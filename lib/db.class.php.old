@@ -219,5 +219,65 @@ class DB extends PDO {
 		return $key;
 	}
 
-	public function exec() {}
+	/**
+	 * 执行SQL语句
+	 * @param  string $sql    SQL语句
+	 * @param  array $params 绑定参数
+	 * @return array         执行结果
+	 */
+	public function exec($sql, $params = NULL, $trans = false) {
+		$this->trans = $trans;
+
+		if (is_null($params)) {
+			$params = array();
+		} elseif (is_scalar($params)) {
+			$params = array(1 => $params);
+		}
+
+		if (!$this->trans) {
+			$this->begin();
+		}
+
+		$bee    = Base::instance();
+		$result = false;
+		$sth    = $this->prepare($sql);
+		if (is_object($sth)) {
+			foreach ($params as $key => $param) {
+				$sth->bindValue($key, $param, $this->type($param));
+			}
+			$sth->execute();
+
+			$error = $sth->errorInfo();
+			if ($error[0] != PDO::ERR_NONE) {
+				if ($this->trans) {
+					$this->rollback();
+				}
+				user_error('PDOStatement: ' . $error[2]);
+			}
+
+			if (strpos($sql, 'SELECT') !== false) {
+				$result     = $sth->fetchAll();
+				$this->rows = count($result);
+			} else {
+				$this->rows = $result = $sth->rowCount();
+			}
+			$sth->closeCursor();
+			unset($sth);
+		} else {
+			$error = $this->errorInfo();
+			if ($error[0] != PDO::ERR_NONE) {
+				if ($this->trans) {
+					$this->rollback();
+				}
+				user_error('PDO: ' . $error[0]);
+			}
+		}
+
+		$this->log = date('r') . ' ' . $sql . PHP_EOL;
+
+		if ($this->trans) {
+			$this->commit();
+		}
+		return $result;
+	}
 }
