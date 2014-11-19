@@ -3,7 +3,7 @@
 /**
  * 配置类，用于配置系统参数
  */
-final class Configuration {
+final class Configuration extends Prefab {
 
 	/**
 	 * 存储配置数据
