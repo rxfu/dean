@@ -27,13 +27,13 @@ abstract class Prefab {
 	 */
 	public static function getInstance() {
 		$className = get_called_class();
-		if (!self::exists($className)) {
+		if (!self::_exists($className)) {
 			$ref  = new ReflectionClass($className);
 			$args = func_get_args();
-			self::set($className, $args ? $ref->newInstanceArgs($args) : new $className);
+			self::_set($className, $args ? $ref->newInstanceArgs($args) : new $className);
 		}
 
-		return self::get($className);
+		return self::_get($className);
 	}
 
 	/**
@@ -41,7 +41,7 @@ abstract class Prefab {
 	 * @param  string $key 类名
 	 * @return boolean      已经实例化为TRUE，未实例化为FALSE
 	 */
-	protected static function exists($key) {
+	private static function _exists($key) {
 		return isset(self::$_instances[$key]);
 	}
 
@@ -50,7 +50,7 @@ abstract class Prefab {
 	 * @param string $key 类名
 	 * @param object $obj 类实例
 	 */
-	protected static function set($key, $obj) {
+	private static function _set($key, $obj) {
 		$_instances[$key] = $obj;
 	}
 
@@ -59,7 +59,7 @@ abstract class Prefab {
 	 * @param  string $key 类名
 	 * @return object      类实例
 	 */
-	protected static function get($key) {
+	private static function _get($key) {
 		return self::$_instances[$key];
 	}
 }

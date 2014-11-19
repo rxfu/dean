@@ -16,7 +16,7 @@ class View {
 	 * @param string $templateDirectory 视图模板路径
 	 */
 	public function __construct($templateDirectory) {
-		$this->templateDirectory = rtrim($templateDirectory, DIRECOTRY_SEPARATOR);
+		$this->templateDirectory = rtrim($templateDirectory, DIRECTORY_SEPARATOR);
 	}
 
 	/**
@@ -26,8 +26,8 @@ class View {
 	 * @return string           渲染后的模板
 	 */
 	public function render($template, array $data = array()) {
-		$templateFile = str_replace('.', DIRECOTRY_SEPARATOR, $template) . '.php';
-		$templatePath = $this->templateDirectory . DIRECOTRY_SEPARATOR . ltrim($templateFile, DIRECOTRY_SEPARATOR);
+		$templateFile = str_replace('.', DIRECTORY_SEPARATOR, $template) . '.php';
+		$templatePath = $this->templateDirectory . DIRECTORY_SEPARATOR . ltrim($templateFile, DIRECTORY_SEPARATOR);
 		if (!is_file($templatePath)) {
 			throw new RuntimeException('模板文件 ' . $templatePath . ' 不存在！');
 		}
