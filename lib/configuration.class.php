@@ -22,7 +22,7 @@ final class Configuration extends Prefab {
 	 * @param  string $key 配置参数
 	 * @return mixed      配置值
 	 */
-	public static function get($key) {
+	public function get($key) {
 		return $_values[$key];
 	}
 
@@ -31,7 +31,7 @@ final class Configuration extends Prefab {
 	 * @param string $key   配置参数
 	 * @param mixed $value 配置值
 	 */
-	public static function set($key, $value) {
+	public function set($key, $value) {
 		$_values[$key] = $value;
 	}
 
@@ -40,7 +40,7 @@ final class Configuration extends Prefab {
 	 * @param  string $key 配置参数
 	 * @return boolean      存在为TRUE，不存在为FALSE
 	 */
-	public static function exists($key) {
+	public function exists($key) {
 		return isset($_value[$key]);
 	}
 
@@ -49,7 +49,7 @@ final class Configuration extends Prefab {
 	 * @param  string $config 配置文件
 	 * @return NULL
 	 */
-	public static function load($config = NULL) {
+	public function load($config = NULL) {
 		if (is_null($config)) {
 			$config = 'config';
 		}
