@@ -9,5 +9,6 @@
 <body>
 <?php
 echo $welcome?>
+你好啊
 </body>
 </html>

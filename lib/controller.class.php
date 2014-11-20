@@ -15,7 +15,6 @@ class Controller {
 	 * 控制器构造方法
 	 */
 	public function __construct() {
-		$settings = Configuration::get('setting');
-		$view     = new View($settings['views']);
+		$this->view = new View();
 	}
 }

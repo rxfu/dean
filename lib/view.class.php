@@ -15,7 +15,8 @@ class View {
 	 * 初始化视图模板路径
 	 * @param string $templateDirectory 视图模板路径
 	 */
-	public function __construct($templateDirectory) {
+	public function __construct($templateDirectory = NULL) {
+		$templateDirectory       = is_null($templateDirectory) ? VIEWROOT : $templateDirectory;
 		$this->templateDirectory = rtrim($templateDirectory, DIRECTORY_SEPARATOR);
 	}
 
@@ -26,7 +27,7 @@ class View {
 	 * @return string           渲染后的模板
 	 */
 	public function render($template, array $data = array()) {
-		$templateFile = str_replace('.', DIRECTORY_SEPARATOR, $template) . '.view.php';
+		$templateFile = str_replace('.', DIRECTORY_SEPARATOR, $template) . '.php';
 		$templatePath = $this->templateDirectory . DIRECTORY_SEPARATOR . ltrim($templateFile, DIRECTORY_SEPARATOR);
 		if (!is_file($templatePath)) {
 			throw new RuntimeException('模板文件 ' . $templatePath . ' 不存在！');
@@ -36,6 +37,6 @@ class View {
 		ob_start();
 		require $templatePath;
 
-		return ob_get_clean();
+		return ob_get_contents();
 	}
 }

@@ -13,8 +13,9 @@ class Autoloader {
 	public static function autoload($className) {
 		$className = ltrim($className, '\\');
 
-		if (substr($className, -1, 10) == 'Controller') {
-			$fileName = CONTROLLER_ROOT . DIRECTORY_SEPARATOR . $className . '.php';
+		$pos = strrpos($className, 'Controller');
+		if (false !== $pos && 0 != $pos) {
+			$fileName = APPROOT . DIRECTORY_SEPARATOR . $className . '.php';
 		} else {
 			$fileName = __DIR__ . DIRECTORY_SEPARATOR . $className . '.class.php';
 		}
