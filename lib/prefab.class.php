@@ -51,7 +51,7 @@ abstract class Prefab {
 	 * @param object $obj 类实例
 	 */
 	private static function _set($key, $obj) {
-		$_instances[$key] = $obj;
+		self::$_instances[$key] = $obj;
 	}
 
 	/**

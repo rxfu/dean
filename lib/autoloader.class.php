@@ -12,7 +12,12 @@ class Autoloader {
 	 */
 	public static function autoload($className) {
 		$className = ltrim($className, '\\');
-		$fileName  = __DIR__ . DIRECTORY_SEPARATOR . $className . '.class.php';
+
+		if (substr($className, -1, 10) == 'Controller') {
+			$fileName = CONTROLLER_ROOT . DIRECTORY_SEPARATOR . $className . '.php';
+		} else {
+			$fileName = __DIR__ . DIRECTORY_SEPARATOR . $className . '.class.php';
+		}
 
 		if (file_exists($fileName)) {
 			require $fileName;

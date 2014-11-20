@@ -9,7 +9,7 @@ final class Configuration extends Prefab {
 	 * 存储配置数据
 	 * @var array
 	 */
-	private $_values = array();
+	private static $_values = array();
 
 	/**
 	 * 配置文件路径
@@ -22,8 +22,8 @@ final class Configuration extends Prefab {
 	 * @param  string $key 配置参数
 	 * @return mixed      配置值
 	 */
-	public function get($key) {
-		return $_values[$key];
+	public static function get($key) {
+		return self::$_values[$key];
 	}
 
 	/**
@@ -31,8 +31,8 @@ final class Configuration extends Prefab {
 	 * @param string $key   配置参数
 	 * @param mixed $value 配置值
 	 */
-	public function set($key, $value) {
-		$_values[$key] = $value;
+	public static function set($key, $value) {
+		self::$_values[$key] = $value;
 	}
 
 	/**
@@ -40,8 +40,8 @@ final class Configuration extends Prefab {
 	 * @param  string $key 配置参数
 	 * @return boolean      存在为TRUE，不存在为FALSE
 	 */
-	public function exists($key) {
-		return isset($_value[$key]);
+	public static function exists($key) {
+		return isset(self::$_values[$key]);
 	}
 
 	/**
@@ -53,9 +53,9 @@ final class Configuration extends Prefab {
 		if (is_null($config)) {
 			$config = 'config';
 		}
-		$cfgPath = $this->_configDirectory . DIRECTORY_SEPARATOR . $config . '.php';
-		if (!is_file($cfgFile)) {
-			throw new RuntimeException('配置文件 ' . $cfgFile . ' 不存在！');
+		$cfgPath = __DIR__ . DIRECTORY_SEPARATOR . $this->_configDirectory . DIRECTORY_SEPARATOR . $config . '.php';
+		if (!is_file($cfgPath)) {
+			throw new RuntimeException('配置文件 ' . $cfgPath . ' 不存在！');
 		}
 
 		$_value = require $cfgPath;
