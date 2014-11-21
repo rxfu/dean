@@ -17,7 +17,12 @@ class App extends Prefab {
 	 */
 	public function run() {
 		$this->setReporting();
-		$this->call($_GET['url']);
+
+		if (isset($_GET['url'])) {
+			$this->call($_GET['url']);
+		} else {
+			$this->call();
+		}
 	}
 
 	/**
@@ -150,7 +155,8 @@ class App extends Prefab {
 	 * @param  string $url 请求URL
 	 * @return NULL
 	 */
-	public function call($url) {
+	public function call($url = NULL) {
+		$url                                     = is_null($url) ? '/' : $url;
 		list($controller, $action, $queryString) = Route::parse($url);
 		$controller                              = ucwords($controller) . 'Controller';
 		$dispatch                                = new $controller;

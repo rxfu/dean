@@ -17,7 +17,7 @@ define('LOGROOT', ROOT . DS . 'log');
 /**
  * 系统参数配置
  */
-define('DEBUG', 0);
+define('DEBUG', 1);
 
 /**
  * 数据库参数配置
