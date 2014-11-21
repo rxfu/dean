@@ -3,13 +3,12 @@
 /**
  * 网站启动文件
  */
-require 'globals.php';
-require LIBROOT . DIRECTORY_SEPARATOR . 'autoloader.class.php';
+require_once 'config.php';
 
+require_once LIBROOT . DS . 'autoloader.class.php';
 Autoloader::register();
 
-$cfg = Configuration::getInstance();
-$cfg->load();
+require_once 'routes.php';
 
 $app = App::getInstance();
 $app->run();

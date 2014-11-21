@@ -13,11 +13,11 @@ class App extends Prefab {
 
 	/**
 	 * 运行网站系统
-	 * @return [type] [description]
+	 * @return NULL
 	 */
 	public function run() {
-		$controller = new HomeController();
-		$controller->index();
+		$this->setReporting();
+		$this->call($_GET['url']);
 	}
 
 	/**
@@ -102,7 +102,7 @@ class App extends Prefab {
 	 *
 	 * @return string 客户端真实IP地址
 	 */
-	function getClientIp() {
+	public function getClientIp() {
 		$ip = '';
 
 		if (!empty($_SERVER["HTTP_CLIENT_IP"])) {
@@ -128,6 +128,38 @@ class App extends Prefab {
 		}
 
 		return empty($_SERVER['REMOTE_ADDR']) ? $ip : $_SERVER['REMOTE_ADDR'];
+	}
+
+	/**
+	 * 设置调试状态下错误报告模式
+	 */
+	public function setReporting() {
+		if (DEBUG) {
+			error_reporting(E_ALL);
+			ini_set('display_errors', 'On');
+		} else {
+			error_reporting(E_ALL);
+			ini_set('display_errors', 'Off');
+			ini_set('log_errors', 'On');
+			ini_set('error_log', LOGROOT . DS . 'error.log');
+		}
+	}
+
+	/**
+	 * 请求执行控制器中方法
+	 * @param  string $url 请求URL
+	 * @return NULL
+	 */
+	public function call($url) {
+		list($controller, $action, $queryString) = Route::parse($url);
+		$controller                              = ucwords($controller) . 'Controller';
+		$dispatch                                = new $controller;
+		$queryString                             = explode('/', $queryString);
+		if (true == method_exists($dispatch, $action)) {
+			call_user_func_array(array($dispatch, $action), $queryString);
+		} else {
+			throw new RuntimeException('方法 ' . $action . ' 在类 ' . $controller . ' 中不存在');
+		}
 	}
 
 }

@@ -15,9 +15,9 @@ class Autoloader {
 
 		$pos = strrpos($className, 'Controller');
 		if (false !== $pos && 0 != $pos) {
-			$fileName = APPROOT . DIRECTORY_SEPARATOR . $className . '.php';
+			$fileName = APPROOT . DS . $className . '.php';
 		} else {
-			$fileName = __DIR__ . DIRECTORY_SEPARATOR . $className . '.class.php';
+			$fileName = LIBROOT . DS . strtolower($className) . '.class.php';
 		}
 
 		if (file_exists($fileName)) {
