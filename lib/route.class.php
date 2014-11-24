@@ -26,16 +26,16 @@ class Route extends Prefab {
 	 * @return array      解析后的路由信息
 	 */
 	public static function parse($url) {
-		$urls = explode('/', $url, 3);
+		$urls        = explode('/', $url);
+		$controller  = array_shift($urls);
+		$action      = array_shift($urls);
+		$queryString = $urls;
 
-		$key = $urls[0] . '/' . $urls[1];
-		if (isset(self::$routes[$key])) {
-			$value  = self::$routes[$key];
-			$values = explode('.', $value);
-
-			return array($values, $values, $urls[2]);
-		} else {
-			return array($urls[0], $urls[1], $urls[2]);
+		$route = $controller . '/' . $action;
+		if (isset($route)) {
+			list($controller, $action) = explode('.', self::$routes[$route]);
 		}
+
+		return array($controller, $action, $queryString);
 	}
 }

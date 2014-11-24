@@ -17,6 +17,7 @@ class App extends Prefab {
 	 */
 	public function run() {
 		$this->setReporting();
+		$session = Session::getInstance();
 
 		if (isset($_GET['url'])) {
 			$this->call($_GET['url']);
@@ -160,7 +161,6 @@ class App extends Prefab {
 		list($controller, $action, $queryString) = Route::parse($url);
 		$controller                              = ucwords($controller) . 'Controller';
 		$dispatch                                = new $controller;
-		$queryString                             = explode('/', $queryString);
 		if (true == method_exists($dispatch, $action)) {
 			call_user_func_array(array($dispatch, $action), $queryString);
 		} else {

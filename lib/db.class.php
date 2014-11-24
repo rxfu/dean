@@ -3,7 +3,7 @@
 /**
  * 数据库访问类，单例模式
  */
-class DB {
+class DB extends Prefab {
 
 	/**
 	 * 保存数据库查询语句
@@ -33,18 +33,6 @@ class DB {
 	private static $_engine = null;
 
 	/**
-	 * 私有化构造方法，保证外界不能实例化
-	 */
-	private function __construct() {
-		$dsn     = DB_PREFIX . ':host=' . DB_HOST . ';port=' . DB_PORT . ';dbname=' . DB_NAME;
-		$options = array();
-		if (DB_PREFIX == 'mysql') {
-			$options += array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . strtolower(defined(DB_CHARSET) ? DB_CHARSET : 'gbk') . ';');
-		}
-		self::_connect($dsn, DB_USERNAME, DB_PASSWORD, $options);
-	}
-
-	/**
 	 * 覆盖__clone()方法，禁止克隆
 	 */
 	private function __clone() {
@@ -64,23 +52,23 @@ class DB {
 	 * @return class 类实例
 	 */
 	public static function getInstance() {
-		if (!(self::$_instance instanceof self)) {
-			self::$_instance = new self();
-		}
+		self::$_instance = parent::getInstance();
+		self::$_instance->_connect();
 
 		return self::$_instance;
 	}
 
 	/**
 	 * 连接数据库
-	 *
-	 * @param string  $dsn      DSN
-	 * @param string  $username 用户名
-	 * @param string  $password 密码
-	 * @param array $options 选项
 	 */
-	private static function _connect($dsn, $username, $password, array $options) {
+	private static function _connect() {
 		try {
+			$dsn     = DB_PREFIX . ':host=' . DB_HOST . ';port=' . DB_PORT . ';dbname=' . DB_NAME;
+			$options = array();
+			if (DB_PREFIX == 'mysql') {
+				$options += array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . strtolower(defined(DB_CHARSET) ? DB_CHARSET : 'gbk') . ';');
+			}
+
 			self::$_dbh = new PDO($dsn, $username, $password, $options);
 			self::$_dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
 			self::$_dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -88,7 +76,8 @@ class DB {
 
 			self::$_engine = self::$_dbh->getAttribute(PDO::ATTR_DRIVER_NAME);
 		} catch (PDOException $e) {
-			raiseError($e);
+			$app = App::getInstance();
+			$app->error($e->getCode(), $e->getMessage());
 		}
 	}
 
@@ -129,7 +118,8 @@ class DB {
 				throw new PDOException($error[2], $error[1]);
 			}
 		} catch (PDOException $e) {
-			raiseError($e);
+			$app = App::getInstance();
+			$app->error($e->getCode(), $e->getMessage());
 		}
 	}
 

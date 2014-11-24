@@ -3,7 +3,7 @@
 /**
  * 会话控制类
  */
-class Session {
+class Session extends Prefab {
 
 	/**
 	 * 会话生存时间
