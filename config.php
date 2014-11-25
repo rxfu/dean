@@ -48,3 +48,8 @@ define('SESS_USE_TRANS_SID', true);
 define('SESS_USE_COOKIES', true);
 define('SESS_USE_ONLY_COOKIES', true);
 define('SESS_EXPIRATION', 7200);
+
+/**
+ * 错误代码定义
+ */
+define('SESS_ERROR', 100001);

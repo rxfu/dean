@@ -20,13 +20,6 @@ class DB extends Prefab {
 	private static $_dbh = null;
 
 	/**
-	 * 保存DB类的唯一实例
-	 *
-	 * @var class实例
-	 */
-	private static $_instance = null;
-
-	/**
 	 * 数据库引擎标识
 	 * @var string
 	 */
@@ -49,9 +42,9 @@ class DB extends Prefab {
 	/**
 	 * 连接数据库
 	 */
-	protected function _init() {
+	protected function init() {
 		try {
-			$dsn     = DB_PREFIX . ':host=' . DB_HOST . ';port=' . DB_PORT . ';dbname=' . DB_NAME;
+			$dsn = DB_PREFIX . ':host=' . DB_HOST . ';port=' . DB_PORT . ';dbname=' . DB_NAME;
 			$options = array();
 			if (DB_PREFIX == 'mysql') {
 				$options += array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . strtolower(defined(DB_CHARSET) ? DB_CHARSET : 'gbk') . ';');
@@ -87,14 +80,15 @@ class DB extends Prefab {
 	private function _execute($sql, $params) {
 		try {
 			$sth = self::$_dbh->prepare($sql);
-			if (null !== $params) {
-				if (is_array($params) || is_object($params)) {
-					$i = 0;
-					foreach ($params as $param) {
-						$sth->bindValue(++$i, $param, $this->type($param));
+			if (is_object($sth)) {
+				if (null !== $params) {
+					if (is_array($params) || is_object($params)) {
+						foreach ($params as $key => $param) {
+							$sth->bindValue($key, $param, $this->type($param));
+						}
+					} else {
+						$sth->bindValue(1, $params, $this->type($param));
 					}
-				} else {
-					$sth->bindValue(1, $params, $this->type($param));
 				}
 			}
 
@@ -103,7 +97,10 @@ class DB extends Prefab {
 				return $sth;
 			} else {
 				$error = $sth->errorInfo();
-				throw new PDOException($error[2], $error[1]);
+				if (PDO::ERR_NONE != $error[0]) {
+					$app = App::getInstance();
+					$app->error($error[1], $error[2]);
+				}
 			}
 		} catch (PDOException $e) {
 			$app = App::getInstance();
@@ -207,17 +204,17 @@ class DB extends Prefab {
 	 * @return serial  最后插入记录序号
 	 */
 	public function insertRecord($table, $data) {
-		$props  = array();
-		$marks  = array();
+		$props = array();
+		$marks = array();
 		$params = array();
-		$prop   = '';
-		$mark   = '';
+		$prop = '';
+		$mark = '';
 
 		if (!empty($data)) {
 			foreach ($data as $key => $value) {
-				$props[]  = $key;
+				$props[] = $key;
 				$params[] = $value;
-				$marks[]  = '?';
+				$marks[] = '?';
 			}
 			$prop = implode(',', $props);
 			$mark = implode(',', $marks);
@@ -249,15 +246,15 @@ class DB extends Prefab {
 	 * @return int  影响行数
 	 */
 	public function updateRecord($table, $data, $where = array()) {
-		$marks      = array();
-		$params     = array();
+		$marks = array();
+		$params = array();
 		$conditions = array();
-		$mark       = '';
-		$condition  = '';
+		$mark = '';
+		$condition = '';
 
 		if (!empty($data)) {
 			foreach ($data as $key => $value) {
-				$marks[]  = $key . '=?';
+				$marks[] = $key . '=?';
 				$params[] = $value;
 			}
 			$mark = implode(',', $marks);
@@ -265,7 +262,7 @@ class DB extends Prefab {
 		if (!empty($where)) {
 			foreach ($where as $key => $value) {
 				$conditions[] = $key . '=?';
-				$params[]     = $value;
+				$params[] = $value;
 			}
 			$condition = ' WHERE ' . implode(' AND ', $conditions);
 		}
@@ -294,14 +291,14 @@ class DB extends Prefab {
 	 * @return int  影响行数
 	 */
 	public function deleteRecord($table, $where) {
-		$params     = array();
+		$params = array();
 		$conditions = array();
-		$condition  = '';
+		$condition = '';
 
 		if (!empty($where)) {
 			foreach ($where as $key => $value) {
 				$conditions[] = $key . '=?';
-				$params[]     = $value;
+				$params[] = $value;
 			}
 
 			$condition = ' WHERE ' . implode(' AND ', $conditions);
@@ -331,20 +328,20 @@ class DB extends Prefab {
 	 * @return PDOStatement   PDO状态句柄
 	 */
 	public function searchRecord($table, $where = array(), $fields = array()) {
-		$params     = array();
+		$params = array();
 		$conditions = array();
-		$condition  = '';
+		$condition = '';
 
 		if (!empty($where)) {
 			foreach ($where as $key => $value) {
 				$conditions[] = $key . '=?';
-				$params[]     = $value;
+				$params[] = $value;
 			}
 
 			$condition = ' WHERE ' . implode(' AND ', $conditions);
 		}
 		$field = empty($fields) ? '*' : implode(',', $fields);
-		$sql   = 'SELECT ' . $field . ' FROM ' . $table . $condition;
+		$sql = 'SELECT ' . $field . ' FROM ' . $table . $condition;
 
 		return $this->query($sql, $params)->fetchAll();
 	}
