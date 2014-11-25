@@ -31,6 +31,7 @@ abstract class Prefab {
 			$ref  = new ReflectionClass($className);
 			$args = func_get_args();
 			self::_set($className, $args ? $ref->newInstanceArgs($args) : new $className);
+			self::_get($className)->_init();
 		}
 
 		return self::_get($className);
@@ -62,4 +63,10 @@ abstract class Prefab {
 	private static function _get($key) {
 		return self::$_instances[$key];
 	}
+
+	/**
+	 * 初始化类方法
+	 * @return NULL
+	 */
+	protected function _init() {}
 }

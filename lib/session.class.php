@@ -15,11 +15,11 @@ class Session extends Prefab {
 	/**
 	 * 会话控制类构造函数
 	 */
-	public function __construct() {
+	protected function _init() {
 		if (!$this->id()) {
-			$this->setUseTransSID(SESSION_USE_TRANS_SID);
-			$this->setUseCookies(SESSION_USE_COOKIES, SESSION_USE_ONLY_COOKIES);
-			$this->setExpiredTime(SESSION_EXPIRATION);
+			$this->setUseTransSID(SESS_USE_TRANS_SID);
+			$this->setUseCookies(SESS_USE_COOKIES, SESS_USE_ONLY_COOKIES);
+			$this->setExpiredTime(SESS_EXPIRATION);
 			$this->_start();
 		}
 	}

@@ -40,3 +40,11 @@ define('AUTH_SALT', '+:sD>PjbsJ+3!&+TE@!J<:wj|*J6_KimvoHJ?HQ][vE)O/2S8F&<iz.-b#t
  */
 define('ENABLE', '1');
 define('DISABLE', '0');
+
+/**
+ * 会话参数配置
+ */
+define('SESS_USE_TRANS_SID', true);
+define('SESS_USE_COOKIES', true);
+define('SESS_USE_ONLY_COOKIES', true);
+define('SESS_EXPIRATION', 7200);

@@ -43,25 +43,13 @@ class DB extends Prefab {
 	 */
 	public function __destruct() {
 
-		self::_close();
-	}
-
-	/**
-	 * 获取DB类的唯一实例
-	 *
-	 * @return class 类实例
-	 */
-	public static function getInstance() {
-		self::$_instance = parent::getInstance();
-		self::$_instance->_connect();
-
-		return self::$_instance;
+		$this->_close();
 	}
 
 	/**
 	 * 连接数据库
 	 */
-	private static function _connect() {
+	protected function _init() {
 		try {
 			$dsn     = DB_PREFIX . ':host=' . DB_HOST . ';port=' . DB_PORT . ';dbname=' . DB_NAME;
 			$options = array();
@@ -84,7 +72,7 @@ class DB extends Prefab {
 	/**
 	 * 关闭数据库
 	 */
-	private static function _close() {
+	private function _close() {
 
 		self::$_dbh = null;
 	}
