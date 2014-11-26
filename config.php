@@ -7,11 +7,10 @@
 /**
  * 网站基本参数配置
  */
-define('DS', DIRECTORY_SEPARATOR);
-define('ROOT', __DIR__);
 define('LIBROOT', ROOT . DS . 'lib');
 define('APPROOT', ROOT . DS . 'app');
 define('WEBROOT', ROOT . DS . 'web');
+define('PUBROOT', ROOT . DS . 'public');
 define('LOGROOT', ROOT . DS . 'log');
 
 /**
