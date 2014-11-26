@@ -44,9 +44,6 @@ define('DISABLE', '0');
 /**
  * 会话参数配置
  */
-define('SESS_USE_TRANS_SID', true);
-define('SESS_USE_COOKIES', true);
-define('SESS_USE_ONLY_COOKIES', true);
 define('SESS_EXPIRATION', 7200);
 
 /**

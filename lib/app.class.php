@@ -18,7 +18,7 @@ class App extends Prefab {
 	public function run() {
 		$this->setReporting();
 		set_error_handler($this->error, E_USER_ERROR);
-		$session = Session::getInstance();
+		Session::start();
 
 		if (isset($_GET['url'])) {
 			$this->call($_GET['url']);
