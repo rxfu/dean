@@ -17,7 +17,7 @@ class App extends Prefab {
 	 */
 	public function run() {
 		$this->setReporting();
-		set_error_handler($this->error, E_USER_ERROR);
+		set_error_handler('self::error', E_USER_ERROR);
 		Session::start();
 
 		if (isset($_GET['url'])) {
@@ -33,7 +33,7 @@ class App extends Prefab {
 	 * @param  string $message 错误信息
 	 * @return NULL
 	 */
-	public function error($code, $message = '') {
+	public static function error($code, $message = '') {
 		echo '<b>ERROR</b>: [' . $code . '] ' . $message;
 	}
 

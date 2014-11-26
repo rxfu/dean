@@ -10,5 +10,6 @@
 	RewriteBase /dean
 
 	#将所有其他URL重写到 index.php/URL
+	RewriteCond $1 !^(index\\.php|images|js|css|robots\\.txt)
 	RewriteRule ^(.*)$ index.php?url=$1 [PT,L]
 </IfModule>

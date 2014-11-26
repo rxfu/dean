@@ -57,8 +57,7 @@ class DB extends Prefab {
 
 			self::$_engine = self::$_dbh->getAttribute(PDO::ATTR_DRIVER_NAME);
 		} catch (PDOException $e) {
-			$app = App::getInstance();
-			$app->error($e->getCode(), $e->getMessage());
+			App::error($e->getCode(), $e->getMessage());
 		}
 	}
 
@@ -103,8 +102,7 @@ class DB extends Prefab {
 				}
 			}
 		} catch (PDOException $e) {
-			$app = App::getInstance();
-			$app->error($e->getCode(), $e->getMessage());
+			App::error($e->getCode(), $e->getMessage());
 		}
 	}
 
