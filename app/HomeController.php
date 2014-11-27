@@ -2,9 +2,11 @@
 
 class HomeController extends Controller {
 
+	/**
+	 * 网站主页
+	 * @return void 
+	 */
 	public function index() {
-		$welcome = 'Hello, Student!';
-
-		$this->view->render('index', array('welcome' => $welcome));
+		$this->view->render('dashboard');
 	}
 }

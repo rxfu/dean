@@ -46,6 +46,24 @@ define('DISABLE', '0');
 define('SESS_EXPIRATION', 7200);
 
 /**
+ * 日志操作类型配置
+ */
+define( 'LOG_INSERT', 'INSERT' );
+define( 'LOG_UPDATE', 'UPDATE' );
+define( 'LOG_DELETE', 'DELETE' );
+define( 'LOG_LOGIN', 'LOGIN' );
+define( 'LOG_LOGOUT', 'LOGOUT' );
+define( 'LOG_CHGPWD', 'CHGPWD' );
+define( 'LOG_REGIST', 'REGIST' );
+define( 'LOG_APPLY', 'APPLY' );
+
+/**
+ * 分页配置
+ */
+define( 'PAGE_INIT', 1 );
+define( 'PAGE_SIZE', 10 );
+
+/**
  * 错误代码定义
  */
 define('SESS_ERROR', 100001);
