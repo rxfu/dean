@@ -9,7 +9,7 @@ class UserController extends Controller {
 		if ($this->isPost()) {
 			$username = trim($_POST['username']);
 			$password = trim($_POST['password']);
-			$app = App::getInstance();
+			$app      = App::getInstance();
 
 			if (empty($username) || empty($password)) {
 				Session::flash('error', '用户名或密码无效');
@@ -21,29 +21,53 @@ class UserController extends Controller {
 				$app->redirect('index.php');
 			}
 
-			if ($this->auth($username, $password)) {}
-		}
-	}
+			if ($this->auth($username, $password)) {
 
-	public function auth($username, $password) {
-		if ( is_string( $username ) && is_string( $password ) ) {
-		$data = DB::getInstance()->searchRecord( TBL_STU_AUTH, array( 'xh' => $username, 'mm' => hashString( $password ) ), array( 'xh' ) );
+				$info = getStudentInfo($username);
 
-		if ( is_array( $data ) ) {
-			if ( 1 == count( $data ) ) {
-				$username = $data[0]['xh'];
-				$currentTime = date( 'Y-m-d H:i:s' );
+				$session->set('name', $info['xm']);
+				$session->set('college', $info['xy']);
+				$session->set('speciality', $info['zy']);
+				$session->set('spno', $info['zyh']);
+				$session->set('grade', $info['nj']);
+				$session->set('season', $info['zsjj']);
+				$session->set('plan', $info['byfa']);
+				$session->set('system', $info['xz']);
 
-				Session::write('id', App::getInstance()->hash($username . date()));
-				Session::write( 'username', $username );
+				$electTerm = getSystemParam('XK_SJ');
+				$term      = parseTerm($electTerm);
+				$session->set('year', $term['year']);
+				$session->set('term', $term['term']);
 
-				Logger::write( array( 'xh' => Session::read( 'username' ), 'czlx' => LOG_LOGIN ) );
+				$session->set('flash_success', '你已经成功登录系统');
 
-				return true;
+				redirect('dashboard.php');
+			} else {
+
+				$session->set('flash_error', '登录失败，请检查用户名和密码是否正确');
 			}
 		}
 	}
 
-	return false;
+	public function auth($username, $password) {
+		if (is_string($username) && is_string($password)) {
+			$data = DB::getInstance()->searchRecord('t_xk_xsmm', array('xh' => $username, 'mm' => hashString($password)), array('xh'));
+
+			if (is_array($data)) {
+				if (1 == count($data)) {
+					$username    = $data[0]['xh'];
+					$currentTime = date('Y-m-d H:i:s');
+
+					Session::write('id', App::getInstance()->hash($username . date()));
+					Session::write('username', $username);
+
+					Logger::write(array('xh' => Session::read('username'), 'czlx' => LOG_LOGIN));
+
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 }
