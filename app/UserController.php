@@ -70,4 +70,9 @@ class UserController extends Controller {
 
 		return false;
 	}
+
+	public function logout() {
+		Logger::write(array('xh'=>Session::read('username'),'czlx'=>LOG_LOGOUT));
+		Session::destroy();
+	}
 }
