@@ -170,12 +170,12 @@ class App extends Prefab {
 	}
 
 	/**
-	 * 从数组中去除转义反斜线
-	 * @param  string|array $value 转义数组
-	 * @return string|array        去除转移反斜线后的数组
+	 * 清理输入变量
+	 * @param  array|string $value 转义变量
+	 * @return array|string        转移后变量
 	 */
-	public function stripSlashesDeep($value) {
-		return is_array($value) ? array_map('stripSlashesDeep', $value) : stripslashes($value);
+	public function sanitize($value) {
+		return is_array($value)?array_map('sanitize',$value):trim(htmlentities(strip_tags($value)));
 	}
 
 }
