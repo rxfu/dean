@@ -29,10 +29,10 @@ class Route extends Prefab {
 		$urls        = explode('/', $url);
 		$controller  = array_shift($urls);
 		$action      = array_shift($urls);
-		$queryString = $urls;
+		$queryString = sanitize($urls);
 
 		$route = $controller . '/' . $action;
-		if (isset($route)) {
+		if (isset(self::$routes[$route])) {
 			list($controller, $action) = explode('.', self::$routes[$route]);
 		}
 

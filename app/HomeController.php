@@ -7,6 +7,6 @@ class HomeController extends Controller {
 	 * @return void 
 	 */
 	public function index() {
-		$this->view->render('dashboard');
+		$this->view->render('index');
 	}
 }

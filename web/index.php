@@ -11,7 +11,7 @@
                         <?php if (Session::has('error')): ?>
                         <?php Session::render('error'); ?>
                         <?php endif;?>
-                        <form id="loginForm" name="loginForm" action="login.php" role="form" method="post" class="form-horizontal">
+                        <form id="loginForm" name="loginForm" action="<?php echo route('student.login') ?>" role="form" method="post" class="form-horizontal">
                             <fieldset>
                                 <div class="form-group">
                                     <label for="username" class="col-md-3 control-label">用户名</label>

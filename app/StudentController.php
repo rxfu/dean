@@ -3,13 +3,12 @@
 /**
  * 用户控制器
  */
-class UserController extends Controller {
+class StudentController extends Controller {
 
 	public function login() {
-		if ($this->isPost()) {
+		if (isPost()) {
 			$username = trim($_POST['username']);
 			$password = trim($_POST['password']);
-			$app      = App::getInstance();
 
 			if (empty($username) || empty($password)) {
 				Session::flash('error', '用户名或密码无效');

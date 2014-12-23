@@ -52,7 +52,7 @@ class App extends Prefab {
 		list($controller, $action, $queryString) = Route::parse($url);
 		$controller                              = ucwords($controller) . 'Controller';
 		$dispatch                                = new $controller;
-		if (true == method_exists($dispatch, $action)) {
+		if (method_exists($dispatch, $action)) {
 			call_user_func_array(array($dispatch, $action), $queryString);
 		} else {
 			throw new RuntimeException('方法 ' . $action . ' 在类 ' . $controller . ' 中不存在');

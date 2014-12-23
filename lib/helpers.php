@@ -155,23 +155,47 @@ if (!function_exists('redirect')) {
 	}
 }
 
+if (!function_exists('isPost')) {
+
+	/**
+	 * 判断是否POST方法
+	 * @return boolean 是为TRUE，否为FALSE
+	 */
+	function isPost() {
+		return 'POST' === $_SERVER['REQUEST_METHOD'];
+	}
+}
+
 if (!function_exists('route')) {
 
 	/**
-	 * 请求执行控制器中方法
-	 * @param  string $url 请求url方法
-	 * @return NULL
+	 * 生成路由信息地址
+	 * @return string 路由信息地址，生成失败为NULL
 	 */
-	function route($url) {
-		$url                                     = is_null($url) ? '/' : $url;
-		list($controller, $action, $queryString) = Route::parse($url);
-		$controller                              = ucwords($controller) . 'Controller';
-		$dispatch                                = new $controller;
-		if (method_exists($dispatch, $action)) {
-			call_user_func_array(array($dispatch, $action), $queryString);
-		} else {
-			trigger_error('方法 ' . $action . ' 在类 ' . $controller . ' 中不存在', E_USER_ERROR);
+	function route() {
+		if (0 == func_num_args()) {
+			return '/';
 		}
+
+		if (1 <= func_num_args()) {
+			$args  = func_get_args();
+			$route = array_shift($args);
+			$route = str_replace('.', '/', $route);
+
+			$param = '';
+			if (!empty($args)) {
+				foreach ($args as $index => $value) {
+					if (is_array($args[$index])) {
+						$args[$index] = implode('/', $args[$index]);
+					}
+				}
+				$param = '/' . implode('/', $args);
+			}
+
+			return $route . $param;
+		}
+
+		return NULL;
 	}
 }
 

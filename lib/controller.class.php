@@ -19,10 +19,20 @@ class Controller {
 	}
 
 	/**
-	 * 判断请求是否采用POST方法
-	 * @return boolean 请求为POST方法为TRUE，否则为FALSE
+	 * 方法前过滤提交变量
+	 * @param  string $method    方法名
+	 * @param  array $arguments 方法参数
+	 * @return mixed            方法返回值
 	 */
-	protected function isPost() {
-		return 'POST' === $_SERVER['REQUEST_METHOD'];
+	public function __call($method, $arguments) {
+		if (method_exists($this, $method)) {
+			$_POST    = isset($_POST) ? sanitize($_POST) : null;
+			$_GET     = isset($_GET) ? sanitize($_GET) : null;
+			$_REQUEST = isset($_REQUEST) ? sanitize($_REQUEST) : null;
+			$_COOKIE  = isset($_COOKIE) ? sanitize($_COOKIE) : null;
+
+			call_user_func_array(array($this, $method), $arguments);
+		}
 	}
+
 }
