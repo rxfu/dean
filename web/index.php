@@ -8,9 +8,7 @@
                         <h3 class="panel-title">登录系统</h3>
                     </div>
                     <div class="panel-body">
-                        <?php if (Session::has('error')): ?>
-                        <?php Session::render('error'); ?>
-                        <?php endif;?>
+                        <?php Session::render(); ?>
                         <form id="loginForm" name="loginForm" action="<?php echo route('student.login') ?>" role="form" method="post" class="form-horizontal">
                             <fieldset>
                                 <div class="form-group">

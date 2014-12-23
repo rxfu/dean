@@ -29,7 +29,7 @@ class Session {
 
 		if (false !== $last && (time() - $last > self::SESSION_AGE)) {
 			self::destroy();
-			App::error(SESS_ERROR, '会话已过期');
+			trigger_error('会话已过期', E_USER_WARNING);
 		}
 
 		$_SESSION['LAST_ACTIVE'] = time();
@@ -58,7 +58,8 @@ class Session {
 	 */
 	public static function write($key, $value = '') {
 		if (!is_string($key)) {
-			App::error(SESS_ERROR, '无效会话参数类型');
+			trigger_error('无效会话参数类型', E_USER_ERROR);
+			return null;
 		}
 
 		self::_init();
@@ -82,7 +83,8 @@ class Session {
 	 */
 	public static function read($key) {
 		if (!is_string($key)) {
-			App::error(SESS_ERROR, '无效会话参数类型');
+			trigger_error('无效会话参数类型', E_USER_ERROR);
+			return false;
 		}
 
 		self::_init();
@@ -109,7 +111,8 @@ class Session {
 	 */
 	public static function delete($key) {
 		if (!is_string($key)) {
-			App::error(SESS_ERROR, '无效会话参数类型');
+			trigger_error('无效会话参数类型', E_USER_ERROR);
+			return;
 		}
 
 		self::_init();
@@ -132,7 +135,8 @@ class Session {
 	 */
 	public static function flash($type, $message) {
 		if (!is_string($type) || !is_string($message)) {
-			App::error(SESS_ERROR, '无效消息类型');
+			trigger_error('无效消息类型', E_USER_ERROR);
+			return;
 		}
 
 		$types = array('info', 'error', 'success', 'warning', 'danger');
@@ -162,7 +166,8 @@ class Session {
 	 */
 	public static function render($type = 'all', $print = true) {
 		if (is_null($type) || !is_string($type)) {
-			App::error(SESS_ERROR, '无效消息类型');
+			trigger_error('无效消息类型', E_USER_ERROR);
+			return;
 		}
 
 		self::_init();
@@ -209,7 +214,8 @@ class Session {
 	 */
 	public static function has($type) {
 		if (is_null($type) || !is_string($type)) {
-			App::error(SESS_ERROR, '无效消息类型');
+			trigger_error('无效消息类型', E_USER_ERROR);
+			return;
 		}
 
 		return !empty($_SESSION['flash'][$type]);
@@ -222,7 +228,8 @@ class Session {
 	 */
 	public static function clear($type = 'all') {
 		if (!is_string($type)) {
-			App::error(SESS_ERROR, '无效消息类型');
+			trigger_error('无效消息类型', E_USER_ERROR);
+			return;
 		}
 
 		if ('all' === $type) {

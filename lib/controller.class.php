@@ -26,13 +26,29 @@ class Controller {
 	 */
 	public function __call($method, $arguments) {
 		if (method_exists($this, $method)) {
-			$_POST    = isset($_POST) ? sanitize($_POST) : null;
-			$_GET     = isset($_GET) ? sanitize($_GET) : null;
-			$_REQUEST = isset($_REQUEST) ? sanitize($_REQUEST) : null;
-			$_COOKIE  = isset($_COOKIE) ? sanitize($_COOKIE) : null;
-
+			$this->before();
 			call_user_func_array(array($this, $method), $arguments);
+			$this->after();
 		}
+	}
+
+	/**
+	 * 预先执行函数
+	 * @return NULL
+	 */
+	public function before() {
+		$_POST    = isset($_POST) ? sanitize($_POST) : null;
+		$_GET     = isset($_GET) ? sanitize($_GET) : null;
+		$_REQUEST = isset($_REQUEST) ? sanitize($_REQUEST) : null;
+		$_COOKIE  = isset($_COOKIE) ? sanitize($_COOKIE) : null;
+	}
+
+	/**
+	 * 事后执行函数
+	 * @return NULL
+	 */
+	public function after() {
+		// TODO:
 	}
 
 }

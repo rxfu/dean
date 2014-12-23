@@ -23,7 +23,7 @@ class Logger extends Prefab {
 	 */
 	protected function init() {
 		self::$table = 't_xk_log';
-		self::$_dbh = DB::getInstance();
+		self::$_dbh  = DB::getInstance();
 	}
 
 	/**
@@ -35,14 +35,12 @@ class Logger extends Prefab {
 		if (isset($log) && is_array($log)) {
 			$logger = self::getInstance();
 
-			$data['xh']   = isset($log['xh']) ? $log['xh'] : null;
 			$data['ip']   = getClientIp();
 			$data['czsj'] = date('Y-m-d H:i:s');
-			$data['kcxh'] = isset($log['kcxh']) ? $log['kcxh'] : null;
-			$data['kcmc'] = isset($log['kcmc']) ? $log['kcmc'] : null;
-			$data['kcxz'] = isset($log['kcxz']) ? $log['kcxz'] : null;
-			$data['czlx'] = isset($log['czlx']) ? $log['czlx'] : null;
-			$data['bz']   = isset($log['bz']) ? $log['bz'] : null;
+			$expected     = array('xh', 'kcxh', 'kcmc', 'kcxz', 'czlx', 'bz');
+			foreach ($expected as $key) {
+				$data[$key] = isset($log[$key]) ? $log[$key] : null;
+			}
 
 			$logger::$_dbh->insertRecord($table, $data);
 		}
@@ -57,7 +55,7 @@ class Logger extends Prefab {
 		$data = null;
 		if (isset($id) && is_string($id)) {
 			$logger = self::getInstance();
-			$data = $logger::$_dbh->searchRecord($table, array('xh' => $id));
+			$data   = $logger::$_dbh->searchRecord($table, array('xh' => $id));
 		}
 		return $data;
 	}
