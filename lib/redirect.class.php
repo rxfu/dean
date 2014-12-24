@@ -27,7 +27,4 @@ class Redirect {
 		header('Location:' . getBaseUrl() . self::$route);
 	}
 
-	public static function route($route) {
-
-	}
 }

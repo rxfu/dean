@@ -22,7 +22,7 @@ $last = min($pages, $current + 4);
                                 共<?php echo $count ?>条日志记录，共<?php echo $pages ?>页，目前在第
                                 <select onchange="window.location=this.value;">
                                     <?php for ($i = 1; $i <= $pages; $i++): ?>
-                                    <option value="<?php echo $_SERVER['PHP_SELF'] . '?p=' . $i ?>"<?php echo ($current == $i) ? ' selected' : ''?>><?php echo $i ?></option>
+                                    <option value="<?php echo toLink('system.log', array($i)) ?>"<?php echo ($current == $i) ? ' selected' : ''?>><?php echo $i ?></option>
                                     <?php endfor ?>
                                 </select>
                                 页

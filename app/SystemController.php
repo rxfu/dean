@@ -21,7 +21,27 @@ class SystemController extends Controller {
 		$data['count']   = $count;
 		$data['current'] = $current;
 
-		return $this->view->render('system.logger', array('logs' => $data));
+		return $this->view->render('system.log', array('logs' => $data));
 	}
-	
+
+	/**
+	 * 分页列出系统消息
+	 *
+	 * @param string  $id   学号
+	 * @param int     $cur  当前页码
+	 * @param int     $size 每页记录数
+	 * @return array       系统消息列表
+	 */
+	function message($current = PAGE_INIT, $size = PAGE_SIZE) {
+		$count = 0;
+		$sql   = 'SELECT * FROM t_xk_dxx WHERE xh = ? ORDER BY fssj DESC';
+
+		$data            = DB::getInstance()->getPage($sql, Session::read('username'), $current, $size, $count);
+		$data['pages']   = ceil($count / $size);
+		$data['count']   = $count;
+		$data['current'] = $current;
+
+		return $this->view->render('system.message', array('messages' => $data));
+	}
+
 }

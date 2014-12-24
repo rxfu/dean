@@ -1,14 +1,12 @@
 <?php include 'header.php' ?>
 <?php include 'navigation.php' ?>
 <?php
-$p = isset($_GET['p']) ? $_GET['p'] : PAGE_INIT;
+$current = array_pop($messages);
+$count = array_pop($messages);
+$pages = array_pop($messages);
 
-$items = pageMessage($session->get('username'), $p, PAGE_SIZE);
-$count = array_pop($items);
-$pages = array_pop($items);
-
-$first = max(1, $p - 4);
-$last = min($pages, $p + 4);
+$first = max(1, $current - 4);
+$last = min($pages, $current + 4);
 ?>
             <div id="page-wrapper">
                 <div class="row">
@@ -24,7 +22,7 @@ $last = min($pages, $p + 4);
                                 共<?php echo $count ?>条系统消息，共<?php echo $pages ?>页，目前在第
                                 <select onchange="window.location=this.value;">
                                     <?php for ($i = 1; $i <= $pages; $i++): ?>
-                                    <option value="<?php echo $_SERVER['PHP_SELF'] . '?p=' . $i ?>"<?php echo ($p == $i) ? ' selected' : ''?>><?php echo $i ?></option>
+                                    <option value="<?php echo toLink('system.message', array($i)) ?>"<?php echo ($p == $i) ? ' selected' : ''?>><?php echo $i ?></option>
                                     <?php endfor ?>
                                 </select>
                                 页
@@ -54,16 +52,16 @@ $last = min($pages, $p + 4);
                                             <tr>
                                                 <td colspan="10" class="text-right">
                                                     <ul class="pagination">
-                                                        <?php if ($p != 1): ?>
-                                                            <li><a href="<?php echo $_SERVER['PHP_SELF'] . '?p=1' ?>">首页</a></li>
-                                                            <li><a href="<?php echo $_SERVER['PHP_SELF'] . '?p=' . ($p - 1) ?>">上一页</a></li>
+                                                        <?php if ($current != 1): ?>
+                                                            <li><a href="<?php echo toLink('system.message', array(1)) ?>">首页</a></li>
+                                                            <li><a href="<?php echo toLink('system.message', array($current - 1)) ?>">上一页</a></li>
                                                         <?php endif ?>
                                                         <?php for ($i = $first; $i <= $last; $i++): ?>
-                                                        <li<?php echo ($p == $i) ? ' class="active"' : ''?>><a href="<?php echo $_SERVER['PHP_SELF'] . '?p=' . $i ?>"><?php echo $i ?></a></li>
+                                                        <li<?php echo ($current == $i) ? ' class="active"' : ''?>><a href="<?php echo toLink('system.message', array($i)) ?>"><?php echo $i ?></a></li>
                                                         <?php endfor ?>
-                                                        <?php if ($p != $pages): ?>
-                                                            <li><a href="<?php echo $_SERVER['PHP_SELF'] . '?p=' . ($p + 1) ?>">下一页</a></li>
-                                                            <li><a href="<?php echo $_SERVER['PHP_SELF'] . '?p=' . $pages ?>">末页</a></li>
+                                                        <?php if ($current != $pages): ?>
+                                                            <li><a href="<?php echo toLink('system.message', array($current + 1)) ?>">下一页</a></li>
+                                                            <li><a href="<?php echo toLink('system.message', array($pages)) ?>">末页</a></li>
                                                         <?php endif ?>
                                                     </ul>
                                                 </td>
