@@ -9,7 +9,7 @@ class Logger extends Prefab {
 	 * 日志表
 	 * @var string
 	 */
-	private static $table = null;
+	private static $_table = null;
 
 	/**
 	 * 数据库连接唯一标识符
@@ -22,7 +22,7 @@ class Logger extends Prefab {
 	 * @return void
 	 */
 	protected function init() {
-		self::$table = 't_xk_log';
+		self::$_table = 't_xk_log';
 		self::$_dbh  = DB::getInstance();
 	}
 
@@ -42,7 +42,7 @@ class Logger extends Prefab {
 				$data[$key] = isset($log[$key]) ? $log[$key] : null;
 			}
 
-			$logger::$_dbh->insertRecord($table, $data);
+			$logger::$_dbh->insertRecord(self::$_table, $data);
 		}
 	}
 
@@ -55,7 +55,7 @@ class Logger extends Prefab {
 		$data = null;
 		if (isset($id) && is_string($id)) {
 			$logger = self::getInstance();
-			$data   = $logger::$_dbh->searchRecord($table, array('xh' => $id));
+			$data   = $logger::$_dbh->searchRecord(self::$_table, array('xh' => $id));
 		}
 		return $data;
 	}

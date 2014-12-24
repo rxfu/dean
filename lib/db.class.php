@@ -50,7 +50,7 @@ class DB extends Prefab {
 				$options += array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . strtolower(defined(DB_CHARSET) ? DB_CHARSET : 'gbk') . ';');
 			}
 
-			self::$_dbh = new PDO($dsn, $username, $password, $options);
+			self::$_dbh = new PDO($dsn, DB_USERNAME, DB_PASSWORD, $options);
 			self::$_dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
 			self::$_dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			self::$_dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
@@ -83,10 +83,10 @@ class DB extends Prefab {
 				if (null !== $params) {
 					if (is_array($params) || is_object($params)) {
 						foreach ($params as $key => $param) {
-							$sth->bindValue($key, $param, $this->type($param));
+							$sth->bindValue($key + 1, $param, $this->type($param));
 						}
 					} else {
-						$sth->bindValue(1, $params, $this->type($param));
+						$sth->bindValue(1, $params, $this->type($params));
 					}
 				}
 			}
@@ -97,8 +97,7 @@ class DB extends Prefab {
 			} else {
 				$error = $sth->errorInfo();
 				if (PDO::ERR_NONE != $error[0]) {
-					$app = App::getInstance();
-					$app->error($error[1], $error[2]);
+					trigger_error($error[2], E_USER_ERROR);
 				}
 			}
 		} catch (PDOException $e) {
@@ -424,7 +423,7 @@ class DB extends Prefab {
 	 * @return int   查询结果总数
 	 */
 	public function count($sql, $params) {
-		return $this->getColumn(countQuery($sql), $params);
+		return $this->getColumn($this->countQuery($sql), $params);
 	}
 
 	/**
@@ -454,5 +453,23 @@ class DB extends Prefab {
 		$limit = $sql . ' LIMIT ' . $size . ' OFFSET ' . $offset;
 
 		return $this->query($limit, $params)->fetchAll();
+	}
+
+	/**
+	 * 替换SQL语句，计算符合查询条件的记录数
+	 *
+	 * @param string  $sql SQL语句
+	 * @return string   统计相应查询条件记录数的SQL语句
+	 */
+	public function countQuery($sql) {
+		$query = $sql;
+		if ((0 === stripos($query, 'SELECT')) && (6 < ($pos = stripos($query, 'FROM')))) {
+			$rpos   = stripos($query, 'ORDER BY');
+			$select = substr($query, 0, 6);
+			$from   = $rpos ? substr($query, $pos, $rpos - $pos) : substr($query, $pos);
+			$query = $select . ' COUNT(*) ' . $from;
+		}
+
+		return $query;
 	}
 }

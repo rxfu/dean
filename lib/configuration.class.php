@@ -1,64 +1,42 @@
 <?php
 
 /**
- * 配置类，用于配置系统参数
+ * 系统配置类
  */
 final class Configuration extends Prefab {
 
 	/**
-	 * 存储配置数据
-	 * @var array
-	 */
-	private static $_values = array();
-
-	/**
-	 * 配置文件路径
+	 * 系统参数表
 	 * @var string
 	 */
-	private $_configDirectory = '..';
+	private static $_table = null;
 
 	/**
-	 * 获取配置值
-	 * @param  string $key 配置参数
-	 * @return mixed      配置值
+	 * 数据库连接唯一标识符
+	 * @var object
 	 */
-	public static function get($key) {
-		return self::$_values[$key];
+	private static $_dbh = null;
+
+	/**
+	 * 初始化系统参数表
+	 * @return void
+	 */
+	protected function init() {
+		self::$_table = 't_xt';
+		self::$_dbh   = DB::getInstance();
 	}
 
 	/**
-	 * 设置配置值
-	 * @param string $key   配置参数
-	 * @param mixed $value 配置值
+	 * 获取系统参数
+	 * @param  string $id 系统参数名
+	 * @return string|integer      系统参数值
 	 */
-	public static function set($key, $value) {
-		self::$_values[$key] = $value;
-	}
+	public static function get($id) {
+		$config = Configuration::getInstance();
+		$sql    = 'SELECT value FROM ' . self::$_table . ' WHERE id = ?';
+		$data   = $config::$_dbh->getRow($sql, $id);
 
-	/**
-	 * 判断配置值是否存在
-	 * @param  string $key 配置参数
-	 * @return boolean      存在为TRUE，不存在为FALSE
-	 */
-	public static function exists($key) {
-		return isset(self::$_values[$key]);
-	}
-
-	/**
-	 * 加载配置文件
-	 * @param  string $config 配置文件
-	 * @return NULL
-	 */
-	public function load($config = NULL) {
-		if (is_null($config)) {
-			$config = 'config';
-		}
-		$cfgPath = __DIR__ . DIRECTORY_SEPARATOR . $this->_configDirectory . DIRECTORY_SEPARATOR . $config . '.php';
-		if (!is_file($cfgPath)) {
-			throw new RuntimeException('配置文件 ' . $cfgPath . ' 不存在！');
-		}
-
-		$_value = require $cfgPath;
+		return $data['value'];
 	}
 
 }

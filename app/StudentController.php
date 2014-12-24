@@ -16,17 +16,17 @@ class StudentController extends Controller {
 
 			if (empty($username) || empty($password)) {
 				Session::flash('error', '用户名或密码无效');
-				$this->view->render('index');
+				break;
 			}
 
 			if (!(is_numeric($username) && isset($username{11}) && !isset($username{12}))) {
 				Session::flash('error', '用户名必须是12位学号');
-				$this->view->render('index');
+				break;
 			}
 
 			if ($this->auth($username, $password)) {
 
-				$info = $this->getInfoById($username);
+				$info = $this->info($username);
 
 				Session::write('name', $info['xm']);
 				Session::write('college', $info['xy']);
@@ -37,19 +37,20 @@ class StudentController extends Controller {
 				Session::write('plan', $info['byfa']);
 				Session::write('system', $info['xz']);
 
-				$electTerm = getSystemParam('XK_SJ');
+				$electTerm = Configuration::get('XK_SJ');
 				$term      = parseTerm($electTerm);
 				Session::write('year', $term['year']);
 				Session::write('term', $term['term']);
 
-				Session::write('success', '你已经成功登录系统');
+				Session::flash('success', '你已经成功登录系统');
 
-				$this->view->render('dashboard');
+				Redirect::to('student.profile');
 			} else {
-
-				Session::write('flash_error', '登录失败，请检查用户名和密码是否正确');
+				Session::flash('error', '登录失败，请检查用户名和密码是否正确');
 			}
 		}
+
+		return $this->view->render('student.login');
 	}
 
 	/**
@@ -67,7 +68,7 @@ class StudentController extends Controller {
 					$username    = $data[0]['xh'];
 					$currentTime = date('Y-m-d H:i:s');
 
-					Session::write('id', hashString($username . date()));
+					Session::write('id', hashString($username . $currentTime));
 					Session::write('username', $username);
 
 					Logger::write(array('xh' => Session::read('username'), 'czlx' => LOG_LOGIN));
@@ -87,35 +88,40 @@ class StudentController extends Controller {
 	public function logout() {
 		Logger::write(array('xh' => Session::read('username'), 'czlx' => LOG_LOGOUT));
 		Session::destroy();
-		$this->view->render('index');
+		Redirect::to('student.login');
 	}
 
 	/**
 	 * 修改密码
-	 * @param  string $old       旧密码
-	 * @param  string $new       新密码
-	 * @param  string $confirmed 确认密码
 	 * @return boolean            修改成功为TRUE，修改失败为FALSE
 	 */
-	public function changePassword($old, $new, $confirmed) {
-		if (is_string($old) && is_string($new)) {
+	public function password() {
+		if (isPost()) {
+			$old       = $_POST['oldPassword'];
+			$new       = $_POST['newPassword'];
+			$confirmed = $_POST['confirmedPassword'];
 
-			if (($new === $confirmed) && ($old !== $new)) {
-				$db = DB::getInstance();
+			if (is_string($old) && is_string($new)) {
 
-				$data = $db->searchRecord('t_xk_xsmm', array('xh' => Session::read('username'), 'mm' => hashString($old)), array('xh'));
-				if (is_array($data)) {
-					if (1 == count($data)) {
-						$db->updateRecord('t_xk_xsmm', array('mm' => hashString($new)), array('xh' => Session::read('username')));
-						Logger::write(array('xh' => Session::read('username'), 'czlx' => LOG_CHGPWD));
+				if (($new === $confirmed) && ($old !== $new)) {
+					$db = DB::getInstance();
 
-						return true;
+					$data = $db->searchRecord('t_xk_xsmm', array('xh' => Session::read('username'), 'mm' => hashString($old)), array('xh'));
+					if (is_array($data)) {
+						if (1 == count($data)) {
+							$db->updateRecord('t_xk_xsmm', array('mm' => hashString($new)), array('xh' => Session::read('username')));
+							Logger::write(array('xh' => Session::read('username'), 'czlx' => LOG_CHGPWD));
+
+							Session::flash('success', '修改密码成功');
+							break;
+						}
 					}
 				}
 			}
-		}
 
-		return false;
+			Session::flash('error', '修改密码失败');
+		}
+		return $this->view->render('student.password');
 	}
 
 	/**
@@ -123,12 +129,26 @@ class StudentController extends Controller {
 	 * @param  string $id 学号
 	 * @return array     学生基本信息
 	 */
-	public function getInfoById($id) {
+	public function info($id) {
 		if (is_numeric($id) && isset($id{11}) && !isset($id{12})) {
 			$sql  = 'SELECT * FROM v_xk_xsjbxx WHERE xh = ?';
-			$data = $db->getRow($sql, $id);
+			$data = DB::getInstance()->getRow($sql, $id);
 		}
 
 		return $data;
+	}
+
+	/**
+	 * 获取当前学生详细信息
+	 * @return array 学生详细信息
+	 */
+	public function profile() {
+		$id = Session::read('username');
+		if (is_numeric($id) && isset($id{11}) && !isset($id{12})) {
+			$sql  = 'SELECT * FROM v_xk_xsxx WHERE xh = ?';
+			$data = DB::getInstance()->getRow($sql, $id);
+		}
+
+		return $this->view->render('student.profile', array('profile' => $data));
 	}
 }

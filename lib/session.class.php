@@ -10,14 +10,16 @@ class Session {
 	 *
 	 * @var integer
 	 */
-	private static $SESSION_AGE = SESS_EXPIRATION;
+	private static $_session_age = SESS_EXPIRATION;
 
 	/**
 	 * 初始化新会话并保存原有会话
 	 * @return boolean 会话创建成功返回TRUE，否则返回FALSE
 	 */
 	private static function _init() {
-		return self::_started() ? session_regenerate_id(true) : session_start();
+		if (!self::_started()) {
+			session_start();
+		}
 	}
 
 	/**
@@ -27,7 +29,7 @@ class Session {
 	private static function _age() {
 		$last = isset($_SESSION['LAST_ACTIVE']) ? $_SESSION['LAST_ACTIVE'] : false;
 
-		if (false !== $last && (time() - $last > self::SESSION_AGE)) {
+		if (false !== $last && (time() - $last > self::$_session_age)) {
 			self::destroy();
 			trigger_error('会话已过期', E_USER_WARNING);
 		}
@@ -150,12 +152,12 @@ class Session {
 
 		if (!isset($_SESSION['flash'])) {
 			$_SESSIION['flash'] = array();
-		}
+		}/*
 		if (!array_key_exists($type, $_SESSION['flash'])) {
 			$_SESSION['flash'][$type] = array();
-		}
+		}*/
 
-		$_SESSION['flash'][$type][] = $message();
+		$_SESSION['flash'][$type][] = $message;
 	}
 
 	/**
@@ -177,14 +179,16 @@ class Session {
 		}
 
 		if ('all' === $type) {
-			foreach ($_SESSION['flash'] as $type => $message) {
-				$flash = '<div id="flash_' . $type . '" class="alert alert-dismissable alert-' . $type . '">';
-				$flash .= '<button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
-				$flash .= $message;
-				$flash .= '</div>';
+			foreach ($_SESSION['flash'] as $type => $messages) {
+				foreach ($messages as $message) {
+					$flash = '<div id="flash_' . $type . '" class="alert alert-dismissable alert-' . $type . '">';
+					$flash .= '<button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
+					$flash .= $message;
+					$flash .= '</div>';
+				}
 			}
 
-			$this->clear();
+			self::clear();
 		} else {
 			if (!isset($_SESSION['flash'][$type])) {
 				$type = 'unknown';
@@ -197,7 +201,7 @@ class Session {
 				$flash .= '</div>';
 			}
 
-			$this->clear($type);
+			self::clear($type);
 		}
 
 		if ($print) {

@@ -13,18 +13,18 @@
                 </div>                    
 
                 <ul class="nav navbar-top-links navbar-right">
-                    <li>欢迎<?php echo $session->get('college') ?><?php echo $session->get('grade') ?>级<?php echo $session->get('speciality') ?>专业的<?php echo $session->get('name') ?>同学使用选课系统！</li>
+                    <li>欢迎<?php echo Session::read('college') ?><?php echo Session::read('grade') ?>级<?php echo Session::read('speciality') ?>专业的<?php echo Session::read('name') ?>同学使用选课系统！</li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-user fa-fw"></i>
-                            <span><?php echo $session->get('name') ?></span>
+                            <span><?php echo Session::read('name') ?></span>
                             <i class="fa fa-caret-down"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-user">
-                            <li><a href="<?php echo getRoute('profile.php') ?>"><i class="fa fa-user fa-fw"></i> 个人资料</a></li>
-                            <li><a href="<?php echo getRoute('password.php') ?>"><i class="fa fa-unlock fa-fw"></i> 修改密码</a></li>
+                            <li><a href="<?php echo toLink('student.profile') ?>"><i class="fa fa-user fa-fw"></i> 个人资料</a></li>
+                            <li><a href="<?php echo toLink('student.password') ?>"><i class="fa fa-unlock fa-fw"></i> 修改密码</a></li>
                             <li class="divider"></li>
-                            <li><a href="<?php echo getRoute('logout.php') ?>"><i class="fa fa-sign-out fa-fw"></i> 登出</a></li>
+                            <li><a href="<?php echo toLink('student.logout') ?>"><i class="fa fa-sign-out fa-fw"></i> 登出</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -43,19 +43,19 @@
                                 </div>
                             </li>
                             <li>
-                                <a href="<?php echo getRoute('dashboard.php') ?>"><i class="fa fa-dashboard fa-fw"></i> 仪表盘</a>
+                                <a href="<?php echo toLink('dashboard') ?>"><i class="fa fa-dashboard fa-fw"></i> 仪表盘</a>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> 教学计划<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="<?php echo getRoute('course.php') ?>">课程信息</a>
+                                        <a href="<?php echo toLink('course') ?>">课程信息</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo getRoute('schedule.php') ?>">教学计划</a>
+                                        <a href="<?php echo toLink('schedule') ?>">教学计划</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo getRoute('graduation.php') ?>">毕业要求</a>
+                                        <a href="<?php echo toLink('graduation') ?>">毕业要求</a>
                                     </li>
                                 </ul>
                             </li>
@@ -63,59 +63,53 @@
                                 <a href="#"><i class="fa fa-table fa-fw"></i> 课程管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="<?php echo getRoute('elective.php') ?>">公共课程</a>
+                                        <a href="<?php echo toLink('elective') ?>">公共课程</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo getRoute('elective.php') ?>">必修课程</a>
+                                        <a href="<?php echo toLink('elective') ?>">必修课程</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo getRoute('elective.php') ?>">选修课程</a>
+                                        <a href="<?php echo toLink('elective') ?>">选修课程</a>
                                     </li>
                                     <li>
                                         <a href="#"> 通识素质课程<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
                                             <li>
-                                                <a href="<?php echo getRoute('elective.php') ?>">人文社科</a>
+                                                <a href="<?php echo toLink('elective') ?>">人文社科</a>
                                             </li>
                                             <li>
-                                                <a href="<?php echo getRoute('elective.php') ?>">自然科学</a>
+                                                <a href="<?php echo toLink('elective') ?>">自然科学</a>
                                             </li>
                                             <li>
-                                                <a href="<?php echo getRoute('elective.php') ?>">艺术体育</a>
+                                                <a href="<?php echo toLink('elective') ?>">艺术体育</a>
                                             </li>
                                             <li>
-                                                <a href="<?php echo getRoute('elective.php') ?>">其他专项</a>
+                                                <a href="<?php echo toLink('elective') ?>">其他专项</a>
                                             </li>
                                         </ul>
                                     </li>
                                     <li>
-                                        <a href="<?php echo getRoute('elective.php') ?>">重修课程</a>
+                                        <a href="<?php echo toLink('elective') ?>">重修课程</a>
                                     </li>
                                 </ul>
                             </li>
-                            <?php $items = listCurriculumTerms($session->get('username')) ?>
                             <li>
                                 <a href="#"><i class="fa fa-calendar fa-fw"></i> 课程表<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
-                                    <?php foreach ($items as $item): ?>
                                     <li>
-                                        <a href="<?php echo getRoute('curriculum.php?year=' . $item['nd'] . '&term=' . $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo parseDictCode('xq', $item['xq']) ?>学期课程表</a>
+                                        <a href="#">当前课程表</a>
                                     </li>
-                                    <?php endforeach ?>
                                 </ul>
                             </li>
-                            <?php $items = listReportTerms($session->get('username')) ?>
                             <li>
                                 <a href="#"><i class="fa fa-tasks fa-fw"></i> 成绩管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="<?php echo getRoute('report.php') ?>">综合成绩单</a>
+                                        <a href="<?php echo toLink('report') ?>">综合成绩单</a>
                                     </li>
-                                    <?php foreach ($items as $item): ?>
                                     <li>
-                                        <a href="<?php echo getRoute('report.php?year=' . $item['nd'] . '&term=' . $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo parseDictCode('xq', $item['xq']) ?>学期成绩单</a>
+                                        <a href="#">历年成绩单</a>
                                     </li>
-                                    <?php endforeach ?>
                                 </ul>
                             </li>
                             <li>
@@ -147,13 +141,13 @@
                                 <a href="#"><i class="fa fa-gear fa-fw"></i> 系统管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="<?php echo getRoute('logger.php') ?>">选课日志</a>
+                                        <a href="<?php echo toLink('system.log') ?>">选课日志</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo getRoute('message.php') ?>">系统消息</a>
+                                        <a href="<?php echo toLink('system.message') ?>">系统消息</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo getRoute('password.php') ?>">修改密码</a>
+                                        <a href="<?php echo toLink('student.password') ?>">修改密码</a>
                                     </li>
                                 </ul>
                             </li>

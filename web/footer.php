@@ -4,19 +4,19 @@
         </div>
 
         <!-- Load JS here for greater good -->
-        <script src="js/jquery-1.11.0.min.js"></script>
-        <script src="js/jquery-ui-1.10.4.custom.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/bootstrapValidator.min.js"></script>
-        <script src="js/language/zh_CN.js"></script>
-        <script src="js/bootstrap-paginator.js"></script>
-        <script src="js/bootstrap-select.js"></script>
-        <script src="js/bootstrap-switch.js"></script>
-        <script src="js/bootstrap-typeahead.js"></script>
-        <script src="js/jquery.placeholder.js"></script>
-        <script src="js/jquery.stacktable.js"></script>
-        <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
-        <script src="js/sb-admin.js"></script>
-        <script src="js/main.js"></script>
+        <?php echo js('js/jquery-1.11.0.min.js') ?>
+        <?php echo js('js/jquery-ui-1.10.4.custom.min.js') ?>
+        <?php echo js('js/bootstrap.min.js') ?>
+        <?php echo js('js/bootstrapValidator.min.js') ?>
+        <?php echo js('js/language/zh_CN.js') ?>
+        <?php echo js('js/bootstrap-paginator.js') ?>
+        <?php echo js('js/bootstrap-select.js') ?>
+        <?php echo js('js/bootstrap-switch.js') ?>
+        <?php echo js('js/bootstrap-typeahead.js') ?>
+        <?php echo js('js/jquery.placeholder.js') ?>
+        <?php echo js('js/jquery.stacktable.js') ?>
+        <?php echo js('js/plugins/metisMenu/jquery.metisMenu.js') ?>
+        <?php echo js('js/sb-admin.js') ?>
+        <?php echo js('js/main.js') ?>
     </body>
 </html>

@@ -4,6 +4,18 @@
  * 常用函数
  */
 
+if (!function_exists('css')) {
+
+	/**
+	 * 获取CSS文件网站路径
+	 * @param  string $file CSS文件
+	 * @return string       CSS文件网站路径
+	 */
+	function css($file) {
+		return getBaseUrl() . $file;
+	}
+}
+
 if (!function_exists('error')) {
 
 	/**
@@ -15,23 +27,23 @@ if (!function_exists('error')) {
 	function error($code, $message, $file, $line) {
 		switch ($code) {
 			case E_USER_ERROR:
-				echo '<b>ERROR</b>: [' . $code . '] ' . $message . '<br />\n';
+				echo '<b>ERROR</b>: [' . $code . '] ' . $message . '<br />' . PHP_EOL;
 				echo '  Fatal error on line ' . $line . ' in file ' . $file;
-				echo ', PHP ' . PHP_VERSION . ' (' . PHP_OS . ')<br />\n';
-				echo 'Aborting...<br />\n';
+				echo ', PHP ' . PHP_VERSION . ' (' . PHP_OS . ')<br />' . PHP_EOL;
+				echo 'Aborting...<br />' . PHP_EOL;
 				exit(1);
 				break;
 
 			case E_USER_WARNING:
-				echo '<b>WARNING</b>: [' . $code . '] ' . $message . '<br />\n';
+				echo '<b>WARNING</b>: [' . $code . '] ' . $message . '<br />' . PHP_EOL;
 				break;
 
 			case E_USER_NOTICE:
-				echo '<b>NOTICE</b>: [' . $code . '] ' . $message . '<br />\n';
+				echo '<b>NOTICE</b>: [' . $code . '] ' . $message . '<br />' . PHP_EOL;
 				break;
 
 			default:
-				echo '<b>UNKNOWN</b>: [' . $code . '] ' . $message . '<br />\n';
+				echo '<b>UNKNOWN</b>: [' . $code . '] ' . $message . '<br />' . PHP_EOL;
 				break;
 		}
 	}
@@ -44,7 +56,7 @@ if (!function_exists('getBaseUrl')) {
 	 * @return string 网站URL地址
 	 */
 	function getBaseUrl() {
-		return getDomain() . substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/') + 1);
+		return getDomain() . '/' . VD . '/';
 	}
 }
 
@@ -139,7 +151,20 @@ if (!function_exists('hashString')) {
 	 * @return string         散列值
 	 */
 	function hashString($string) {
-		return hash('sha1', $string);
+		$encrypt = AUTH_SALT . $string;
+		return hash('sha1', $encrypt);
+	}
+}
+
+if (!function_exists('js')) {
+
+	/**
+	 * 获取JavaScript文件网站路径
+	 * @param  string $file JavaScript文件
+	 * @return string       JavaScript文件网站路径
+	 */
+	function js($file) {
+		return '<script src="' . getBaseUrl() . $file . '"></script>';
 	}
 }
 
@@ -166,13 +191,13 @@ if (!function_exists('isPost')) {
 	}
 }
 
-if (!function_exists('route')) {
+if (!function_exists('toLink')) {
 
 	/**
 	 * 生成路由信息地址
 	 * @return string 路由信息地址，生成失败为NULL
 	 */
-	function route() {
+	function toLink() {
 		if (0 == func_num_args()) {
 			return '/';
 		}
@@ -192,10 +217,59 @@ if (!function_exists('route')) {
 				$param = '/' . implode('/', $args);
 			}
 
-			return $route . $param;
+			return getBaseUrl() . $route . $param;
 		}
 
 		return NULL;
+	}
+}
+
+if (!function_exists('parseTerm')) {
+
+	/**
+	 * 解析年度、学期代码
+	 *
+	 * @param string  $term 年度学期号
+	 * @return array 年度学期值
+	 */
+	function parseTerm($term) {
+		$data = null;
+		if (is_numeric($term)) {
+			$data['year'] = substr($term, 0, 4);
+			$data['term'] = substr($term, 4, 1);
+		}
+
+		return $data;
+	}
+}
+
+if (!function_exists('parseType')) {
+	
+	/**
+	 * 解析选课日志操作类型
+	 *
+	 * @param string  $type 操作类型
+	 * @return string       操作类型名称
+	 */
+	function parseType($type) {
+		switch (trim($type)) {
+			case 'LOGIN':
+				return '登录系统';
+			case 'LOGOUT':
+				return '登出系统';
+			case 'CHGPWD':
+				return '修改密码';
+			case 'INSERT':
+				return '选课';
+			case 'DELETE':
+				return '退课';
+			case 'REGIST':
+				return '考试报名';
+			case 'APPLY':
+				return '教室申请';
+			default:
+				return '未知类型';
+		}
 	}
 }
 
@@ -208,5 +282,20 @@ if (!function_exists('sanitize')) {
 	 */
 	function sanitize($value) {
 		return is_array($value) ? array_map('sanitize', $value) : trim(htmlentities(strip_tags($value)));
+	}
+}
+
+if (!function_exists('section')) {
+
+	/**
+	 * 包含PHP片段
+	 * @param  string $section PHP片段
+	 * @return NULL
+	 */
+	function section($section) {
+		$path = str_replace('.', '/', $section);
+		$path = WEBROOT . DS . $path . '.php';
+
+		include $path;
 	}
 }

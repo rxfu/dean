@@ -1,5 +1,5 @@
-<?php include 'header.php' ?>
-<?php include 'navigation.php' ?>
+<?php section('header') ?>
+<?php section('navigation') ?>
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
@@ -13,4 +13,4 @@
         </div>
     </div>
 </div>
-<?php include 'footer.php' ?>
+<?php section('footer') ?>
