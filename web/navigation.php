@@ -49,13 +49,13 @@
                                 <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> 教学计划<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="<?php echo toLink('course') ?>">课程信息</a>
+                                        <a href="<?php echo toLink('plan.course') ?>">课程信息</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('schedule') ?>">教学计划</a>
+                                        <a href="<?php echo toLink('plan.index') ?>">教学计划</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('graduation') ?>">毕业要求</a>
+                                        <a href="<?php echo toLink('plan.graduation') ?>">毕业要求</a>
                                     </li>
                                 </ul>
                             </li>
@@ -97,7 +97,7 @@
                                 <a href="#"><i class="fa fa-calendar fa-fw"></i> 课程表<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="#">当前课程表</a>
+                                        <a href="<?php echo toLink('schedule.index') ?>">当前课程表</a>
                                     </li>
                                 </ul>
                             </li>
@@ -105,7 +105,7 @@
                                 <a href="#"><i class="fa fa-tasks fa-fw"></i> 成绩管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="<?php echo toLink('report') ?>">综合成绩单</a>
+                                        <a href="<?php echo toLink('report.index') ?>">综合成绩单</a>
                                     </li>
                                     <li>
                                         <a href="#">历年成绩单</a>

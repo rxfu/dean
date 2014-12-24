@@ -27,8 +27,7 @@ class SystemController extends Controller {
 	/**
 	 * 分页列出系统消息
 	 *
-	 * @param string  $id   学号
-	 * @param int     $cur  当前页码
+	 * @param int     $current  当前页码
 	 * @param int     $size 每页记录数
 	 * @return array       系统消息列表
 	 */

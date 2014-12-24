@@ -74,5 +74,4 @@ $last = min($pages, $current + 4);
                     </div>
                 </div>
             </div>
-
-<?php include 'footer.php' ?>
+<?php section('footer') ?>
