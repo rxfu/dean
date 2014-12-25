@@ -84,4 +84,57 @@ class CourseController extends Controller {
 		return $this->view->render('course.retake', array('courses' => $data));
 	}
 
+	/**
+	 * 选择课程
+	 *
+	 * @return boolean       选课成功为TRUE，不成功为FALSE
+	 */
+	public function elect() {
+		$sql           = 'SELECT pt, xz, xl, bz, kkxy, jsgh FROM t_pk_kczy a LEFT JOIN t_xk_xsqf b ON a.kcxh = b.kcxh WHERE a.nd = ? AND a.xq = ? AND a.kcxh = ?';
+		$course        = $db->getRow($sql, array($data['nd'], $data['xq'], $data['kcxh']));
+		$data['pt']    = $course['pt'];
+		$data['xz']    = $course['xz'];
+		$data['xl']    = $course['xl'];
+		$data['lb']    = null;
+		$data['jsgh']  = $course['jsgh'];
+		$data['sf']    = isArrearage($data['xh']);
+		$data['zg']    = $course['bz'];
+		$data['bz']    = 0;
+		$data['tdkch'] = null;
+		$data['tdyy']  = null;
+		$data['qz']    = 0;
+		$data['sj']    = date('Y-m-d H:i:s');
+		$data['kkxy']  = $course['kkxy'];
+
+		$sql        = 'SELECT zxf FROM t_jx_jxjh WHERE kch = ?';
+		$course     = $db->getRow($sql, parseCourse($data['kcxh']));
+		$data['xf'] = $course['zxf'];
+
+		$db->insertRecord('t_xk_xkxx', $data);
+
+		$log['xh']   = $data['xh'];
+		$log['kcxh'] = $data['kcxh'];
+		$log['czlx'] = LOG_INSERT;
+		writeLog($log);
+
+		return true;
+	}
+
+	/**
+	 * 选课申请
+	 * @return NULL 
+	 */
+	public function apply() {
+		if (isPost()) {
+			$data['xh'] = Session::read('username');
+			$data['xm'] = Session::read('name');
+			$data['nd'] = Session::read('year');
+			$data['xq']=Session::read('term');
+			$data['kcxh'] = $_POST['cno'];
+			DB::getInstance()->insertRecord('t_xk_xksq', $data);
+
+			Logger::write(array('xh'=>Session::read('username'), 'kcxh' =>$data['kcxh'], 'czlx'=>LOG_APPLY));
+		}
+	}
+
 }

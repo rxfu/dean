@@ -21,4 +21,12 @@ class Redirect {
 		header('Location:' . getBaseUrl() . self::$route);
 	}
 
+	/**
+	 * 返回到前一
+	 * @return [type] [description]
+	 */
+	public static function back() {
+		header('Location:' . getBaseUrl().self::$route);
+	}
+
 }
