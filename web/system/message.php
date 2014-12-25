@@ -1,5 +1,5 @@
-<?php include 'header.php' ?>
-<?php include 'navigation.php' ?>
+<?php section('header') ?>
+<?php section('navigation') ?>
 <?php
 $current = array_pop($messages);
 $count = array_pop($messages);
@@ -39,12 +39,12 @@ $last = min($pages, $current + 4);
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($items as $item): ?>
+                                            <?php foreach ($messages as $message): ?>
                                             <tr>
-                                                <td><?php echo $item['xxfsz'] ?></td>
-                                                <td><?php echo $item['xxnr'] ?></td>
-                                                <td><?php echo $item['fssj'] ?></td>
-                                                <td><?php echo $item['ydbz'] ?></td>
+                                                <td><?php echo $message['xxfsz'] ?></td>
+                                                <td><?php echo $message['xxnr'] ?></td>
+                                                <td><?php echo $message['fssj'] ?></td>
+                                                <td><?php echo $message['ydbz'] ?></td>
                                             </tr>
                                             <?php endforeach; ?>
                                         </tbody>

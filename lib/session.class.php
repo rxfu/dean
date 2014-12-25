@@ -55,7 +55,7 @@ class Session {
 	/**
 	 * 写入会话数据
 	 * @param  string $key   会话名称或会话数组
-	 * @param  string $value 会话值
+	 * @param  mixed $value 会话值
 	 * @return string 写入会话数据
 	 */
 	public static function write($key, $value = '') {

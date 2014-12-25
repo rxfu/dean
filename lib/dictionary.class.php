@@ -32,7 +32,7 @@ final class Dictionary extends Prefab {
 	 * @param  string $code    字典代码
 	 * @return string        中文名称
 	 */
-	public function get($table, $code) {
+	public static function get($table, $code) {
 		$dict = self::getInstance();
 
 		$sql  = 'SELECT mc FROM ' . self::$_prefix . $table . ' WHERE dm = ?';

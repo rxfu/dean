@@ -36,7 +36,7 @@ class Controller {
 	 * 预先执行函数
 	 * @return NULL
 	 */
-	public function before() {
+	protected function before() {
 		$_POST    = isset($_POST) ? sanitize($_POST) : null;
 		$_GET     = isset($_GET) ? sanitize($_GET) : null;
 		$_REQUEST = isset($_REQUEST) ? sanitize($_REQUEST) : null;
@@ -47,7 +47,7 @@ class Controller {
 	 * 事后执行函数
 	 * @return NULL
 	 */
-	public function after() {
+	protected function after() {
 		// TODO:
 	}
 

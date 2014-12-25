@@ -10,7 +10,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
-                            <div class="panel-heading"><?php echo $session->get('college') ?><?php echo $session->get('grade') ?>级<?php echo $session->get('speciality') ?>专业课程设置计划总表</div>
+                            <div class="panel-heading"><?php echo Session::read('college') ?><?php echo Session::read('grade') ?>级<?php echo Session::read('speciality') ?>专业课程设置计划总表</div>
                             <div class="panel-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered">

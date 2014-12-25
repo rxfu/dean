@@ -42,6 +42,9 @@ class StudentController extends Controller {
 				Session::write('year', $term['year']);
 				Session::write('term', $term['term']);
 
+				Session::write('courseTerms', $this->courseTerms($username));
+				Session::write('reportTerms', $this->reportTerms($username));
+
 				Session::flash('success', '你已经成功登录系统');
 
 				Redirect::to('student.profile');
@@ -151,4 +154,31 @@ class StudentController extends Controller {
 
 		return $this->view->render('student.profile', array('profile' => $data));
 	}
+
+	/**
+	 * 根据学号列出学生具有课程的学期
+	 *
+	 * @param string  $id 学号
+	 * @return array     年度学期数组
+	 */
+	public function courseTerms($id) {
+		$sql  = 'SELECT nd, xq FROM t_xk_xkxx WHERE xh = ? GROUP BY nd, xq ORDER BY nd, xq';
+		$data = DB::getInstance()->getAll($sql, $id);
+
+		return $data;
+	}
+
+	/**
+	 * 根据学号列出学生具有成绩的学期
+	 *
+	 * @param string  $id 学号
+	 * @return array     年度学期数组
+	 */
+	public function reportTerms($id) {
+		$sql  = 'SELECT nd, xq FROM t_cj_zxscj WHERE xh = ? GROUP BY nd, xq ORDER BY nd, xq';
+		$data = DB::getInstance()->getAll($sql, $id);
+
+		return $data;
+	}
+
 }

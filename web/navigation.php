@@ -43,7 +43,7 @@
                                 </div>
                             </li>
                             <li>
-                                <a href="<?php echo toLink('dashboard') ?>"><i class="fa fa-dashboard fa-fw"></i> 仪表盘</a>
+                                <a href="<?php echo toLink('home.dashboard') ?>"><i class="fa fa-dashboard fa-fw"></i> 仪表盘</a>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> 教学计划<span class="fa arrow"></span></a>
@@ -63,42 +63,44 @@
                                 <a href="#"><i class="fa fa-table fa-fw"></i> 课程管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="<?php echo toLink('elective') ?>">公共课程</a>
+                                        <a href="<?php echo toLink('course.pub') ?>">公共课程</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('elective') ?>">必修课程</a>
+                                        <a href="<?php echo toLink('course.required') ?>">必修课程</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('elective') ?>">选修课程</a>
+                                        <a href="<?php echo toLink('course.elective') ?>">选修课程</a>
                                     </li>
                                     <li>
                                         <a href="#"> 通识素质课程<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
                                             <li>
-                                                <a href="<?php echo toLink('elective') ?>">人文社科</a>
+                                                <a href="<?php echo toLink('course.general') ?>">人文社科</a>
                                             </li>
                                             <li>
-                                                <a href="<?php echo toLink('elective') ?>">自然科学</a>
+                                                <a href="<?php echo toLink('course.general') ?>">自然科学</a>
                                             </li>
                                             <li>
-                                                <a href="<?php echo toLink('elective') ?>">艺术体育</a>
+                                                <a href="<?php echo toLink('course.general') ?>">艺术体育</a>
                                             </li>
                                             <li>
-                                                <a href="<?php echo toLink('elective') ?>">其他专项</a>
+                                                <a href="<?php echo toLink('course.general') ?>">其他专项</a>
                                             </li>
                                         </ul>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('elective') ?>">重修课程</a>
+                                        <a href="<?php echo toLink('course.retake') ?>">重修课程</a>
                                     </li>
                                 </ul>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-calendar fa-fw"></i> 课程表<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
+                                    <?php foreach (Session::read('courseTerms') as $item): ?>
                                     <li>
-                                        <a href="<?php echo toLink('schedule.index') ?>">当前课程表</a>
+                                        <a href="<?php echo toLink('schedule.term', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo Dictionary::get('xq', $item['xq']) ?>当前课程表</a>
                                     </li>
+                                    <?php endforeach ?>
                                 </ul>
                             </li>
                             <li>
@@ -107,9 +109,11 @@
                                     <li>
                                         <a href="<?php echo toLink('report.index') ?>">综合成绩单</a>
                                     </li>
+                                    <?php foreach (Session::read('reportTerms') as $item): ?>
                                     <li>
-                                        <a href="#">历年成绩单</a>
+                                        <a href="<?php echo toLink('report.term', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo Dictionary::get('xq', $item['xq']) ?>学期成绩单</a>
                                     </li>
+                                    <?php endforeach ?>
                                 </ul>
                             </li>
                             <li>

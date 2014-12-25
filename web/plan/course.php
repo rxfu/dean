@@ -44,17 +44,17 @@ $last = min($pages, $current + 4);
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($items as $item): ?>
+                                            <?php foreach ($courses as $course): ?>
                                             <tr>
-                                                <td><?php echo $item['kch'] ?></td>
-                                                <td><?php echo $item['kcmc'] ?></td>
-                                                <td><?php echo $item['kcywmc'] ?></td>
-                                                <td><?php echo $item['xf'] ?></td>
-                                                <td><?php echo $item['xs'] ?></td>
-                                                <td><?php echo $item['ff'] ?></td>
-                                                <td><?php echo $item['jc'] ?></td>
-                                                <td><?php echo $item['cks'] ?></td>
-                                                <td><?php echo $item['kh'] ?></td>
+                                                <td><?php echo $course['kch'] ?></td>
+                                                <td><?php echo $course['kcmc'] ?></td>
+                                                <td><?php echo $course['kcywmc'] ?></td>
+                                                <td><?php echo $course['xf'] ?></td>
+                                                <td><?php echo $course['xs'] ?></td>
+                                                <td><?php echo $course['ff'] ?></td>
+                                                <td><?php echo $course['jc'] ?></td>
+                                                <td><?php echo $course['cks'] ?></td>
+                                                <td><?php echo $course['kh'] ?></td>
                                             </tr>
                                             <?php endforeach; ?>
                                         </tbody>

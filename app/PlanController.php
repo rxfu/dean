@@ -23,7 +23,7 @@ class PlanController extends Controller {
 	 * @param int     $size 每页记录数
 	 * @return array       课程详细信息列表
 	 */
-	public function course($current, $size) {
+	public function course($current = PAGE_INIT, $size = PAGE_SIZE) {
 		$count = 0;
 		$sql   = 'SELECT * FROM t_jx_kc_xx';
 
