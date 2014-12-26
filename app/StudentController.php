@@ -155,6 +155,15 @@ class StudentController extends Controller {
 		return $this->view->render('student.profile', array('profile' => $data));
 	}
 
+	public function portrait($file) {
+		$path = PORTRAIT . DS . $file . 'jpg';
+		if (file_exists($path)) {
+			return file_get_contents($paht);
+		} else {
+			return file_get_contents(PORTRAIT . DS . 'untitled.jpg');
+		}
+	}
+
 	/**
 	 * 根据学号列出学生具有课程的学期
 	 *

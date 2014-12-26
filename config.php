@@ -17,6 +17,8 @@ define('APPROOT', ROOT . DS . 'app');
 define('WEBROOT', ROOT . DS . 'web');
 define('PUBROOT', ROOT . DS . 'public');
 define('LOGROOT', ROOT . DS . 'log');
+define('STORAGE', ROOT . DS . 'storage');
+define('PORTRAIT', STORAGE . DS . 'portraits');
 
 /**
  * 系统参数配置

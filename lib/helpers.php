@@ -168,18 +168,6 @@ if (!function_exists('js')) {
 	}
 }
 
-if (!function_exists('redirect')) {
-
-	/**
-	 * 页面重定向
-	 * @param  string $url URL地址
-	 * @return NULL
-	 */
-	function redirect($url) {
-		header('Location: ' . $url);
-	}
-}
-
 if (!function_exists('isPost')) {
 
 	/**

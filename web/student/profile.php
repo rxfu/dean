@@ -19,7 +19,7 @@
                                             <td><?php echo $profile['xh'] ?></td>
                                             <th class="active">姓名</th>
                                             <td><?php echo $profile['xm'] ?></td>
-                                            <td rowspan="10" width="240" height="320"><img src="images/portrait.jpg" alt="用户头像" /></td>
+                                            <td rowspan="10" width="240" height="320"><img src="<?php echo toLink('student.portrait', $profile['sfzh']) ?>" alt="用户头像" /></td>
                                         </tr>
                                         <tr>
                                             <th class="active">曾用名</th>
