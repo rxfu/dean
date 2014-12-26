@@ -232,7 +232,7 @@ if (!function_exists('parseTerm')) {
 }
 
 if (!function_exists('parseType')) {
-	
+
 	/**
 	 * 解析选课日志操作类型
 	 *
@@ -285,5 +285,32 @@ if (!function_exists('section')) {
 		$path = WEBROOT . DS . $path . '.php';
 
 		include $path;
+	}
+}
+
+if (!function_exists('weekend')) {
+
+	/**
+	 * 星期名称
+	 * @param  integer $week 星期
+	 * @return string       星期名
+	 */
+	function weekend($week) {
+		switch ($week) {
+			case 1:
+				return '星期一';
+			case 2:
+				return '星期二';
+			case 3:
+				return '星期三';
+			case 4:
+				return '星期四';
+			case 5:
+				return '星期五';
+			case 6:
+				return '星期六';
+			case 7:
+				return '星期日';
+		}
 	}
 }

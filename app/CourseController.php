@@ -25,6 +25,7 @@ class CourseController extends Controller {
 	public function unpaid() {
 		$sql  = 'SELECT xh FROM t_xk_xsqf WHERE xh = ?';
 		$data = $db->getRow($sql, Session::read('username'));
+		var_dump($data);
 
 		return strcasecmp($data['xh'], Session::read('username')) ? false : true;
 	}

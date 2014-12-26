@@ -41,6 +41,7 @@ class Controller {
 		$_GET     = isset($_GET) ? sanitize($_GET) : null;
 		$_REQUEST = isset($_REQUEST) ? sanitize($_REQUEST) : null;
 		$_COOKIE  = isset($_COOKIE) ? sanitize($_COOKIE) : null;
+		echo 'before';
 	}
 
 	/**

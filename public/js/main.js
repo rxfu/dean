@@ -118,4 +118,5 @@ $(document).ready(function() {
 			});
 		}
 	});
+	$('#campus-tab a:first').tab('show');
 });

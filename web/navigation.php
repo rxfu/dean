@@ -125,19 +125,29 @@
                                 </ul>
                             </li>
                             <li>
+                                <a href="#"><i class="fa fa-pencil-square-o fa-fw"></i> 教学评价<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#">教师评价</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-university fa-fw"></i> 创新学分申请<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#">学科竞赛获奖</a>
+                                        <a href="#">发表科研论文</a>
+                                        <a href="#">专利授权</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
                                 <a href="#"><i class="fa fa-university fa-fw"></i> 教室管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
                                         <a href="#">空教室查询</a>
                                         <a href="#">空教室申请</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-pencil-square-o fa-fw"></i> 教学评价<span class="fa arrow"></span></a>
-                                <ul class="nav nav-second-level">
-                                    <li>
-                                        <a href="#">教师评价</a>
                                     </li>
                                 </ul>
                             </li>

@@ -155,12 +155,17 @@ class StudentController extends Controller {
 		return $this->view->render('student.profile', array('profile' => $data));
 	}
 
+	/**
+	 * 获取当前学生头像
+	 * @param  string $file 头像文件名
+	 * @return integer       头像文件
+	 */
 	public function portrait($file) {
 		$path = PORTRAIT . DS . $file . 'jpg';
 		if (file_exists($path)) {
-			return file_get_contents($paht);
+			return readfile($path);
 		} else {
-			return file_get_contents(PORTRAIT . DS . 'untitled.jpg');
+			return readfile(PORTRAIT . DS . 'untitled.jpg');
 		}
 	}
 
