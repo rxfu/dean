@@ -22,7 +22,7 @@ class CourseController extends Controller {
 	 *
 	 * @return boolean     欠费为TRUE，未欠费为FALSE
 	 */
-	public function unpaid() {
+	protected function unpaid() {
 		$sql  = 'SELECT xh FROM t_xk_xsqf WHERE xh = ?';
 		$data = $db->getRow($sql, Session::read('username'));
 		var_dump($data);
@@ -34,7 +34,7 @@ class CourseController extends Controller {
 	 * 获取当前学生可选公选课程表
 	 * @return mixed 公选课程数据包
 	 */
-	public function pub() {
+	protected function pub() {
 		$sql  = 'SELECT * FROM p_xk_hqkcb(?, ?, ?, ?, ?, ?, ?, ?)';
 		$data = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term'), Session::read('season'), Session::read('grade'), Session::read('spno'), 'T', 'B'));
 
@@ -45,7 +45,7 @@ class CourseController extends Controller {
 	 * 获取当前学生可选必修课程表
 	 * @return mixed 必修课程数据包
 	 */
-	public function required() {
+	protected function required() {
 		$sql  = 'SELECT * FROM p_xk_hqkcb(?, ?, ?, ?, ?, ?, ?, ?)';
 		$data = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term'), Session::read('season'), Session::read('grade'), Session::read('spno'), 'T', 'B'));
 
@@ -56,7 +56,7 @@ class CourseController extends Controller {
 	 * 获取当前学生可选选修课程表
 	 * @return mixed 选修课程数据包
 	 */
-	public function elective() {
+	protected function elective() {
 		$sql  = 'SELECT * FROM p_xk_hqkcb(?, ?, ?, ?, ?, ?, ?, ?)';
 		$data = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term'), Session::read('season'), Session::read('grade'), Session::read('spno'), 'T', 'B'));
 
@@ -67,7 +67,7 @@ class CourseController extends Controller {
 	 * 获取当前学生可选通识素质课程表
 	 * @return mixed 通识素质课程数据包
 	 */
-	public function general() {
+	protected function general() {
 		$sql  = 'SELECT * FROM p_xk_hqkcb(?, ?, ?, ?, ?, ?, ?, ?)';
 		$data = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term'), Session::read('season'), Session::read('grade'), Session::read('spno'), 'T', 'B'));
 
@@ -78,7 +78,7 @@ class CourseController extends Controller {
 	 * 获取当前学生可选重修课程表
 	 * @return mixed 重修课程数据包
 	 */
-	public function retake() {
+	protected function retake() {
 		$sql  = 'SELECT * FROM p_xk_hqkcb(?, ?, ?, ?, ?, ?, ?, ?)';
 		$data = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term'), Session::read('season'), Session::read('grade'), Session::read('spno'), 'T', 'B'));
 
@@ -90,7 +90,7 @@ class CourseController extends Controller {
 	 *
 	 * @return boolean       选课成功为TRUE，不成功为FALSE
 	 */
-	public function elect() {
+	protected function elect() {
 		$sql           = 'SELECT pt, xz, xl, bz, kkxy, jsgh FROM t_pk_kczy a LEFT JOIN t_xk_xsqf b ON a.kcxh = b.kcxh WHERE a.nd = ? AND a.xq = ? AND a.kcxh = ?';
 		$course        = $db->getRow($sql, array($data['nd'], $data['xq'], $data['kcxh']));
 		$data['pt']    = $course['pt'];
@@ -125,7 +125,7 @@ class CourseController extends Controller {
 	 * 选课申请
 	 * @return NULL 
 	 */
-	public function apply() {
+	protected function apply() {
 		if (isPost()) {
 			$data['xh'] = Session::read('username');
 			$data['xm'] = Session::read('name');

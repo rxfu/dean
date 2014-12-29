@@ -10,7 +10,7 @@ class PlanController extends Controller {
 	 *
 	 * @return array         教学计划信息
 	 */
-	public function index() {
+	protected function index() {
 		$data = DB::getInstance()->searchRecord('v_xk_jxjh', array('zy' => Session::read('spno'), 'nj' => Session::read('grade'), 'zsjj' => Session::read('season')));
 
 		return $this->view->render('plan.index', array('plans' => $data));
@@ -23,7 +23,7 @@ class PlanController extends Controller {
 	 * @param int     $size 每页记录数
 	 * @return array       课程详细信息列表
 	 */
-	public function course($current = PAGE_INIT, $size = PAGE_SIZE) {
+	protected function course($current = PAGE_INIT, $size = PAGE_SIZE) {
 		$count = 0;
 		$sql   = 'SELECT * FROM t_jx_kc_xx';
 
@@ -40,7 +40,7 @@ class PlanController extends Controller {
 	 *
 	 * @return array         毕业要求的学分数组
 	 */
-	public function graduation() {
+	protected function graduation() {
 		$data         = false;
 		$requirements = DB::getInstance()->searchRecord('t_jx_byyq', array('zy' => Session::read('spno'), 'nj' => Session::read('grade'), 'zsjj' => Session::read('season'), 'byfa' => Session::read('system')));
 

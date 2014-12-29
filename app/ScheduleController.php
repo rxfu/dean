@@ -12,7 +12,7 @@ class ScheduleController extends Controller {
 	 * @param string  $xq 学期
 	 * @return array     学生课程表
 	 */
-	public function term($year, $term) {
+	protected function term($year, $term) {
 		$data = DB::getInstance()->searchRecord('v_xk_xskcb', array('xh' => Session::read('username'), 'nd' => $year, 'xq' => $term));
 
 		return $this->view->render('schedule.term', array('courses' => $data, 'year' => $year, 'term' => $term));

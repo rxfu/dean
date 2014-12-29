@@ -12,7 +12,7 @@ class SystemController extends Controller {
 	 * @param int     $size 每页记录数
 	 * @return array       选课日志列表
 	 */
-	public function log($current = PAGE_INIT, $size = PAGE_SIZE) {
+	protected function log($current = PAGE_INIT, $size = PAGE_SIZE) {
 		$count = 0;
 		$sql   = 'SELECT * FROM t_xk_log WHERE xh = ? ORDER BY czsj DESC';
 

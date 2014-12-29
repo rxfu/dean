@@ -10,7 +10,7 @@ class ReportController extends Controller {
 	 *
 	 * @return array     学生成绩
 	 */
-	public function index() {
+	protected function index() {
 		$id = Session::read('username');
 		if (is_numeric($id) && isset($id{11}) && !isset($id{12})) {
 			$data = DB::getInstance()->searchRecord('v_xk_xscj', array('xh' => $id));
@@ -26,7 +26,7 @@ class ReportController extends Controller {
 	 * @param string  $term 学期
 	 * @return array       学生成绩
 	 */
-	function term($year, $term) {
+	protected function term($year, $term) {
 		$data = DB::getInstance()->searchRecord('v_xk_xscj', array('xh' => Session::read('username'), 'nd' => $year, 'xq' => $term));
 
 		return $this->view->render('report.term', array('scores' => $data, 'year' => $year, 'term' => $term));
