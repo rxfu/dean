@@ -9,13 +9,13 @@
         <meta name="author" content="Fu Rongxin,符荣鑫">
         <title>广西师范大学教务管理系统 - 选课系统</title>
         <link rel="shortcut icon" href="favicon.ico">
-        <link rel="stylesheet" href="<?php echo css('css/bootstrap.min.css') ?>">
-        <link rel="stylesheet" href="<?php echo css('css/bootstrapValidator.min.css') ?>">
-        <link rel="stylesheet" href="<?php echo css('css/bootstrap-select.css') ?>">
-        <link rel="stylesheet" href="<?php echo css('css/bootstrap-theme.css') ?>">
-        <link rel="stylesheet" href="<?php echo css('font-awesome/css/font-awesome.min.css') ?>">
-        <link rel="stylesheet" href="<?php echo css('css/sb-admin.css') ?>">
-        <link rel="stylesheet" href="<?php echo css('css/style.css') ?>">
+        <?php echo css('css/bootstrap.min.css') ?>
+        <?php echo css('css/bootstrapValidator.min.css') ?>
+        <?php echo css('css/bootstrap-select.css') ?>
+        <?php echo css('css/bootstrap-theme.css') ?>
+        <?php echo css('font-awesome/css/font-awesome.min.css') ?>
+        <?php echo css('css/sb-admin.css') ?>
+        <?php echo css('css/style.css') ?>
 
         <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
         <!--[if lt IE 9]>

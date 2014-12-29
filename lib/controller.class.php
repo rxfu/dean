@@ -27,7 +27,19 @@ class Controller {
 	public function __call($method, $arguments) {
 		if (method_exists($this, $method)) {
 			$this->before();
-			call_user_func_array(array($this, $method), $arguments);
+			$beforeMethod = 'before_' . $method;
+			if (method_exists($this, $beforeMethod)) {
+				if (call_user_func_array(array($this, $beforeMethod), $arguments)) {
+					call_user_func_array(array($this, $method), $arguments);
+				}
+			} else {
+				call_user_func_array(array($this, $method), $arguments);
+			}
+
+			$afterMethod = 'after_' . $method;
+			if (method_exists($this, $afterMethod)) {
+				call_user_func_array(array($this, $afterMethod), $arguments);
+			}
 			$this->after();
 		}
 	}
@@ -41,7 +53,6 @@ class Controller {
 		$_GET     = isset($_GET) ? sanitize($_GET) : null;
 		$_REQUEST = isset($_REQUEST) ? sanitize($_REQUEST) : null;
 		$_COOKIE  = isset($_COOKIE) ? sanitize($_COOKIE) : null;
-		echo 'before';
 	}
 
 	/**

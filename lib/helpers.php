@@ -12,7 +12,7 @@ if (!function_exists('css')) {
 	 * @return string       CSS文件网站路径
 	 */
 	function css($file) {
-		return getBaseUrl() . $file;
+		return '<link rel="stylesheet" href="' . getBaseUrl() . $file . '">' . PHP_EOL;
 	}
 }
 
@@ -164,7 +164,7 @@ if (!function_exists('js')) {
 	 * @return string       JavaScript文件网站路径
 	 */
 	function js($file) {
-		return '<script src="' . getBaseUrl() . $file . '"></script>';
+		return '<script src="' . getBaseUrl() . $file . '"></script>' . PHP_EOL;
 	}
 }
 

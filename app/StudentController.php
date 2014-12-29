@@ -9,7 +9,7 @@ class StudentController extends Controller {
 	 * 登录系统
 	 * @return NULL
 	 */
-	public function login() {
+	protected function login() {
 		if (isPost()) {
 			$username = $_POST['username'];
 			$password = $_POST['password'];
@@ -47,7 +47,7 @@ class StudentController extends Controller {
 
 				Session::flash('success', '你已经成功登录系统');
 
-				Redirect::to('student.profile');
+				Redirect::to('home.dashboard');
 			} else {
 				Session::flash('error', '登录失败，请检查用户名和密码是否正确');
 			}
@@ -62,7 +62,7 @@ class StudentController extends Controller {
 	 * @param  string $password 密码
 	 * @return boolean           验证成功为TRUE，验证失败为FALSE
 	 */
-	public function auth($username, $password) {
+	protected function auth($username, $password) {
 		if (is_string($username) && is_string($password)) {
 			$data = DB::getInstance()->searchRecord('t_xk_xsmm', array('xh' => $username, 'mm' => hashString($password)), array('xh'));
 
@@ -88,7 +88,7 @@ class StudentController extends Controller {
 	 * 登出系统
 	 * @return NULL
 	 */
-	public function logout() {
+	protected function logout() {
 		Logger::write(array('xh' => Session::read('username'), 'czlx' => LOG_LOGOUT));
 		Session::destroy();
 		Redirect::to('student.login');
@@ -98,7 +98,7 @@ class StudentController extends Controller {
 	 * 修改密码
 	 * @return boolean            修改成功为TRUE，修改失败为FALSE
 	 */
-	public function password() {
+	protected function password() {
 		if (isPost()) {
 			$old       = $_POST['oldPassword'];
 			$new       = $_POST['newPassword'];
@@ -132,7 +132,7 @@ class StudentController extends Controller {
 	 * @param  string $id 学号
 	 * @return array     学生基本信息
 	 */
-	public function info($id) {
+	protected function info($id) {
 		if (is_numeric($id) && isset($id{11}) && !isset($id{12})) {
 			$sql  = 'SELECT * FROM v_xk_xsjbxx WHERE xh = ?';
 			$data = DB::getInstance()->getRow($sql, $id);
@@ -145,7 +145,7 @@ class StudentController extends Controller {
 	 * 获取当前学生详细信息
 	 * @return array 学生详细信息
 	 */
-	public function profile() {
+	protected function profile() {
 		$id = Session::read('username');
 		if (is_numeric($id) && isset($id{11}) && !isset($id{12})) {
 			$sql  = 'SELECT * FROM v_xk_xsxx WHERE xh = ?';
@@ -160,7 +160,7 @@ class StudentController extends Controller {
 	 * @param  string $file 头像文件名
 	 * @return integer       头像文件
 	 */
-	public function portrait($file) {
+	protected function portrait($file) {
 		$path = PORTRAIT . DS . $file . 'jpg';
 		if (file_exists($path)) {
 			return readfile($path);
@@ -175,7 +175,7 @@ class StudentController extends Controller {
 	 * @param string  $id 学号
 	 * @return array     年度学期数组
 	 */
-	public function courseTerms($id) {
+	protected function courseTerms($id) {
 		$sql  = 'SELECT nd, xq FROM t_xk_xkxx WHERE xh = ? GROUP BY nd, xq ORDER BY nd, xq';
 		$data = DB::getInstance()->getAll($sql, $id);
 
@@ -188,7 +188,7 @@ class StudentController extends Controller {
 	 * @param string  $id 学号
 	 * @return array     年度学期数组
 	 */
-	public function reportTerms($id) {
+	protected function reportTerms($id) {
 		$sql  = 'SELECT nd, xq FROM t_cj_zxscj WHERE xh = ? GROUP BY nd, xq ORDER BY nd, xq';
 		$data = DB::getInstance()->getAll($sql, $id);
 

@@ -17,9 +17,7 @@ class Session {
 	 * @return boolean 会话创建成功返回TRUE，否则返回FALSE
 	 */
 	private static function _init() {
-		if (!self::_started()) {
-			session_start();
-		}
+		return self::_started() ? self::regenerateId() : session_start();
 	}
 
 	/**
@@ -44,9 +42,9 @@ class Session {
 	private static function _started() {
 		$started = false;
 		if (version_compare(phpversion(), '5.4.0', '>=')) {
-			$started = session_status() === PHP_SESSION_ACTIVE ? true : false;
+			$started = PHP_SESSION_ACTIVE === session_status() ? true : false;
 		} else {
-			$started = session_id() === '' ? false : true;
+			$started = '' === session_id() ? false : true;
 		}
 
 		return $started;
@@ -124,6 +122,7 @@ class Session {
 		foreach ($keys as $name) {
 			$session = &$session[$name];
 		}
+		var_dump($_SESSION);
 		unset($session);
 
 		self::_age();
@@ -154,7 +153,7 @@ class Session {
 			$_SESSIION['flash'] = array();
 		}/*
 		if (!array_key_exists($type, $_SESSION['flash'])) {
-			$_SESSION['flash'][$type] = array();
+		$_SESSION['flash'][$type] = array();
 		}*/
 
 		$_SESSION['flash'][$type][] = $message;
@@ -294,7 +293,7 @@ class Session {
 	 */
 	public static function destroy() {
 		if (self::_started()) {
-			$_SESSION = array();
+			session_unset();
 
 			if (ini_get('session.use_cookies')) {
 				$params = session_get_cookie_params();
@@ -303,5 +302,20 @@ class Session {
 
 			session_destroy();
 		}
+	}
+
+	/**
+	 * 重新生成回话ID
+	 * @return string session id数据
+	 */
+	public static function regenerateId() {
+		if (isset($_SESSION['regenerate'])) {
+			if (true === $_SESSION['regenerate']) {
+				return session_id();
+			}
+		}
+
+		session_regenerate_id(true);
+		return session_id();
 	}
 }
