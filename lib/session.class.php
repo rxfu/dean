@@ -17,7 +17,7 @@ class Session {
 	 * @return boolean 会话创建成功返回TRUE，否则返回FALSE
 	 */
 	private static function _init() {
-		return self::_started() ? self::regenerateId() : session_start();
+		return self::_started() ? self::refresh() : session_start();
 	}
 
 	/**
@@ -64,12 +64,7 @@ class Session {
 
 		self::_init();
 
-		$keys    = explode('.', $key);
-		$session = &$_SESSION;
-		foreach ($keys as $name) {
-			$session = &$session[$name];
-		}
-		$session = $value;
+		$_SESSION[$key] = $value;
 
 		self::_age();
 
@@ -89,16 +84,10 @@ class Session {
 
 		self::_init();
 
-		$keys    = explode('.', $key);
-		$session = &$_SESSION;
-		foreach ($keys as $name) {
-			$session = &$session[$name];
-		}
-
-		if (isset($session)) {
+		if (isset($_SESSION[$key])) {
 			self::_age();
 
-			return $session;
+			return $_SESSION[$key];
 		}
 
 		return false;
@@ -117,13 +106,7 @@ class Session {
 
 		self::_init();
 
-		$keys    = explode('.', $key);
-		$session = &$_SESSION;
-		foreach ($keys as $name) {
-			$session = &$session[$name];
-		}
-		var_dump($_SESSION);
-		unset($session);
+		unset($_SESSION[$key]);
 
 		self::_age();
 	}
@@ -150,7 +133,7 @@ class Session {
 		self::_init();
 
 		if (!isset($_SESSION['flash'])) {
-			$_SESSIION['flash'] = array();
+			$_SESSION['flash'] = array();
 		}/*
 		if (!array_key_exists($type, $_SESSION['flash'])) {
 		$_SESSION['flash'][$type] = array();
@@ -172,7 +155,7 @@ class Session {
 		}
 
 		self::_init();
-
+		
 		if (!isset($_SESSION['flash'])) {
 			return false;
 		}
@@ -308,7 +291,7 @@ class Session {
 	 * 重新生成回话ID
 	 * @return string session id数据
 	 */
-	public static function regenerateId() {
+	public static function refresh() {
 		if (isset($_SESSION['regenerate'])) {
 			if (true === $_SESSION['regenerate']) {
 				return session_id();
