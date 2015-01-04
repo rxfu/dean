@@ -8,7 +8,6 @@ $pages = array_pop($courses);
 $first = max(1, $current - 4);
 $last = min($pages, $current + 4);
 ?>
-            <div id="page-wrapper">
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">课程基本信息</h1>

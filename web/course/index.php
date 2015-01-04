@@ -9,7 +9,6 @@ if (isArrearage($session->get('username'))) {
 <?php
 $items = listElectiveCourses($session->get('username'), $session->get('spno'), $session->get('grade'), $session->get('year'), $session->get('term'), $session->get('season'), 'K', 'B');
 ?>
-            <div id="page-wrapper">
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header"><?php echo $session->get('name') ?>同学<?php echo $session->get('year') ?>年度<?php echo parseDictCode('xq', $session->get('term')) ?>学期选课表</h1>

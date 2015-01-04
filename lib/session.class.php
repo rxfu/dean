@@ -17,7 +17,7 @@ class Session {
 	 * @return boolean 会话创建成功返回TRUE，否则返回FALSE
 	 */
 	private static function _init() {
-		return self::_started() ? self::refresh() : session_start();
+		return self::_started() ? self::regenerate() : session_start();
 	}
 
 	/**
@@ -134,10 +134,7 @@ class Session {
 
 		if (!isset($_SESSION['flash'])) {
 			$_SESSION['flash'] = array();
-		}/*
-		if (!array_key_exists($type, $_SESSION['flash'])) {
-		$_SESSION['flash'][$type] = array();
-		}*/
+		}
 
 		$_SESSION['flash'][$type][] = $message;
 	}
@@ -155,7 +152,7 @@ class Session {
 		}
 
 		self::_init();
-		
+
 		if (!isset($_SESSION['flash'])) {
 			return false;
 		}
@@ -219,9 +216,9 @@ class Session {
 		}
 
 		if ('all' === $type) {
-			self::delete('flash');
+			unset($_SESSION['flash']);
 		} else {
-			self::delete('flash.' . $type);
+			unset($_SESSION['flash'][$type]);
 		}
 
 		return true;
@@ -291,7 +288,7 @@ class Session {
 	 * 重新生成回话ID
 	 * @return string session id数据
 	 */
-	public static function refresh() {
+	public static function regenerate() {
 		if (isset($_SESSION['regenerate'])) {
 			if (true === $_SESSION['regenerate']) {
 				return session_id();

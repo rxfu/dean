@@ -47,7 +47,7 @@ class StudentController extends Controller {
 
 				Session::flash('success', '你已经成功登录系统');
 
-				Redirect::to('home.dashboard');
+				return Redirect::to('home.dashboard');
 			} else {
 				Session::flash('error', '登录失败，请检查用户名和密码是否正确');
 			}
@@ -91,7 +91,7 @@ class StudentController extends Controller {
 	protected function logout() {
 		Logger::write(array('xh' => Session::read('username'), 'czlx' => LOG_LOGOUT));
 		Session::destroy();
-		Redirect::to('student.login');
+		return Redirect::to('student.login');
 	}
 
 	/**
@@ -193,6 +193,14 @@ class StudentController extends Controller {
 		$data = DB::getInstance()->getAll($sql, $id);
 
 		return $data;
+	}
+
+	/**
+	 * 学生欠费提示
+	 * @return void
+	 */
+	protected function unpaid() {
+		return $this->view->render('student.unpaid');
 	}
 
 }

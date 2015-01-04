@@ -298,19 +298,19 @@ if (!function_exists('weekend')) {
 	function weekend($week) {
 		switch ($week) {
 			case 1:
-				return '星期一';
+				return '一';
 			case 2:
-				return '星期二';
+				return '二';
 			case 3:
-				return '星期三';
+				return '三';
 			case 4:
-				return '星期四';
+				return '四';
 			case 5:
-				return '星期五';
+				return '五';
 			case 6:
-				return '星期六';
+				return '六';
 			case 7:
-				return '星期日';
+				return '日';
 		}
 	}
 }

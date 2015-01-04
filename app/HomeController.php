@@ -7,7 +7,7 @@ class HomeController extends Controller {
 	 * @return void
 	 */
 	protected function index() {
-		$this->view->render('student.login');
+		return $this->view->render('student.login');
 	}
 
 	/**
@@ -15,6 +15,6 @@ class HomeController extends Controller {
 	 * @return void
 	 */
 	protected function dashboard() {
-		$this->view->render('home.dashboard');
+		return $this->view->render('home.dashboard');
 	}
 }

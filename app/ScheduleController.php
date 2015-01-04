@@ -6,6 +6,14 @@
 class ScheduleController extends Controller {
 
 	/**
+	 * 列出当前学生当前年度、学期选课课程表
+	 * @return void
+	 */
+	protected function index() {
+		return $this->view->render('schedule.index', array('year' => Session::read('year'), 'term'=>Session::read('term')));
+	}
+
+	/**
 	 * 根据年度、学期列出当前学生的课程表
 	 *
 	 * @param string  $nd 年度

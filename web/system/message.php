@@ -8,7 +8,6 @@ $pages = array_pop($messages);
 $first = max(1, $current - 4);
 $last = min($pages, $current + 4);
 ?>
-            <div id="page-wrapper">
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">系统消息</h1>

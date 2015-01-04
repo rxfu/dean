@@ -13,7 +13,7 @@ class CourseController extends Controller {
 		parent::before();
 
 		if ($this->unpaid()) {
-			Redirect::to('course.unpaid');
+			return Redirect::to('student.unpaid');
 		}
 	}
 
@@ -24,8 +24,7 @@ class CourseController extends Controller {
 	 */
 	protected function unpaid() {
 		$sql  = 'SELECT xh FROM t_xk_xsqf WHERE xh = ?';
-		$data = $db->getRow($sql, Session::read('username'));
-		var_dump($data);
+		$data = DB::getInstance()->getRow($sql, Session::read('username'));
 
 		return strcasecmp($data['xh'], Session::read('username')) ? false : true;
 	}
