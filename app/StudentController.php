@@ -36,6 +36,7 @@ class StudentController extends Controller {
 				Session::write('season', $info['zsjj']);
 				Session::write('plan', $info['byfa']);
 				Session::write('system', $info['xz']);
+				Session::write('campus', $info['xqh']);
 
 				$electTerm = Configuration::get('XK_SJ');
 				$term      = parseTerm($electTerm);

@@ -38,7 +38,7 @@ final class Dictionary extends Prefab {
 		$sql  = 'SELECT mc FROM ' . self::$_prefix . $table . ' WHERE dm = ?';
 		$data = $dict::$_dbh->getRow($sql, $code);
 
-		return $data['mc'];
+		return empty($data['mc']) ? '未知' : $data['mc'];
 	}
 
 }

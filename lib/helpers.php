@@ -156,15 +156,15 @@ if (!function_exists('hashString')) {
 	}
 }
 
-if (!function_exists('js')) {
+if (!function_exists('isEmpty')) {
 
 	/**
-	 * 获取JavaScript文件网站路径
-	 * @param  string $file JavaScript文件
-	 * @return string       JavaScript文件网站路径
+	 * 判断字符串是否为空或空白
+	 * @param  string  $text 字符串
+	 * @return boolean       空或空白为TRUE，非空或非空白为FALSE
 	 */
-	function js($file) {
-		return '<script src="' . getBaseUrl() . $file . '"></script>' . PHP_EOL;
+	function isEmpty($text) {
+		return empty($text) ? true : ctype_space($text);
 	}
 }
 
@@ -176,6 +176,18 @@ if (!function_exists('isPost')) {
 	 */
 	function isPost() {
 		return 'POST' === $_SERVER['REQUEST_METHOD'];
+	}
+}
+
+if (!function_exists('js')) {
+
+	/**
+	 * 获取JavaScript文件网站路径
+	 * @param  string $file JavaScript文件
+	 * @return string       JavaScript文件网站路径
+	 */
+	function js($file) {
+		return '<script src="' . getBaseUrl() . $file . '"></script>' . PHP_EOL;
 	}
 }
 

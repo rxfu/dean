@@ -37,7 +37,15 @@ class CourseController extends Controller {
 		$sql  = 'SELECT * FROM p_xk_hqkcb(?, ?, ?, ?, ?, ?, ?, ?)';
 		$data = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term'), Session::read('season'), Session::read('grade'), Session::read('spno'), 'T', 'B'));
 
-		return $this->view->render('course.pub', array('courses' => $data));
+		$courses = array();
+		foreach ($data as $course) {
+			if (isEmpty($course['xqh'])) {
+				$courses['unknown'][] = $course;
+			} else {
+				$courses[$course['xqh']][] = $course;
+			}
+		}
+		return $this->view->render('course.pub', array('courses' => $courses));
 	}
 
 	/**
@@ -122,18 +130,18 @@ class CourseController extends Controller {
 
 	/**
 	 * 选课申请
-	 * @return NULL 
+	 * @return NULL
 	 */
 	protected function apply() {
 		if (isPost()) {
-			$data['xh'] = Session::read('username');
-			$data['xm'] = Session::read('name');
-			$data['nd'] = Session::read('year');
-			$data['xq']=Session::read('term');
+			$data['xh']   = Session::read('username');
+			$data['xm']   = Session::read('name');
+			$data['nd']   = Session::read('year');
+			$data['xq']   = Session::read('term');
 			$data['kcxh'] = $_POST['cno'];
 			DB::getInstance()->insertRecord('t_xk_xksq', $data);
 
-			Logger::write(array('xh'=>Session::read('username'), 'kcxh' =>$data['kcxh'], 'czlx'=>LOG_APPLY));
+			Logger::write(array('xh' => Session::read('username'), 'kcxh' => $data['kcxh'], 'czlx' => LOG_APPLY));
 		}
 	}
 

@@ -5,6 +5,7 @@ $.getJsUrl = function() {
 }
 
 $(document).ready(function() {
+	/*
 	$('#flash_error').on('closed.bs.alert', function() {
 		$.get('clearSession.php', {
 			name: "error"
@@ -25,6 +26,7 @@ $(document).ready(function() {
 			name: "success"
 		});
 	});
+*/
 	$('a[href="' + $(location).attr('href') + '"]').closest('ul.nav').addClass('collapse in');
 	$('#loginForm')
 		.bootstrapValidator({
@@ -118,5 +120,11 @@ $(document).ready(function() {
 			});
 		}
 	});
-	$('#campus-tab a:first').tab('show');
+
+	var campusId = '<?php echo Session::read('campus'); ?>';
+	$('#campus-tab a[href="#campus-"' + campusId + '"]').tab('show');
+	$('#campus-tab a').click(function(e) {
+		e.preventDefault();
+		$(this).tab('show');
+	});
 });
