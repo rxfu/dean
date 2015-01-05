@@ -120,11 +120,4 @@ $(document).ready(function() {
 			});
 		}
 	});
-
-	var campusId = '<?php echo Session::read('campus'); ?>';
-	$('#campus-tab a[href="#campus-"' + campusId + '"]').tab('show');
-	$('#campus-tab a').click(function(e) {
-		e.preventDefault();
-		$(this).tab('show');
-	});
 });
