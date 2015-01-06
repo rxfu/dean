@@ -63,33 +63,33 @@
                                 <a href="#"><i class="fa fa-table fa-fw"></i> 课程管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="<?php echo toLink('course.pub') ?>">公共课程</a>
+                                        <a href="<?php echo toLink('course.index', 'pub') ?>">公共课程</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('course.required') ?>">必修课程</a>
+                                        <a href="<?php echo toLink('course.index', 'req') ?>">必修课程</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('course.elective') ?>">选修课程</a>
+                                        <a href="<?php echo toLink('course.index', 'sel') ?>">选修课程</a>
                                     </li>
                                     <li>
                                         <a href="#"> 通识素质课程<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
                                             <li>
-                                                <a href="<?php echo toLink('course.general') ?>">人文社科</a>
+                                                <a href="<?php echo toLink('course.index', 'hs') ?>">人文社科</a>
                                             </li>
                                             <li>
-                                                <a href="<?php echo toLink('course.general') ?>">自然科学</a>
+                                                <a href="<?php echo toLink('course.index', 'ns') ?>">自然科学</a>
                                             </li>
                                             <li>
-                                                <a href="<?php echo toLink('course.general') ?>">艺术体育</a>
+                                                <a href="<?php echo toLink('course.index', 'as') ?>">艺术体育</a>
                                             </li>
                                             <li>
-                                                <a href="<?php echo toLink('course.general') ?>">其他专项</a>
+                                                <a href="<?php echo toLink('course.index', 'os') ?>">其他专项</a>
                                             </li>
                                         </ul>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('course.retake') ?>">重修课程</a>
+                                        <a href="<?php echo toLink('course.index', 'ret') ?>">重修课程</a>
                                     </li>
                                 </ul>
                             </li>

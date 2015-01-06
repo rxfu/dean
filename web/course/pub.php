@@ -1,5 +1,5 @@
 <?php section('header') ?>
-<?php section('navigation') ?>
+<?php section('student.navigation') ?>
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header"><?php echo Session::read('name') ?>同学<?php echo Session::read('year') ?>年度<?php echo Dictionary::get('xq', Session::read('term')) ?>学期公共课程选课表</h1>
@@ -75,7 +75,7 @@
             </div>
 <?php section('footer') ?>
 <script type="text/javascript">
-    $('#campus-tab a[href="#campus-"' + <?php echo Session::read('campus') ?> + '"]').tab('show');
+    $('#campus-tab a[href="#campus-<?php echo Session::read('campus') ?>"]').tab('show');
     $('#campus-tab a').click(function(e) {
         e.preventDefault();
         $(this).tab('show');

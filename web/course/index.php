@@ -1,17 +1,8 @@
-<?php include 'header.php' ?>
-<?php
-if (isArrearage($session->get('username'))) {
-    
-    redirect('arrearage.php');
-}
-?>
-<?php include 'navigation.php' ?>
-<?php
-$items = listElectiveCourses($session->get('username'), $session->get('spno'), $session->get('grade'), $session->get('year'), $session->get('term'), $session->get('season'), 'K', 'B');
-?>
+<?php section('header') ?>
+<?php section('student.navigation') ?>
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header"><?php echo $session->get('name') ?>同学<?php echo $session->get('year') ?>年度<?php echo parseDictCode('xq', $session->get('term')) ?>学期选课表</h1>
+                        <h1 class="page-header"><?php echo Session::read('name') ?>同学<?php echo Session::read('year') ?>年度<?php echo Dictionary::get('xq', Session::read('term')) ?>学期<?php echo $title ?>选课表</h1>
                     </div>
                 </div>
 
@@ -19,50 +10,74 @@ $items = listElectiveCourses($session->get('username'), $session->get('spno'), $
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th class="active">操作</th>
-                                                <th class="active">课程序号</th>
-                                                <th class="active">课程名称</th>
-                                                <th class="active">学分</th>
-                                                <th class="active">考核方式</th>
-                                                <th class="active">上课时间</th>
-                                                <th class="active">上课周数</th>
-                                                <th class="active">所在校区</th>
-                                                <th class="active">主要任课老师</th>
-                                                <th class="active">上课人数</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach ($items as $item): ?>
-                                            <tr>
-                                                <td><input type="checkbox" value="<?php echo $item['kcxh'] ?>" <?php echo isElective($session->get('username'), $session->get('year'), $session->get('term'), $item['kcxh']) ? 'checked' : '' ?>></td>
-                                                <td><?php echo $item['kcxh'] ?></td>
-                                                <td><?php echo $item['kcmc'] ?></td>
-                                                <td><?php echo $item['xf'] ?></td>
-                                                <td><?php echo $item['kh'] ?></td>
-                                                <td>
-                                                    <?php 
-                                                    foreach ($item['sksj'] as $time) {
-                                                        echo $time['sksj'] . '<br />';
-                                                    } 
-                                                    ?>
-                                                </td>
-                                                <td><?php echo $item['jsz'] - $item['ksz'] ?></td>
-                                                <td><?php echo $item['xqh'] ?></td>
-                                                <td><?php echo $item['jsxm'] ?></td>
-                                                <td><?php echo $item['rs'] ?></td>
-                                            </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
+                                <div role="tabpanel">
+                                    <ul id="campus-tab" class="nav nav-tabs" role="tablist">
+                                        <?php if(!empty($courses)): ?>
+                                            <?php foreach (array_keys($courses) as $campus): ?>
+                                                <?php $campusId = 'campus-' . $campus ?>
+                                                <li role="presentation"><a href="#<?php echo $campusId ?>" aria-controls="<?php echo $campusId ?>" role="tab" data-toggle="tab"><?php echo Dictionary::get('xqh', $campus) ?></a></li>
+                                            <?php endforeach ?>
+                                        <?php endif ?>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <?php if(!empty($courses)): ?>
+                                            <?php foreach (array_keys($courses) as $campus): ?>
+                                                <div id="campus-<?php echo $campus ?>" class="tab-pane fade<?php echo Session::read('campus') == $campus ? ' in active' : '' ?>" role="tabpanel">                                            
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th rowspan="2" class="active">操作</th>
+                                                                    <th rowspan="2" class="active">课程序号</th>
+                                                                    <th rowspan="2" class="active">课程名称</th>
+                                                                    <th rowspan="2" class="active">学分</th>
+                                                                    <th rowspan="2" class="active">考核方式</th>
+                                                                    <th colspan="3" class="active text-center">上课时间</th>
+                                                                    <th rowspan="2" class="active">所在校区</th>
+                                                                    <th rowspan="2" class="active">主要任课老师</th>
+                                                                    <th rowspan="2" class="active">上课人数</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th class="active">起始周次</th>
+                                                                    <th class="active">星期</th>
+                                                                    <th class="active">起始节数</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <?php foreach ($courses[$campus] as $course): ?>
+                                                                <tr>
+                                                                    <td><input type="checkbox"></td>
+                                                                    <td><?php echo $course['kcxh'] ?></td>
+                                                                    <td><?php echo $course['kcmc'] ?></td>
+                                                                    <td><?php echo $course['xf'] ?></td>
+                                                                    <td><?php echo $course['kh'] ?></td>
+                                                                    <td><?php echo $course['ksz'] ?>~<?php echo $course['jsz'] ?></td>
+                                                                    <td><?php echo $course['zc'] ?></td>
+                                                                    <td><?php echo $course['ksj'] ?>
+                                                                        <?php echo $course['jsj'] <= $course['ksj'] ? '' : '~' . $course['jsj'] ?></td>
+                                                                    <td><?php echo Dictionary::get('xqh', $course['xqh']) ?></td>
+                                                                    <td><?php echo $course['jsxm'] ?></td>
+                                                                    <td><?php echo $course['rs'] ?></td>
+                                                                </tr>
+                                                                <?php endforeach; ?>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach ?>
+                                        <?php endif ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-<?php include 'footer.php' ?>
+<?php section('footer') ?>
+<script type="text/javascript">
+    $('#campus-tab a[href="#campus-<?php echo Session::read('campus') ?>"]').tab('show');
+    $('#campus-tab a').click(function(e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+</script>

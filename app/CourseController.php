@@ -30,6 +30,77 @@ class CourseController extends Controller {
 	}
 
 	/**
+	 * 获取当前学生可选课程表
+	 * @param  string $type 课程性质
+	 * @return mixed       可选课程数据
+	 */
+	protected function index($type) {
+		switch ($type) {
+			case 'pub':
+				$title = '公共课程';
+				$platform = 'T';
+				$property = 'B';
+				break;
+
+			case 'req':
+				$title = '必修课程';
+				$property = 'B';
+
+				$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
+				foreach ($data as $pt) {
+					if ('T' !== $pt) {
+						$platform = $pt['dm'];
+					}
+				}
+				break;
+
+			case 'sel':
+				$title = '选修课程';
+				$property = 'X';
+
+				$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
+				foreach ($data as $pt) {
+					if ('T'!== $pt || 'W' !== $pt || 'I' !== $pt || 'Y' !== $pt || 'Q' !== $pt) {
+						$platform = $pt['dm'];
+					}
+				}
+				break;
+				
+			case 'hs':
+				$title = '人文社科通识素质课程';
+				break;
+			case 'ns':
+				$title = '自然科学通识素质课程';
+				break;
+			case 'as':
+				$title = '艺术体育通识素质课程';
+				break;
+			case 'os':
+				$title = '其他专项通识素质课程';
+				break;
+			case 'ret':
+				$title = '重修课程';
+				break;
+			default:
+				$title = '可选课程';
+				break;
+		}
+
+		$sql  = 'SELECT * FROM p_xk_hqkcb(?, ?, ?, ?, ?, ?, ?, ?)';
+		$data = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term'), Session::read('season'), Session::read('grade'), Session::read('spno'), 'T', 'B'));
+
+		$courses = array();
+		foreach ($data as $course) {
+			if (isEmpty($course['xqh'])) {
+				$courses['unknown'][] = $course;
+			} else {
+				$courses[$course['xqh']][] = $course;
+			}
+		}
+		return $this->view->render('course.index', array('courses' => $courses, 'title' => $title));
+	}
+
+	/**
 	 * 获取当前学生可选公选课程表
 	 * @return mixed 公选课程数据包
 	 */
@@ -63,7 +134,7 @@ class CourseController extends Controller {
 	 * 获取当前学生可选选修课程表
 	 * @return mixed 选修课程数据包
 	 */
-	protected function elective() {
+	protected function selective() {
 		$sql  = 'SELECT * FROM p_xk_hqkcb(?, ?, ?, ?, ?, ?, ?, ?)';
 		$data = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term'), Session::read('season'), Session::read('grade'), Session::read('spno'), 'T', 'B'));
 
@@ -97,7 +168,7 @@ class CourseController extends Controller {
 	 *
 	 * @return boolean       选课成功为TRUE，不成功为FALSE
 	 */
-	protected function elect() {
+	protected function select() {
 		$sql           = 'SELECT pt, xz, xl, bz, kkxy, jsgh FROM t_pk_kczy a LEFT JOIN t_xk_xsqf b ON a.kcxh = b.kcxh WHERE a.nd = ? AND a.xq = ? AND a.kcxh = ?';
 		$course        = $db->getRow($sql, array($data['nd'], $data['xq'], $data['kcxh']));
 		$data['pt']    = $course['pt'];

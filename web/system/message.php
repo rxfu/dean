@@ -1,5 +1,5 @@
 <?php section('header') ?>
-<?php section('navigation') ?>
+<?php section('student.navigation') ?>
 <?php
 $current = array_pop($messages);
 $count = array_pop($messages);

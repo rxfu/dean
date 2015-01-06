@@ -4,6 +4,23 @@
  * 常用函数
  */
 
+if (!function_exists('array_remove')) {
+
+	/**
+	 * 根据给定值删除数组元素
+	 * @param  array $haystack 给定数组
+	 * @param  mixed $needle   给定值
+	 * @return array           删除元素后数组
+	 */
+	function array_remove($haystack, $needle) {
+		if (false !== ($key = array_search($needle, $haystack))) {
+			unset($haystack[$key]);
+		}
+
+		return $haystack;
+	}
+}
+
 if (!function_exists('css')) {
 
 	/**
