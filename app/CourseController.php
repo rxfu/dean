@@ -37,57 +37,76 @@ class CourseController extends Controller {
 	protected function index($type) {
 		switch ($type) {
 			case 'pub':
-				$title = '公共课程';
+				$title    = '公共课程';
 				$platform = 'T';
 				$property = 'B';
 				break;
 
 			case 'req':
-				$title = '必修课程';
+				$title    = '必修课程';
 				$property = 'B';
 
 				$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
 				foreach ($data as $pt) {
 					if ('T' !== $pt) {
-						$platform = $pt['dm'];
+						$platform[] = $pt['dm'];
 					}
 				}
 				break;
 
 			case 'sel':
-				$title = '选修课程';
+				$title    = '选修课程';
 				$property = 'X';
 
 				$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
 				foreach ($data as $pt) {
-					if ('T'!== $pt || 'W' !== $pt || 'I' !== $pt || 'Y' !== $pt || 'Q' !== $pt) {
-						$platform = $pt['dm'];
+					if ('T' !== $pt || 'W' !== $pt || 'I' !== $pt || 'Y' !== $pt || 'Q' !== $pt) {
+						$platform[] = $pt['dm'];
 					}
 				}
 				break;
-				
+
 			case 'hs':
-				$title = '人文社科通识素质课程';
+				$title    = '人文社科通识素质课程';
+				$property = 'X';
+				$platform = 'W';
 				break;
 			case 'ns':
-				$title = '自然科学通识素质课程';
+				$title    = '自然科学通识素质课程';
+				$property = 'X';
+				$platform = 'I';
 				break;
 			case 'as':
-				$title = '艺术体育通识素质课程';
+				$title    = '艺术体育通识素质课程';
+				$property = 'X';
+				$platform = 'Y';
 				break;
 			case 'os':
-				$title = '其他专项通识素质课程';
+				$title    = '其他专项通识素质课程';
+				$property = 'X';
+				$platform = 'Q';
 				break;
 			case 'ret':
 				$title = '重修课程';
 				break;
 			default:
 				$title = '可选课程';
+				$data  = DB::getInstance()->getAll('SELECT dm FROM t_zd_xz');
+				foreach ($data as $xz) {
+					$property[] = $xz['dm'];
+				}
+				$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
+				foreach ($data as $pt) {
+					$platform[] = $pt['dm'];
+				}
 				break;
 		}
 
-		$sql  = 'SELECT * FROM p_xk_hqkcb(?, ?, ?, ?, ?, ?, ?, ?)';
-		$data = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term'), Session::read('season'), Session::read('grade'), Session::read('spno'), 'T', 'B'));
+		$platform = is_array($platform) ? $platform : array($platform);
+		$platform = implode(',', $platform);
+		$property = is_array($property) ? $property : array($property);
+		$property = implode(',', $property);
+		$data     = DB::getInstance()->query('SELECT * FROM p_kxkcb_sel(\'' . Session::read('username') . '\',{' . $platform . '},{' . $property . '})');
 
 		$courses = array();
 		foreach ($data as $course) {

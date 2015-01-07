@@ -312,7 +312,7 @@ class DB extends Prefab {
 	 * @param array   $params 绑定参数值
 	 * @return PDOStatement   PDO状态句柄
 	 */
-	public function query($sql, $params = null) {
+	public function search($sql, $params = null) {
 		return $this->_execute($sql, $params);
 	}
 
@@ -340,7 +340,16 @@ class DB extends Prefab {
 		$field = empty($fields) ? '*' : implode(',', $fields);
 		$sql   = 'SELECT ' . $field . ' FROM ' . $table . $condition;
 
-		return $this->query($sql, $params)->fetchAll();
+		return $this->search($sql, $params)->fetchAll();
+	}
+
+	/**
+	 * 用原始SQL语句查询记录
+	 * @param  string $sql SQL语句
+	 * @return PDOStatement      PDO状态句柄
+	 */
+	public function query($sql) {
+		return self::$_dbh->query($sql)->fetchAll();
 	}
 
 	/**
@@ -351,7 +360,7 @@ class DB extends Prefab {
 	 * @return array   查询一行结果
 	 */
 	public function getRow($sql, $params = null) {
-		$sth = $this->query($sql, $params);
+		$sth = $this->search($sql, $params);
 		return $sth->fetch();
 	}
 
@@ -375,7 +384,7 @@ class DB extends Prefab {
 	 * @return array   查询一列结果
 	 */
 	public function getColumn($sql, $params = null) {
-		$sth = $this->query($sql, $params);
+		$sth = $this->search($sql, $params);
 		return $sth->fetchColumn();
 	}
 
@@ -452,7 +461,7 @@ class DB extends Prefab {
 		// 限制查询结果数量
 		$limit = $sql . ' LIMIT ' . $size . ' OFFSET ' . $offset;
 
-		return $this->query($limit, $params)->fetchAll();
+		return $this->search($limit, $params)->fetchAll();
 	}
 
 	/**
@@ -467,7 +476,7 @@ class DB extends Prefab {
 			$rpos   = stripos($query, 'ORDER BY');
 			$select = substr($query, 0, 6);
 			$from   = $rpos ? substr($query, $pos, $rpos - $pos) : substr($query, $pos);
-			$query = $select . ' COUNT(*) ' . $from;
+			$query  = $select . ' COUNT(*) ' . $from;
 		}
 
 		return $query;
