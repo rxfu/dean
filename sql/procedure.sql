@@ -137,7 +137,7 @@ BEGIN
   
   EXECUTE 'SELECT a.jsgh, a.ksz, a.jsz, a.zc, a.ksj, a.jsj, b.kch, c.pt, c.xz, c.xl, c.kkxy, c.bz, d.zxf FROM t_pk_kb a LEFT JOIN t_pk_jxrw b ON a.nd = b.nd AND a.xq = b.xq AND a.kcxh = b.kcxh AND a.jsgh = b.jsgh LEFT JOIN t_pk_kczy c ON a.nd = c.nd AND a.xq = c.xq AND a.kcxh = c.kcxh AND c.nj = $1 AND c.zsjj = $2 AND c.zy = $3 LEFT JOIN t_jx_jxjh d ON d.zy = c.zy AND d.nj = c.nj AND d.zsjj = c.zsjj AND d.kch = b.kch WHERE a.nd = $4 AND a.xq = $5 AND a.kcxh = $6' INTO course_rec USING student_rec.nj, student_rec.zsjj, student_rec.zy, c_year, c_term, i_cno;
 
-  EXECUTE 'INSERT INTO t_xk_xkxx(xh, xm, nd, xq, kcxh, kch, pt, xz, xl, jsgh, xf, sf, zg, cx, bz, sj, kkxy) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16,$17)' USING i_sno, student_rec.xm, c_year, c_term, cno, course_rec.kch, course_rec.pt, course_rec.xz, course_rec.xl, course_rec.jsgh, course_rec.zxf, c_paid, course_rec.bz, '0', '0', CURRENT_TIMESTAMP, course_rec.kkxy;
+  EXECUTE 'INSERT INTO t_xk_xkxx(xh, xm, nd, xq, kcxh, kch, pt, xz, xl, jsgh, xf, sf, zg, cx, bz, sj, kkxy) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16,$17)' USING i_sno, student_rec.xm, c_year, c_term, i_cno, course_rec.kch, course_rec.pt, course_rec.xz, course_rec.xl, course_rec.jsgh, course_rec.zxf, c_paid, course_rec.bz, '0', '0', CURRENT_TIMESTAMP, course_rec.kkxy;
   EXECUTE 'UPDATE t_xk_tj SET rs = rs + 1 WHERE kcxh = $1' USING i_cno;
 END;$BODY$
   LANGUAGE plpgsql VOLATILE
@@ -157,3 +157,4 @@ SELECT * FROM t_xk_kxkcxx a
       AND pt IN ('J', 'T')
        AND xz IN ('B')
         AND NOT EXISTS (SELECT kch FROM t_cj_zxscj b WHERE a.kch = b.kch AND b.xh = '201110100122')
+select p_xzkc_save('201110100122','TB1300101349','T','B')

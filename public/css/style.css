@@ -19,3 +19,7 @@ body {
 	text-align: center;
 	line-height: 60px;
 }
+input[type="checkbox"] {
+	line-height: normal;
+	margin: 0;
+}

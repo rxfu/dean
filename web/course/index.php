@@ -24,7 +24,7 @@
                                             <?php foreach (array_keys($courses) as $campus): ?>
                                                 <div id="campus-<?php echo $campus ?>" class="tab-pane fade<?php echo Session::read('campus') == $campus ? ' in active' : '' ?>" role="tabpanel">                                            
                                                     <div class="table-responsive">
-                                                        <table class="table table-bordered table-striped">
+                                                        <table class="table table-bordered table-striped table-hover">
                                                             <thead>
                                                                 <tr>
                                                                     <th rowspan="2" class="active">操作</th>
@@ -46,7 +46,7 @@
                                                             <tbody>
                                                                 <?php foreach ($courses[$campus] as $course): ?>
                                                                 <tr>
-                                                                    <td><input type="checkbox"></td>
+                                                                    <td class="text-center"><input type="checkbox" value="<?php echo $course['kcxh'] ?>"<?php echo 'DISABLE' === $course['zt'] ? ' disabled' : ('SELECTED' === $course['zt'] ? ' checked' : '') ?>></td>
                                                                     <td><?php echo $course['kcxh'] ?></td>
                                                                     <td><?php echo $course['kcmc'] ?></td>
                                                                     <td><?php echo $course['xf'] ?></td>
@@ -79,5 +79,21 @@
     $('#campus-tab a').click(function(e) {
         e.preventDefault();
         $(this).tab('show');
+    });
+    $('input:checkbox').click(function(e) {
+        if (true == $(this).is(':checked')) {         
+            $('input[value=' + $(this).val() + ']').each(function() {
+                $(this).prop('checked', true);
+            });
+        } else if (false == $(this).is(':checked')){
+            $('input[value=' + $(this).val() + ']').each(function() {
+                $(this).prop('checked', false);
+            });
+        }
+        $.ajax({
+            type: "post",
+            url: "<?php echo toLink('course.select') ?>",
+            data: { type: "pub", course: $(this).val() }
+        });
     });
 </script>

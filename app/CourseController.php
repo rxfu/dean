@@ -48,7 +48,7 @@ class CourseController extends Controller {
 
 				$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
 				foreach ($data as $pt) {
-					if ('T' !== $pt) {
+					if ('T' !== $pt['dm']) {
 						$platform[] = $pt['dm'];
 					}
 				}
@@ -60,7 +60,7 @@ class CourseController extends Controller {
 
 				$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
 				foreach ($data as $pt) {
-					if ('T' !== $pt || 'W' !== $pt || 'I' !== $pt || 'Y' !== $pt || 'Q' !== $pt) {
+					if ('T' !== $pt['dm'] || 'W' !== $pt['dm'] || 'I' !== $pt['dm'] || 'Y' !== $pt['dm'] || 'Q' !== $pt['dm']) {
 						$platform[] = $pt['dm'];
 					}
 				}
@@ -71,24 +71,29 @@ class CourseController extends Controller {
 				$property = 'X';
 				$platform = 'W';
 				break;
+
 			case 'ns':
 				$title    = '自然科学通识素质课程';
 				$property = 'X';
 				$platform = 'I';
 				break;
+
 			case 'as':
 				$title    = '艺术体育通识素质课程';
 				$property = 'X';
 				$platform = 'Y';
 				break;
+
 			case 'os':
 				$title    = '其他专项通识素质课程';
 				$property = 'X';
 				$platform = 'Q';
 				break;
+
 			case 'ret':
 				$title = '重修课程';
 				break;
+
 			default:
 				$title = '可选课程';
 				$data  = DB::getInstance()->getAll('SELECT dm FROM t_zd_xz');
@@ -120,58 +125,6 @@ class CourseController extends Controller {
 	}
 
 	/**
-	 * 获取当前学生可选公选课程表
-	 * @return mixed 公选课程数据包
-	 */
-	protected function pub() {
-		$sql  = 'SELECT * FROM p_xk_hqkcb(?, ?, ?, ?, ?, ?, ?, ?)';
-		$data = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term'), Session::read('season'), Session::read('grade'), Session::read('spno'), 'T', 'B'));
-
-		$courses = array();
-		foreach ($data as $course) {
-			if (isEmpty($course['xqh'])) {
-				$courses['unknown'][] = $course;
-			} else {
-				$courses[$course['xqh']][] = $course;
-			}
-		}
-		return $this->view->render('course.pub', array('courses' => $courses));
-	}
-
-	/**
-	 * 获取当前学生可选必修课程表
-	 * @return mixed 必修课程数据包
-	 */
-	protected function required() {
-		$sql  = 'SELECT * FROM p_xk_hqkcb(?, ?, ?, ?, ?, ?, ?, ?)';
-		$data = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term'), Session::read('season'), Session::read('grade'), Session::read('spno'), 'T', 'B'));
-
-		return $this->view->render('course.required', array('courses' => $data));
-	}
-
-	/**
-	 * 获取当前学生可选选修课程表
-	 * @return mixed 选修课程数据包
-	 */
-	protected function selective() {
-		$sql  = 'SELECT * FROM p_xk_hqkcb(?, ?, ?, ?, ?, ?, ?, ?)';
-		$data = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term'), Session::read('season'), Session::read('grade'), Session::read('spno'), 'T', 'B'));
-
-		return $this->view->render('course.elective', array('courses' => $data));
-	}
-
-	/**
-	 * 获取当前学生可选通识素质课程表
-	 * @return mixed 通识素质课程数据包
-	 */
-	protected function general() {
-		$sql  = 'SELECT * FROM p_xk_hqkcb(?, ?, ?, ?, ?, ?, ?, ?)';
-		$data = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term'), Session::read('season'), Session::read('grade'), Session::read('spno'), 'T', 'B'));
-
-		return $this->view->render('course.general', array('courses' => $data));
-	}
-
-	/**
 	 * 获取当前学生可选重修课程表
 	 * @return mixed 重修课程数据包
 	 */
@@ -188,34 +141,17 @@ class CourseController extends Controller {
 	 * @return boolean       选课成功为TRUE，不成功为FALSE
 	 */
 	protected function select() {
-		$sql           = 'SELECT pt, xz, xl, bz, kkxy, jsgh FROM t_pk_kczy a LEFT JOIN t_xk_xsqf b ON a.kcxh = b.kcxh WHERE a.nd = ? AND a.xq = ? AND a.kcxh = ?';
-		$course        = $db->getRow($sql, array($data['nd'], $data['xq'], $data['kcxh']));
-		$data['pt']    = $course['pt'];
-		$data['xz']    = $course['xz'];
-		$data['xl']    = $course['xl'];
-		$data['lb']    = null;
-		$data['jsgh']  = $course['jsgh'];
-		$data['sf']    = isArrearage($data['xh']);
-		$data['zg']    = $course['bz'];
-		$data['bz']    = 0;
-		$data['tdkch'] = null;
-		$data['tdyy']  = null;
-		$data['qz']    = 0;
-		$data['sj']    = date('Y-m-d H:i:s');
-		$data['kkxy']  = $course['kkxy'];
+		if (isPost()) {
+			$type = $_POST['type'];
+			$cno  = $_POST['course'];
 
-		$sql        = 'SELECT zxf FROM t_jx_jxjh WHERE kch = ?';
-		$course     = $db->getRow($sql, parseCourse($data['kcxh']));
-		$data['xf'] = $course['zxf'];
-
-		$db->insertRecord('t_xk_xkxx', $data);
-
-		$log['xh']   = $data['xh'];
-		$log['kcxh'] = $data['kcxh'];
-		$log['czlx'] = LOG_INSERT;
-		writeLog($log);
-
-		return true;
+			$selected = DB::getInstance()->query("SELECT p_xzkc_save('" . Session::read('username') . "', '" . $platform . "', '" . $property . "'");
+			if ($selected) {
+				Session::flash('success', '选课成功');
+			} else {
+				Session::flash('danger', '选课失败');
+			}
+		}
 	}
 
 	/**
