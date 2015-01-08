@@ -54,7 +54,7 @@ BEGIN
   
   EXECUTE 'SELECT zsjj, nj, zyh FROM v_xk_xsjbxx WHERE xh = $1' INTO student_rec USING i_sno;
   
-  FOR course_rec IN EXECUTE format('SELECT * FROM t_xk_kxkcxx a WHERE nd = $1 AND xq = $2 AND zsjj = $3 AND nj = $4 AND zy = $5 AND pt IN (' || i_property || ') AND xz IN (' || i_property || ') AND NOT EXISTS (SELECT kch FROM t_cj_zxscj b WHERE a.kch = b.kch AND b.xh = $6)') USING c_year, c_term, student_rec.zsjj, student_rec.nj, student_rec.zyh, i_sno LOOP
+  FOR course_rec IN EXECUTE 'SELECT * FROM t_xk_kxkcxx a WHERE nd = $1 AND xq = $2 AND zsjj = $3 AND nj = $4 AND zy = $5 AND pt = ANY($6) AND xz = ANY($7) AND NOT EXISTS (SELECT kch FROM t_cj_zxscj b WHERE a.kch = b.kch AND b.xh = $8)' USING c_year, c_term, student_rec.zsjj, student_rec.nj, student_rec.zyh, i_platform, i_property, i_sno LOOP
     course_kcb.kch := course_rec.kch;
     course_kcb.kcxh := course_rec.kcxh;
     course_kcb.kcmc := course_rec.kcmc;

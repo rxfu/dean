@@ -106,7 +106,7 @@ class CourseController extends Controller {
 		$platform = implode(',', $platform);
 		$property = is_array($property) ? $property : array($property);
 		$property = implode(',', $property);
-		$data     = DB::getInstance()->query('SELECT * FROM p_kxkcb_sel(\'' . Session::read('username') . '\',{' . $platform . '},{' . $property . '})');
+		$data     = DB::getInstance()->query("SELECT * FROM p_kxkcb_sel('" . Session::read('username') . "', '{" . $platform . "}', '{" . $property . "}')");
 
 		$courses = array();
 		foreach ($data as $course) {

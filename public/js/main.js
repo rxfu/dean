@@ -5,28 +5,6 @@ $.getJsUrl = function() {
 }
 
 $(document).ready(function() {
-	/*
-	$('#flash_error').on('closed.bs.alert', function() {
-		$.get('clearSession.php', {
-			name: "error"
-		});
-	});
-	$('#flash_warning').on('closed.bs.alert', function() {
-		$.get('clearSession.php', {
-			name: "warning"
-		});
-	});
-	$('#flash_info').on('closed.bs.alert', function() {
-		$.get('clearSession.php', {
-			name: "info"
-		});
-	});
-	$('#flash_success').on('closed.bs.alert', function() {
-		$.get('clearSession.php', {
-			name: "success"
-		});
-	});
-*/
 	$('a[href="' + $(location).attr('href') + '"]').closest('ul.nav').addClass('collapse in');
 	$('#loginForm')
 		.bootstrapValidator({

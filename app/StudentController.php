@@ -15,12 +15,12 @@ class StudentController extends Controller {
 			$password = $_POST['password'];
 
 			if (empty($username) || empty($password)) {
-				Session::flash('error', '用户名或密码无效');
+				Session::flash('danger', '用户名或密码无效');
 				break;
 			}
 
 			if (!(is_numeric($username) && isset($username{11}) && !isset($username{12}))) {
-				Session::flash('error', '用户名必须是12位学号');
+				Session::flash('danger', '用户名必须是12位学号');
 				break;
 			}
 
@@ -50,7 +50,7 @@ class StudentController extends Controller {
 
 				return Redirect::to('home.dashboard');
 			} else {
-				Session::flash('error', '登录失败，请检查用户名和密码是否正确');
+				Session::flash('danger', '登录失败，请检查用户名和密码是否正确');
 			}
 		}
 
@@ -123,7 +123,7 @@ class StudentController extends Controller {
 				}
 			}
 
-			Session::flash('error', '修改密码失败');
+			Session::flash('danger', '修改密码失败');
 		}
 		return $this->view->render('student.password');
 	}

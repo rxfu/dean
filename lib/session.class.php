@@ -123,7 +123,7 @@ class Session {
 			return;
 		}
 
-		$types = array('info', 'error', 'success', 'warning', 'danger');
+		$types = array('info', 'success', 'warning', 'danger');
 		$type  = strtolower($type);
 
 		if (!in_array($type, $types)) {

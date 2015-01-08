@@ -10,17 +10,17 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <div role="tabpanel">
-                                    <ul id="campus-tab" class="nav nav-tabs" role="tablist">
-                                        <?php if(!empty($courses)): ?>
+                                <?php if(empty($courses)): ?>
+                                    <div class="well">现在无可选课程</div>
+                                <?php else: ?>
+                                    <div role="tabpanel">
+                                        <ul id="campus-tab" class="nav nav-tabs" role="tablist">
                                             <?php foreach (array_keys($courses) as $campus): ?>
                                                 <?php $campusId = 'campus-' . $campus ?>
                                                 <li role="presentation"><a href="#<?php echo $campusId ?>" aria-controls="<?php echo $campusId ?>" role="tab" data-toggle="tab"><?php echo Dictionary::get('xqh', $campus) ?></a></li>
                                             <?php endforeach ?>
-                                        <?php endif ?>
-                                    </ul>
-                                    <div class="tab-content">
-                                        <?php if(!empty($courses)): ?>
+                                        </ul>
+                                        <div class="tab-content">
                                             <?php foreach (array_keys($courses) as $campus): ?>
                                                 <div id="campus-<?php echo $campus ?>" class="tab-pane fade<?php echo Session::read('campus') == $campus ? ' in active' : '' ?>" role="tabpanel">                                            
                                                     <div class="table-responsive">
@@ -65,9 +65,9 @@
                                                     </div>
                                                 </div>
                                             <?php endforeach ?>
-                                        <?php endif ?>
+                                        </div>
                                     </div>
-                                </div>
+                                <?php endif ?>
                             </div>
                         </div>
                     </div>
