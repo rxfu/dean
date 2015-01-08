@@ -87,15 +87,4 @@ $(document).ready(function() {
 				}
 			}
 		});
-	$('input[type=checkbox]').change(function() {
-		if ($(this).is(':checked')) {
-			$.get('elect.php', {
-				course: $(this).val()
-			});
-		} else {
-			$.get('drop.php', {
-				course: $(this).val()
-			});
-		}
-	});
 });

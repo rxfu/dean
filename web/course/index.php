@@ -93,7 +93,7 @@
         $.ajax({
             type: "post",
             url: "<?php echo toLink('course.select') ?>",
-            data: { type: "pub", course: $(this).val() }
+            data: { course: $(this).val() }
         });
     });
 </script>
