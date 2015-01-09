@@ -106,12 +106,8 @@ class CourseController extends Controller {
 				}
 				break;
 		}
-
-		$platform = is_array($platform) ? $platform : array($platform);
-		$platform = implode(',', $platform);
-		$property = is_array($property) ? $property : array($property);
-		$property = implode(',', $property);
-		$data     = DB::getInstance()->query("SELECT * FROM p_kxkcb_sel('" . Session::read('username') . "', '{" . $platform . "}', '{" . $property . "}')");
+		$param = "'" . implode("','", array(Session::read('username'), array_to_pg($platform), array_to_pg($property))) . "'";
+		$data  = DB::getInstance()->query('SELECT * FROM p_kxkcb_sel(' . $param . ')');
 
 		$courses = array();
 		foreach ($data as $course) {
@@ -121,6 +117,7 @@ class CourseController extends Controller {
 				$courses[$course['xqh']][] = $course;
 			}
 		}
+		krsort($courses);
 		return $this->view->render('course.index', array('courses' => $courses, 'title' => $title));
 	}
 
@@ -142,7 +139,6 @@ class CourseController extends Controller {
 	 */
 	protected function select() {
 		if (isPost()) {
-			$type = $_POST['type'];
 			$cno  = $_POST['course'];
 
 			$selected = DB::getInstance()->query("SELECT p_xzkc_save('" . Session::read('username') . "', '" . $platform . "', '" . $property . "'");
@@ -151,6 +147,26 @@ class CourseController extends Controller {
 			} else {
 				Session::flash('danger', '选课失败');
 			}
+		}
+	}
+
+	/**
+	 * 取消选课
+	 * @return boolean 取消成功为TRUE，取消失败为FALSE
+	 */
+	protected function remove() {
+		if (isPost()) {
+
+		}
+	}
+
+	/**
+	 * 选课时间冲突检测
+	 * @return boolean 冲突为TRUE，不冲突为FALSE
+	 */
+	protected function check() {
+		if (isPost()) {
+			return false;
 		}
 	}
 

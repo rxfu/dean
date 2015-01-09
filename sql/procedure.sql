@@ -1,7 +1,7 @@
 选课课表：
--- Type: tp_xk_kcb
+-- Type: tp_kcb
 
--- DROP TYPE tp_xk_kcb;
+-- DROP TYPE tp_kcb;
 
 CREATE TYPE tp_kcb AS
    (kch character varying(8),
@@ -30,14 +30,14 @@ ALTER TYPE tp_kcb
 COMMENT ON TYPE tp_kcb
   IS '可选课程列表';
 
--- Function: p_xk_hqkcb(character, character, character, character, character, character, character, character)
+-- Function: p_kxkcb_sel(text, text[], text[])
 
--- DROP FUNCTION p_xk_hqkcb(character, character, character, character, character, character, character, character);
+-- DROP FUNCTION p_kxkcb_sel(text, text[], text[]);
 
 CREATE OR REPLACE FUNCTION p_kxkcb_sel(
-    i_sno character,
-    i_platform character,
-    i_property character)
+    i_sno text,
+    i_platform text[],
+    i_property text[])
   RETURNS SETOF tp_kcb AS
 $BODY$DECLARE
   student_rec RECORD;
@@ -47,14 +47,19 @@ $BODY$DECLARE
   c_time VARCHAR;
   c_year VARCHAR;
   c_term VARCHAR;
+  o_exists VARCHAR;
 BEGIN
   EXECUTE 'SELECT value FROM t_xt WHERE id = ' || quote_literal('XK_SJ') INTO c_time;
   c_year := substring(c_time from 1 for 4);
   c_term := substring(c_time from 5 for 1);
   
-  EXECUTE 'SELECT zsjj, nj, zyh FROM v_xk_xsjbxx WHERE xh = $1' INTO student_rec USING i_sno;
+  IF ARRAY['Q'] = i_platform AND ARRAY['X'] = i_property THEN
+    o_exists = 'NOT EXISTS';
+  ELSE
+    o_exists = 'pt = ANY($1) AND xz = ANY($2) AND EXISTS';
+  END IF;
   
-  FOR course_rec IN EXECUTE 'SELECT * FROM t_xk_kxkcxx a WHERE nd = $1 AND xq = $2 AND zsjj = $3 AND nj = $4 AND zy = $5 AND pt = ANY($6) AND xz = ANY($7) AND NOT EXISTS (SELECT kch FROM t_cj_zxscj b WHERE a.kch = b.kch AND b.xh = $8)' USING c_year, c_term, student_rec.zsjj, student_rec.nj, student_rec.zyh, i_platform, i_property, i_sno LOOP
+  FOR course_rec IN EXECUTE format('SELECT * FROM t_xk_kxkcxx a WHERE a.nd = %L AND a.xq = %L AND NOT EXISTS (SELECT kch FROM t_cj_zxscj b WHERE a.kch = b.kch AND b.xh = %L) AND ' || o_exists || ' (SELECT nj, zyh, zsjj FROM v_xk_xsjbxx c WHERE a.nj = c.nj AND a.zy = c.zyh AND a.zsjj = c.zsjj AND xh = %3$L)', c_year, c_term, i_sno) USING i_platform, i_property LOOP
     course_kcb.kch := course_rec.kch;
     course_kcb.kcxh := course_rec.kcxh;
     course_kcb.kcmc := course_rec.kcmc;
@@ -77,17 +82,17 @@ BEGIN
     course_kcb.cdbh := course_rec.cdbh;
     course_kcb.zt := 'ENABLE';
 
-    EXECUTE 'SELECT count(*) FROM t_xk_xkxx WHERE kch = $1 AND xh = $2 AND nd = $3' INTO n_count USING course_kcb.kch, i_sno, c_year;
+    EXECUTE format('SELECT count(*) FROM t_xk_xkxx WHERE kch = %L AND xh = %L AND nd = %L', course_kcb.kch, i_sno, c_year) INTO n_count;
     IF n_count > 0 THEN
       course_kcb.zt := 'SELECTED';
     END IF;
 
     IF course_kcb.zt = 'ENABLE' THEN
-      EXECUTE 'SELECT xf FROM t_cj_zxscj a JOIN t_jx_kc_qxgx b ON a.kch = b.kch AND xf <= 0 AND gx = ' || quote_literal('>') || ' AND kch2 = $1 AND xh = $2' USING course_kcb.kch, i_sno;
+      PERFORM format('SELECT xf FROM t_cj_zxscj a JOIN t_jx_kc_qxgx b ON a.kch = b.kch AND xf <= 0 AND gx = ' || quote_literal('>') || ' AND kch2 = %L AND xh = %L', course_kcb.kch, i_sno);
       IF FOUND THEN
         course_kcb.zt := 'DISABLE';
       ELSE
-        EXECUTE 'SELECT jhrs FROM t_xk_tj WHERE kcxh = $1 AND jhrs <= rs' USING course_kcb.kcxh;
+        PERFORM format('SELECT jhrs FROM t_xk_tj WHERE kcxh = %L AND jhrs <= rs', course_kcb.kcxh);
         IF FOUND THEN
           course_kcb.zt := 'DISABLE';
         END IF;
@@ -97,57 +102,73 @@ BEGIN
     RETURN NEXT course_kcb;
   END LOOP;
 END$BODY$
-  LANGUAGE plpgsql IMMUTABLE
+  LANGUAGE plpgsql VOLATILE
   COST 100
   ROWS 1000;
-ALTER FUNCTION p_xk_hqkcb(character, character, character, character, character, character, character, character)
+ALTER FUNCTION p_kxkcb_sel(text, text[], text[])
   OWNER TO jwxt;
-COMMENT ON FUNCTION p_xk_hqkcb(character, character, character, character, character, character, character, character) IS '获取可选课程列表';
+COMMENT ON FUNCTION p_kxkcb_sel(text, text[], text[]) IS '列出可选课程';
 
--- Function: p_xk_xzkc(character, character, character, character)
+-- Function: p_xzkc_save(character varying, character varying, character varying, character varying)
 
--- DROP FUNCTION p_xk_xzkc(character, character, character, character);
+-- DROP FUNCTION p_xzkc_save(character varying, character varying, character varying, character varying);
 
 CREATE OR REPLACE FUNCTION p_xzkc_save(
-    i_sno character,
-    i_cno character,
-    i_platform character,
-    i_property character)
-  RETURNS void AS
+    i_sno text,
+    i_cno text)
+  RETURNS boolean AS
 $BODY$DECLARE
   n_paid INTEGER;
   c_time VARCHAR;
   c_year VARCHAR;
   c_term VARCHAR;
+  c_platform VARCHAR;
+  c_property VARCHAR;
   course_rec RECORD;
   student_rec RECORD;
+  major_rec RECORD;
 BEGIN
-  EXECUTE 'SELECT xh FROM t_xk_xsqf WHERE xh = $1' INTO n_paid USING i_sno;
+  EXECUTE format('SELECT xh FROM t_xk_xsqf WHERE xh = %L', i_sno) INTO n_paid;
   IF FOUND THEN
-    c_paid := 0;
+    n_paid := 0;
   ELSE
-    c_paid := 1;
+    n_paid := 1;
   END IF;
   
   EXECUTE 'SELECT value FROM t_xt WHERE id = ' || quote_literal('XK_SJ') INTO c_time;
   c_year := substring(c_time from 1 for 4);
   c_term := substring(c_time from 5 for 1);
   
-  EXECUTE 'SELECT xm, nj, zsjj, zy FROM t_xs_zxs WHERE xh = $1' INTO student_rec USING i_sno;
-  
-  EXECUTE 'SELECT a.jsgh, a.ksz, a.jsz, a.zc, a.ksj, a.jsj, b.kch, c.pt, c.xz, c.xl, c.kkxy, c.bz, d.zxf FROM t_pk_kb a LEFT JOIN t_pk_jxrw b ON a.nd = b.nd AND a.xq = b.xq AND a.kcxh = b.kcxh AND a.jsgh = b.jsgh LEFT JOIN t_pk_kczy c ON a.nd = c.nd AND a.xq = c.xq AND a.kcxh = c.kcxh AND c.nj = $1 AND c.zsjj = $2 AND c.zy = $3 LEFT JOIN t_jx_jxjh d ON d.zy = c.zy AND d.nj = c.nj AND d.zsjj = c.zsjj AND d.kch = b.kch WHERE a.nd = $4 AND a.xq = $5 AND a.kcxh = $6' INTO course_rec USING student_rec.nj, student_rec.zsjj, student_rec.zy, c_year, c_term, i_cno;
+  EXECUTE format('SELECT xm, nj, zsjj, zy FROM t_xs_zxs WHERE xh = %L', i_sno) INTO student_rec;
 
-  EXECUTE 'INSERT INTO t_xk_xkxx(xh, xm, nd, xq, kcxh, kch, pt, xz, xl, jsgh, xf, sf, zg, cx, bz, sj, kkxy) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16,$17)' USING i_sno, student_rec.xm, c_year, c_term, i_cno, course_rec.kch, course_rec.pt, course_rec.xz, course_rec.xl, course_rec.jsgh, course_rec.zxf, c_paid, course_rec.bz, '0', '0', CURRENT_TIMESTAMP, course_rec.kkxy;
-  EXECUTE 'UPDATE t_xk_tj SET rs = rs + 1 WHERE kcxh = $1' USING i_cno;
-END;$BODY$
+  EXECUTE format('SELECT nj, zy, zsjj, pt, xz FROM t_pk_kczy WHERE nd = %L AND xq = %L AND kcxh = %L', c_year, c_term, i_cno) INTO major_rec;
+  IF FOUND THEN
+    IF major_rec.nj = student_rec.nj AND major_rec.zy = student_rec.zy AND major_rec.zsjj = student_rec.zsjj THEN
+      c_platform = major_rec.pt;
+      c_property = major_rec.xz;
+    ELSE
+      c_platform = 'Q';
+      c_property = 'X';
+    END IF;
+  ELSE
+    RETURN FALSE;
+  END IF;
+  
+  EXECUTE format('SELECT * FROM t_xk_kxkcxx WHERE nj = %L AND zsjj = %L AND zy = %L AND nd = %L AND xq = %L AND kcxh = %L', student_rec.nj, student_rec.zsjj, student_rec.zy, c_year, c_term, i_cno) INTO course_rec;
+
+  EXECUTE format('INSERT INTO t_xk_xkxx(xh, xm, nd, xq, kcxh, kch, pt, xz, xl, jsgh, xf, sf, zg, cx, bz, sj, kkxy) VALUES(%L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L', i_sno, student_rec.xm, c_year, c_term, i_cno, course_rec.kch, c_platform, c_property, course_rec.xl, course_rec.jsgh, course_rec.xf, n_paid, course_rec.bz, '0', '0', CURRENT_TIMESTAMP, course_rec.kkxy);
+  EXECUTE format('UPDATE t_xk_tj SET rs = rs + 1 WHERE kcxh = %L', i_cno);
+
+  RETURN TRUE;
+END$BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
-ALTER FUNCTION p_xk_xzkc(character, character, character, character)
+ALTER FUNCTION p_xzkc_save(character varying, character varying, character varying, character varying)
   OWNER TO jwxt;
-COMMENT ON FUNCTION p_xk_xzkc(character, character, character, character) IS '选择课程';
+COMMENT ON FUNCTION p_xzkc_save(character varying, character varying, character varying, character varying) IS '选择课程';
 
 select * from p_xk_hqkcb('201110100122','2012','1','1','2010','0500101','J','B')
-select * from p_kxkcb_sel('201110100122','J','B')
+select * from p_kxkcb_sel('201110100122','2011', '0500101', '1', '{Q}','{X}')
 SELECT * FROM t_xk_kxkcxx a
  WHERE nd = '2012'
   AND xq = '1'
@@ -158,3 +179,21 @@ SELECT * FROM t_xk_kxkcxx a
        AND xz IN ('B')
         AND NOT EXISTS (SELECT kch FROM t_cj_zxscj b WHERE a.kch = b.kch AND b.xh = '201110100122')
 select p_xzkc_save('201110100122','TB1300101349','T','B')
+SELECT * FROM t_xk_kxkcxx a 
+WHERE nd = '2012'
+ AND xq = '1'
+  AND zsjj = '1'
+   AND nj = '2011'
+    AND zy = '0500101'
+     AND NOT EXISTS (SELECT kch FROM t_cj_zxscj b WHERE a.kch = b.kch AND b.xh = '201110100122')
+      AND NOT EXISTS (SELECT nj, zyh, zsjj FROM v_xk_xsjbxx c WHERE a.nj = c.nj AND a.zy = c.zyh AND xh = '201110100122')
+SELECT * FROM t_xk_kxkcxx a 
+WHERE nd = '2012'
+ AND xq = '1'
+  AND zsjj = '1'
+   AND nj = '2011'
+    AND zy = '0500101'
+     AND NOT EXISTS (SELECT kch FROM t_cj_zxscj b WHERE a.kch = b.kch AND b.xh = '201110100122')
+      AND pt = ANY('{T}')
+       AND xz = ANY('{B}')
+        AND EXISTS (SELECT nj, zyh, zsjj FROM v_xk_xsjbxx c WHERE a.nj = c.nj AND a.zy = c.zyh AND xh = '201110100122')

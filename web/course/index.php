@@ -85,15 +85,33 @@
             $('input[value=' + $(this).val() + ']').each(function() {
                 $(this).prop('checked', true);
             });
+            $.ajax({
+                type: "post",
+                url: "<?php echo toLink('course.select') ?>",
+                data: { course: $(this).val() }
+            });
         } else if (false == $(this).is(':checked')){
             $('input[value=' + $(this).val() + ']').each(function() {
                 $(this).prop('checked', false);
             });
         }
-        $.ajax({
-            type: "post",
-            url: "<?php echo toLink('course.select') ?>",
-            data: { course: $(this).val() }
-        });
     });
 </script>
+<!-- Modal -->
+<div class="modal fade" id="checkModal" tabindex="-1" role="dialog" aria-labelledby="checkModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="checkModalLabel">选课时间冲突</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary">确认</button>
+      </div>
+    </div>
+  </div>
+</div>

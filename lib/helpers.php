@@ -21,6 +21,18 @@ if (!function_exists('array_remove')) {
 	}
 }
 
+if (!function_exists('array_to_pg')) {
+
+	/**
+	 * PHP数组转换成PostgreSQL数组
+	 * @param  array $array 转换数组
+	 * @return string        转换后数组格式
+	 */
+	function array_to_pg($array) {
+		return '{' . (is_array($array) ? implode(',', $array) : $array) . '}';
+	}
+}
+
 if (!function_exists('css')) {
 
 	/**
