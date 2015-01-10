@@ -45,21 +45,31 @@ $BODY$DECLARE
   c_time TEXT;
   c_year TEXT;
   c_term TEXT;
-  o_exists TEXT;
+  c_query TEXT;
+  c_grade TEXT;
+  c_major TEXT;
+  c_season TEXT;
 BEGIN
+  PERFORM 1 FROM t_xs_zxs WHERE xh = i_sno;
+  IF NOT FOUND THEN
+    RETURN;
+  END IF;
+
   SELECT value INTO c_time FROM t_xt WHERE id = 'XK_SJ';
   IF FOUND THEN
     c_year := substring(c_time from 1 for 4);
     c_term := substring(c_time from 5 for 1);
   END IF;
+
+  EXECUTE format('SELECT nj, zy, zsjj FROM t_xs_zxs WHERE xh = %L', i_sno) INTO c_grade, c_major, c_season;
   
   IF ARRAY['Q'] = i_platform AND ARRAY['X'] = i_property THEN
-    o_exists = 'NOT EXISTS';
+    c_query = 'SELECT * FROM v_xk_kxkcxx a WHERE a.nd = ' || quote_literal(c_year) || ' AND a.xq = ' || quote_literal(c_term) || ' AND a.zsjj = ' || quote_literal(c_season) || ' AND zy = ' || quote_literal(c_major) || ' AND NOT EXISTS (SELECT kch FROM t_cj_zxscj b WHERE a.kch = b.kch AND b.xh = ' || quote_literal(i_sno) || ') AND EXISTS (SELECT DISTINCT nj FROM v_xk_kxkcxx c WHERE a.nd = c.nd AND a.xq = c.xq AND c.nj <> ' || quote_literal(c_grade) || ') UNION SELECT * FROM v_xk_kxkcxx a WHERE a.nd = ' || quote_literal(c_year) || ' AND a.xq = ' || quote_literal(c_term) || ' AND nj = ' || quote_literal(c_grade) || 'AND NOT EXISTS (SELECT kch FROM t_cj_zxscj b WHERE a.kch = b.kch AND b.xh = ' || quote_literal(i_sno) || ') AND EXISTS (SELECT DISTINCT zy FROM v_xk_kxkcxx c WHERE a.nd = c.nd AND a.xq = c.xq AND c.zy <> ' || quote_literal(c_major) || ')';
   ELSE
-    o_exists = 'pt = ANY($1) AND xz = ANY($2) AND EXISTS';
+    c_query = 'SELECT * FROM v_xk_kxkcxx a WHERE a.nd = ' || quote_literal(c_year) || ' AND a.xq = ' || quote_literal(c_term) || ' AND a.nj = ' || quote_literal(c_grade) || ' AND a.zy = ' || quote_literal(c_major) || ' AND a.zsjj = ' || quote_literal(c_season) || ' AND NOT EXISTS (SELECT kch FROM t_cj_zxscj b WHERE a.kch = b.kch AND b.xh = ' || quote_literal(i_sno) || ') AND pt = ANY($1) AND xz = ANY($2)';
   END IF;
   
-  FOR course_rec IN EXECUTE format('SELECT * FROM v_xk_kxkcxx a WHERE a.nd = %L AND a.xq = %L AND NOT EXISTS (SELECT kch FROM t_cj_zxscj b WHERE a.kch = b.kch AND b.xh = %L) AND ' || o_exists || ' (SELECT nj, zyh, zsjj FROM v_xk_xsjbxx c WHERE a.nj = c.nj AND a.zy = c.zyh AND a.zsjj = c.zsjj AND xh = %3$L)', c_year, c_term, i_sno) USING i_platform, i_property LOOP
+  FOR course_rec IN EXECUTE c_query USING i_platform, i_property LOOP
     course_kcb.kch := course_rec.kch;
     course_kcb.kcxh := course_rec.kcxh;
     course_kcb.kcmc := course_rec.kcmc;
