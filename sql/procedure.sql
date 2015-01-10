@@ -49,17 +49,17 @@ $BODY$DECLARE
   c_term VARCHAR;
   o_exists VARCHAR;
 BEGIN
-  EXECUTE 'SELECT value FROM t_xt WHERE id = ' || quote_literal('XK_SJ') INTO c_time;
+  SELECT value INTO c_time FROM t_xt WHERE id = quote_literal('XK_SJ');
   c_year := substring(c_time from 1 for 4);
   c_term := substring(c_time from 5 for 1);
   
   IF ARRAY['Q'] = i_platform AND ARRAY['X'] = i_property THEN
     o_exists = 'NOT EXISTS';
   ELSE
-    o_exists = 'pt = ANY($1) AND xz = ANY($2) AND EXISTS';
+    o_exists = 'pt = ANY(i_platform) AND xz = ANY(i_property) AND EXISTS';
   END IF;
   
-  FOR course_rec IN EXECUTE format('SELECT * FROM t_xk_kxkcxx a WHERE a.nd = %L AND a.xq = %L AND NOT EXISTS (SELECT kch FROM t_cj_zxscj b WHERE a.kch = b.kch AND b.xh = %L) AND ' || o_exists || ' (SELECT nj, zyh, zsjj FROM v_xk_xsjbxx c WHERE a.nj = c.nj AND a.zy = c.zyh AND a.zsjj = c.zsjj AND xh = %3$L)', c_year, c_term, i_sno) USING i_platform, i_property LOOP
+  FOR course_rec IN SELECT * FROM t_xk_kxkcxx a WHERE a.nd = quote_literal(c_year) AND a.xq = quote_literal(c_term) AND NOT EXISTS (SELECT kch FROM t_cj_zxscj b WHERE a.kch = b.kch AND b.xh = quote_literal(i_sno)) AND o_exists (SELECT nj, zyh, zsjj FROM v_xk_xsjbxx c WHERE a.nj = c.nj AND a.zy = c.zyh AND a.zsjj = c.zsjj AND xh = quote_literal(i_sno)) LOOP
     course_kcb.kch := course_rec.kch;
     course_kcb.kcxh := course_rec.kcxh;
     course_kcb.kcmc := course_rec.kcmc;
@@ -82,17 +82,17 @@ BEGIN
     course_kcb.cdbh := course_rec.cdbh;
     course_kcb.zt := 'ENABLE';
 
-    EXECUTE format('SELECT count(*) FROM t_xk_xkxx WHERE kch = %L AND xh = %L AND nd = %L', course_kcb.kch, i_sno, c_year) INTO n_count;
-    IF n_count > 0 THEN
+    PERFORM 1 FROM t_xk_xkxx WHERE kch = quote_literal(course_kcb.kch) AND xh = quote_literal(i_sno) AND nd = quote_literal(c_year);
+    IF FOUND THEN
       course_kcb.zt := 'SELECTED';
     END IF;
 
     IF course_kcb.zt = 'ENABLE' THEN
-      PERFORM format('SELECT xf FROM t_cj_zxscj a JOIN t_jx_kc_qxgx b ON a.kch = b.kch AND xf <= 0 AND gx = ' || quote_literal('>') || ' AND kch2 = %L AND xh = %L', course_kcb.kch, i_sno);
+      PERFORM 1 FROM t_cj_zxscj a JOIN t_jx_kc_qxgx b ON a.kch = b.kch AND xf <= 0 AND gx = quote_literal('>') AND kch2 = quote_literal(course_kcb.kch) AND xh = quote_literal(i_sno);
       IF FOUND THEN
         course_kcb.zt := 'DISABLE';
       ELSE
-        PERFORM format('SELECT jhrs FROM t_xk_tj WHERE kcxh = %L AND jhrs <= rs', course_kcb.kcxh);
+        PERFORM 1 FROM t_xk_tj WHERE kcxh = quote_literal(course_kdb.kcxh) AND jhrs <= rs;
         IF FOUND THEN
           course_kcb.zt := 'DISABLE';
         END IF;
