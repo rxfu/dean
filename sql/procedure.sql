@@ -49,14 +49,17 @@ $BODY$DECLARE
   c_major TEXT;
   c_season TEXT;
 BEGIN
-  PERFORM 1 FROM t_xs_zxs WHERE xh = i_sno;
+  SELECT nj, zy, zsjj INTO c_grade, c_major, c_season FROM t_xs_zxs WHERE xh = i_sno;
   IF NOT FOUND THEN
+    RAISE EXCEPTION 'NO STUDENT!';
     RETURN;
   END IF;
 
   SELECT substr(value, 1, 4), substr(value, 5, 1) INTO c_year, c_term FROM t_xt WHERE id = 'XK_SJ';
-
-  EXECUTE format('SELECT nj, zy, zsjj FROM %I WHERE xh = %L', 't_xs_zxs', i_sno) INTO c_grade, c_major, c_season;
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'NOT Setup Selective Time';
+    RETURN;
+  END IF;
   
   IF ARRAY['Q'] = i_platform AND ARRAY['X'] = i_property THEN
     c_query = format('SELECT * FROM %I a WHERE a.nd = %L AND a.xq = %L AND a.zsjj = %L AND EXISTS (SELECT nj, zy FROM %1$I b WHERE a.nd = b.nd AND a.xq = b.xq AND (b.nj <> %L OR b.zy <> %L))', 'v_xk_kxkcxx', c_year, c_term, c_season, c_grade, c_major);
@@ -136,17 +139,27 @@ $BODY$DECLARE
   major_rec RECORD;
   n_count INTEGER;
 BEGIN
+  PERFORM 1 FROM t_xk_tj WHERE kxxh = i_cno AND jhrs < rs;
+  IF FOUND THEN
+    RAISE EXCEPTION 'Too Many Students Selected This Course!';
+    RETURN FALSE;
+  END IF;
+
   SELECT xm, nj, zsjj, zy INTO student_rec FROM t_xs_zxs WHERE xh = i_sno;
   IF NOT FOUND THEN
-    RAISE EXCEPTION 'NO STUDENT';
+    RAISE EXCEPTION 'NO STUDENT!';
     RETURN FALSE;
   END IF;
   
   SELECT substr(value, 1, 4), substr(value, 5, 1) INTO c_year, c_term FROM t_xt WHERE id = 'XK_SJ';
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'NOT Setup Selective Time';
+    RETURN FALSE;
+  END IF;
 
   SELECT nj, zy, zsjj, pt, xz INTO major_rec FROM t_pk_kczy WHERE nd = c_year AND xq = c_term AND kcxh = i_cno;
   IF NOT FOUND THEN
-    RAISE EXCEPTION 'NO COURSE';
+    RAISE EXCEPTION 'NO COURSE!';
     RETURN FALSE;
   ELSIF major_rec.nj = student_rec.nj AND major_rec.zy = student_rec.zy AND major_rec.zsjj = student_rec.zsjj THEN
     c_platform := major_rec.pt;
@@ -163,21 +176,21 @@ BEGIN
     n_paid := 1;
   END IF;
 
-  EXECUTE format('SELECT * FROM t_xk_kxkcxx WHERE nj = %L AND zsjj = %L AND zy = %L AND nd = %L AND xq = %L AND kcxh = %L', student_rec.nj, student_rec.zsjj, student_rec.zy, c_year, c_term, i_cno) INTO course_rec;
+  EXECUTE format('SELECT kch, xl, jsgh, xf, bz, kkxy FROM %I WHERE nj = %L AND zsjj = %L AND zy = %L AND nd = %L AND xq = %L AND kcxh = %L', 'v_xk_kxkcxx', student_rec.nj, student_rec.zsjj, student_rec.zy, c_year, c_term, i_cno) INTO course_rec;
   GET DIAGNOSTICS n_count = ROW_COUNT;
   IF 0 >= n_count THEN
     RAISE EXCEPTION 'NO COURSE!';
     RETURN FALSE;
   END IF;
 
-  EXECUTE format('INSERT INTO t_xk_xkxx(xh, xm, nd, xq, kcxh, kch, pt, xz, xl, jsgh, xf, sf, zg, cx, bz, sj, kkxy) VALUES(%L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L)', i_sno, student_rec.xm, c_year, c_term, i_cno, course_rec.kch, c_platform, c_property, course_rec.xl, course_rec.jsgh, course_rec.xf, n_paid, course_rec.bz, '0', '0', CURRENT_TIMESTAMP, course_rec.kkxy);
+  EXECUTE format('INSERT INTO %I(xh, xm, nd, xq, kcxh, kch, pt, xz, xl, jsgh, xf, sf, zg, cx, bz, sj, kkxy) VALUES(%L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L)', 't_xk_xkxx', i_sno, student_rec.xm, c_year, c_term, i_cno, course_rec.kch, c_platform, c_property, course_rec.xl, course_rec.jsgh, course_rec.xf, n_paid, course_rec.bz, '0', '0', CURRENT_TIMESTAMP, course_rec.kkxy);
   GET DIAGNOSTICS n_count = ROW_COUNT;
   IF 0 >= n_count THEN
     RAISE EXCEPTION 'Insert FAILED!';
     RETURN FALSE;
   END IF;
 
-  EXECUTE format('UPDATE t_xk_tj SET rs = rs + 1 WHERE kcxh = %L', i_cno);
+  EXECUTE format('UPDATE %I SET rs = rs + 1 WHERE kcxh = %L', 't_xk_tj', i_cno);
   GET DIAGNOSTICS n_count = ROW_COUNT;
   IF 0 >= n_count THEN
     RAISE EXCEPTION 'Update FAILED!';
@@ -191,6 +204,49 @@ END$BODY$
 ALTER FUNCTION p_xzkc_save(character varying, character varying, character varying, character varying)
   OWNER TO jwxt;
 COMMENT ON FUNCTION p_xzkc_save(character varying, character varying, character varying, character varying) IS '选择课程';
+
+CREATE OR REPLACE FUNCTION p_xzkc_drop(
+    i_sno text,
+    i_cno text)
+  RETURNS boolean AS
+$BODY$DECLARE
+  c_year TEXT;
+  c_term TEXT;
+  n_count INTEGER;
+BEGIN
+  SELECT substr(value, 1, 4), substr(value, 5, 1) INTO c_year, c_term FROM t_xt WHERE id = 'XK_SJ';
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'NOT Setup Selective Time';
+    RETURN FALSE;
+  END IF;
+
+  PERFORM 1 FROM t_xk_xkxx WHERE nd = c_year AND xq = c_term AND xh = i_sno AND kcxh = i_cno;
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'NO RECORD';
+    RETURN FALSE;
+  END IF;
+
+  EXECUTE format('DELETE FROM %I WHERE nd = %L AND xq = %L AND xh = %L AND kcxh = %L', 't_xk_xkxx', c_year, c_term, i_sno, i_cno);
+  GET DIAGNOSTICS n_count = ROW_COUNT;
+  IF 0 >= n_count THEN
+    RAISE EXCEPTION 'Delete FAILED!';
+    RETURN FALSE;
+  END IF;
+
+  EXECUTE format('UPDATE %I SET rs = rs - 1 WHERE kcxh = %L', 't_xk_tj', i_cno);
+  GET DIAGNOSTICS n_count = ROW_COUNT;
+  IF 0 >= n_count THEN
+    RAISE EXCEPTION 'Update FAILED!';
+    RETURN FALSE;
+  END IF;
+
+  RETURN TRUE;
+END$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION p_xzkc_save(character varying, character varying, character varying, character varying)
+  OWNER TO jwxt;
+COMMENT ON FUNCTION p_xzkc_save(character varying, character varying, character varying, character varying) IS '删除选课';
 
 select * from p_xk_hqkcb('201110100122','2012','1','1','2010','0500101','J','B')
 select * from p_kxkcb_sel('201110100122','2011', '0500101', '1', '{Q}','{X}')
