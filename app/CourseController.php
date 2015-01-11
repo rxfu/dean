@@ -118,6 +118,7 @@ class CourseController extends Controller {
 			}
 		}
 		krsort($courses);
+
 		return $this->view->render('course.index', array('courses' => $courses, 'title' => $title));
 	}
 
@@ -126,10 +127,21 @@ class CourseController extends Controller {
 	 * @return mixed 重修课程数据包
 	 */
 	protected function retake() {
-		$sql  = 'SELECT * FROM p_xk_hqkcb(?, ?, ?, ?, ?, ?, ?, ?)';
-		$data = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term'), Session::read('season'), Session::read('grade'), Session::read('spno'), 'T', 'B'));
+		$title = '重修课程';
+		$sql   = 'SELECT * FROM v_xk_cxkcb WHERE xh = ? AND (nd <> ? OR xq <> ?)';
+		$data  = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term')));
 
-		return $this->view->render('course.retake', array('courses' => $data));
+		$courses = array();
+		foreach ($data as $course) {
+			if (isEmpty($course['xqh'])) {
+				$courses['unknown'][] = $course;
+			} else {
+				$courses[$course['xqh']][] = $course;
+			}
+		}
+		krsort($courses);
+
+		return $this->view->render('course.retake', array('courses' => $courses, 'title' => $title));
 	}
 
 	/**
@@ -139,7 +151,7 @@ class CourseController extends Controller {
 	 */
 	protected function select() {
 		if (isPost()) {
-			$cno  = $_POST['course'];
+			$cno = $_POST['course'];
 
 			$selected = DB::getInstance()->query("SELECT p_xzkc_save('" . Session::read('username') . "', '" . $platform . "', '" . $property . "'");
 			if ($selected) {
@@ -156,7 +168,7 @@ class CourseController extends Controller {
 	 */
 	protected function drop() {
 		if (isPost()) {
-			$cno = $_POST['course'];
+			$cno   = $_POST['course'];
 			$param = "'" . implode("',", array(Session::read('username'), $cno)) . "'";
 
 			$deleted = DB::getInstance()->query('SELECT p_scxk_del(' . $param . ')');
@@ -174,15 +186,15 @@ class CourseController extends Controller {
 	 */
 	protected function check() {
 		if (isPost()) {
-			$cno = $_POST['course'];
+			$cno       = $_POST['course'];
 			$collision = false;
 
-			$sql = 'SELECT kcxh, ksz, jsz, zc, ksj, jsj FROM t_pk_kb WHERE nd = ? AND xq = ? AND kcxh = ?';
+			$sql      = 'SELECT kcxh, ksz, jsz, zc, ksj, jsj FROM t_pk_kb WHERE nd = ? AND xq = ? AND kcxh = ?';
 			$currents = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), $cno));
 
-			$sql = 'SELECT kcxh, ksz, jsz, zc, ksj, jsj FROM v_xk_xskcb WHERE xh = ? AND nd = ? AND xq = ?';
+			$sql      = 'SELECT kcxh, ksz, jsz, zc, ksj, jsj FROM v_xk_xskcb WHERE xh = ? AND nd = ? AND xq = ?';
 			$compares = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term')));
-			
+
 			foreach ($currents as $current) {
 				foreach ($compares as $compare) {
 					if ($compare['zc'] == $current['zc']) {

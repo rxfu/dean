@@ -67,3 +67,13 @@ CREATE OR REPLACE VIEW v_xk_jxjh AS
    LEFT JOIN t_xt_department e ON a.kxy = e.dw
    LEFT JOIN t_zd_khfs f ON a.kh = f.dm
   ORDER BY a.pt, a.xz, a.kxq;
+
+重修课程表：
+CREATE OR REPLACE VIEW v_xk_cxkcb AS 
+ SELECT h.xh, h.cj, a.nd, a.xq, a.nj, a.zsjj, a.zy, a.pt, a.xz, a.xl, a.kcxh, b.kch, c.kcmc, c.kcywmc, c.xs, c.xf, d.cdbh, d.xqh, d.ksz, d.jsz, d.zc, d.ksj, d.jsj, d.jsgh, e.xm AS jsxm, d.hb, d.rs, a.kkxy, (SELECT mc FROM t_zd_khfs f JOIN t_jx_jxjh g ON f.dm = g.kh WHERE a.zy = g.zy AND a.nj = g.nj AND a.zsjj = g.zsjj AND b.kch = g.kch ) AS kh, a.bz 
+   FROM t_pk_kczy a 
+   LEFT JOIN t_pk_jxrw b ON a.kcxh = b.kcxh AND a.nd = b.nd AND a.xq = b.xq AND b.id = 1 
+   LEFT JOIN t_jx_kc c ON b.kch = c.kch 
+   LEFT JOIN t_pk_kb d ON a.nd = d.nd AND a.xq = d.xq AND a.kcxh = d.kcxh 
+   LEFT JOIN t_pk_js e ON d.jsgh = e.jsgh
+   LEFT JOIN t_cj_zxscj h ON f.kch = b.kch AND h.cj = (SELECT MAX(i.cj) FROM t_cj_zxscj i);
