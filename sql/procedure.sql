@@ -42,7 +42,6 @@ CREATE OR REPLACE FUNCTION p_kxkcb_sel(
 $BODY$DECLARE
   course_rec RECORD;
   course_kcb tp_kcb;
-  c_time TEXT;
   c_year TEXT;
   c_term TEXT;
   c_query TEXT;
@@ -55,11 +54,7 @@ BEGIN
     RETURN;
   END IF;
 
-  SELECT value INTO c_time FROM t_xt WHERE id = 'XK_SJ';
-  IF FOUND THEN
-    c_year := substring(c_time from 1 for 4);
-    c_term := substring(c_time from 5 for 1);
-  END IF;
+  SELECT substr(value, 1, 4), substr(value, 5, 1) INTO c_year, c_term FROM t_xt WHERE id = 'XK_SJ';
 
   EXECUTE format('SELECT nj, zy, zsjj FROM %I WHERE xh = %L', 't_xs_zxs', i_sno) INTO c_grade, c_major, c_season;
   
@@ -132,45 +127,62 @@ CREATE OR REPLACE FUNCTION p_xzkc_save(
   RETURNS boolean AS
 $BODY$DECLARE
   n_paid INTEGER;
-  c_time VARCHAR;
-  c_year VARCHAR;
-  c_term VARCHAR;
-  c_platform VARCHAR;
-  c_property VARCHAR;
+  c_year TEXT;
+  c_term TEXT;
+  c_platform TEXT;
+  c_property TEXT;
   course_rec RECORD;
   student_rec RECORD;
   major_rec RECORD;
+  n_count INTEGER;
 BEGIN
-  EXECUTE format('SELECT xh FROM t_xk_xsqf WHERE xh = %L', i_sno) INTO n_paid;
+  SELECT xm, nj, zsjj, zy INTO student_rec FROM t_xs_zxs WHERE xh = i_sno;
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'NO STUDENT';
+    RETURN FALSE;
+  END IF;
+  
+  SELECT substr(value, 1, 4), substr(value, 5, 1) INTO c_year, c_term FROM t_xt WHERE id = 'XK_SJ';
+
+  SELECT nj, zy, zsjj, pt, xz INTO major_rec FROM t_pk_kczy WHERE nd = c_year AND xq = c_term AND kcxh = i_cno;
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'NO COURSE';
+    RETURN FALSE;
+  ELSIF major_rec.nj = student_rec.nj AND major_rec.zy = student_rec.zy AND major_rec.zsjj = student_rec.zsjj THEN
+    c_platform := major_rec.pt;
+    c_property := major_rec.xz;
+  ELSE
+    c_platform := 'Q';
+    c_property := 'X';
+  END IF;
+
+  PERFORM 1 FROM t_xk_xsqf WHERE xh = i_sno;
   IF FOUND THEN
     n_paid := 0;
   ELSE
     n_paid := 1;
   END IF;
-  
-  EXECUTE 'SELECT value FROM t_xt WHERE id = ' || quote_literal('XK_SJ') INTO c_time;
-  c_year := substring(c_time from 1 for 4);
-  c_term := substring(c_time from 5 for 1);
-  
-  EXECUTE format('SELECT xm, nj, zsjj, zy FROM t_xs_zxs WHERE xh = %L', i_sno) INTO student_rec;
 
-  EXECUTE format('SELECT nj, zy, zsjj, pt, xz FROM t_pk_kczy WHERE nd = %L AND xq = %L AND kcxh = %L', c_year, c_term, i_cno) INTO major_rec;
-  IF FOUND THEN
-    IF major_rec.nj = student_rec.nj AND major_rec.zy = student_rec.zy AND major_rec.zsjj = student_rec.zsjj THEN
-      c_platform = major_rec.pt;
-      c_property = major_rec.xz;
-    ELSE
-      c_platform = 'Q';
-      c_property = 'X';
-    END IF;
-  ELSE
+  EXECUTE format('SELECT * FROM t_xk_kxkcxx WHERE nj = %L AND zsjj = %L AND zy = %L AND nd = %L AND xq = %L AND kcxh = %L', student_rec.nj, student_rec.zsjj, student_rec.zy, c_year, c_term, i_cno) INTO course_rec;
+  GET DIAGNOSTICS n_count = ROW_COUNT;
+  IF 0 >= n_count THEN
+    RAISE EXCEPTION 'NO COURSE!';
     RETURN FALSE;
   END IF;
-  
-  EXECUTE format('SELECT * FROM t_xk_kxkcxx WHERE nj = %L AND zsjj = %L AND zy = %L AND nd = %L AND xq = %L AND kcxh = %L', student_rec.nj, student_rec.zsjj, student_rec.zy, c_year, c_term, i_cno) INTO course_rec;
 
   EXECUTE format('INSERT INTO t_xk_xkxx(xh, xm, nd, xq, kcxh, kch, pt, xz, xl, jsgh, xf, sf, zg, cx, bz, sj, kkxy) VALUES(%L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L', i_sno, student_rec.xm, c_year, c_term, i_cno, course_rec.kch, c_platform, c_property, course_rec.xl, course_rec.jsgh, course_rec.xf, n_paid, course_rec.bz, '0', '0', CURRENT_TIMESTAMP, course_rec.kkxy);
+  GET DIAGNOSTICS n_count = ROW_COUNT;
+  IF 0 >= n_count THEN
+    RAISE EXCEPTION 'Insert FAILED!';
+    RETURN FALSE;
+  END IF;
+
   EXECUTE format('UPDATE t_xk_tj SET rs = rs + 1 WHERE kcxh = %L', i_cno);
+  GET DIAGNOSTICS n_count = ROW_COUNT;
+  IF 0 >= n_count THEN
+    RAISE EXCEPTION 'Update FAILED!';
+    RETURN FALSE;
+  END IF;
 
   RETURN TRUE;
 END$BODY$
