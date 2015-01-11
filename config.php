@@ -71,6 +71,8 @@ define('PAGE_INIT', 1);
 define('PAGE_SIZE', 10);
 
 /**
- * 错误代码定义
+ * 检索状态代码
  */
-define('SESS_ERROR', 100001);
+define('DISABLE', 0);
+define('ENABLE', 1);
+define('SELECTED', 2);

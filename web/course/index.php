@@ -46,7 +46,7 @@
                                                             <tbody>
                                                                 <?php foreach ($courses[$campus] as $course): ?>
                                                                 <tr>
-                                                                    <td class="text-center"><input type="checkbox" value="<?php echo $course['kcxh'] ?>"<?php echo 'DISABLE' === $course['zt'] ? ' disabled' : ('SELECTED' === $course['zt'] ? ' checked' : '') ?>></td>
+                                                                    <td class="text-center"><input type="checkbox" value="<?php echo $course['kcxh'] ?>"<?php echo DISABLE === $course['zt'] ? ' disabled' : (SELECTED === $course['zt'] ? ' checked' : '') ?>></td>
                                                                     <td><?php echo $course['kcxh'] ?></td>
                                                                     <td><?php echo $course['kcmc'] ?></td>
                                                                     <td><?php echo $course['xf'] ?></td>

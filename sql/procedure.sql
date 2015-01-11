@@ -24,7 +24,7 @@ CREATE TYPE tp_kcb AS
     ksj integer,
     jsj integer,
     cdbh character varying(7),
-    zt character varying(8));
+    zt character varying(1));
 ALTER TYPE tp_kcb
   OWNER TO jwxt;
 COMMENT ON TYPE tp_kcb
@@ -61,15 +61,18 @@ BEGIN
     c_term := substring(c_time from 5 for 1);
   END IF;
 
-  EXECUTE format('SELECT nj, zy, zsjj FROM t_xs_zxs WHERE xh = %L', i_sno) INTO c_grade, c_major, c_season;
+  EXECUTE format('SELECT nj, zy, zsjj FROM %I WHERE xh = %L', 't_xs_zxs', i_sno) INTO c_grade, c_major, c_season;
   
   IF ARRAY['Q'] = i_platform AND ARRAY['X'] = i_property THEN
-    c_query = 'SELECT * FROM v_xk_kxkcxx a WHERE a.nd = ' || quote_literal(c_year) || ' AND a.xq = ' || quote_literal(c_term) || ' AND a.zsjj = ' || quote_literal(c_season) || ' AND zy = ' || quote_literal(c_major) || ' AND NOT EXISTS (SELECT kch FROM t_cj_zxscj b WHERE a.kch = b.kch AND b.xh = ' || quote_literal(i_sno) || ') AND EXISTS (SELECT DISTINCT nj FROM v_xk_kxkcxx c WHERE a.nd = c.nd AND a.xq = c.xq AND c.nj <> ' || quote_literal(c_grade) || ') UNION SELECT * FROM v_xk_kxkcxx a WHERE a.nd = ' || quote_literal(c_year) || ' AND a.xq = ' || quote_literal(c_term) || ' AND nj = ' || quote_literal(c_grade) || 'AND NOT EXISTS (SELECT kch FROM t_cj_zxscj b WHERE a.kch = b.kch AND b.xh = ' || quote_literal(i_sno) || ') AND EXISTS (SELECT DISTINCT zy FROM v_xk_kxkcxx c WHERE a.nd = c.nd AND a.xq = c.xq AND c.zy <> ' || quote_literal(c_major) || ')';
+    c_query = format('SELECT * FROM %I a WHERE a.nd = %L AND a.xq = %L AND a.zsjj = %L AND a.zy = %L AND EXISTS (SELECT DISTINCT nj FROM %1$I c WHERE a.nd = c.nd AND a.xq = c.xq AND c.nj <> %L) UNION SELECT * FROM %1$I a WHERE a.nd = %2$L AND a.xq = %3$L AND a.zsjj = %4$L AND a.nj = %6$L AND EXISTS (SELECT DISTINCT zy FROM %1I c WHERE a.nd = c.nd AND a.xq = c.xq AND c.zy <> %5$L)', 'v_xk_kxkcxx', c_year, c_term, c_season, c_major, c_grade);
   ELSE
-    c_query = 'SELECT * FROM v_xk_kxkcxx a WHERE a.nd = ' || quote_literal(c_year) || ' AND a.xq = ' || quote_literal(c_term) || ' AND a.nj = ' || quote_literal(c_grade) || ' AND a.zy = ' || quote_literal(c_major) || ' AND a.zsjj = ' || quote_literal(c_season) || ' AND NOT EXISTS (SELECT kch FROM t_cj_zxscj b WHERE a.kch = b.kch AND b.xh = ' || quote_literal(i_sno) || ') AND pt = ANY($1) AND xz = ANY($2)';
+    c_query = format('SELECT * FROM %I a WHERE a.nd = %L AND a.xq = %L AND a.zsjj = %L AND a.nj = %L AND a.zy = %L AND pt = ANY($1) AND xz = ANY($2)', 'v_xk_kxkcxx', c_year, c_term, c_season, c_grade, c_major);
   END IF;
   
   FOR course_rec IN EXECUTE c_query USING i_platform, i_property LOOP
+    PERFORM 1 FROM t_cj_zxscj WHERE kch = course_rec.kch AND xh = i_sno;
+    CONTINUE WHEN FOUND;
+
     course_kcb.kch := course_rec.kch;
     course_kcb.kcxh := course_rec.kcxh;
     course_kcb.kcmc := course_rec.kcmc;
@@ -90,21 +93,21 @@ BEGIN
     course_kcb.ksj := course_rec.ksj;
     course_kcb.jsj := course_rec.jsj;
     course_kcb.cdbh := course_rec.cdbh;
-    course_kcb.zt := 'ENABLE';
+    course_kcb.zt := '1';
 
     PERFORM 1 FROM t_xk_xkxx WHERE kch = course_kcb.kch AND xh = i_sno AND nd = c_year AND xq = c_term;
     IF FOUND THEN
-      course_kcb.zt := 'SELECTED';
+      course_kcb.zt := '2';
     END IF;
 
-    IF course_kcb.zt = 'ENABLE' THEN
+    IF course_kcb.zt = '1' THEN
       PERFORM 1 FROM t_cj_zxscj a JOIN t_jx_kc_qxgx b ON a.kch = b.kch AND xf <= 0 AND gx = '>' AND kch2 = course_kcb.kch AND xh = i_sno;
       IF FOUND THEN
-        course_kcb.zt := 'DISABLE';
+        course_kcb.zt := '0';
       ELSE
         PERFORM 1 FROM t_xk_tj WHERE kcxh = course_kcb.kcxh AND jhrs <= rs;
         IF FOUND THEN
-          course_kcb.zt := 'DISABLE';
+          course_kcb.zt := '0';
         END IF;
       END IF;
     END IF;
