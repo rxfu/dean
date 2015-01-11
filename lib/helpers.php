@@ -33,6 +33,20 @@ if (!function_exists('array_to_pg')) {
 	}
 }
 
+if (!function_exists('between')) {
+
+	/**
+	 * 测试输入值是否在开始值和结束值之间
+	 * @param  integer $value 输入值
+	 * @param  integer $start 开始值
+	 * @param  integer $end   结束值
+	 * @return boolean        在开始值和结束值之间为TRUE，否则为FALSE
+	 */
+	function between($value, $start, $end) {
+		return $value >= $start && $value <= $end;
+	}
+}
+
 if (!function_exists('css')) {
 
 	/**

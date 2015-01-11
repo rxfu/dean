@@ -170,17 +170,32 @@ class CourseController extends Controller {
 
 	/**
 	 * 选课时间冲突检测
-	 * @return boolean 冲突为TRUE，不冲突为FALSE
+	 * @return mixed 冲突为冲突课程序号数足，否则为FALSE
 	 */
 	protected function check() {
 		if (isPost()) {
 			$cno = $_POST['course'];
+			$collision = false;
 
-			$data = DB::getInstance()->searchRecord('t_pk_kb', array('nd' => Session::read('year'), 'xq' => Session::read('term'), 'kcxh' => $cno), array('ksz', 'jsz', 'zc', 'ksj', 'jsj'));
-			foreach ($data as $course) {
-				
+			$sql = 'SELECT kcxh, ksz, jsz, zc, ksj, jsj FROM t_pk_kb WHERE nd = ? AND xq = ? AND kcxh = ?';
+			$currents = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), $cno));
+
+			$sql = 'SELECT kcxh, ksz, jsz, zc, ksj, jsj FROM v_xk_xskcb WHERE xh = ? AND nd = ? AND xq = ?';
+			$compares = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term')));
+			
+			foreach ($currents as $current) {
+				foreach ($compares as $compare) {
+					if ($compare['zc'] == $current['zc']) {
+						if (between($current['ksj'], $compare['ksj'], $compare['jsj'])) {
+							if (between($current['ksz'], $compare['ksz'], $compare['jsz'])) {
+								$collision[] = $compare['kcxh'];
+							}
+						}
+					}
+				}
 			}
-			return false;
+
+			return $collision;
 		}
 	}
 
