@@ -92,6 +92,7 @@ class StudentController extends Controller {
 	protected function logout() {
 		Logger::write(array('xh' => Session::read('username'), 'czlx' => LOG_LOGOUT));
 		Session::destroy();
+		
 		return Redirect::to('student.login');
 	}
 

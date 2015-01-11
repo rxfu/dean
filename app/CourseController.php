@@ -154,9 +154,17 @@ class CourseController extends Controller {
 	 * 取消选课
 	 * @return boolean 取消成功为TRUE，取消失败为FALSE
 	 */
-	protected function remove() {
+	protected function drop() {
 		if (isPost()) {
+			$cno = $_POST['course'];
+			$param = "'" . implode("',", array(Session::read('username'), $cno)) . "'";
 
+			$deleted = DB::getInstance()->query('SELECT p_scxk_del(' . $param . ')');
+			if ($deleted) {
+				Session::flash('success', '删除选课成功');
+			} else {
+				Session::flash('danger', '删除选课失败');
+			}
 		}
 	}
 
@@ -166,6 +174,12 @@ class CourseController extends Controller {
 	 */
 	protected function check() {
 		if (isPost()) {
+			$cno = $_POST['course'];
+
+			$data = DB::getInstance()->searchRecord('t_pk_kb', array('nd' => Session::read('year'), 'xq' => Session::read('term'), 'kcxh' => $cno), array('ksz', 'jsz', 'zc', 'ksj', 'jsj'));
+			foreach ($data as $course) {
+				
+			}
 			return false;
 		}
 	}

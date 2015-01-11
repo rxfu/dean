@@ -205,7 +205,7 @@ ALTER FUNCTION p_xzkc_save(character varying, character varying, character varyi
   OWNER TO jwxt;
 COMMENT ON FUNCTION p_xzkc_save(character varying, character varying, character varying, character varying) IS '选择课程';
 
-CREATE OR REPLACE FUNCTION p_xzkc_drop(
+CREATE OR REPLACE FUNCTION p_xzkc_del(
     i_sno text,
     i_cno text)
   RETURNS boolean AS
