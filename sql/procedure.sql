@@ -64,7 +64,7 @@ BEGIN
   EXECUTE format('SELECT nj, zy, zsjj FROM %I WHERE xh = %L', 't_xs_zxs', i_sno) INTO c_grade, c_major, c_season;
   
   IF ARRAY['Q'] = i_platform AND ARRAY['X'] = i_property THEN
-    c_query = format('SELECT * FROM %I a WHERE a.nd = %L AND a.xq = %L AND a.zsjj = %L AND a.zy = %L AND EXISTS (SELECT DISTINCT nj FROM %1$I c WHERE a.nd = c.nd AND a.xq = c.xq AND c.nj <> %L) UNION SELECT * FROM %1$I a WHERE a.nd = %2$L AND a.xq = %3$L AND a.zsjj = %4$L AND a.nj = %6$L AND EXISTS (SELECT DISTINCT zy FROM %1I c WHERE a.nd = c.nd AND a.xq = c.xq AND c.zy <> %5$L)', 'v_xk_kxkcxx', c_year, c_term, c_season, c_major, c_grade);
+    c_query = format('SELECT * FROM %I a WHERE a.nd = %L AND a.xq = %L AND a.zsjj = %L AND EXISTS (SELECT nj, zy FROM %1$I b WHERE a.nd = b.nd AND a.xq = b.xq AND (b.nj <> %L OR b.zy <> %L))', 'v_xk_kxkcxx', c_year, c_term, c_season, c_grade, c_major);
   ELSE
     c_query = format('SELECT * FROM %I a WHERE a.nd = %L AND a.xq = %L AND a.zsjj = %L AND a.nj = %L AND a.zy = %L AND pt = ANY($1) AND xz = ANY($2)', 'v_xk_kxkcxx', c_year, c_term, c_season, c_grade, c_major);
   END IF;
