@@ -182,6 +182,7 @@ COMMENT ON FUNCTION p_xzkc_save(character varying, character varying, character 
 
 select * from p_xk_hqkcb('201110100122','2012','1','1','2010','0500101','J','B')
 select * from p_kxkcb_sel('201110100122','2011', '0500101', '1', '{Q}','{X}')
+select * from p_kxkcb_sel('201110100122', '{T}','{B}')
 SELECT * FROM t_xk_kxkcxx a
  WHERE nd = '2012'
   AND xq = '1'
