@@ -11,6 +11,11 @@ CREATE OR REPLACE VIEW v_xk_kcxx AS
   WHERE a.zt = '1'::bpchar
   ORDER BY a.kch;
 
+ALTER TABLE v_xk_kcxx
+  OWNER TO jwxt;
+COMMENT ON VIEW v_xk_kcxx
+  IS '课程基本信息视图';
+
 学生成绩单：
 CREATE OR REPLACE VIEW v_xk_xscj AS 
  SELECT a.xh, a.nd, a.xq, a.kch, b.kcmc, b.kcywmc, a.cj, a.xf, a.jd, c.mc AS kcxz, d.mc AS kh, a.kszt
@@ -18,6 +23,11 @@ CREATE OR REPLACE VIEW v_xk_xscj AS
    LEFT JOIN t_jx_kc b ON a.kch = b.kch
    LEFT JOIN t_zd_xz c ON a.kcxz = c.dm
    LEFT JOIN t_zd_khfs d ON a.kh::bpchar = d.dm;
+
+ALTER TABLE v_xk_xscj
+  OWNER TO jwxt;
+COMMENT ON VIEW v_xk_xscj
+  IS '学生成绩单视图';
 
 学生已选课程表：
 CREATE OR REPLACE VIEW v_xk_xskcb AS 
@@ -29,12 +39,23 @@ CREATE OR REPLACE VIEW v_xk_xskcb AS
    LEFT JOIN t_js_jsxx f ON c.cdbh = f.jsh
    LEFT JOIN t_pk_js g ON a.jsgh = g.jsgh::bpchar;
 
+ALTER TABLE v_xk_xskcb
+  OWNER TO jwxt;
+COMMENT ON VIEW v_xk_xskcb
+  IS '学生已选课程表视图';
+
 学生基本信息：
 CREATE OR REPLACE VIEW v_xk_xsjbxx AS 
- SELECT a.xh, a.xm, b.mc AS xy, a.zy AS zyh, c.mc AS zy, a.nj, a.zsjj, a.xz, a.byfa
+ SELECT a.xh, a.xm, b.mc AS xy, c.xq AS xqh, a.zy AS zyh, d.mc AS zy, a.nj, a.zsjj, a.xz, a.byfa
    FROM t_xs_zxs a
    JOIN t_xt_department b ON a.xy = b.dw
-   JOIN t_jx_zy c ON a.zy = c.zy;
+   LEFT JOIN t_xk_xyxq c ON a.xy = c.xy
+   JOIN t_jx_zy d ON a.zy = d.zy;
+
+ALTER TABLE v_xk_xsjbxx
+  OWNER TO jwxt;
+COMMENT ON VIEW v_xk_xsjbxx
+  IS '学生基本信息视图';
 
 学生详细信息：
 CREATE OR REPLACE VIEW v_xk_xsxx AS 
@@ -57,6 +78,11 @@ CREATE OR REPLACE VIEW v_xk_xsxx AS
    LEFT JOIN t_zd_zzmm p ON a.zzmm = p.dm
    LEFT JOIN t_zd_zjlx q ON a.zjlx = q.dm;
 
+ALTER TABLE v_xk_xsxx
+  OWNER TO jwxt;
+COMMENT ON VIEW v_xk_xsxx
+  IS '学生详细信息视图';
+
 教学计划信息：
 CREATE OR REPLACE VIEW v_xk_jxjh AS 
  SELECT a.zy, a.nj, a.zsjj, a.kch, b.kcmc, b.kcywmc, c.mc AS pt, d.mc AS xz, a.xl, a.llxf, a.syxf, a.zxf, a.llxs, a.syxs, a.kxq, e.mc AS kkxy, f.mc AS kh, a.fs, a.lx
@@ -68,12 +94,44 @@ CREATE OR REPLACE VIEW v_xk_jxjh AS
    LEFT JOIN t_zd_khfs f ON a.kh = f.dm
   ORDER BY a.pt, a.xz, a.kxq;
 
-重修课程表：
-CREATE OR REPLACE VIEW v_xk_cxkcb AS 
- SELECT h.xh, h.cj, a.nd, a.xq, a.nj, a.zsjj, a.zy, a.pt, a.xz, a.xl, a.kcxh, b.kch, c.kcmc, c.kcywmc, c.xs, c.xf, d.cdbh, d.xqh, d.ksz, d.jsz, d.zc, d.ksj, d.jsj, d.jsgh, e.xm AS jsxm, d.hb, d.rs, a.kkxy, (SELECT mc FROM t_zd_khfs f JOIN t_jx_jxjh g ON f.dm = g.kh WHERE a.zy = g.zy AND a.nj = g.nj AND a.zsjj = g.zsjj AND b.kch = g.kch ) AS kh, a.bz 
-   FROM t_pk_kczy a 
-   LEFT JOIN t_pk_jxrw b ON a.kcxh = b.kcxh AND a.nd = b.nd AND a.xq = b.xq AND b.id = 1 
-   LEFT JOIN t_jx_kc c ON b.kch = c.kch 
-   LEFT JOIN t_pk_kb d ON a.nd = d.nd AND a.xq = d.xq AND a.kcxh = d.kcxh 
-   LEFT JOIN t_pk_js e ON d.jsgh = e.jsgh
-   LEFT JOIN t_cj_zxscj h ON f.kch = b.kch AND h.cj = (SELECT MAX(i.cj) FROM t_cj_zxscj i);
+ALTER TABLE v_xk_jxjh
+  OWNER TO jwxt;
+COMMENT ON VIEW v_xk_jxjh
+  IS '教学计划信息视图';
+
+可选课程信息：
+CREATE OR REPLACE VIEW v_xk_kxkcxx AS 
+ SELECT a.nd, a.xq, a.nj, a.zsjj, a.zy, a.pt, a.xz, a.xl, a.kcxh, b.kch, c.kcmc, c.kcywmc, c.xs, c.xf, d.cdbh, d.xqh, d.ksz, d.jsz, d.zc, d.ksj, d.jsj, d.jsgh, e.xm AS jsxm, d.hb, d.rs, a.kkxy, ( SELECT f.mc
+           FROM t_zd_khfs f
+      JOIN t_jx_jxjh g ON f.dm = g.kh
+     WHERE a.zy = g.zy AND a.nj = g.nj AND a.zsjj = g.zsjj AND b.kch = g.kch) AS kh, a.bz
+   FROM t_pk_kczy a
+   LEFT JOIN t_pk_jxrw b ON a.kcxh = b.kcxh AND a.nd = b.nd AND a.xq = b.xq AND b.id = 1
+   LEFT JOIN t_jx_kc c ON b.kch = c.kch
+   LEFT JOIN t_pk_kb d ON a.nd = d.nd AND a.xq = d.xq AND a.kcxh = d.kcxh
+   LEFT JOIN t_pk_js e ON d.jsgh = e.jsgh::bpchar;
+
+ALTER TABLE v_xk_kxkcxx
+  OWNER TO jwxt;
+COMMENT ON VIEW v_xk_kxkcxx
+  IS '可选课程信息视图';
+
+重修课程信息：
+CREATE OR REPLACE VIEW v_xk_cxkcxx AS 
+ SELECT h.xh, h.cj, a.nd, a.xq, a.nj, a.zsjj, a.zy, a.pt, a.xz, a.xl, a.kcxh, b.kch, c.kcmc, c.kcywmc, c.xs, c.xf, d.cdbh, d.xqh, d.ksz, d.jsz, d.zc, d.ksj, d.jsj, d.jsgh, e.xm AS jsxm, d.hb, d.rs, a.kkxy, ( SELECT f.mc
+           FROM t_zd_khfs f
+      JOIN t_jx_jxjh g ON f.dm = g.kh
+     WHERE a.zy = g.zy AND a.nj = g.nj AND a.zsjj = g.zsjj AND b.kch = g.kch) AS kh, a.bz
+   FROM t_pk_kczy a
+   LEFT JOIN t_pk_jxrw b ON a.kcxh = b.kcxh AND a.nd = b.nd AND a.xq = b.xq AND b.id = 1
+   LEFT JOIN t_jx_kc c ON b.kch = c.kch
+   LEFT JOIN t_pk_kb d ON a.nd = d.nd AND a.xq = d.xq AND a.kcxh = d.kcxh
+   LEFT JOIN t_pk_js e ON d.jsgh = e.jsgh::bpchar
+   JOIN t_cj_zxscj h ON h.kch = b.kch AND h.cj = (( SELECT max(i.cj) AS max
+   FROM t_cj_zxscj i
+  WHERE i.xh::text = h.xh::text AND i.kch = h.kch));
+
+ALTER TABLE v_xk_cxkcxx
+  OWNER TO jwxt;
+COMMENT ON VIEW v_xk_cxkcxx
+  IS '重修课程信息';

@@ -1,8 +1,8 @@
 <?php section('header') ?>
-<?php section('navigation') ?>
+<?php section('student.navigation') ?>
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header"><?php echo Session::read('name') ?>同学<?php echo Session::read('year') ?>年度<?php echo Dictionary::get('xq', Session::read('term')) ?>学期选课表</h1>
+                        <h1 class="page-header"><?php echo Session::read('name') ?>同学<?php echo Session::read('year') ?>年度<?php echo Dictionary::get('xq', Session::read('term')) ?>学期<?php echo $title ?>选课表</h1>
                     </div>
                 </div>
 
@@ -46,7 +46,7 @@
                                                             <tbody>
                                                                 <?php foreach ($courses[$campus] as $course): ?>
                                                                 <tr>
-                                                                    <td class="text-center"><input type="checkbox" value="<?php echo $course['kcxh'] ?>"<?php echo DISABLE === $course['zt'] ? ' disabled' : (SELECTED === $course['zt'] ? ' checked' : '') ?>></td>
+                                                                    <td class="text-center"><input type="checkbox" value="<?php echo $course['kcxh'] ?>"<?php echo FORBIDDEN === $course['zt'] ? ' disabled' : (SELECTED === $course['zt'] ? ' checked' : '') ?>></td>
                                                                     <td><?php echo $course['kcxh'] ?></td>
                                                                     <td><?php echo $course['kcmc'] ?></td>
                                                                     <td><?php echo $course['xf'] ?></td>

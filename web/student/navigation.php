@@ -89,7 +89,7 @@
                                         </ul>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('course.index', 'ret') ?>">重修课程</a>
+                                        <a href="<?php echo toLink('course.retake') ?>">重修课程</a>
                                     </li>
                                 </ul>
                             </li>

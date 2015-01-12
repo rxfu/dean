@@ -128,8 +128,8 @@ class CourseController extends Controller {
 	 */
 	protected function retake() {
 		$title = '重修课程';
-		$sql   = 'SELECT * FROM v_xk_cxkcb WHERE xh = ? AND (nd <> ? OR xq <> ?)';
-		$data  = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term')));
+		$sql   = 'SELECT * FROM v_xk_cxkcxx WHERE xh = ?';
+		$data  = DB::getInstance()->getAll($sql, array(Session::read('username')));
 
 		$courses = array();
 		foreach ($data as $course) {
@@ -139,7 +139,7 @@ class CourseController extends Controller {
 				$courses[$course['xqh']][] = $course;
 			}
 		}
-		krsort($courses);
+		krsort($courses);var_dump($courses);
 
 		return $this->view->render('course.retake', array('courses' => $courses, 'title' => $title));
 	}

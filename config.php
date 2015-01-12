@@ -73,6 +73,6 @@ define('PAGE_SIZE', 10);
 /**
  * 检索状态代码
  */
-define('DISABLE', 0);
-define('ENABLE', 1);
-define('SELECTED', 2);
+define('FORBIDDEN', '0');
+define('SELECTABLE', '1');
+define('SELECTED', '2');

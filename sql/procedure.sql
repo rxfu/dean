@@ -1,8 +1,4 @@
 选课课表：
--- Type: tp_kcb
-
--- DROP TYPE tp_kcb;
-
 CREATE TYPE tp_kcb AS
    (kch character varying(8),
     kcxh character varying(12),
@@ -30,10 +26,7 @@ ALTER TYPE tp_kcb
 COMMENT ON TYPE tp_kcb
   IS '可选课程列表';
 
--- Function: p_kxkcb_sel(text, text[], text[])
-
--- DROP FUNCTION p_kxkcb_sel(text, text[], text[]);
-
+列出可选课程：
 CREATE OR REPLACE FUNCTION p_kxkcb_sel(
     i_sno text,
     i_platform text[],
@@ -103,7 +96,7 @@ BEGIN
       IF FOUND THEN
         course_kcb.zt := '0';
       ELSE
-        PERFORM 1 FROM t_xk_tj WHERE kcxh = course_kcb.kcxh AND jhrs <= rs;
+        PERFORM 1 FROM t_xk_tj WHERE kcxh = course_kcb.kcxh AND jhrs > 0 AND jhrs <= rs;
         IF FOUND THEN
           course_kcb.zt := '0';
         END IF;
@@ -120,10 +113,77 @@ ALTER FUNCTION p_kxkcb_sel(text, text[], text[])
   OWNER TO jwxt;
 COMMENT ON FUNCTION p_kxkcb_sel(text, text[], text[]) IS '列出可选课程';
 
--- Function: p_xzkc_save(character varying, character varying, character varying, character varying)
+列出重修课程：
+CREATE OR REPLACE FUNCTION p_cxkcb_sel(i_sno text)
+  RETURNS SETOF tp_kcb AS
+$BODY$DECLARE
+  course_rec RECORD;
+  course_kcb tp_kcb;
+  a_course TEXT[];
+  c_year TEXT;
+  c_term TEXT;
+  c_query TEXT;
+  c_grade TEXT;
+  c_major TEXT;
+  c_season TEXT;
+BEGIN
+  SELECT nj, zy, zsjj INTO c_grade, c_major, c_season FROM t_xs_zxs WHERE xh = i_sno;
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'NO STUDENT!';
+    RETURN;
+  END IF;
 
--- DROP FUNCTION p_xzkc_save(character varying, character varying, character varying, character varying);
+  SELECT substr(value, 1, 4), substr(value, 5, 1) INTO c_year, c_term FROM t_xt WHERE id = 'XK_SJ';
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'NOT Setup Selective Time';
+    RETURN;
+  END IF;
+  
+  SELECT kch INTO a_course FROM t_cj_zxscj a WHERE xh = i_sno AND cj = (SELECT MAX(cj) FROM t_cj_zxscj WHERE xh = i_sno AND kch = a.kch);
+  IF NOT FOUND THEN    
+    RAISE EXCEPTION 'NO SCORE';
+    RETURN;
+  END IF;
+  
+  FOR course_rec IN EXECUTE format('SELECT * FROM %I WHERE kch = ANY($1)', 'v_xk_kxkcxx') USING a_course LOOP
+    course_kcb.kch := course_rec.kch;
+    course_kcb.kcxh := course_rec.kcxh;
+    course_kcb.kcmc := course_rec.kcmc;
+    course_kcb.kcywmc := course_rec.kcywmc;
+    course_kcb.xf := course_rec.xf;
+    course_kcb.kh := course_rec.kh;
+    course_kcb.xl := course_rec.xl;
+    course_kcb.jsgh := course_rec.jsgh;
+    course_kcb.jsxm := course_rec.jsxm;
+    course_kcb.zg := course_rec.bz;
+    course_kcb.rs := course_rec.rs;
+    course_kcb.kkxy := course_rec.kkxy;
+    course_kcb.xqh := course_rec.xqh;
+    course_kcb.hb := course_rec.hb;
+    course_kcb.ksz := course_rec.ksz;
+    course_kcb.jsz := course_rec.jsz;
+    course_kcb.zc := course_rec.zc;
+    course_kcb.ksj := course_rec.ksj;
+    course_kcb.jsj := course_rec.jsj;
+    course_kcb.cdbh := course_rec.cdbh;
+    course_kcb.zt := '1';
 
+    PERFORM 1 FROM t_xk_xkxx WHERE kch = course_kcb.kch AND xh = i_sno AND nd = c_year AND xq = c_term;
+    IF FOUND THEN
+      course_kcb.zt := '2';
+    END IF;
+
+    RETURN NEXT course_kcb;
+  END LOOP;
+END$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100
+  ROWS 1000;
+ALTER FUNCTION p_cxkcb_sel(text)
+  OWNER TO jwxt;
+COMMENT ON FUNCTION p_cxkcb_sel(text) IS '列出重修课程';
+
+选择课程：
 CREATE OR REPLACE FUNCTION p_xzkc_save(
     i_sno text,
     i_cno text)
@@ -139,7 +199,7 @@ $BODY$DECLARE
   major_rec RECORD;
   n_count INTEGER;
 BEGIN
-  PERFORM 1 FROM t_xk_tj WHERE kxxh = i_cno AND jhrs < rs;
+  PERFORM 1 FROM t_xk_tj WHERE kcxh = i_cno AND jhrs < rs;
   IF FOUND THEN
     RAISE EXCEPTION 'Too Many Students Selected This Course!';
     RETURN FALSE;
@@ -201,11 +261,12 @@ BEGIN
 END$BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
-ALTER FUNCTION p_xzkc_save(character varying, character varying, character varying, character varying)
+ALTER FUNCTION p_xzkc_save(text, text)
   OWNER TO jwxt;
-COMMENT ON FUNCTION p_xzkc_save(character varying, character varying, character varying, character varying) IS '选择课程';
+COMMENT ON FUNCTION p_xzkc_save(text, text) IS '选择课程';
 
-CREATE OR REPLACE FUNCTION p_xzkc_del(
+删除选课：
+CREATE OR REPLACE FUNCTION p_scxk_del(
     i_sno text,
     i_cno text)
   RETURNS boolean AS
@@ -244,9 +305,9 @@ BEGIN
 END$BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
-ALTER FUNCTION p_xzkc_save(character varying, character varying, character varying, character varying)
+ALTER FUNCTION p_scxk_del(text, text)
   OWNER TO jwxt;
-COMMENT ON FUNCTION p_xzkc_save(character varying, character varying, character varying, character varying) IS '删除选课';
+COMMENT ON FUNCTION p_scxk_del(text, text) IS '取消所选课程';
 
 select * from p_xk_hqkcb('201110100122','2012','1','1','2010','0500101','J','B')
 select * from p_kxkcb_sel('201110100122','2011', '0500101', '1', '{Q}','{X}')
