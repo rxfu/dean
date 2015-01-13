@@ -46,7 +46,7 @@
                                                             <tbody>
                                                                 <?php foreach ($courses[$campus] as $course): ?>
                                                                 <tr>
-                                                                    <td class="text-center"><input type="checkbox" value="<?php echo $course['kcxh'] ?>"<?php echo FORBIDDEN === $course['zt'] ? ' disabled' : (SELECTED === $course['zt'] ? ' checked' : '') ?>></td>
+                                                                    <td class="text-center"><input type="checkbox" name='<?php echo $course['kcxh'] ?>[]' value="<?php echo $course['kcxh'] ?>"<?php echo FORBIDDEN === $course['zt'] ? ' disabled' : (SELECTED === $course['zt'] ? ' checked' : '') ?>></td>
                                                                     <td><?php echo $course['kcxh'] ?></td>
                                                                     <td><?php echo $course['kcmc'] ?></td>
                                                                     <td><?php echo $course['xf'] ?></td>
@@ -80,26 +80,70 @@
         e.preventDefault();
         $(this).tab('show');
     });
-</script>
-<!--
     $('input:checkbox').click(function(e) {
         if (true == $(this).is(':checked')) {         
             $('input[value=' + $(this).val() + ']').each(function() {
                 $(this).prop('checked', true);
             });
+
+            var selectedItems = new Array();
+            $('input[@name="' + $(this).val() + '[]"]:checked').each(function() {
+                selectedItems.push($(this).val());
+            })
             $.ajax({
                 type: "post",
                 url: "<?php echo toLink('course.select') ?>",
-                data: { course: $(this).val() }
+                data: { course: selectedItems.join('|') },
+                dataType: "text",
+                success: function(data) {
+                    document.location.reload;
+                },
+                error: function(request,error){
+                    alert('Error deleting item(s), try again later.');
+                }
             });
         } else if (false == $(this).is(':checked')){
             $('input[value=' + $(this).val() + ']').each(function() {
                 $(this).prop('checked', false);
             });
+
+            var selectedItems = new Array();
+            $('input[@name="' + $(this).val() + '[]"]').each(function() {
+                selectedItems.push($(this).val());
+            })
+            $.ajax({
+                type: "post",
+                url: "<?php echo toLink('course.drop') ?>",
+                data: { course: selectedItems.join('|') },
+                dataType: "text",
+                success: function(data) {
+                    document.location.reload;
+                },
+                error: function(request,error){
+                    alert('Error deleting item(s), try again later.');
+                }
+            });
+
+            var selectedItems = new Array();
+            $('input[@name="' + $(this).val() + '[]"]:checked').each(function() {
+                selectedItems.push($(this).val());
+            })
+            $.ajax({
+                type: "post",
+                url: "<?php echo toLink('course.select') ?>",
+                data: { course: selectedItems.join('|') },
+                dataType: "text",
+                success: function(data) {
+                    document.location.reload;
+                },
+                error: function(request,error){
+                    alert('Error deleting item(s), try again later.');
+                }
+            });
         }
     });
 </script>
-
+<!--
 <div class="modal fade" id="checkModal" tabindex="-1" role="dialog" aria-labelledby="checkModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">

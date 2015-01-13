@@ -153,9 +153,13 @@ class CourseController extends Controller {
 		if (isPost()) {
 			$cno = $_POST['course'];
 
-			$selected = DB::getInstance()->query("SELECT p_xzkc_save('" . Session::read('username') . "', '" . $platform . "', '" . $property . "'");
-			if ($selected) {
-				Session::flash('success', '选课成功');
+			if ($this->check()) {
+				$selected = DB::getInstance()->query("SELECT p_xzkc_save('" . Session::read('username') . "', '" . $platform . "', '" . $property . "'");
+				if ($selected) {
+					Session::flash('success', '选课成功');
+				} else {
+					Session::flash('danger', '选课失败');
+				}
 			} else {
 				Session::flash('danger', '选课失败');
 			}
