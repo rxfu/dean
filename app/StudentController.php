@@ -54,7 +54,7 @@ class StudentController extends Controller {
 			}
 		}
 
-		return $this->view->render('student.login');
+		return $this->view->display('student.login');
 	}
 
 	/**
@@ -126,7 +126,7 @@ class StudentController extends Controller {
 
 			Session::flash('danger', '修改密码失败');
 		}
-		return $this->view->render('student.password');
+		return $this->view->display('student.password');
 	}
 
 	/**
@@ -154,7 +154,7 @@ class StudentController extends Controller {
 			$data = DB::getInstance()->getRow($sql, $id);
 		}
 
-		return $this->view->render('student.profile', array('profile' => $data));
+		return $this->view->display('student.profile', array('profile' => $data));
 	}
 
 	/**
@@ -202,7 +202,7 @@ class StudentController extends Controller {
 	 * @return void
 	 */
 	protected function unpaid() {
-		return $this->view->render('student.unpaid');
+		return $this->view->display('student.unpaid');
 	}
 
 }

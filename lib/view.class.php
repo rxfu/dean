@@ -36,7 +36,22 @@ class View {
 		extract($data);
 		ob_start();
 		require $templatePath;
+		$contents = ob_get_contents();
+		ob_end_clean();
 
-		return ob_get_contents();
+		return $contents;
 	}
+
+	/**
+	 * 显示模板内容
+	 * @param  string $template 视图模板名
+	 * @param  array  $data     模板数据
+	 * @return void
+	 */
+	public function display($template, array $data = array()) {
+		print $this->render($template, $data);
+		
+		exit(0);
+	}
+
 }

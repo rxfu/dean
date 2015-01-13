@@ -119,7 +119,7 @@ class CourseController extends Controller {
 		}
 		krsort($courses);
 
-		return $this->view->render('course.index', array('courses' => $courses, 'title' => $title));
+		return $this->view->display('course.index', array('courses' => $courses, 'title' => $title));
 	}
 
 	/**
@@ -127,9 +127,9 @@ class CourseController extends Controller {
 	 * @return mixed 重修课程数据包
 	 */
 	protected function retake() {
-		$title = '重修课程';
-		$sql   = 'SELECT * FROM v_xk_cxkcxx WHERE xh = ?';
-		$data  = DB::getInstance()->getAll($sql, array(Session::read('username')));
+		$title = '可重修课程';
+		$param = "'" . implode("','", array(Session::read('username'))) . "'";
+		$data  = DB::getInstance()->query('SELECT * FROM p_cxkcb_sel(' . $param . ')');
 
 		$courses = array();
 		foreach ($data as $course) {
@@ -139,9 +139,9 @@ class CourseController extends Controller {
 				$courses[$course['xqh']][] = $course;
 			}
 		}
-		krsort($courses);var_dump($courses);
+		krsort($courses);
 
-		return $this->view->render('course.retake', array('courses' => $courses, 'title' => $title));
+		return $this->view->display('course.retake', array('courses' => $courses, 'title' => $title));
 	}
 
 	/**

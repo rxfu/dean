@@ -10,7 +10,7 @@ class ScheduleController extends Controller {
 	 * @return void
 	 */
 	protected function index() {
-		return $this->view->render('schedule.index', array('year' => Session::read('year'), 'term'=>Session::read('term')));
+		return $this->view->display('schedule.index', array('year' => Session::read('year'), 'term'=>Session::read('term')));
 	}
 
 	/**
@@ -23,6 +23,6 @@ class ScheduleController extends Controller {
 	protected function term($year, $term) {
 		$data = DB::getInstance()->searchRecord('v_xk_xskcb', array('xh' => Session::read('username'), 'nd' => $year, 'xq' => $term));
 
-		return $this->view->render('schedule.term', array('courses' => $data, 'year' => $year, 'term' => $term));
+		return $this->view->display('schedule.term', array('courses' => $data, 'year' => $year, 'term' => $term));
 	}
 }

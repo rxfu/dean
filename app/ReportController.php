@@ -16,7 +16,7 @@ class ReportController extends Controller {
 			$data = DB::getInstance()->searchRecord('v_xk_xscj', array('xh' => $id));
 		}
 
-		return $this->view->render('report.index', array('scores' => $data));
+		return $this->view->display('report.index', array('scores' => $data));
 	}
 
 	/**
@@ -29,6 +29,6 @@ class ReportController extends Controller {
 	protected function term($year, $term) {
 		$data = DB::getInstance()->searchRecord('v_xk_xscj', array('xh' => Session::read('username'), 'nd' => $year, 'xq' => $term));
 
-		return $this->view->render('report.term', array('scores' => $data, 'year' => $year, 'term' => $term));
+		return $this->view->display('report.term', array('scores' => $data, 'year' => $year, 'term' => $term));
 	}
 }

@@ -13,7 +13,7 @@ class PlanController extends Controller {
 	protected function index() {
 		$data = DB::getInstance()->searchRecord('v_xk_jxjh', array('zy' => Session::read('spno'), 'nj' => Session::read('grade'), 'zsjj' => Session::read('season')));
 
-		return $this->view->render('plan.index', array('plans' => $data));
+		return $this->view->display('plan.index', array('plans' => $data));
 	}
 
 	/**
@@ -32,7 +32,7 @@ class PlanController extends Controller {
 		$data['count']   = $count;
 		$data['current'] = $current;
 
-		return $this->view->render('plan.course', array('courses' => $data));
+		return $this->view->display('plan.course', array('courses' => $data));
 	}
 
 	/**
@@ -50,7 +50,7 @@ class PlanController extends Controller {
 			}
 		}
 
-		return $this->view->render('plan.graduation', array('require' => $data));
+		return $this->view->display('plan.graduation', array('require' => $data));
 	}
 
 }

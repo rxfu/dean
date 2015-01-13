@@ -25,6 +25,8 @@ class App extends Prefab {
 		} else {
 			$this->call();
 		}
+
+		Session::close();
 	}
 
 	/**

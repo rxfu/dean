@@ -21,7 +21,7 @@ class SystemController extends Controller {
 		$data['count']   = $count;
 		$data['current'] = $current;
 
-		return $this->view->render('system.log', array('logs' => $data));
+		return $this->view->display('system.log', array('logs' => $data));
 	}
 
 	/**
@@ -40,7 +40,7 @@ class SystemController extends Controller {
 		$data['count']   = $count;
 		$data['current'] = $current;
 
-		return $this->view->render('system.message', array('messages' => $data));
+		return $this->view->display('system.message', array('messages' => $data));
 	}
 
 }

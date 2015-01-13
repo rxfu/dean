@@ -75,7 +75,7 @@
             </div>
 <?php section('footer') ?>
 <script type="text/javascript">
-    $('#campus-tab a[href="#campus-<?php echo Session::read('campus') ?>"]').tab('show');
+    $('#campus-tab a[href="#campus-' + <?php echo Session::read('campus') ?> + '"]').tab('show');
     $('#campus-tab a').click(function(e) {
         e.preventDefault();
         $(this).tab('show');
