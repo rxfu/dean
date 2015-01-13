@@ -182,7 +182,7 @@ class CourseController extends Controller {
 
 	/**
 	 * 选课时间冲突检测
-	 * @return mixed 冲突为冲突课程序号数足，否则为FALSE
+	 * @return mixed 冲突为冲突课程序号数组，否则为FALSE
 	 */
 	protected function check() {
 		if (isPost()) {

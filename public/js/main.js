@@ -87,4 +87,15 @@ $(document).ready(function() {
 				}
 			}
 		});
+	$('.data-table').dataTable({
+		'lengthMenu': [
+			[10, 25, 50, -1],
+			[10, 25, 50, '全部']
+		],
+		'pagingType': 'full_numbers',
+		'ordering': false,
+		'language': {
+			'url': $.getJsUrl() + 'plugins/dataTables/i18n/zh_cn.lang'
+		}
+	});
 });

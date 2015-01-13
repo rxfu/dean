@@ -14,6 +14,7 @@
         <?php echo css('css/bootstrap-select.css') ?>
         <?php echo css('css/bootstrap-theme.css') ?>
         <?php echo css('font-awesome/css/font-awesome.min.css') ?>
+        <?php echo css('css/plugins/dataTables/dataTables.bootstrap.css') ?>
         <?php echo css('css/sb-admin.css') ?>
         <?php echo css('css/style.css') ?>
 

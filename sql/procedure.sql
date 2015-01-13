@@ -119,15 +119,11 @@ CREATE OR REPLACE FUNCTION p_cxkcb_sel(i_sno text)
 $BODY$DECLARE
   course_rec RECORD;
   course_kcb tp_kcb;
-  a_course TEXT[];
   c_year TEXT;
   c_term TEXT;
   c_query TEXT;
-  c_grade TEXT;
-  c_major TEXT;
-  c_season TEXT;
 BEGIN
-  SELECT nj, zy, zsjj INTO c_grade, c_major, c_season FROM t_xs_zxs WHERE xh = i_sno;
+  PERFORM 1 FROM t_xs_zxs WHERE xh = i_sno;
   IF NOT FOUND THEN
     RAISE EXCEPTION 'NO STUDENT!';
     RETURN;
@@ -139,13 +135,9 @@ BEGIN
     RETURN;
   END IF;
   
-  SELECT kch INTO a_course FROM t_cj_zxscj a WHERE xh = i_sno AND cj = (SELECT MAX(cj) FROM t_cj_zxscj WHERE xh = i_sno AND kch = a.kch);
-  IF NOT FOUND THEN    
-    RAISE EXCEPTION 'NO SCORE';
-    RETURN;
-  END IF;
+  c_query = format('SELECT * FROM %I a WHERE EXISTS (SELECT 1 FROM t_cj_zxscj WHERE kch = a.kch AND xh = %L) AND nd = %L AND xq = %L', 'v_xk_kxkcxx', i_sno, c_year, c_term);
   
-  FOR course_rec IN EXECUTE format('SELECT * FROM %I WHERE kch = ANY($1)', 'v_xk_kxkcxx') USING a_course LOOP
+  FOR course_rec IN EXECUTE c_query LOOP
     course_kcb.kch := course_rec.kch;
     course_kcb.kcxh := course_rec.kcxh;
     course_kcb.kcmc := course_rec.kcmc;
@@ -182,6 +174,7 @@ END$BODY$
 ALTER FUNCTION p_cxkcb_sel(text)
   OWNER TO jwxt;
 COMMENT ON FUNCTION p_cxkcb_sel(text) IS '列出重修课程';
+
 
 选择课程：
 CREATE OR REPLACE FUNCTION p_xzkc_save(
