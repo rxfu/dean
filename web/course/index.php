@@ -8,23 +8,23 @@
 
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <?php if(empty($courses)): ?>
-                                    <div class="well">现在无可选课程</div>
-                                <?php else: ?>
-                                    <div role="tabpanel">
-                                        <ul id="campus-tab" class="nav nav-tabs" role="tablist">
+                        <?php if(empty($courses)): ?>
+                            <div class="well">现在无可选课程</div>
+                        <?php else: ?>
+                            <div role="tabpanel">
+                                <ul id="campus-tab" class="nav nav-tabs" role="tablist">
+                                    <?php foreach (array_keys($courses) as $campus): ?>
+                                        <?php $campusId = 'campus-' . $campus ?>
+                                        <li role="presentation"><a href="#<?php echo $campusId ?>" aria-controls="<?php echo $campusId ?>" role="tab" data-toggle="tab"><?php echo Dictionary::get('xqh', $campus) ?></a></li>
+                                    <?php endforeach ?>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
                                             <?php foreach (array_keys($courses) as $campus): ?>
-                                                <?php $campusId = 'campus-' . $campus ?>
-                                                <li role="presentation"><a href="#<?php echo $campusId ?>" aria-controls="<?php echo $campusId ?>" role="tab" data-toggle="tab"><?php echo Dictionary::get('xqh', $campus) ?></a></li>
-                                            <?php endforeach ?>
-                                        </ul>
-                                        <div class="tab-content">
-                                            <?php foreach (array_keys($courses) as $campus): ?>
-                                                <div id="campus-<?php echo $campus ?>" class="tab-pane fade<?php echo Session::read('campus') == $campus ? ' in active' : '' ?>" role="tabpanel">                                            
+                                                <div id="campus-<?php echo $campus ?>" class="tab-pane fade<?php echo Session::read('campus') == $campus ? ' in active' : '' ?>" role="tabpanel">
                                                     <div class="table-responsive">
-                                                        <table class="table table-bordered table-striped table-hover">
+                                                        <table class="table table-bordered table-striped table-hover data-table">
                                                             <thead>
                                                                 <tr>
                                                                     <th rowspan="2" class="active">操作</th>
@@ -67,14 +67,15 @@
                                             <?php endforeach ?>
                                         </div>
                                     </div>
-                                <?php endif ?>
+                                </div>
                             </div>
-                        </div>
+                        <?php endif ?>
                     </div>
                 </div>
             </div>
 <?php section('footer') ?>
-<script type="text/javascript">
+<!--
+<script>
     $('#campus-tab a[href="#campus-' + <?php echo Session::read('campus') ?> + '"]').tab('show');
     $('#campus-tab a').click(function(e) {
         e.preventDefault();
@@ -97,7 +98,7 @@
         }
     });
 </script>
-<!-- Modal -->
+
 <div class="modal fade" id="checkModal" tabindex="-1" role="dialog" aria-labelledby="checkModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -115,3 +116,4 @@
     </div>
   </div>
 </div>
+-->
