@@ -199,6 +199,17 @@ if (!function_exists('hashString')) {
 	}
 }
 
+if (!function_exists('isAjax')) {
+
+	/**
+	 * 判断是否AJAX提交
+	 * @return boolean 是为TRUE，否为FALSE
+	 */
+	function isAjax() {
+		return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+	}
+}
+
 if (!function_exists('isEmpty')) {
 
 	/**

@@ -8,23 +8,23 @@
 
                 <div class="row">
                     <div class="col-lg-12">
-                        <?php if(empty($courses)): ?>
-                            <div class="well">现在无可选课程</div>
-                        <?php else: ?>
-                            <div role="tabpanel">
-                                <ul id="campus-tab" class="nav nav-tabs" role="tablist">
-                                    <?php foreach (array_keys($courses) as $campus): ?>
-                                        <?php $campusId = 'campus-' . $campus ?>
-                                        <li role="presentation"><a href="#<?php echo $campusId ?>" aria-controls="<?php echo $campusId ?>" role="tab" data-toggle="tab"><?php echo Dictionary::get('xqh', $campus) ?></a></li>
-                                    <?php endforeach ?>
-                                </ul>
-                                <div class="tab-content">
-                                    <div class="panel panel-default">
-                                        <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <?php if(empty($courses)): ?>
+                                    <div class="well">现在无可选课程</div>
+                                <?php else: ?>
+                                    <div role="tabpanel">
+                                        <ul id="campus-tab" class="nav nav-tabs" role="tablist">
+                                            <?php foreach (array_keys($courses) as $campus): ?>
+                                                <?php $campusId = 'campus-' . $campus ?>
+                                                <li role="presentation"><a href="#<?php echo $campusId ?>" aria-controls="<?php echo $campusId ?>" role="tab" data-toggle="tab"><?php echo Dictionary::get('xqh', $campus) ?></a></li>
+                                            <?php endforeach ?>
+                                        </ul>
+                                        <div class="tab-content">
                                             <?php foreach (array_keys($courses) as $campus): ?>
                                                 <div id="campus-<?php echo $campus ?>" class="tab-pane fade<?php echo Session::read('campus') == $campus ? ' in active' : '' ?>" role="tabpanel">
                                                     <div class="table-responsive">
-                                                        <table class="table table-bordered table-striped table-hover data-table">
+                                                        <table class="table table-bordered table-striped table-hover">
                                                             <thead>
                                                                 <tr>
                                                                     <th rowspan="2" class="active">操作</th>
@@ -46,7 +46,7 @@
                                                             <tbody>
                                                                 <?php foreach ($courses[$campus] as $course): ?>
                                                                 <tr>
-                                                                    <td class="text-center"><input type="checkbox" value="<?php echo $course['kcxh'] ?>"<?php echo FORBIDDEN == $course['zt'] ? ' disabled' : (SELECTED == $course['zt'] ? ' checked' : '') ?>></td>
+                                                                    <td class="text-center"><input type="checkbox" value="<?php echo $course['kcxh'] ?>"<?php echo FORBIDDEN === $course['zt'] ? ' disabled' : (SELECTED === $course['zt'] ? ' checked' : '') ?>></td>
                                                                     <td><?php echo $course['kcxh'] ?></td>
                                                                     <td><?php echo $course['kcmc'] ?></td>
                                                                     <td><?php echo $course['xf'] ?></td>
@@ -67,20 +67,21 @@
                                             <?php endforeach ?>
                                         </div>
                                     </div>
-                                </div>
+                                <?php endif ?>
                             </div>
-                        <?php endif ?>
+                        </div>
                     </div>
                 </div>
             </div>
 <?php section('footer') ?>
-<!--
 <script>
     $('#campus-tab a[href="#campus-' + <?php echo Session::read('campus') ?> + '"]').tab('show');
     $('#campus-tab a').click(function(e) {
         e.preventDefault();
         $(this).tab('show');
     });
+</script>
+<!--
     $('input:checkbox').click(function(e) {
         if (true == $(this).is(':checked')) {         
             $('input[value=' + $(this).val() + ']').each(function() {

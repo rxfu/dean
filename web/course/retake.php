@@ -22,7 +22,7 @@
                                         </ul>
                                         <div class="tab-content">
                                             <?php foreach (array_keys($courses) as $campus): ?>
-                                                <div id="campus-<?php echo $campus ?>" class="tab-pane fade<?php echo Session::read('campus') == $campus ? ' in active' : '' ?>" role="tabpanel">                                            
+                                                <div id="campus-<?php echo $campus ?>" class="tab-pane fade<?php echo Session::read('campus') == $campus ? ' in active' : '' ?>" role="tabpanel">
                                                     <div class="table-responsive">
                                                         <table class="table table-bordered table-striped table-hover">
                                                             <thead>
@@ -74,3 +74,10 @@
                 </div>
             </div>
 <?php section('footer') ?>
+<script>
+    $('#campus-tab a[href="#campus-' + <?php echo Session::read('campus') ?> + '"]').tab('show');
+    $('#campus-tab a').click(function(e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+</script>

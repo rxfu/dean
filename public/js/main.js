@@ -86,7 +86,7 @@ $(document).ready(function() {
 					}
 				}
 			}
-		});
+		});/*
 	$('.data-table').dataTable({
 		'lengthMenu': [
 			[10, 25, 50, -1],
@@ -97,5 +97,13 @@ $(document).ready(function() {
 		'language': {
 			'url': $.getJsUrl() + 'plugins/dataTables/i18n/zh_cn.lang'
 		}
-	});
+	});*/
+	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+e.target // activated tab
+e.relatedTarget // previous tab
+var table = $.fn.dataTable.fnTables(true);
+if (table.length > 0) {
+$(table).dataTable().fnAdjustColumnSizing();
+}
+});
 });
