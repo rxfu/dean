@@ -3,7 +3,9 @@ $.getJsUrl = function() {
 
 	return url.substring(0, url.lastIndexOf("/") + 1);
 }
-
+$.getBaseUrl = function() {
+	return location.protocol + "//" + location.host + "/dean/";
+}
 $(document).ready(function() {
 	$('a[href="' + $(location).attr('href') + '"]').closest('ul.nav').addClass('collapse in');
 	$('#loginForm')
@@ -95,7 +97,34 @@ $(document).ready(function() {
 		'pagingType': 'full_numbers',
 		'ordering': false,
 		'language': {
-			'url': $.getJsUrl() + 'plugins/dataTables/i18n/zh_cn.lang'
+			'url': $.getBaseUrl() + 'js/plugins/dataTables/i18n/zh_cn.lang'
 		}
+	});
+	$('#campus-tab a').click(function(e) {
+		e.preventDefault();
+		$(this).tab('show');
+	});
+	$('input:checkbox').click(function(e) {
+		var form = $(this).closest('form');
+		var course = $(this).val();
+		$.ajax({
+			type: "post",
+			url: form.prop('action'),
+			data: {
+				'course': $(this).val(),
+				'checked': (true == $(this).is(':checked')) ? 'true' : 'false'
+			},
+			success: function(data) {
+				var tr = $('tr[data-name="' + course + '"] > td');
+				if ('select-success' == data) {
+					tr.removeClass();
+					tr.addClass('success');
+				}
+				if ('delete-success' == data) {
+					tr.removeClass();
+					tr.addClass('warning');
+				}
+			}
+		});
 	});
 });

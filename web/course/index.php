@@ -45,20 +45,40 @@
                                                             </thead>
                                                             <tbody>
                                                                 <?php foreach ($courses[$campus] as $course): ?>
-                                                                <tr>
-                                                                    <td class="text-center"><input type="checkbox" name='<?php echo $course['kcxh'] ?>[]' value="<?php echo $course['kcxh'] ?>"<?php echo FORBIDDEN === $course['zt'] ? ' disabled' : (SELECTED === $course['zt'] ? ' checked' : '') ?>></td>
-                                                                    <td><?php echo $course['kcxh'] ?></td>
-                                                                    <td><?php echo $course['kcmc'] ?></td>
-                                                                    <td><?php echo $course['xf'] ?></td>
-                                                                    <td><?php echo $course['kh'] ?></td>
-                                                                    <td><?php echo $course['ksz'] ?>~<?php echo $course['jsz'] ?></td>
-                                                                    <td><?php echo $course['zc'] ?></td>
-                                                                    <td><?php echo $course['ksj'] ?>
-                                                                        <?php echo $course['jsj'] <= $course['ksj'] ? '' : '~' . $course['jsj'] ?></td>
-                                                                    <td><?php echo Dictionary::get('xqh', $course['xqh']) ?></td>
-                                                                    <td><?php echo $course['jsxm'] ?></td>
-                                                                    <td><?php echo $course['rs'] ?></td>
-                                                                </tr>
+                                                                    <tr data-name="<?php echo $course[0]['kcxh'] ?>">
+                                                                        <?php $rowspan = count($course) ?>
+                                                                        <td rowspan="<?php echo $rowspan ?>" class="text-center">
+                                                                            <form method="post" action="<?php echo toLink('course.select') ?>" role="form">
+                                                                                <div class="checkbox">
+                                                                                    <label>
+                                                                                        <input type="checkbox" value="<?php echo $course[0]['kcxh'] ?>"<?php echo FORBIDDEN === $course[0]['zt'] ? ' disabled' : (SELECTED === $course[0]['zt'] ? ' checked' : '') ?>>
+                                                                                    </label>
+                                                                                </div>
+                                                                            </form>
+                                                                        </td>
+                                                                        <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kcxh'] ?></td>
+                                                                        <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kcmc'] ?></td>
+                                                                        <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['xf'] ?></td>
+                                                                        <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kh'] ?></td>
+                                                                        <td><?php echo $course[0]['ksz'] ?>~<?php echo $course[0]['jsz'] ?></td>
+                                                                        <td><?php echo $course[0]['zc'] ?></td>
+                                                                        <td><?php echo $course[0]['ksj'] ?>
+                                                                            <?php echo $course[0]['jsj'] <= $course[0]['ksj'] ? '' : '~' . $course[0]['jsj'] ?></td>
+                                                                        <td><?php echo Dictionary::get('xqh', $course[0]['xqh']) ?></td>
+                                                                        <td><?php echo $course[0]['jsxm'] ?></td>
+                                                                        <td><?php echo $course[0]['rs'] ?></td>
+                                                                    </tr>
+                                                                    <?php for($i = 1; $i < $rowspan; ++$i): ?>
+                                                                        <tr data-name="<?php echo $course[0]['kcxh'] ?>">
+                                                                            <td><?php echo $course[$i]['ksz'] ?>~<?php echo $course[$i]['jsz'] ?></td>
+                                                                            <td><?php echo $course[$i]['zc'] ?></td>
+                                                                            <td><?php echo $course[$i]['ksj'] ?>
+                                                                                <?php echo $course[$i]['jsj'] <= $course[$i]['ksj'] ? '' : '~' . $course[$i]['jsj'] ?></td>
+                                                                            <td><?php echo Dictionary::get('xqh', $course[$i]['xqh']) ?></td>
+                                                                            <td><?php echo $course[$i]['jsxm'] ?></td>
+                                                                            <td><?php echo $course[$i]['rs'] ?></td>
+                                                                        </tr>
+                                                                    <?php endfor; ?>
                                                                 <?php endforeach; ?>
                                                             </tbody>
                                                         </table>
@@ -76,89 +96,4 @@
 <?php section('footer') ?>
 <script>
     $('#campus-tab a[href="#campus-' + <?php echo Session::read('campus') ?> + '"]').tab('show');
-    $('#campus-tab a').click(function(e) {
-        e.preventDefault();
-        $(this).tab('show');
-    });
-    $('input:checkbox').click(function(e) {
-        if (true == $(this).is(':checked')) {         
-            $('input[value=' + $(this).val() + ']').each(function() {
-                $(this).prop('checked', true);
-            });
-
-            var selectedItems = new Array();
-            $('input[@name="' + $(this).val() + '[]"]:checked').each(function() {
-                selectedItems.push($(this).val());
-            })
-            $.ajax({
-                type: "post",
-                url: "<?php echo toLink('course.select') ?>",
-                data: { course: selectedItems.join('|') },
-                dataType: "text",
-                success: function(data) {
-                    document.location.reload;
-                },
-                error: function(request,error){
-                    alert('Error deleting item(s), try again later.');
-                }
-            });
-        } else if (false == $(this).is(':checked')){
-            $('input[value=' + $(this).val() + ']').each(function() {
-                $(this).prop('checked', false);
-            });
-
-            var selectedItems = new Array();
-            $('input[@name="' + $(this).val() + '[]"]').each(function() {
-                selectedItems.push($(this).val());
-            })
-            $.ajax({
-                type: "post",
-                url: "<?php echo toLink('course.drop') ?>",
-                data: { course: selectedItems.join('|') },
-                dataType: "text",
-                success: function(data) {
-                    document.location.reload;
-                },
-                error: function(request,error){
-                    alert('Error deleting item(s), try again later.');
-                }
-            });
-
-            var selectedItems = new Array();
-            $('input[@name="' + $(this).val() + '[]"]:checked').each(function() {
-                selectedItems.push($(this).val());
-            })
-            $.ajax({
-                type: "post",
-                url: "<?php echo toLink('course.select') ?>",
-                data: { course: selectedItems.join('|') },
-                dataType: "text",
-                success: function(data) {
-                    document.location.reload;
-                },
-                error: function(request,error){
-                    alert('Error deleting item(s), try again later.');
-                }
-            });
-        }
-    });
 </script>
-<!--
-<div class="modal fade" id="checkModal" tabindex="-1" role="dialog" aria-labelledby="checkModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="checkModalLabel">选课时间冲突</h4>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary">确认</button>
-      </div>
-    </div>
-  </div>
-</div>
--->

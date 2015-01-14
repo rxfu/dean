@@ -112,9 +112,9 @@ class CourseController extends Controller {
 		$courses = array();
 		foreach ($data as $course) {
 			if (isEmpty($course['xqh'])) {
-				$courses['unknown'][] = $course;
+				$courses['unknown'][$course['kcxh']][] = $course;
 			} else {
-				$courses[$course['xqh']][] = $course;
+				$courses[$course['xqh']][$course['kcxh']][] = $course;
 			}
 		}
 		krsort($courses);
@@ -134,9 +134,9 @@ class CourseController extends Controller {
 		$courses = array();
 		foreach ($data as $course) {
 			if (isEmpty($course['xqh'])) {
-				$courses['unknown'][] = $course;
+				$courses['unknown'][$course['kcxh']][] = $course;
 			} else {
-				$courses[$course['xqh']][] = $course;
+				$courses[$course['xqh']][$course['kcxh']][] = $course;
 			}
 		}
 		krsort($courses);
@@ -151,35 +151,22 @@ class CourseController extends Controller {
 	 */
 	protected function select() {
 		if (isPost()) {
-			$cno = $_POST['course'];
+			$cno     = $_POST['course'];
+			$checked = $_POST['checked'];
 
-			if ($this->check()) {
-				$selected = DB::getInstance()->query("SELECT p_xzkc_save('" . Session::read('username') . "', '" . $platform . "', '" . $property . "'");
-				if ($selected) {
-					Session::flash('success', '选课成功');
-				} else {
-					Session::flash('danger', '选课失败');
+			if ('true' == $checked) {
+				$param    = "'" . implode("','", array(Session::read('username'), $cno)) . "'";
+				$selected = DB::getInstance()->query('SELECT p_xzkc_save(' . $param . ')');
+				if (isAjax()) {
+					echo $selected ? 'select-success' : 'select-failed';
 				}
 			} else {
-				Session::flash('danger', '选课失败');
-			}
-		}
-	}
+				$param = "'" . implode("','", array(Session::read('username'), $cno)) . "'";
 
-	/**
-	 * 取消选课
-	 * @return boolean 取消成功为TRUE，取消失败为FALSE
-	 */
-	protected function drop() {
-		if (isPost()) {
-			$cno   = $_POST['course'];
-			$param = "'" . implode("',", array(Session::read('username'), $cno)) . "'";
-
-			$deleted = DB::getInstance()->query('SELECT p_scxk_del(' . $param . ')');
-			if ($deleted) {
-				Session::flash('success', '删除选课成功');
-			} else {
-				Session::flash('danger', '删除选课失败');
+				$deleted = DB::getInstance()->query('SELECT p_scxk_del(' . $param . ')');
+				if (isAjax()) {
+					echo $deleted ? 'delete-success' : 'delete-failed';
+				}
 			}
 		}
 	}
