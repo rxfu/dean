@@ -175,7 +175,6 @@ ALTER FUNCTION p_cxkcb_sel(text)
   OWNER TO jwxt;
 COMMENT ON FUNCTION p_cxkcb_sel(text) IS '列出重修课程';
 
-
 选择课程：
 CREATE OR REPLACE FUNCTION p_xzkc_save(
     i_sno text,
@@ -301,6 +300,64 @@ END$BODY$
 ALTER FUNCTION p_scxk_del(text, text)
   OWNER TO jwxt;
 COMMENT ON FUNCTION p_scxk_del(text, text) IS '取消所选课程';
+
+申请重修：
+CREATE OR REPLACE FUNCTION p_xzkc_save(
+    i_sno text,
+    i_cno text)
+  RETURNS boolean AS
+$BODY$DECLARE
+  c_year TEXT;
+  c_term TEXT;
+  c_platform TEXT;
+  c_property TEXT;
+  course_rec RECORD;
+  student_rec RECORD;
+  major_rec RECORD;
+  n_count INTEGER;
+BEGIN
+  SELECT xm, nj, zsjj, zy INTO student_rec FROM t_xs_zxs WHERE xh = i_sno;
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'NO STUDENT!';
+    RETURN FALSE;
+  END IF;
+  
+  SELECT substr(value, 1, 4), substr(value, 5, 1) INTO c_year, c_term FROM t_xt WHERE id = 'XK_SJ';
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'NOT Setup Selective Time';
+    RETURN FALSE;
+  END IF;
+
+  EXECUTE format('SELECT pt, xz FROM %I WHERE xh = %L AND kch = %L', 't_cj_zxscj', i_sno, i_cno);
+
+  EXECUTE format('SELECT b.xh, b.xm, a.kcxh, a.kch, b.pt, b.kcxz FROM %I a JOIN %I b ON a.kch = b.kch WHERE a.nd = %L AND a.xq = %L AND a.kcxh = %L AND a.xh = %L', 'v_xk_kxkcxx', 't_cj_zxscj', c_year, c_term, i_cno, i_cno) INTO course_rec;
+  GET DIAGNOSTICS n_count = ROW_COUNT;
+  IF 0 >= n_count THEN
+    RAISE EXCEPTION 'NO COURSE!';
+    RETURN FALSE;
+  END IF;
+
+  EXECUTE format('INSERT INTO %I(xh, xm, nd, xq, kcxh, kch, pt, xz, xl, jsgh, xf, sf, zg, cx, bz, sj, kkxy) VALUES(%L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L, %L)', 't_xk_xkxx', i_sno, student_rec.xm, c_year, c_term, i_cno, course_rec.kch, c_platform, c_property, course_rec.xl, course_rec.jsgh, course_rec.xf, n_paid, course_rec.bz, '0', '0', CURRENT_TIMESTAMP, course_rec.kkxy);
+  GET DIAGNOSTICS n_count = ROW_COUNT;
+  IF 0 >= n_count THEN
+    RAISE EXCEPTION 'Insert FAILED!';
+    RETURN FALSE;
+  END IF;
+
+  EXECUTE format('UPDATE %I SET rs = rs + 1 WHERE kcxh = %L', 't_xk_tj', i_cno);
+  GET DIAGNOSTICS n_count = ROW_COUNT;
+  IF 0 >= n_count THEN
+    RAISE EXCEPTION 'Update FAILED!';
+    RETURN FALSE;
+  END IF;
+
+  RETURN TRUE;
+END$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION p_xzkc_save(text, text)
+  OWNER TO jwxt;
+COMMENT ON FUNCTION p_xzkc_save(text, text) IS '选择课程';
 
 select * from p_xk_hqkcb('201110100122','2012','1','1','2010','0500101','J','B')
 select * from p_kxkcb_sel('201110100122','2011', '0500101', '1', '{Q}','{X}')

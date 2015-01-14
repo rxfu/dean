@@ -158,13 +158,24 @@ class CourseController extends Controller {
 				$param    = "'" . implode("','", array(Session::read('username'), $cno)) . "'";
 				$selected = DB::getInstance()->query('SELECT p_xzkc_save(' . $param . ')');
 				if (isAjax()) {
-					echo $selected ? 'select-success' : 'select-failed';
+					if ($selected) {
+						Logger::write(array('xh' => Session::read('username'), 'kcxh' => $cno, 'czlx' => LOG_INSERT));
+						echo 'select-success';
+					} else {
+						echo 'select-failed';
+					}
 				}
 			} else {
 				$param = "'" . implode("','", array(Session::read('username'), $cno)) . "'";
 
 				$deleted = DB::getInstance()->query('SELECT p_scxk_del(' . $param . ')');
 				if (isAjax()) {
+					if ($deleted) {
+						Logger::write(array('xh' => Session::read('username'), 'kcxh' => $cno, 'czlx' => LOG_DELETE));
+						echo 'delete-success';
+					} else {
+						echo 'delete-failed';
+					}
 					echo $deleted ? 'delete-success' : 'delete-failed';
 				}
 			}

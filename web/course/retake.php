@@ -45,20 +45,36 @@
                                                             </thead>
                                                             <tbody>
                                                                 <?php foreach ($courses[$campus] as $course): ?>
-                                                                <tr>
-                                                                    <td class="text-center"><input type="checkbox" value="<?php echo $course['kcxh'] ?>"<?php echo FORBIDDEN === $course['zt'] ? ' disabled' : (SELECTED === $course['zt'] ? ' checked' : '') ?>></td>
-                                                                    <td><?php echo $course['kcxh'] ?></td>
-                                                                    <td><?php echo $course['kcmc'] ?></td>
-                                                                    <td><?php echo $course['xf'] ?></td>
-                                                                    <td><?php echo $course['kh'] ?></td>
-                                                                    <td><?php echo $course['ksz'] ?>~<?php echo $course['jsz'] ?></td>
-                                                                    <td><?php echo $course['zc'] ?></td>
-                                                                    <td><?php echo $course['ksj'] ?>
-                                                                        <?php echo $course['jsj'] <= $course['ksj'] ? '' : '~' . $course['jsj'] ?></td>
-                                                                    <td><?php echo Dictionary::get('xqh', $course['xqh']) ?></td>
-                                                                    <td><?php echo $course['jsxm'] ?></td>
-                                                                    <td><?php echo $course['rs'] ?></td>
-                                                                </tr>
+                                                                    <tr data-name="<?php echo $course[0]['kcxh'] ?>">
+                                                                        <?php $rowspan = count($course) ?>
+                                                                        <td rowspan="<?php echo $rowspan ?>" class="text-center">
+                                                                            <form method="post" action="<?php echo toLink('course.select') ?>" role="form">
+                                                                                <button type="submit" class="btn btn-primary<?php echo FORBIDDEN === $course[0]['zt'] ? ' disabled' : (SELECTED === $course[0]['zt'] ? ' checked' : '') ?>">申请重修</button>
+                                                                            </form>
+                                                                        </td>
+                                                                        <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kcxh'] ?></td>
+                                                                        <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kcmc'] ?></td>
+                                                                        <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['xf'] ?></td>
+                                                                        <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kh'] ?></td>
+                                                                        <td><?php echo $course[0]['ksz'] ?>~<?php echo $course[0]['jsz'] ?></td>
+                                                                        <td><?php echo $course[0]['zc'] ?></td>
+                                                                        <td><?php echo $course[0]['ksj'] ?>
+                                                                            <?php echo $course[0]['jsj'] <= $course[0]['ksj'] ? '' : '~' . $course[0]['jsj'] ?></td>
+                                                                        <td><?php echo Dictionary::get('xqh', $course[0]['xqh']) ?></td>
+                                                                        <td><?php echo $course[0]['jsxm'] ?></td>
+                                                                        <td><?php echo $course[0]['rs'] ?></td>
+                                                                    </tr>
+                                                                    <?php for($i = 1; $i < $rowspan; ++$i): ?>
+                                                                        <tr data-name="<?php echo $course[0]['kcxh'] ?>">
+                                                                            <td><?php echo $course[$i]['ksz'] ?>~<?php echo $course[$i]['jsz'] ?></td>
+                                                                            <td><?php echo $course[$i]['zc'] ?></td>
+                                                                            <td><?php echo $course[$i]['ksj'] ?>
+                                                                                <?php echo $course[$i]['jsj'] <= $course[$i]['ksj'] ? '' : '~' . $course[$i]['jsj'] ?></td>
+                                                                            <td><?php echo Dictionary::get('xqh', $course[$i]['xqh']) ?></td>
+                                                                            <td><?php echo $course[$i]['jsxm'] ?></td>
+                                                                            <td><?php echo $course[$i]['rs'] ?></td>
+                                                                        </tr>
+                                                                    <?php endfor; ?>
                                                                 <?php endforeach; ?>
                                                             </tbody>
                                                         </table>

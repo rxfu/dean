@@ -25,6 +25,7 @@ class StudentController extends Controller {
 			}
 
 			if ($this->auth($username, $password)) {
+				Logger::write(array('xh' => Session::read('username'), 'czlx' => LOG_LOGIN));
 
 				$info = $this->info($username);
 
@@ -75,8 +76,6 @@ class StudentController extends Controller {
 					Session::write('id', hashString($username . $currentTime));
 					Session::write('username', $username);
 
-					Logger::write(array('xh' => Session::read('username'), 'czlx' => LOG_LOGIN));
-
 					return true;
 				}
 			}
@@ -92,7 +91,7 @@ class StudentController extends Controller {
 	protected function logout() {
 		Logger::write(array('xh' => Session::read('username'), 'czlx' => LOG_LOGOUT));
 		Session::destroy();
-		
+
 		return Redirect::to('student.login');
 	}
 
