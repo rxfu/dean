@@ -48,7 +48,7 @@
                                                                     <tr data-name="<?php echo $course[0]['kcxh'] ?>">
                                                                         <?php $rowspan = count($course) ?>
                                                                         <td rowspan="<?php echo $rowspan ?>" class="text-center">
-                                                                            <form method="post" action="<?php echo toLink('course.select') ?>" role="form">
+                                                                            <form method="post" action="<?php echo toLink('course.apply') ?>" role="form">
                                                                                 <button type="submit" class="btn btn-primary<?php echo FORBIDDEN === $course[0]['zt'] ? ' disabled' : (SELECTED === $course[0]['zt'] ? ' checked' : '') ?>">申请重修</button>
                                                                             </form>
                                                                         </td>

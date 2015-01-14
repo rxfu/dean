@@ -111,7 +111,7 @@ $(document).ready(function() {
 			type: "post",
 			url: form.prop('action'),
 			data: {
-				'course': $(this).val(),
+				'course': course,
 				'checked': (true == $(this).is(':checked')) ? 'true' : 'false'
 			},
 			success: function(data) {
@@ -124,6 +124,17 @@ $(document).ready(function() {
 					tr.removeClass();
 					tr.addClass('warning');
 				}
+			}
+		});
+	});
+	$(':submit').click(function(e) {
+		var form = $(this).closest('form');
+		var course = $(this).val();
+		$.ajax({
+			type: "post",
+			url: form.prop("action"),
+			data: {
+				"course": course
 			}
 		});
 	});
