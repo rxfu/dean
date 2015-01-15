@@ -194,8 +194,11 @@ if (!function_exists('hashString')) {
 	 * @return string         散列值
 	 */
 	function hashString($string) {
+		/*
 		$encrypt = AUTH_SALT . $string;
 		return hash('sha1', $encrypt);
+		*/
+	return $string;
 	}
 }
 
@@ -320,7 +323,7 @@ if (!function_exists('parseType')) {
 			case 'REGIST':
 				return '考试报名';
 			case 'APPLY':
-				return '教室申请';
+				return '重修申请';
 			default:
 				return '未知类型';
 		}

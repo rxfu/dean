@@ -5,11 +5,11 @@
             <div class="col-md-4 col-md-offset-4">
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">学生入口</h3>
+                        <h3 class="panel-title">教师入口</h3>
                     </div>
                     <div class="panel-body">
                         <?php Session::render(); ?>
-                        <form id="loginForm" name="loginForm" action="<?php echo toLink('student.login') ?>" role="form" method="post" class="form-horizontal">
+                        <form id="loginForm" name="loginForm" action="<?php echo toLink('teacher.login') ?>" role="form" method="post" class="form-horizontal">
                             <fieldset>
                                 <div class="form-group">
                                     <label for="username" class="col-md-3 control-label">用户名</label>

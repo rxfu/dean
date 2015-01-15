@@ -155,7 +155,11 @@ class CourseController extends Controller {
 			$checked = $_POST['checked'];
 
 			if ('true' == $checked) {
-				$param    = "'" . implode("','", array(Session::read('username'), $cno)) . "'";
+				if ($this->full($cno)) {
+					return 'full';
+				}
+				$param = "'" . implode("','", array(Session::read('username'), $cno)) . "'";
+
 				$selected = DB::getInstance()->query('SELECT p_xzkc_save(' . $param . ')');
 				if (isAjax()) {
 					if ($selected) {
@@ -164,6 +168,8 @@ class CourseController extends Controller {
 					} else {
 						echo 'select-failed';
 					}
+				} else {
+					return $selected;
 				}
 			} else {
 				$param = "'" . implode("','", array(Session::read('username'), $cno)) . "'";
@@ -177,6 +183,8 @@ class CourseController extends Controller {
 						echo 'delete-failed';
 					}
 					echo $deleted ? 'delete-success' : 'delete-failed';
+				} else {
+					return $deleted;
 				}
 			}
 		}
@@ -184,15 +192,15 @@ class CourseController extends Controller {
 
 	/**
 	 * 选课时间冲突检测
+	 * @param  string $course 课程序号
 	 * @return mixed 冲突为冲突课程序号数组，否则为FALSE
 	 */
-	protected function check() {
+	protected function check($course) {
 		if (isPost()) {
-			$cno       = $_POST['course'];
 			$collision = false;
 
 			$sql      = 'SELECT kcxh, ksz, jsz, zc, ksj, jsj FROM t_pk_kb WHERE nd = ? AND xq = ? AND kcxh = ?';
-			$currents = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), $cno));
+			$currents = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), $course));
 
 			$sql      = 'SELECT kcxh, ksz, jsz, zc, ksj, jsj FROM v_xk_xskcb WHERE xh = ? AND nd = ? AND xq = ?';
 			$compares = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term')));
@@ -214,6 +222,18 @@ class CourseController extends Controller {
 	}
 
 	/**
+	 * 判断是否选课人数已满
+	 * @param  string $course 课程序号
+	 * @return boolean         人数已满为TRUE，未满为FALSE
+	 */
+	protected function full($course) {
+		$sql  = 'SELECT jhrs, rs FROM t_xk_tj WHERE kcxh = ?';
+		$data = DB::getInstance()->getRow($sql, $course);
+
+		return 0 < $data['jhrs'] && $data['jhrs'] > $data['rs'];
+	}
+
+	/**
 	 * 选课申请
 	 * @return NULL
 	 */
@@ -223,10 +243,19 @@ class CourseController extends Controller {
 			$data['xm']   = Session::read('name');
 			$data['nd']   = Session::read('year');
 			$data['xq']   = Session::read('term');
-			$data['kcxh'] = $_POST['cno'];
+			$data['kcxh'] = $_POST['course'];
+			$data['sj']   = date('Y-m-d H:i:s');
+			$data['cx']   = ENABLE;
+
+			$sql          = 'SELECT kch, kkxy FROM v_xk_kxkcxx WHERE kcxh = ? AND nd = ? AND xq = ?';
+			$course       = DB::getInstance()->getRow($sql, array($_POST['course'], Session::read('year'), Session::read('term')));
+			$data['kch']  = $course['kch'];
+			$data['kkxy'] = $course['kkxy'];
 			DB::getInstance()->insertRecord('t_xk_xksq', $data);
 
 			Logger::write(array('xh' => Session::read('username'), 'kcxh' => $data['kcxh'], 'czlx' => LOG_APPLY));
+
+			echo 'apply-success';
 		}
 	}
 

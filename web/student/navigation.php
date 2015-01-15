@@ -96,9 +96,9 @@
                             <li>
                                 <a href="#"><i class="fa fa-calendar fa-fw"></i> 课程表<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
-                                    <li>
+                                    <!--li>
                                         <a href="<?php echo toLink('schedule.index') ?>">当前课程表</a>
-                                    </li>
+                                    </li-->
                                     <?php foreach (Session::read('courseTerms') as $item): ?>
                                     <li>
                                         <a href="<?php echo toLink('schedule.term', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo Dictionary::get('xq', $item['xq']) ?>课程表</a>
