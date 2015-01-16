@@ -31,4 +31,32 @@ class ReportController extends Controller {
 
 		return $this->view->display('report.term', array('scores' => $data, 'year' => $year, 'term' => $term));
 	}
+
+	/**
+	 * 教师录入成绩
+	 * @param  string $course 课程号
+	 * @return array          学生成绩
+	 */
+	protected function input($course) {
+		return $this->view->display('report.input', array('students' => $students));
+	}
+
+	/**
+	 * 按年度按学期列出成绩单
+	 * @param  string $year 年度
+	 * @param  string $term 学期
+	 * @return array       成绩单列表
+	 */
+	protected function summary($year, $term) {
+		return $this->view->display('report.summary', array('courses' => $courses));
+	}
+
+	/**
+	 * 列出课程成绩
+	 * @param  string $course 课程号
+	 * @return array         成绩列表
+	 */
+	protected function score($course) {
+		return $this->view->display('report.score', array('course' => $course));
+	}
 }

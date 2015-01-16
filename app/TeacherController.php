@@ -60,14 +60,14 @@ class TeacherController extends Controller {
 			if (is_array($data)) {
 				if (1 == count($data)) {
 					if (ENABLE == $data[0]['zt']) {
-					$username    = $data[0]['jsgh'];
-					$currentTime = date('Y-m-d H:i:s');
+						$username    = $data[0]['jsgh'];
+						$currentTime = date('Y-m-d H:i:s');
 
-					Session::write('id', hashString($username . $currentTime));
-					Session::write('username', $username);
+						Session::write('id', hashString($username . $currentTime));
+						Session::write('username', $username);
 
-					return true;
-				}
+						return true;
+					}
 				}
 			}
 		}
