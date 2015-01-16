@@ -28,7 +28,7 @@ define('DEBUG', 1);
 /**
  * 数据库参数配置
  */
-
+/*
 define('DB_PREFIX', 'pgsql');
 define('DB_HOST', '202.193.162.21');
 define('DB_PORT', '5432');
@@ -36,7 +36,7 @@ define('DB_NAME', 'dean');
 define('DB_USERNAME', 'jwxt');
 define('DB_PASSWORD', 'jwxt..');
 define('DB_CHARSET', 'UTF8');
-/*
+*/
 define('DB_PREFIX', 'pgsql');
 define('DB_HOST', '202.193.171.236');
 define('DB_PORT', '5432');
@@ -44,7 +44,7 @@ define('DB_NAME', 'dean');
 define('DB_USERNAME', 'jwxt');
 define('DB_PASSWORD', 'jwxt..');
 define('DB_CHARSET', 'UTF8');
-*/
+
 /**
  * SALT配置
  */

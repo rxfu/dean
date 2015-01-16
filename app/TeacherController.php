@@ -3,7 +3,7 @@
 /**
  * 用户控制器
  */
-class StudentController extends Controller {
+class TeacherController extends Controller {
 
 	/**
 	 * 登录系统
@@ -19,32 +19,21 @@ class StudentController extends Controller {
 				break;
 			}
 
-			if (!(is_numeric($username) && isset($username{11}) && !isset($username{12}))) {
-				Session::flash('danger', '用户名必须是12位学号');
-				break;
-			}
-
 			if ($this->auth($username, $password)) {
-				Logger::write(array('xh' => Session::read('username'), 'czlx' => LOG_LOGIN));
+				Logger::write(array('jsgh' => Session::read('username'), 'czlx' => LOG_LOGIN));
 
 				$info = $this->info($username);
 
 				Session::write('name', $info['xm']);
 				Session::write('college', $info['xy']);
 				Session::write('speciality', $info['zy']);
-				Session::write('spno', $info['zyh']);
-				Session::write('grade', $info['nj']);
-				Session::write('season', $info['zsjj']);
-				Session::write('plan', $info['byfa']);
-				Session::write('system', $info['xz']);
-				Session::write('campus', $info['xqh']);
 
-				$electTerm = Configuration::get('XK_SJ');
+				$electTerm = Configuration::get('CJ_WEBSJ');
 				$term      = parseTerm($electTerm);
 				Session::write('year', $term['year']);
 				Session::write('term', $term['term']);
 
-				Session::write('courseTerms', $this->courseTerms($username));
+				Session::write('reportCourses', $this->reportCourses($username));
 				Session::write('reportTerms', $this->reportTerms($username));
 
 				Session::flash('success', '你已经成功登录系统');
@@ -59,24 +48,26 @@ class StudentController extends Controller {
 	}
 
 	/**
-	 * 通过用户名和密码验证学生登录
+	 * 通过用户名和密码验证教师登录
 	 * @param  string $username 用户名
 	 * @param  string $password 密码
 	 * @return boolean           验证成功为TRUE，验证失败为FALSE
 	 */
 	protected function auth($username, $password) {
 		if (is_string($username) && is_string($password)) {
-			$data = DB::getInstance()->searchRecord('t_xk_xsmm', array('xh' => $username, 'mm' => hashString($password)), array('xh'));
+			$data = DB::getInstance()->searchRecord('t_pk_js', array('jsgh' => $username, 'mm' => hashString($password)), array('jsgh', 'zt'));
 
 			if (is_array($data)) {
 				if (1 == count($data)) {
-					$username    = $data[0]['xh'];
+					if (ENABLE == $data[0]['zt']) {
+					$username    = $data[0]['jsgh'];
 					$currentTime = date('Y-m-d H:i:s');
 
 					Session::write('id', hashString($username . $currentTime));
 					Session::write('username', $username);
 
 					return true;
+				}
 				}
 			}
 		}
@@ -89,10 +80,10 @@ class StudentController extends Controller {
 	 * @return NULL
 	 */
 	protected function logout() {
-		Logger::write(array('xh' => Session::read('username'), 'czlx' => LOG_LOGOUT));
+		Logger::write(array('jsgh' => Session::read('username'), 'czlx' => LOG_LOGOUT));
 		Session::destroy();
 
-		return Redirect::to('student.login');
+		return Redirect::to('teacher.login');
 	}
 
 	/**
@@ -110,11 +101,11 @@ class StudentController extends Controller {
 				if (($new === $confirmed) && ($old !== $new)) {
 					$db = DB::getInstance();
 
-					$data = $db->searchRecord('t_xk_xsmm', array('xh' => Session::read('username'), 'mm' => hashString($old)), array('xh'));
+					$data = $db->searchRecord('t_pk_js', array('jsgh' => Session::read('username'), 'mm' => hashString($old)), array('jsgh'));
 					if (is_array($data)) {
 						if (1 == count($data)) {
-							$db->updateRecord('t_xk_xsmm', array('mm' => hashString($new)), array('xh' => Session::read('username')));
-							Logger::write(array('xh' => Session::read('username'), 'czlx' => LOG_CHGPWD));
+							$db->updateRecord('t_pk_js', array('mm' => hashString($new)), array('jsgh' => Session::read('username')));
+							Logger::write(array('jsgh' => Session::read('username'), 'czlx' => LOG_CHGPWD));
 
 							Session::flash('success', '修改密码成功');
 							break;
@@ -125,17 +116,17 @@ class StudentController extends Controller {
 
 			Session::flash('danger', '修改密码失败');
 		}
-		return $this->view->display('student.password');
+		return $this->view->display('teacher.password');
 	}
 
 	/**
-	 * 根据学号获取学生基本信息
-	 * @param  string $id 学号
-	 * @return array     学生基本信息
+	 * 根据教师工号获取教师基本信息
+	 * @param  string $id 教师工号
+	 * @return array     教师基本信息
 	 */
 	protected function info($id) {
-		if (is_numeric($id) && isset($id{11}) && !isset($id{12})) {
-			$sql  = 'SELECT * FROM v_xk_xsjbxx WHERE xh = ?';
+		if (is_numeric($id)) {
+			$sql  = 'SELECT * FROM v_pk_jsxx WHERE jsgh = ?';
 			$data = DB::getInstance()->getRow($sql, $id);
 		}
 
@@ -143,77 +134,43 @@ class StudentController extends Controller {
 	}
 
 	/**
-	 * 获取当前学生详细信息
-	 * @return array 学生详细信息
+	 * 获取当前教师详细信息
+	 * @return array 教师详细信息
 	 */
 	protected function profile() {
 		$id = Session::read('username');
-		if (is_numeric($id) && isset($id{11}) && !isset($id{12})) {
-			$sql  = 'SELECT * FROM v_xk_xsxx WHERE xh = ?';
+		if (is_numeric($id)) {
+			$sql  = 'SELECT * FROM v_pk_jsxx WHERE jsgh = ?';
 			$data = DB::getInstance()->getRow($sql, $id);
 		}
 
-		return $this->view->display('student.profile', array('profile' => $data));
+		return $this->view->display('teacher.profile', array('profile' => $data));
 	}
 
 	/**
-	 * 获取当前学生头像
-	 * @param  string $file 头像文件名
-	 * @return integer       头像文件
-	 */
-	protected function portrait($file) {
-		$path = PORTRAIT . DS . $file . 'jpg';
-		if (file_exists($path)) {
-			return readfile($path);
-		} else {
-			return readfile(PORTRAIT . DS . 'untitled.jpg');
-		}
-	}
-
-	/**
-	 * 根据学号列出学生具有课程的学期
+	 * 根据教师工号列出教师所上课程
 	 *
-	 * @param string  $id 学号
-	 * @return array     年度学期数组
+	 * @param string  $id 教师工号
+	 * @return array     课程数组
 	 */
-	protected function courseTerms($id) {
-		$sql  = 'SELECT nd, xq FROM t_xk_xkxx WHERE xh = ? GROUP BY nd, xq ORDER BY nd, xq';
-		$data = DB::getInstance()->getAll($sql, $id);
+	protected function reportCourses($id) {
+		$sql  = 'SELECT kcxh FROM t_pk_jxrw WHERE jsgh = ? AND nd = ? AND xq = ? GROUP BY kcxh ORDER BY kcxh';
+		$data = DB::getInstance()->getAll($sql, array($id, Session::read('year'), Session::read('term')));
 
 		return $data;
 	}
 
 	/**
-	 * 根据学号列出学生具有成绩的学期
+	 * 根据教师工号列出教师授课的学期
 	 *
 	 * @param string  $id 学号
-	 * @return array     年度学期数组
+	 * @return array     学期数据
 	 */
 	protected function reportTerms($id) {
-		$sql  = 'SELECT nd, xq FROM t_cj_zxscj WHERE xh = ? GROUP BY nd, xq ORDER BY nd, xq';
+		$sql  = 'SELECT nd, xq FROM t_pk_jxrw WHERE jsgh = ? GROUP BY nd, xq ORDER BY nd, xq';
 		$data = DB::getInstance()->getAll($sql, $id);
 
 		return $data;
-	}
-
-	/**
-	 * 学生欠费提示
-	 * @return void
-	 */
-	protected function unpaid() {
-		return $this->view->display('student.unpaid');
-	}
-
-	/**
-	 * 获取校区号
-	 * @return string 校区号
-	 */
-	public function campus() {
-		if (isAjax()) {
-			echo Session::read('campus');
-		}
-
-		return Session::read('campus');
 	}
 
 }

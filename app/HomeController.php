@@ -7,7 +7,7 @@ class HomeController extends Controller {
 	 * @return void
 	 */
 	protected function index() {
-		return $this->view->display('student.login');
+		return $this->view->display('home.index');
 	}
 
 	/**

@@ -42,7 +42,7 @@ class PlanController extends Controller {
 	 */
 	protected function graduation() {
 		$data         = false;
-		$requirements = DB::getInstance()->searchRecord('t_jx_byyq', array('zy' => Session::read('spno'), 'nj' => Session::read('grade'), 'zsjj' => Session::read('season'), 'byfa' => Session::read('system')));
+		$requirements = DB::getInstance()->searchRecord('t_jx_byyq', array('zy' => Session::read('spno'), 'nj' => Session::read('grade'), 'zsjj' => Session::read('season'), 'byfa' => Session::read('plan')));
 
 		if (is_array($requirements)) {
 			foreach ($requirements as $requirement) {

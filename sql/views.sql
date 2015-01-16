@@ -63,7 +63,7 @@ CREATE OR REPLACE VIEW v_xk_xsxx AS
    FROM t_xs_zxs a
    LEFT JOIN t_zd_xb b ON a.xbdm = b.dm
    LEFT JOIN t_zd_mz c ON a.mzdm = c.dm
-   LEFT JOIN t_zd_gj d ON a.gj = c.dm
+   LEFT JOIN t_zd_gj d ON a.gj = d.dm
    LEFT JOIN t_xt_department e ON a.xy = e.dw
    LEFT JOIN t_zd_xsh f ON a.xsh = f.dm
    LEFT JOIN t_jx_zy g ON a.zy = g.zy
@@ -116,22 +116,21 @@ ALTER TABLE v_xk_kxkcxx
 COMMENT ON VIEW v_xk_kxkcxx
   IS '可选课程信息视图';
 
-重修课程信息：
-CREATE OR REPLACE VIEW v_xk_cxkcxx AS 
- SELECT h.xh, h.cj, a.nd, a.xq, a.nj, a.zsjj, a.zy, a.pt, a.xz, a.xl, a.kcxh, b.kch, c.kcmc, c.kcywmc, c.xs, c.xf, d.cdbh, d.xqh, d.ksz, d.jsz, d.zc, d.ksj, d.jsj, d.jsgh, e.xm AS jsxm, d.hb, d.rs, a.kkxy, ( SELECT f.mc
-           FROM t_zd_khfs f
-      JOIN t_jx_jxjh g ON f.dm = g.kh
-     WHERE a.zy = g.zy AND a.nj = g.nj AND a.zsjj = g.zsjj AND b.kch = g.kch) AS kh, a.bz
-   FROM t_pk_kczy a
-   LEFT JOIN t_pk_jxrw b ON a.kcxh = b.kcxh AND a.nd = b.nd AND a.xq = b.xq AND b.id = 1
-   LEFT JOIN t_jx_kc c ON b.kch = c.kch
-   LEFT JOIN t_pk_kb d ON a.nd = d.nd AND a.xq = d.xq AND a.kcxh = d.kcxh
-   LEFT JOIN t_pk_js e ON d.jsgh = e.jsgh::bpchar
-   JOIN t_cj_zxscj h ON h.kch = b.kch AND h.cj = (( SELECT max(i.cj) AS max
-   FROM t_cj_zxscj i
-  WHERE i.xh::text = h.xh::text AND i.kch = h.kch));
+教师信息：
+CREATE OR REPLACE VIEW v_pk_jsxx AS 
+ SELECT a.jsgh, a.xm, b.mc AS xb, a.csrq, c.mc AS gj, d.mc AS zjlx, sfzh, e.mc AS xl, f.mc AS xw, g.mc AS zc, a.zy, a.jj, h.mc AS xy, i.mc AS xs, j.mc AS jys, a.zt
+   FROM t_pk_js a
+   LEFT JOIN t_zd_xb b ON a.xb = b.dm
+   LEFT JOIN t_zd_gj c ON a.gj = c.dm
+   LEFT JOIN t_zd_zjlx d ON a.zjlx = d.dm
+   LEFT JOIN t_zd_xl e ON a.xl = e.dm
+   LEFT JOIN t_zd_xw f ON a.xw = f.dm
+   LEFT JOIN t_zd_zc g ON a.zc = g.dm
+   LEFT JOIN t_xt_department h ON a.xy = h.dw
+   LEFT JOIN t_zd_xsh i ON a.xsh = i.dm
+   LEFT JOIN t_zd_jys j ON a.jys = j.dm;
 
-ALTER TABLE v_xk_cxkcxx
+ALTER TABLE v_pk_jsxx
   OWNER TO jwxt;
-COMMENT ON VIEW v_xk_cxkcxx
-  IS '重修课程信息';
+COMMENT ON VIEW v_pk_jsxx
+  IS '教师信息视图';
