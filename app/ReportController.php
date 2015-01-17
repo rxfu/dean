@@ -34,7 +34,7 @@ class ReportController extends Controller {
 
 	/**
 	 * 教师录入成绩
-	 * @param  string $course 课程号
+	 * @param  string $course 课程序号
 	 * @return array          学生成绩
 	 */
 	protected function input($course) {
@@ -53,7 +53,7 @@ class ReportController extends Controller {
 
 	/**
 	 * 列出课程成绩
-	 * @param  string $course 课程号
+	 * @param  string $course 课程序号
 	 * @return array         成绩列表
 	 */
 	protected function score($course) {
