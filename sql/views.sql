@@ -59,7 +59,7 @@ COMMENT ON VIEW v_xk_xsjbxx
 
 学生详细信息：
 CREATE OR REPLACE VIEW v_xk_xsxx AS 
- SELECT a.xh, a.xm, a.cym, a.xmpy, b.mc AS xb, a.csny, c.mc AS mz, d.mc AS gj, e.mc AS xy, f.mc AS xs, g.mc AS zy, a.zyfs, h.mc AS zy2, i.mc AS fxzy, a.bj, a.xz, j.mc AS xjzt, k.mc AS zylb, a.rxrq, l.mc AS rxfs, a.bxxs, m.mc AS bxlx, a.xxxs, n.mc AS zsjj, o.mc AS syd, a.jg, a.csd, p.mc AS zzmm, a.jrrq, a.tc, a.zxmc, a.jzxm, a.yzbm, a.jtdz, a.lxdh, q.mc AS zjlx, a.sfzh, a.nj, a.sfldm, a.zxwyyz, a.zxwyjb, a.jsjdj, a.bz, a.zp, a.byfa, a.hcdz, a.ksh
+ SELECT a.xh, a.xm, a.cym, a.xmpy, b.mc AS xb, a.csny, c.mc AS mz, d.mc AS gj, e.mc AS xy, f.mc AS xs, g.mc AS zy, a.zyfs, h.mc AS zy2, i.mc AS fxzy, a.bj, a.xz, j.mc AS xjzt, k.mc AS zylb, a.rxrq, l.mc AS rxfs, r.mc AS bxxs, m.mc AS bxlx, s.mc AS xxxs, n.mc AS zsjj, o.mc AS syd, a.jg, a.csd, p.mc AS zzmm, a.jrrq, a.tc, a.zxmc, a.jzxm, a.yzbm, a.jtdz, a.lxdh, q.mc AS zjlx, a.sfzh, a.nj, a.sfldm, a.zxwyyz, a.zxwyjb, a.jsjdj, a.bz, a.zp, a.byfa, a.hcdz, a.ksh
    FROM t_xs_zxs a
    LEFT JOIN t_zd_xb b ON a.xbdm = b.dm
    LEFT JOIN t_zd_mz c ON a.mzdm = c.dm
@@ -76,7 +76,9 @@ CREATE OR REPLACE VIEW v_xk_xsxx AS
    LEFT JOIN t_zd_zsjj n ON a.zsjj = n.dm
    LEFT JOIN t_zd_syszd o ON a.syszd = o.dm::bpchar
    LEFT JOIN t_zd_zzmm p ON a.zzmm = p.dm
-   LEFT JOIN t_zd_zjlx q ON a.zjlx = q.dm;
+   LEFT JOIN t_zd_zjlx q ON a.zjlx = q.dm
+   LEFT JOIN t_zd_bxxs r ON a.bxxs = r.dm
+   LEFT JOIN t_zd_xxxs s ON a.xxxs = s.dm;
 
 ALTER TABLE v_xk_xsxx
   OWNER TO jwxt;
