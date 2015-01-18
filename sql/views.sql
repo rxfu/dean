@@ -118,6 +118,20 @@ ALTER TABLE v_xk_kxkcxx
 COMMENT ON VIEW v_xk_kxkcxx
   IS '可选课程信息视图';
 
+可选课程信息：
+CREATE OR REPLACE VIEW v_xk_kxkcxx AS 
+ SELECT a.nd, a.xq, e.nj, e.zsjj, e.zy, e.pt, e.xz, e.xl, a.kcxh, c.kch, d.kcmc, d.kcywmc, d.xs, d.xf, a.cdbh, a.xqh, a.ksz, a.jsz, a.zc, a.ksj, a.jsj, a.jsgh, b.xm AS jsxm, a.hb, a.rs, a.kkxy, (SELECT f.mc FROM t_zd_khfs f LEFT JOIN t_jx_jxjh g ON f.dm= g.kh WHERE e.zy = g.zyy AND e.nj=g.nj AND e.zsjj=g.zsjj AND c.kch=g.kch) AS kh, e.bz
+ FROM t_pk_kb a 
+ LEFT JOIN t_pk_js b ON a.jsgh = b.jsgh
+ LEFT JOIN t_pk_jxrw c ON a.nd = c.nd AND a.xq = c.xq AND c.id = 1
+ LEFT JOIN t_jx_kc d ON b.kch = d.kch
+ LEFT JOIN t_pk_kczy e ON a.nd = e.nd AND a.xq = e.xq AND a.kcxh = e.kcxh
+
+ALTER TABLE v_xk_kxkcxx
+  OWNER TO jwxt;
+COMMENT ON VIEW v_xk_kxkcxx
+  IS '可选课程信息视图';
+
 教师信息：
 CREATE OR REPLACE VIEW v_pk_jsxx AS 
  SELECT a.jsgh, a.xm, b.mc AS xb, a.csrq, c.mc AS gj, d.mc AS zjlx, sfzh, e.mc AS xl, f.mc AS xw, g.mc AS zc, a.zy, a.jj, h.mc AS xy, i.mc AS xs, j.mc AS jys, a.zt
