@@ -38,13 +38,13 @@ class TeacherController extends Controller {
 
 				Session::flash('success', '你已经成功登录系统');
 
-				return Redirect::to('home.dashboard');
+				return Redirect::to('home.teacher');
 			} else {
 				Session::flash('danger', '登录失败，请检查用户名和密码是否正确');
 			}
 		}
 
-		return $this->view->display('student.login');
+		return $this->view->display('teacher.login');
 	}
 
 	/**
@@ -167,7 +167,7 @@ class TeacherController extends Controller {
 	 * @return array     学期数据
 	 */
 	protected function reportTerms($id) {
-		$sql  = 'SELECT nd, xq FROM t_pk_jxrw WHERE jsgh = ? GROUP BY nd, xq ORDER BY nd, xq';
+		$sql  = 'SELECT nd, xq FROM t_pk_jxrw WHERE jsgh = ? GROUP BY nd, xq ORDER BY nd, xq DESC';
 		$data = DB::getInstance()->getAll($sql, $id);
 
 		return $data;

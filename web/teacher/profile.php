@@ -14,8 +14,8 @@
                                 <div class="table-responsive">
                                     <table class="table table-bordered">
                                         <tr>
-                                            <th class="active">学号</th>
-                                            <td><?php echo $profile['xh'] ?></td>
+                                            <th class="active">工号</th>
+                                            <td><?php echo $profile['jsgh'] ?></td>
                                             <th class="active">姓名</th>
                                             <td><?php echo $profile['xm'] ?></td>
                                         </tr>
@@ -57,7 +57,7 @@
                                         </tr>
                                         <tr>
                                             <th class="active">简介</th>
-                                            <td cospan="3"><?php echo $profile['jj'] ?></td>
+                                            <td colspan="3"><?php echo $profile['jj'] ?></td>
                                         </tr>
                                     </table>
                                 </div>

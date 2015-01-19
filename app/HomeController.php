@@ -11,10 +11,18 @@ class HomeController extends Controller {
 	}
 
 	/**
-	 * 网站仪表盘
+	 * 学生仪表盘
 	 * @return void
 	 */
-	protected function dashboard() {
-		return $this->view->display('home.dashboard');
+	protected function student() {
+		return $this->view->display('student.dashboard');
+	}
+
+	/**
+	 * 教师仪表盘
+	 * @return void
+	 */
+	protected function teacher() {
+		return $this->view->display('teacher.dashboard');
 	}
 }

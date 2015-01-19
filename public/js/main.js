@@ -22,11 +22,6 @@ $(document).ready(function() {
 						notEmpty: {
 							message: '用户名不能为空'
 						},
-						stringLength: {
-							min: 12,
-							max: 12,
-							message: '用户名为12位学号'
-						},
 						regexp: {
 							regexp: /^[0-9]+$/,
 							message: '用户名只能是数字格式'

@@ -38,7 +38,11 @@ class ReportController extends Controller {
 	 * @return array          学生成绩
 	 */
 	protected function input($course) {
-		return $this->view->display('report.input', array('students' => $students));
+		$electTerm = Configuration::get('XK_SJ');
+		$term      = parseTerm($electTerm);
+		$data      = DB::getInstance()->searchRecord('v_pk_kczyxx', array('nd' => $term['year'], 'xq' => $term['term'], 'kcxh' => $course));
+
+		return $this->view->display('report.input', array('course' => $data));
 	}
 
 	/**
@@ -48,7 +52,10 @@ class ReportController extends Controller {
 	 * @return array       成绩单列表
 	 */
 	protected function summary($year, $term) {
-		return $this->view->display('report.summary', array('courses' => $courses));
+		$sql = 'SELECT kcxh, kcmc FROM v_pk_kczyxx WHERE nd = ? AND xq = ?';
+		$data = DB::getInstance()->getAll($sql, array($year, $term));
+		
+		return $this->view->display('report.summary', array('courses' => $data));
 	}
 
 	/**

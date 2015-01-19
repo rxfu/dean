@@ -47,26 +47,28 @@
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-tasks fa-fw"></i> 成绩管理<span class="fa arrow"></span></a>
-                                <li>
-                                    <a href="#"> 成绩录入<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <?php foreach(Session::read('reportCourses') as $item): ?>
-                                            <li>
-                                                <a href="<?php echo toLink('report.input', $item['kcxh']) ?>"><?php echo $item['kcxh'] ?></a>
-                                            </li>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="#"> 成绩查询<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <?php foreach(Session::read('reportTerms') as $item): ?>
-                                            <li>
-                                                <a href="<?php echo toLink('report.summary', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo Dictionary::get('xq', $item['xq']) ?>学期成绩单</a>
-                                            </li>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                </li>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#"> 成绩录入<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <?php foreach(Session::read('reportCourses') as $item): ?>
+                                                <li>
+                                                    <a href="<?php echo toLink('report.input', $item['kcxh']) ?>"><?php echo $item['kcxh'] ?></a>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#"> 成绩查询<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <?php foreach(Session::read('reportTerms') as $item): ?>
+                                                <li>
+                                                    <a href="<?php echo toLink('report.summary', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo Dictionary::get('xq', $item['xq']) ?>学期成绩单</a>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </li>
+                                </ul>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-gear fa-fw"></i> 系统管理<span class="fa arrow"></span></a>

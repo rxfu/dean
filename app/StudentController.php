@@ -49,7 +49,7 @@ class StudentController extends Controller {
 
 				Session::flash('success', '你已经成功登录系统');
 
-				return Redirect::to('home.dashboard');
+				return Redirect::to('home.student');
 			} else {
 				Session::flash('danger', '登录失败，请检查用户名和密码是否正确');
 			}

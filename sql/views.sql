@@ -168,17 +168,24 @@ COMMENT ON VIEW v_pk_jsxx
 
 课程专业信息：
 CREATE OR REPLACE VIEW v_pk_kczyxx AS 
- SELECT a.nd, a.xq, a.nj, a.zsjj, a.zy, a.pt, a.xz, a.xl, a.kcxh, b.kch, c.kcmc, c.kcywmc, c.xs, c.xf, d.cdbh, d.xqh, d.ksz, d.jsz, d.zc, d.ksj, d.jsj, d.jsgh, e.xm AS jsxm, d.hb, d.rs, a.kkxy, ( SELECT f.mc
-           FROM t_zd_khfs f
-      JOIN t_jx_jxjh g ON f.dm = g.kh
-     WHERE a.zy = g.zy AND a.nj = g.nj AND a.zsjj = g.zsjj AND b.kch = g.kch) AS kh, a.bz
+ SELECT a.nd,
+    a.xq,
+    a.zsjj,
+    a.kcxh,
+    a.nj,
+    b.mc AS zy,
+    c.mc AS pt,
+    d.mc AS xz,
+    e.mc AS xy
    FROM t_pk_kczy a
-   LEFT JOIN t_pk_jxrw b ON a.kcxh = b.kcxh AND a.nd = b.nd AND a.xq = b.xq AND b.id = 1
-   LEFT JOIN t_jx_kc c ON b.kch = c.kch
-   LEFT JOIN t_pk_kb d ON a.nd = d.nd AND a.xq = d.xq AND a.kcxh = d.kcxh
-   LEFT JOIN t_pk_js e ON d.jsgh = e.jsgh::bpchar;
+     LEFT JOIN t_jx_zy b ON b.zy::text = a.zy::text
+     LEFT JOIN t_zd_pt c ON c.dm::text = a.pt::text
+     LEFT JOIN t_zd_xz d ON d.dm::text = a.xz::text
+     LEFT JOIN t_xt_department e ON e.dw::text = a.kkxy::text;
 
 ALTER TABLE v_pk_kczyxx
   OWNER TO jwxt;
+GRANT ALL ON TABLE v_pk_kczyxx TO jwxt;
+GRANT ALL ON TABLE v_pk_kczyxx TO kongsir;
 COMMENT ON VIEW v_pk_kczyxx
   IS '课程专业信息视图';
