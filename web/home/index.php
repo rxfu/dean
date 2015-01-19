@@ -3,20 +3,52 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-md-offset-2">
-                <a href="<?php echo toLink('student.login') ?>" class="thumbnail">
-                	<img alt="学生入口" data-src="holder.js/100%x180">
-                	<div class="caption text-center">
-                		<h3>学生入口</h3>
-                	</div>
-                </a>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <i class="fa fa-comments fa-5x"></i>
+                            </div>
+                            <div class="col-md-9 text-right">
+                                <div class="huge">26</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="<?php echo toLink('student.login') ?>">
+                        <div class="panel-footer">
+                            <span class="pull-left">学生入口</span>
+                            <span class="pull-right">
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
             </div>
             <div class="col-md-4">
-                <a href="<?php echo toLink('teacher.login') ?>" class="thumbnail">
-                	<img alt="教师入口" data-src="holder.js/100%x180">
-                	<div class="caption text-center">
-                		<h3>教师入口</h3>
-                	</div>
-                </a>
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <i class="fa fa-tasks fa-5x"></i>
+                            </div>
+                            <div class="col-md-9 text-right">
+                                <div class="huge">26</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="<?php echo toLink('teacher.login') ?>">
+                        <div class="panel-footer">
+                            <span class="pull-left">教师入口</span>
+                            <span class="pull-right">
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
 <?php section('footer') ?>

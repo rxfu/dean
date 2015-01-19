@@ -103,34 +103,49 @@ COMMENT ON VIEW v_xk_jxjh
 
 可选课程信息：
 CREATE OR REPLACE VIEW v_xk_kxkcxx AS 
- SELECT a.nd, a.xq, a.nj, a.zsjj, a.zy, a.pt, a.xz, a.xl, a.kcxh, b.kch, c.kcmc, c.kcywmc, c.xs, c.xf, d.cdbh, d.xqh, d.ksz, d.jsz, d.zc, d.ksj, d.jsj, d.jsgh, e.xm AS jsxm, d.hb, d.rs, a.kkxy, ( SELECT f.mc
-           FROM t_zd_khfs f
-      JOIN t_jx_jxjh g ON f.dm = g.kh
-     WHERE a.zy = g.zy AND a.nj = g.nj AND a.zsjj = g.zsjj AND b.kch = g.kch) AS kh, a.bz
-   FROM t_pk_kczy a
-   LEFT JOIN t_pk_jxrw b ON a.kcxh = b.kcxh AND a.nd = b.nd AND a.xq = b.xq AND b.id = 1
-   LEFT JOIN t_jx_kc c ON b.kch = c.kch
-   LEFT JOIN t_pk_kb d ON a.nd = d.nd AND a.xq = d.xq AND a.kcxh = d.kcxh
-   LEFT JOIN t_pk_js e ON d.jsgh = e.jsgh::bpchar;
+ SELECT a.nd,
+    a.xq,
+    e.nj,
+    e.zsjj,
+    e.zy,
+    e.pt,
+    e.xz,
+    e.xl,
+    a.kcxh,
+    c.kch,
+    d.kcmc,
+    d.kcywmc,
+    f.llxs + f.syxs AS xs,
+    f.zxf AS xf,
+    a.cdbh,
+    a.xqh,
+    a.ksz,
+    a.jsz,
+    a.zc,
+    a.ksj,
+    a.jsj,
+    a.jsgh,
+    b.xm AS jsxm,
+    a.hb,
+    a.rs,
+    e.kkxy,
+    g.mc AS kh,
+    e.bz
+   FROM t_pk_kb a
+     LEFT JOIN t_pk_js b ON b.jsgh::text = a.jsgh::text
+     LEFT JOIN t_pk_jxrw c ON c.kcxh::text = a.kcxh::text AND c.nd::text = a.nd::text AND c.xq::text = a.xq::text AND c.id = 1
+     LEFT JOIN t_jx_kc d ON d.kch::text = c.kch::text
+     LEFT JOIN t_pk_kczy e ON e.nd::text = a.nd::text AND e.xq::text = a.xq::text AND e.kcxh::text = a.kcxh::text
+     LEFT JOIN t_jx_jxjh f ON f.zy::text = e.zy::text AND f.nj::text = e.nj::text AND f.zsjj::text = e.zsjj::text AND f.kch::text = c.kch::text
+     LEFT JOIN t_zd_khfs g ON g.dm::text = f.kh::text;
 
 ALTER TABLE v_xk_kxkcxx
   OWNER TO jwxt;
+GRANT ALL ON TABLE v_xk_kxkcxx TO jwxt;
+GRANT ALL ON TABLE v_xk_kxkcxx TO kongsir;
 COMMENT ON VIEW v_xk_kxkcxx
   IS '可选课程信息视图';
 
-可选课程信息：
-CREATE OR REPLACE VIEW v_xk_kxkcxx AS 
- SELECT a.nd, a.xq, e.nj, e.zsjj, e.zy, e.pt, e.xz, e.xl, a.kcxh, c.kch, d.kcmc, d.kcywmc, d.xs, d.xf, a.cdbh, a.xqh, a.ksz, a.jsz, a.zc, a.ksj, a.jsj, a.jsgh, b.xm AS jsxm, a.hb, a.rs, a.kkxy, (SELECT f.mc FROM t_zd_khfs f LEFT JOIN t_jx_jxjh g ON f.dm= g.kh WHERE e.zy = g.zyy AND e.nj=g.nj AND e.zsjj=g.zsjj AND c.kch=g.kch) AS kh, e.bz
- FROM t_pk_kb a 
- LEFT JOIN t_pk_js b ON a.jsgh = b.jsgh
- LEFT JOIN t_pk_jxrw c ON a.nd = c.nd AND a.xq = c.xq AND c.id = 1
- LEFT JOIN t_jx_kc d ON b.kch = d.kch
- LEFT JOIN t_pk_kczy e ON a.nd = e.nd AND a.xq = e.xq AND a.kcxh = e.kcxh
-
-ALTER TABLE v_xk_kxkcxx
-  OWNER TO jwxt;
-COMMENT ON VIEW v_xk_kxkcxx
-  IS '可选课程信息视图';
 
 教师信息：
 CREATE OR REPLACE VIEW v_pk_jsxx AS 

@@ -86,3 +86,11 @@ define('FORBIDDEN', '0');
 define('SELECTABLE', '1');
 define('SELECTED', '2');
 define('UNAUDIT', '3');
+
+/**
+ * 考试状态代码
+ */
+define('NORMAL', '正常');
+define('MAKEUP', '补考');
+define('DEFERMENT', '缓考');
+define('NOCLASS', '免听');

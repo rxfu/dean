@@ -162,11 +162,13 @@ class StudentController extends Controller {
 	 * @return integer       头像文件
 	 */
 	protected function portrait($file) {
-		$path = PORTRAIT . DS . $file . 'jpg';
-		if (file_exists($path)) {
-			return readfile($path);
+		$sql = 'SELECT zp FROM t_xs_zxs WHERE xh = ?';
+		$portrait = DB::getInstance()->getRow($sql, Session::read('username'));
+		$path     = PORTRAIT . DS;;
+		if (ENABLE == $portrait['zp']) {
+			return readfile($path . $file . '.jpg');
 		} else {
-			return readfile(PORTRAIT . DS . 'untitled.jpg');
+			return readfile($path . 'untitled.jpg');
 		}
 	}
 
