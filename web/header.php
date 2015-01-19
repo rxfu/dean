@@ -15,7 +15,8 @@
         <?php echo css('css/bootstrap-theme.css') ?>
         <?php echo css('font-awesome/css/font-awesome.min.css') ?>
         <?php echo css('css/plugins/dataTables/dataTables.bootstrap.css') ?>
-        <?php echo css('css/sb-admin.css') ?>
+        <?php echo css('css/sb-admin-2.css') ?>
+        <?php echo css('css/timeline.css') ?>
         <?php echo css('css/style.css') ?>
 
         <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->

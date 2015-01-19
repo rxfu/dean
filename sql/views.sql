@@ -17,16 +17,17 @@ COMMENT ON VIEW v_xk_kcxx
   IS '课程基本信息视图';
 
 学生成绩单：
-CREATE OR REPLACE VIEW v_xk_xscj AS 
- SELECT a.xh, a.nd, a.xq, a.kch, b.kcmc, b.kcywmc, a.cj, a.xf, a.jd, c.mc AS kcxz, d.mc AS kh, a.kszt
+CREATE OR REPLACE VIEW v_cj_xscj AS 
+ SELECT a.xh, a.xm, a.nd, a.xq, a.kch, b.kcmc, b.kcywmc, a.cj, a.xf, a.jd, c.mc AS pt, d.mc AS xz, e.mc AS kh, a.kszt
    FROM t_cj_zxscj a
-   LEFT JOIN t_jx_kc b ON a.kch = b.kch
-   LEFT JOIN t_zd_xz c ON a.kcxz = c.dm
-   LEFT JOIN t_zd_khfs d ON a.kh::bpchar = d.dm;
+   LEFT JOIN t_jx_kc b ON b.kch = a.kch
+   LEFT JOIN t_zd_pt c ON c.dm = a.pt
+   LEFT JOIN t_zd_xz d ON d.dm = a.kcxz
+   LEFT JOIN t_zd_khfs e ON e.dm = a.kh;
 
-ALTER TABLE v_xk_xscj
+ALTER TABLE v_cj_xscj
   OWNER TO jwxt;
-COMMENT ON VIEW v_xk_xscj
+COMMENT ON VIEW v_cj_xscj
   IS '学生成绩单视图';
 
 学生已选课程表：

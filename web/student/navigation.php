@@ -13,7 +13,7 @@
                 </div>                    
 
                 <ul class="nav navbar-top-links navbar-right">
-                    <li>欢迎<?php echo Session::read('college') ?><?php echo Session::read('grade') ?>级<?php echo Session::read('speciality') ?>专业的<?php echo Session::read('name') ?>同学使用选课系统！</li>
+                    <li>欢迎<?php echo Session::read('college') ?><?php echo Session::read('grade') ?>级<?php echo Session::read('speciality') ?>专业<?php echo Session::read('name') ?>同学使用选课系统！</li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-user fa-fw"></i>

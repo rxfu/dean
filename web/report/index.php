@@ -22,6 +22,7 @@
                                                 <th class="active">成绩</th>
                                                 <th class="active">学分</th>
                                                 <th class="active">绩点</th>
+                                                <th class="active">课程平台</th>
                                                 <th class="active">课程性质</th>
                                                 <th class="active">考核方式</th>
                                                 <th class="active">考试状态</th>
@@ -36,7 +37,8 @@
                                                 <td><?php echo $score['cj'] ?></td>
                                                 <td><?php echo $score['xf'] ?></td>
                                                 <td><?php echo $score['jd'] ?></td>
-                                                <td><?php echo $score['kcxz'] ?></td>
+                                                <td><?php echo $score['pt'] ?></td>
+                                                <td><?php echo $score['xz'] ?></td>
                                                 <td><?php echo $score['kh'] ?></td>
                                                 <td><?php echo $score['kszt'] ?></td>
                                             </tr>

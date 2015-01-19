@@ -12,9 +12,7 @@ class ReportController extends Controller {
 	 */
 	protected function index() {
 		$id = Session::read('username');
-		if (is_numeric($id) && isset($id{11}) && !isset($id{12})) {
-			$data = DB::getInstance()->searchRecord('v_xk_xscj', array('xh' => $id));
-		}
+		$data = DB::getInstance()->searchRecord('v_xk_xscj', array('xh' => $id));
 
 		return $this->view->display('report.index', array('scores' => $data));
 	}
@@ -40,9 +38,9 @@ class ReportController extends Controller {
 	protected function input($course) {
 		$electTerm = Configuration::get('XK_SJ');
 		$term      = parseTerm($electTerm);
-		$data      = DB::getInstance()->searchRecord('v_pk_kczyxx', array('nd' => $term['year'], 'xq' => $term['term'], 'kcxh' => $course));
+		$course      = DB::getInstance()->searchRecord('v_pk_kczyxx', array('nd' => $term['year'], 'xq' => $term['term'], 'kcxh' => $course));
 
-		return $this->view->display('report.input', array('course' => $data));
+		return $this->view->display('report.input', array('course' => $course));
 	}
 
 	/**
@@ -60,10 +58,20 @@ class ReportController extends Controller {
 
 	/**
 	 * 列出课程成绩
+	 * @param  string $year 年度
+	 * @param  string $term 学期
 	 * @param  string $course 课程序号
 	 * @return array         成绩列表
 	 */
-	protected function score($course) {
-		return $this->view->display('report.score', array('course' => $course));
+	protected function score($year, $term, $course) {
+		$electTerm = Configuration::get('XK_SJ');
+		$term      = parseTerm($electTerm);
+		$course      = DB::getInstance()->searchRecord('v_pk_kczyxx', array('nd' => $term['year'], 'xq' => $term['term'], 'kcxh' => $course));
+
+		$sql = 'SELECT kch FROM t_pk_jxrw WHERE nd = ? AND xq = ? AND kcxh = ? AND jsgh = ?';
+		$cno = DB::getInstance()->getRow($sql, array($year, $term, $course, Session::read('username')));
+
+		$data = DB::getInstance()->getAll('v_cj_zxscj', array('nd' => $year, 'xq' => $term, 'kch' => $cno));
+		return $this->view->display('report.score', array('course' => $course, 'scores' => $data));
 	}
 }

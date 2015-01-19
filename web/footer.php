@@ -18,7 +18,7 @@
         <?php echo js('js/plugins/metisMenu/jquery.metisMenu.js') ?>
         <?php echo js('js/plugins/dataTables/jquery.dataTables.js') ?>
         <?php echo js('js/plugins/dataTables/dataTables.bootstrap.js') ?>
-        <?php echo js('js/sb-admin.js') ?>
+        <?php echo js('js/sb-admin-2.js') ?>
         <?php echo js('js/main.js') ?>
     </body>
 </html>
