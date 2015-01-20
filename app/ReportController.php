@@ -12,7 +12,7 @@ class ReportController extends Controller {
 	 */
 	protected function index() {
 		$id = Session::read('username');
-		$data = DB::getInstance()->searchRecord('v_xk_xscj', array('xh' => $id));
+		$data = DB::getInstance()->searchRecord('v_cj_xscj', array('xh' => $id));
 
 		return $this->view->display('report.index', array('scores' => $data));
 	}
@@ -25,7 +25,7 @@ class ReportController extends Controller {
 	 * @return array       学生成绩
 	 */
 	protected function term($year, $term) {
-		$data = DB::getInstance()->searchRecord('v_xk_xscj', array('xh' => Session::read('username'), 'nd' => $year, 'xq' => $term));
+		$data = DB::getInstance()->searchRecord('v_cj_xscj', array('xh' => Session::read('username'), 'nd' => $year, 'xq' => $term));
 
 		return $this->view->display('report.term', array('scores' => $data, 'year' => $year, 'term' => $term));
 	}
@@ -50,8 +50,8 @@ class ReportController extends Controller {
 	 * @return array       成绩单列表
 	 */
 	protected function summary($year, $term) {
-		$sql = 'SELECT kcxh, kcmc FROM v_pk_kczyxx WHERE nd = ? AND xq = ?';
-		$data = DB::getInstance()->getAll($sql, array($year, $term));
+		$sql = 'SELECT kcxh, kcmc FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND jsgh = ?';
+		$data = DB::getInstance()->getAll($sql, array($year, $term, Session::read('username')));
 		
 		return $this->view->display('report.summary', array('courses' => $data));
 	}

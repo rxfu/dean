@@ -2,7 +2,7 @@
 <?php section('teacher.navigation') ?>
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">**学院**专业**课程号**课程成绩单</h1>
+                        <h1 class="page-header"></h1>
                     </div>
                 </div>
 

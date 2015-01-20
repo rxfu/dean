@@ -1,9 +1,9 @@
 <body>
     <div id="wrapper">
         <header>
-            <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom:0">
+            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom:0">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                       <span class="sr-only">Toggle navigation</span>
                       <span class="icon-bar"></span>
                       <span class="icon-bar"></span>
@@ -29,8 +29,8 @@
                     </li>
                 </ul>
 
-                <nav class="navbar-default navbar-static-side" role="navigation">
-                    <div class="sidebar-collapse">
+                <nav class="navbar-default sidebar" role="navigation">
+                    <div class="sidebar-nav navbar-collapse">
                         <ul id="side-menu" class="nav">
                             <li class="sidebar-search">
                                 <div class="input-group custom-search-form">
@@ -43,7 +43,7 @@
                                 </div>
                             </li>
                             <li>
-                                <a href="<?php echo toLink('home.dashboard') ?>"><i class="fa fa-dashboard fa-fw"></i> 仪表盘</a>
+                                <a href="<?php echo toLink('home.student') ?>"><i class="fa fa-dashboard fa-fw"></i> 仪表盘</a>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> 教学计划<span class="fa arrow"></span></a>
