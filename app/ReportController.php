@@ -32,15 +32,19 @@ class ReportController extends Controller {
 
 	/**
 	 * 教师录入成绩
-	 * @param  string $course 课程序号
+	 * @param  string $cno 课程序号
 	 * @return array          学生成绩
 	 */
-	protected function input($course) {
-		$electTerm = Configuration::get('XK_SJ');
+	protected function input($cno) {
+		$electTerm = Configuration::get('CJ_WEBSJ');
 		$term      = parseTerm($electTerm);
-		$course    = DB::getInstance()->searchRecord('v_pk_kczyxx', array('nd' => $term['year'], 'xq' => $term['term'], 'kcxh' => $course));
+		$sql       = 'SELECT * FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND kcxh = ?';
+		$course    = DB::getInstance()->getRow($sql, array($term['year'], $term['term'], $cno));
 
-		return $this->view->display('report.input', array('course' => $course));
+		$sql  = 'SELECT * FROM t_cj_lscj WHERE nd = ? AND xq = ? AND kcxh = ?';
+		$data = DB::getInstance()->getAll($sql, array($term['year'], $term['term'], $cno));
+
+		return $this->view->display('report.input', array('course' => $course, 'scores' => $data));
 	}
 
 	/**
@@ -60,18 +64,14 @@ class ReportController extends Controller {
 	 * 列出课程成绩
 	 * @param  string $year 年度
 	 * @param  string $term 学期
-	 * @param  string $course 课程序号
+	 * @param  string $cno 课程序号
 	 * @return array         成绩列表
 	 */
-	protected function score($year, $term, $course) {
-		$electTerm = Configuration::get('XK_SJ');
-		$term      = parseTerm($electTerm);
-		$course    = DB::getInstance()->searchRecord('v_pk_kczyxx', array('nd' => $term['year'], 'xq' => $term['term'], 'kcxh' => $course));
+	protected function score($year, $term, $cno) {
+		$sql    = 'SELECT kch FROM t_pk_jxrw WHERE nd = ? AND xq = ? AND kcxh = ? AND jsgh = ?';
+		$course = DB::getInstance()->getRow($sql, array($year, $term, $cno, Session::read('username')));
 
-		$sql = 'SELECT kch FROM t_pk_jxrw WHERE nd = ? AND xq = ? AND kcxh = ? AND jsgh = ?';
-		$cno = DB::getInstance()->getRow($sql, array($year, $term, $course, Session::read('username')));
-
-		$data = DB::getInstance()->getAll('v_cj_zxscj', array('nd' => $year, 'xq' => $term, 'kch' => $cno));
-		return $this->view->display('report.score', array('course' => $course, 'scores' => $data));
+		$data = DB::getInstance()->getAll('v_cj_xscj', array('nd' => $year, 'xq' => $term, 'kch' => $course['kch']));
+		return $this->view->display('report.score', array('scores' => $data));
 	}
 }

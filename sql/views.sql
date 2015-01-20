@@ -185,7 +185,7 @@ CREATE OR REPLACE VIEW v_pk_kczyxx AS
      LEFT JOIN t_zd_pt c ON c.dm::text = a.pt::text
      LEFT JOIN t_zd_xz d ON d.dm::text = a.xz::text
      LEFT JOIN t_xt_department e ON e.dw::text = a.kkxy::text
-     LEFT JOIN t_pk_jxrw f ON f.kcxh::text = a.kcxh::text
+     LEFT JOIN t_pk_jxrw f ON f.kcxh::text = a.kcxh::text AND f.nd::text = a.nd::text AND f.xq::text = a.xq::text
      LEFT JOIN t_jx_kc g ON f.kch::text = g.kch::text;
 
 ALTER TABLE v_pk_kczyxx

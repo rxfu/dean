@@ -20,8 +20,6 @@ class TeacherController extends Controller {
 			}
 
 			if ($this->auth($username, $password)) {
-				Logger::write(array('jsgh' => Session::read('username'), 'czlx' => LOG_LOGIN));
-
 				$info = $this->info($username);
 
 				Session::write('name', $info['xm']);
@@ -80,7 +78,6 @@ class TeacherController extends Controller {
 	 * @return NULL
 	 */
 	protected function logout() {
-		Logger::write(array('jsgh' => Session::read('username'), 'czlx' => LOG_LOGOUT));
 		Session::destroy();
 
 		return Redirect::to('teacher.login');
@@ -105,7 +102,6 @@ class TeacherController extends Controller {
 					if (is_array($data)) {
 						if (1 == count($data)) {
 							$db->updateRecord('t_pk_js', array('mm' => hashString($new)), array('jsgh' => Session::read('username')));
-							Logger::write(array('jsgh' => Session::read('username'), 'czlx' => LOG_CHGPWD));
 
 							Session::flash('success', '修改密码成功');
 							break;
