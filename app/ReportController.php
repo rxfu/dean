@@ -11,7 +11,7 @@ class ReportController extends Controller {
 	 * @return array     学生成绩
 	 */
 	protected function index() {
-		$id = Session::read('username');
+		$id   = Session::read('username');
 		$data = DB::getInstance()->searchRecord('v_cj_xscj', array('xh' => $id));
 
 		return $this->view->display('report.index', array('scores' => $data));
@@ -38,7 +38,7 @@ class ReportController extends Controller {
 	protected function input($course) {
 		$electTerm = Configuration::get('XK_SJ');
 		$term      = parseTerm($electTerm);
-		$course      = DB::getInstance()->searchRecord('v_pk_kczyxx', array('nd' => $term['year'], 'xq' => $term['term'], 'kcxh' => $course));
+		$course    = DB::getInstance()->searchRecord('v_pk_kczyxx', array('nd' => $term['year'], 'xq' => $term['term'], 'kcxh' => $course));
 
 		return $this->view->display('report.input', array('course' => $course));
 	}
@@ -50,10 +50,10 @@ class ReportController extends Controller {
 	 * @return array       成绩单列表
 	 */
 	protected function summary($year, $term) {
-		$sql = 'SELECT kcxh, kcmc FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND jsgh = ?';
+		$sql  = 'SELECT kcxh, kcmc FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND jsgh = ?';
 		$data = DB::getInstance()->getAll($sql, array($year, $term, Session::read('username')));
-		
-		return $this->view->display('report.summary', array('courses' => $data));
+
+		return $this->view->display('report.summary', array('courses' => $data, 'year' => $year, 'term' => $term));
 	}
 
 	/**
@@ -66,7 +66,7 @@ class ReportController extends Controller {
 	protected function score($year, $term, $course) {
 		$electTerm = Configuration::get('XK_SJ');
 		$term      = parseTerm($electTerm);
-		$course      = DB::getInstance()->searchRecord('v_pk_kczyxx', array('nd' => $term['year'], 'xq' => $term['term'], 'kcxh' => $course));
+		$course    = DB::getInstance()->searchRecord('v_pk_kczyxx', array('nd' => $term['year'], 'xq' => $term['term'], 'kcxh' => $course));
 
 		$sql = 'SELECT kch FROM t_pk_jxrw WHERE nd = ? AND xq = ? AND kcxh = ? AND jsgh = ?';
 		$cno = DB::getInstance()->getRow($sql, array($year, $term, $course, Session::read('username')));

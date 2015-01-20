@@ -2,7 +2,7 @@
 <?php section('teacher.navigation') ?>
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header"></h1>
+                        <h1 class="page-header"><?php echo $year ?>年度<?php echo $term ?>学期成绩单列表</h1>
                     </div>
                 </div>
 
@@ -26,7 +26,7 @@
                                     <div class="panel-footer">
                                         <span class="pull-left">查询</span>
                                         <span class="pull-right">
-                                            <i class="fa fa-arrow-circle-right"></i>
+                                            <i class="fa fa-arrow-circle-righ学期t"></i>
                                         </span>
                                         <div class="clearfix"></div>
                                     </div>
