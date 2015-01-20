@@ -186,6 +186,18 @@ if (!function_exists('getDomain')) {
 	}
 }
 
+if (!function_exists('gpa')) {
+
+	/**
+	 * 计算成绩平均绩点
+	 * @param  double $score 学生成绩
+	 * @return double        学生绩点
+	 */
+	function gpa($score) {
+		return $score;
+	}
+}
+
 if (!function_exists('hashString')) {
 
 	/**
