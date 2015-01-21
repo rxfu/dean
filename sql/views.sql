@@ -173,6 +173,7 @@ CREATE OR REPLACE VIEW v_pk_kczyxx AS
     a.xq,
     a.zsjj,
     a.kcxh,
+    f.kch,
     g.kcmc,
     a.nj,
     b.mc AS zy,

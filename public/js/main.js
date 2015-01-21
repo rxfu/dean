@@ -94,7 +94,7 @@ $(document).ready(function() {
 		'pagingType': 'full_numbers',
 		'ordering': false,
 		'language': {
-			'url': $.getBaseUrl() + 'js/plugins/dataTables/i18n/zh_cn.lang'
+			'url': $().getBaseUrl() + 'js/plugins/dataTables/i18n/zh_cn.lang'
 		}
 	});
 	$('#campus-tab a').click(function(e) {
@@ -112,7 +112,7 @@ $(document).ready(function() {
 				'checked': (true === $(this).is(':checked')) ? 'true' : 'false'
 			},
 			success: function(data) {
-				var tr = $('tr[data-name="' + course + '"] > td');
+				var tr = $('tr[data-row="' + course + '"] > td');
 				if ('select-success' == data) {
 					tr.removeClass();
 					tr.addClass('success');
@@ -124,10 +124,11 @@ $(document).ready(function() {
 			}
 		});
 	});
-	$(':submit[name^=retake]').click(function(e) {
+	$(':submit[name^="retake"]').click(function(e) {
 		e.preventDefault();
 		var form = $(this).closest('form');
 		var course = $(this).val();
+		var cno = $(this).attr('name');
 		$.ajax({
 			type: "post",
 			url: form.prop("action"),
@@ -135,8 +136,23 @@ $(document).ready(function() {
 				"course": course
 			},
 			success: function(data) {
-
+				$(':submit[name="retake' + cno + '"]').prop('disabled');
+				$('td#' + course).text('待审核');
 			}
 		});
+	});
+	$(':input[name^="grade"]').focus(function() {
+		$(this).closest('.panel').addClass('panel-primary');
+	});
+	$(':input[name^="grade"]').blur(function() {
+		$(this).closest('.panel').removeClass('panel-primary');
+
+		var form = $(this).closest('form');
+		$.post(
+			form.prop('action'), {
+				'_token': form.find('input[name=_token]').val(),
+				'_method': form.find('input[name=_method]').val(),
+				'entry': $(this).val()
+			});
 	});
 });

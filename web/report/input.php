@@ -3,7 +3,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                            <?php echo $course['xy'] ?><?php echo $course['nj'] ?>级<?php echo $course['zy'] ?>专业<?php echo $course['kcxh'] ?><?php echo $course['kcmc'] ?>成绩录入
+                            <?php echo $info['xy'] ?><?php echo $info['nj'] ?>级<?php echo $info['zy'] ?>专业<?php echo $info['kcxh'] ?><?php echo $info['kcmc'] ?>成绩录入
                         </h1>
                     </div>
                 </div>
@@ -14,7 +14,7 @@
                             <div class="panel-heading">成绩方式：<?php echo $grades['name'] ?></div>
                             <div class="panel-body">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered table-striped table-hover">
+                                    <table class="table table-bordered table-striped table-hover data-table">
                                         <thead>
                                             <tr>
                                                 <th class="active">学号</th>
@@ -32,7 +32,7 @@
                                                 <td><?php echo $score['xh'] ?></td>
                                                 <td><?php echo $score['xm'] ?></td>
                                                 <?php foreach($grades['mode'] as $grade): ?>
-                                                    <td><input type="text" name="<?php echo $grade['id'] ?>" value="<?php echo $score['cj'.$grade['id']] ?>"></td>
+                                                    <td><input type="text" name="<?php echo $grade['id'] ?>" value="<?php echo $score['cj' . $grade['id']] ?>"></td>
                                                 <?php endforeach; ?>
                                                 <td><?php echo $score['zpcj'] ?></td>
                                                 <td><?php echo $score['kszt'] ?></td>

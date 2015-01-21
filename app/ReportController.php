@@ -51,7 +51,7 @@ class ReportController extends Controller {
 		$sql  = 'SELECT * FROM t_cj_lscj WHERE nd = ? AND xq = ? AND kcxh = ?';
 		$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), $cno));
 
-		return $this->view->display('report.input', array('course' => $course, 'scores' => $data, 'grades' => $grades));
+		return $this->view->display('report.input', array('info' => $course, 'scores' => $data, 'grades' => $grades));
 	}
 
 	/**
@@ -114,7 +114,7 @@ class ReportController extends Controller {
 	 * @return array       成绩单列表
 	 */
 	protected function summary($year, $term) {
-		$sql  = 'SELECT kcxh, kcmc FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND jsgh = ?';
+		$sql  = 'SELECT DISTINCT kch, kcmc FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND jsgh = ?';
 		$data = DB::getInstance()->getAll($sql, array($year, $term, Session::read('username')));
 
 		return $this->view->display('report.summary', array('courses' => $data, 'year' => $year, 'term' => $term));
@@ -124,14 +124,15 @@ class ReportController extends Controller {
 	 * 列出课程成绩
 	 * @param  string $year 年度
 	 * @param  string $term 学期
-	 * @param  string $cno 课程序号
+	 * @param  string $cno 课程号
 	 * @return array         成绩列表
 	 */
 	protected function score($year, $term, $cno) {
-		$sql    = 'SELECT kch FROM t_pk_jxrw WHERE nd = ? AND xq = ? AND kcxh = ? AND jsgh = ?';
-		$course = DB::getInstance()->getRow($sql, array($year, $term, $cno, Session::read('username')));
+		$sql    = 'SELECT DISTINCT kch, kcmc, xy, nj, zy FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND kch = ?';
+		$info = DB::getInstance()->getRow($sql, array($year, $term, $cno));
 
-		$data = DB::getInstance()->getAll('v_cj_xscj', array('nd' => $year, 'xq' => $term, 'kch' => $course['kch']));
-		return $this->view->display('report.score', array('scores' => $data));
+		$sql = 'SELECT * FROM v_cj_xscj WHERE nd = ? AND xq = ? AND kch = ? ORDER BY xh';
+		$data = DB::getInstance()->getAll($sql, array($year, $term, $cno));
+		return $this->view->display('report.score', array('info' => $info, 'scores' => $data));
 	}
 }

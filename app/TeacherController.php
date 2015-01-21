@@ -53,7 +53,7 @@ class TeacherController extends Controller {
 	 */
 	protected function auth($username, $password) {
 		if (is_string($username) && is_string($password)) {
-			$data = DB::getInstance()->searchRecord('t_pk_js', array('jsgh' => $username, 'mm' => hashString($password)), array('jsgh', 'zt'));
+			$data = DB::getInstance()->searchRecord('t_pk_js', array('jsgh' => $username, 'mm' => encrypt($password)), array('jsgh', 'zt'));
 
 			if (is_array($data)) {
 				if (1 == count($data)) {
@@ -61,7 +61,7 @@ class TeacherController extends Controller {
 						$username    = $data[0]['jsgh'];
 						$currentTime = date('Y-m-d H:i:s');
 
-						Session::write('id', hashString($username . $currentTime));
+						Session::write('id', encrypt($username . $currentTime));
 						Session::write('username', $username);
 
 						return true;
@@ -163,7 +163,7 @@ class TeacherController extends Controller {
 	 * @return array     学期数据
 	 */
 	protected function reportTerms($id) {
-		$sql  = 'SELECT nd, xq FROM t_cj_zxscj WHERE kch = (SELECT kch FROM t_pk_jxrw WHERE b.jsgh = ?) GROUP BY nd, xq ORDER BY nd DESC, xq DESC';
+		$sql  = 'SELECT DISTINCT a.nd, a.xq FROM t_cj_zxscj a INNER JOIN t_pk_jxrw b ON b.nd = a.nd AND b.xq = a.xq AND b.kch = a.kch AND b.jsgh = ? ORDER BY a.nd DESC, a.xq DESC';
 		$data = DB::getInstance()->getAll($sql, $id);
 
 		return $data;

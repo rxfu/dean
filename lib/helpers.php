@@ -59,6 +59,22 @@ if (!function_exists('css')) {
 	}
 }
 
+if (!function_exists('encrypt')) {
+
+	/**
+	 * 加密字符串
+	 * @param  string $string 字符串
+	 * @return string         加密字符串
+	 */
+	function encrypt($string) {
+		/*
+		$encrypt = AUTH_SALT . $string;
+		return hash('sha1', $encrypt);
+		 */
+		return $string;
+	}
+}
+
 if (!function_exists('error')) {
 
 	/**
@@ -195,22 +211,6 @@ if (!function_exists('gpa')) {
 	 */
 	function gpa($score) {
 		return PASSLINE < $score ? ($score / 10 - 5) : 0;
-	}
-}
-
-if (!function_exists('hashString')) {
-
-	/**
-	 * 计算字符串散列值
-	 * @param  string $string 字符串
-	 * @return string         散列值
-	 */
-	function hashString($string) {
-		/*
-		$encrypt = AUTH_SALT . $string;
-		return hash('sha1', $encrypt);
-		 */
-		return $string;
 	}
 }
 

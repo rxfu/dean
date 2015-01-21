@@ -17,7 +17,10 @@ class Session {
 	 * @return boolean 会话创建成功返回TRUE，否则返回FALSE
 	 */
 	private static function _init() {
-		return self::_started() ? self::regenerate() : session_start();
+		if (false === self::_started()) {
+			session_start();
+			self::regenerate();
+		}
 	}
 
 	/**
@@ -44,7 +47,7 @@ class Session {
 		if (version_compare(phpversion(), '5.4.0', '>=')) {
 			$started = PHP_SESSION_ACTIVE === session_status() ? true : false;
 		} else {
-			$started = '' === session_id() ? false : true;
+			$started = ('' === session_id() ? false : true);
 		}
 
 		return $started;

@@ -2,7 +2,7 @@
 <?php section('teacher.navigation') ?>
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header"><?php echo $course['xy'] ?><?php echo $course['nj'] ?>级<?php echo $course['zy'] ?>专业<?php echo $course['kcxh'] ?><?php echo $course['kcmc'] ?>成绩单</h1>
+                        <h1 class="page-header"><?php echo $info['xy'] ?><?php echo $info['nj'] ?>级<?php echo $info['zy'] ?>专业<?php echo $info['kch'] ?><?php echo $info['kcmc'] ?>课程成绩单</h1>
                     </div>
                 </div>
 

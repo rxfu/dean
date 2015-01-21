@@ -66,14 +66,14 @@ class StudentController extends Controller {
 	 */
 	protected function auth($username, $password) {
 		if (is_string($username) && is_string($password)) {
-			$data = DB::getInstance()->searchRecord('t_xk_xsmm', array('xh' => $username, 'mm' => hashString($password)), array('xh'));
+			$data = DB::getInstance()->searchRecord('t_xk_xsmm', array('xh' => $username, 'mm' => encrypt($password)), array('xh'));
 
 			if (is_array($data)) {
 				if (1 == count($data)) {
 					$username    = $data[0]['xh'];
 					$currentTime = date('Y-m-d H:i:s');
 
-					Session::write('id', hashString($username . $currentTime));
+					Session::write('id', encrypt($username . $currentTime));
 					Session::write('username', $username);
 
 					return true;

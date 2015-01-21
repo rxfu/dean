@@ -46,14 +46,14 @@
                                                             </thead>
                                                             <tbody>
                                                                 <?php foreach ($courses[$campus] as $course): ?>
-                                                                    <tr data-name="<?php echo $course[0]['kcxh'] ?>">
+                                                                    <tr data-row="<?php echo $course[0]['kcxh'] ?>">
                                                                         <?php $rowspan = count($course) ?>
-                                                                        <td rowspan="<?php echo $rowspan ?>" class="text-center">
+                                                                        <td rowspan="<?php echo $rowspan ?>" class="text-center" id="<?php echo $course[0]['kcxh'] ?>">
                                                                             <?php if (UNAUDIT == $course[0]['zt']): ?>
                                                                                 待审核
                                                                             <?php else: ?>
                                                                                 <form method="post" action="<?php echo toLink('course.apply') ?>" role="form">
-                                                                                    <button type="submit" name="retake<?php echo $course[0]['kcxh'] ?>" value="<?php echo $course[0]['kcxh'] ?>" class="btn btn-primary<?php echo FORBIDDEN === $course[0]['zt'] ? ' disabled' : (SELECTED === $course[0]['zt'] ? ' checked' : '') ?>">申请重修</button>
+                                                                                    <button type="submit" name="retake<?php echo $course[0]['kch'] ?>" value="<?php echo $course[0]['kcxh'] ?>" class="btn btn-primary<?php echo FORBIDDEN === $course[0]['zt'] ? ' disabled' : (SELECTED === $course[0]['zt'] ? ' checked' : '') ?>">申请重修</button>
                                                                                 </form>
                                                                             <?php endif; ?>
                                                                         </td>
