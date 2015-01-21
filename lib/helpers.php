@@ -194,7 +194,7 @@ if (!function_exists('gpa')) {
 	 * @return double        学生绩点
 	 */
 	function gpa($score) {
-		return $score;
+		return PASSLINE < $score ? ($score / 10 - 5) : 0;
 	}
 }
 
@@ -209,8 +209,8 @@ if (!function_exists('hashString')) {
 		/*
 		$encrypt = AUTH_SALT . $string;
 		return hash('sha1', $encrypt);
-		*/
-	return $string;
+		 */
+		return $string;
 	}
 }
 
@@ -290,6 +290,18 @@ if (!function_exists('toLink')) {
 		}
 
 		return NULL;
+	}
+}
+
+if (!function_exists('parseCourse')) {
+
+	/**
+	 * 获取课程号
+	 * @param  string $cno 课程序号
+	 * @return string      课程号
+	 */
+	function parseCourse($cno) {
+		return substr($cno, 2, 8);
 	}
 }
 

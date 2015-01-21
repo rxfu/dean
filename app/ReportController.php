@@ -39,10 +39,19 @@ class ReportController extends Controller {
 		$sql    = 'SELECT * FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND kcxh = ?';
 		$course = DB::getInstance()->getRow($sql, array(Session::read('year'), Session::read('term'), $cno));
 
+		$grades = array();
+		$items  = DB::getInstance()->searchRecord('t_jx_cjfs', array('fs' => $course['cjfs']));
+		foreach ($items as $item) {
+			$grades['name']   = $item['khmc'];
+			$grades['mode'][] = array('id' => $item['id'], 'idm' => $item['idm']);
+			Session::write('grade', $item['fs']);
+			Session::write('proportion.' . $item['fs'] . '.' . $item['id'], $item['bl'] / $item['mf']);
+		}
+
 		$sql  = 'SELECT * FROM t_cj_lscj WHERE nd = ? AND xq = ? AND kcxh = ?';
 		$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), $cno));
 
-		return $this->view->display('report.input', array('course' => $course, 'scores' => $data));
+		return $this->view->display('report.input', array('course' => $course, 'scores' => $data, 'grades' => $grades));
 	}
 
 	/**
@@ -56,17 +65,9 @@ class ReportController extends Controller {
 			$mode  = $_POST['mode'];
 			$score = $_POST['score'];
 
-			$sql      = 'SELECT id, a.bl/a.mf AS bl FROM t_jx_cjfs a WHERE a.fs = (SELECT cjfs FROM t_pk_jxrw WHERE nd = ? AND xq = ? AND jsgh = ? AND id = 1)';
-			$items    = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('username')));
-			$percents = array();
-			foreach ($items as $item) {
-				$percents[strval($item['id'])] = $item['bl'];
-			}
-
 			$sql   = 'SELECT * FROM t_cj_lscj WHERE nd = ? AND xq = ? AND kcxh = ? AND xh = ?';
 			$item  = DB::getInstance()->getRow($sql, array(Session::read('year'), Session::read('term'), $cno, $sno));
-			$total = $item['zpcj'];
-			$total += empty($percents) ? $score : ($score * $percents[$mode]);
+			$total = $item['zpcj'] + $score * Session::read('proportion.' . Session::read('grade') . '.' . $mode);
 
 			$update = DB::getInstance()->updateRecord('t_cj_lscj', array('cj' . $mode => $score, 'zpcj' => $total), array('nd' => $year, 'xq' => $term, 'xh' => $sno, 'kcxh' => $cno));
 			return $update;
@@ -79,10 +80,31 @@ class ReportController extends Controller {
 	 */
 	protected function confirm() {
 		if (isPost()) {
-			$cno = $_POST['course'];
+			$cno      = $_POST['course'];
+			$inserted = false;
 
-			$items = DB::getInstance()->searchRecord('t_cj_lscj', array('nd'=>Session::read('year'),'xq'=>Session::read('term'),'kcxh'=>$cno));
+			$sql    = 'SELECT kch, zxf FROM t_jx_jxjh WHERE kch = (SELECT kch FROM t-pk_jxrw WHERE nd = ? AND xq = ? AND jsgh = ? AND kcxh = ?';
+			$course = DB::getInstance()->getRow($sql, array(Session::read('year'), Session::read('xq'), Session::read('username'), $cno));
+			$items  = DB::getInstance()->searchRecord('t_cj_lscj', array('nd' => Session::read('year'), 'xq' => Session::read('term'), 'kcxh' => $cno));
+			foreach ($items as $item) {
+				$score = array(
+					'xh'   => $item['xh'],
+					'xm'   => $item['xm'],
+					'kch'  => $course['kch'],
+					'kcxz' => $item['kcxz'],
+					'kcpt' => $item['kcpt'],
+					'xl'   => $item['xl'],
+					'nd'   => $item['nd'],
+					'xq'   => $item['xq'],
+					'kh'   => $item['kh'],
+					'cj'   => $item['zpcj'],
+					'xf'   => PASSLINE < $item['zpcj'] ? $course['zxf'] : 0,
+					'jd'   => gpa($item['zpcj']),
+					'kszt' => $item['kszt'],
+				);
+				$inserted = DB::getInstance() - insertRecord('t_cj_zxscj', $score);}
 		}
+		return $inserted;
 	}
 
 	/**

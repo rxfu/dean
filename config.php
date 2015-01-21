@@ -94,3 +94,5 @@ define('NORMAL', '正常');
 define('MAKEUP', '补考');
 define('DEFERMENT', '缓考');
 define('NOCLASS', '免听');
+
+define ('PASSLINE', 60);

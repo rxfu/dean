@@ -1,11 +1,13 @@
-$.getJsUrl = function() {
-	var url = $("script").last().attr("src");
+(function($) {
+	$.fn.getJsUrl = function() {
+		var url = $("script").last().attr("src");
 
-	return url.substring(0, url.lastIndexOf("/") + 1);
-}
-$.getBaseUrl = function() {
-	return location.protocol + "//" + location.host + "/dean/";
-}
+		return url.substring(0, url.lastIndexOf("/") + 1);
+	};
+	$.fn.getBaseUrl = function() {
+		return location.protocol + "//" + location.host + "/dean/";
+	};
+})(jQuery);
 $(document).ready(function() {
 	$('a[href="' + $(location).attr('href') + '"]').closest('ul.nav').addClass('collapse in');
 	$('#loginForm')
@@ -107,7 +109,7 @@ $(document).ready(function() {
 			url: form.prop('action'),
 			data: {
 				'course': course,
-				'checked': (true == $(this).is(':checked')) ? 'true' : 'false'
+				'checked': (true === $(this).is(':checked')) ? 'true' : 'false'
 			},
 			success: function(data) {
 				var tr = $('tr[data-name="' + course + '"] > td');

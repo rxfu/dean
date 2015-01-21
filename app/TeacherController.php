@@ -150,7 +150,7 @@ class TeacherController extends Controller {
 	 * @return array     课程数组
 	 */
 	protected function reportCourses($id) {
-		$sql  = 'SELECT kcxh FROM t_pk_jxrw WHERE jsgh = ? AND nd = ? AND xq = ? GROUP BY kcxh ORDER BY kcxh';
+		$sql  = 'SELECT a.kcxh FROM t_pk_kb a LEFT JOIN t_pk_jxrw b ON b.kcxh = a.kcxh AND b.nd = a.nd AND b.xq = a.xq WHERE a.jsgh = ? AND a.nd = ? AND a.xq = ? GROUP BY a.kcxh ORDER BY a.kcxh';
 		$data = DB::getInstance()->getAll($sql, array($id, Session::read('year'), Session::read('term')));
 
 		return $data;
@@ -163,7 +163,7 @@ class TeacherController extends Controller {
 	 * @return array     学期数据
 	 */
 	protected function reportTerms($id) {
-		$sql  = 'SELECT nd, xq FROM t_pk_jxrw WHERE jsgh = ? GROUP BY nd, xq ORDER BY nd, xq DESC';
+		$sql  = 'SELECT nd, xq FROM t_cj_zxscj WHERE kch = (SELECT kch FROM t_pk_jxrw WHERE b.jsgh = ?) GROUP BY nd, xq ORDER BY nd DESC, xq DESC';
 		$data = DB::getInstance()->getAll($sql, $id);
 
 		return $data;

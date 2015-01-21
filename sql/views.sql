@@ -179,7 +179,9 @@ CREATE OR REPLACE VIEW v_pk_kczyxx AS
     c.mc AS pt,
     d.mc AS xz,
     e.mc AS xy,
-    f.jsgh
+    f.jsgh,
+    f.cjfs,
+    f.id
    FROM t_pk_kczy a
      LEFT JOIN t_jx_zy b ON b.zy::text = a.zy::text
      LEFT JOIN t_zd_pt c ON c.dm::text = a.pt::text

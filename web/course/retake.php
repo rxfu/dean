@@ -33,6 +33,7 @@
                                                                     <th rowspan="2" class="active">学分</th>
                                                                     <th rowspan="2" class="active">考核方式</th>
                                                                     <th colspan="3" class="active text-center">上课时间</th>
+                                                                    <th rowspan="2" class="active">开课学院</th>
                                                                     <th rowspan="2" class="active">所在校区</th>
                                                                     <th rowspan="2" class="active">主要任课老师</th>
                                                                     <th rowspan="2" class="active">上课人数</th>
@@ -64,6 +65,7 @@
                                                                         <td><?php echo $course[0]['zc'] ?></td>
                                                                         <td><?php echo $course[0]['ksj'] ?>
                                                                             <?php echo $course[0]['jsj'] <= $course[0]['ksj'] ? '' : '~' . $course[0]['jsj'] ?></td>
+                                                                        <td><?php echo $course[0]['kkxy'] ?></td>
                                                                         <td><?php echo Dictionary::get('xqh', $course[0]['xqh']) ?></td>
                                                                         <td><?php echo $course[0]['jsxm'] ?></td>
                                                                         <td><?php echo $course[0]['rs'] ?></td>
