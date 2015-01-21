@@ -32,16 +32,6 @@
                 <nav class="navbar-default sidebar" role="navigation">
                     <div class="sidebar-nav navbar-collapse">
                         <ul id="side-menu" class="nav">
-                            <li class="sidebar-search">
-                                <div class="input-group custom-search-form">
-                                    <input type="search" name="search" id="search" class="form-control" placeholder="搜索...">
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default">
-                                            <i class="fa fa-search"></i>
-                                        </button>
-                                    </span>
-                                </div>
-                            </li>
                             <li>
                                 <a href="<?php echo toLink('home.student') ?>"><i class="fa fa-dashboard fa-fw"></i> 仪表盘</a>
                             </li>

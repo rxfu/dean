@@ -11,7 +11,13 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
-                            <div class="panel-heading">成绩方式：<?php echo $grades['name'] ?></div>
+                            <div class="panel-heading">成绩方式：<?php echo $grades['name'] ?>
+                                <span class="pull-right">
+                                    <form method="post" action="<?php echo toLink('report.confirm', $info['kcxh']) ?>" role="form">
+                                        <button type="submit" class="btn btn-success">确认成绩</button>
+                                    </form>
+                                </span>
+                            </div>
                             <div class="panel-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-striped table-hover data-table">
@@ -32,9 +38,13 @@
                                                 <td><?php echo $score['xh'] ?></td>
                                                 <td><?php echo $score['xm'] ?></td>
                                                 <?php foreach($grades['mode'] as $grade): ?>
-                                                    <td><input type="text" name="<?php echo $grade['id'] ?>" value="<?php echo $score['cj' . $grade['id']] ?>"></td>
+                                                    <td>
+                                                        <form method="post" action="<?php echo toLink('report.enter', $info['kcxh']) ?>" role="form">
+                                                            <input type="text" name="grade<?php echo $grade['id'] ?>" value="<?php echo $score['cj' . $grade['id']] ?>">
+                                                        </form>
+                                                    </td>
                                                 <?php endforeach; ?>
-                                                <td><?php echo $score['zpcj'] ?></td>
+                                                <td data-name="total"><?php echo $score['zpcj'] ?></td>
                                                 <td><?php echo $score['kszt'] ?></td>
                                             </tr>
                                             <?php endforeach; ?>

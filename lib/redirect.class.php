@@ -26,7 +26,7 @@ class Redirect {
 	 * @return [type] [description]
 	 */
 	public static function back() {
-		header('Location:' . getBaseUrl().self::$route);
+		header('Location:' . getBaseUrl() . self::$route);
 	}
 
 }

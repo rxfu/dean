@@ -17,10 +17,7 @@ class Session {
 	 * @return boolean 会话创建成功返回TRUE，否则返回FALSE
 	 */
 	private static function _init() {
-		if (false === self::_started()) {
-			session_start();
-			self::regenerate();
-		}
+		return self::_started() ? self::regenerate() : session_start();
 	}
 
 	/**

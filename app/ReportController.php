@@ -48,7 +48,7 @@ class ReportController extends Controller {
 			Session::write('proportion.' . $item['fs'] . '.' . $item['id'], $item['bl'] / $item['mf']);
 		}
 
-		$sql  = 'SELECT * FROM t_cj_lscj WHERE nd = ? AND xq = ? AND kcxh = ?';
+		$sql  = 'SELECT * FROM t_cj_lscj WHERE nd = ? AND xq = ? AND kcxh = ? ORDER BY xh';
 		$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), $cno));
 
 		return $this->view->display('report.input', array('info' => $course, 'scores' => $data, 'grades' => $grades));
@@ -56,35 +56,39 @@ class ReportController extends Controller {
 
 	/**
 	 * 录入学生成绩，更新临时成绩表
-	 * @param  string $cno 课程号
+	 * @param  string $cno 课程序号
 	 * @return boolean         成功返回TRUE，失败返回FALSE
 	 */
 	protected function enter($cno) {
 		if (isPost()) {
 			$sno   = $_POST['sno'];
-			$mode  = $_POST['mode'];
+			$mode  = substr($_POST['mode'], 5);
 			$score = $_POST['score'];
 
 			$sql   = 'SELECT * FROM t_cj_lscj WHERE nd = ? AND xq = ? AND kcxh = ? AND xh = ?';
 			$item  = DB::getInstance()->getRow($sql, array(Session::read('year'), Session::read('term'), $cno, $sno));
-			$total = $item['zpcj'] + $score * Session::read('proportion.' . Session::read('grade') . '.' . $mode);
+			$total = $item['zpcj'] - $item['cj' . $mode] * Session::read('proportion.' . Session::read('grade') . '.' . $mode) + $score * Session::read('proportion.' . Session::read('grade') . '.' . $mode);
 
-			$update = DB::getInstance()->updateRecord('t_cj_lscj', array('cj' . $mode => $score, 'zpcj' => $total), array('nd' => $year, 'xq' => $term, 'xh' => $sno, 'kcxh' => $cno));
-			return $update;
+			$updated = DB::getInstance()->updateRecord('t_cj_lscj', array('cj' . $mode => $score, 'zpcj' => $total), array('nd' => $item['nd'], 'xq' => $item['xq'], 'xh' => $sno, 'kcxh' => $cno));
+
+			if (isAjax()) {
+				echo $updated ? $total : $item['zpcj'];
+			}
+			return $updated;
 		}
 	}
 
 	/**
 	 * 确认成绩，写入在校生成绩表
+	 * @param  string cno 课程序号
 	 * @return boolean      写入成功为TRUE，写入失败为FALSE
 	 */
-	protected function confirm() {
+	protected function confirm($cno) {
 		if (isPost()) {
-			$cno      = $_POST['course'];
 			$inserted = false;
 
-			$sql    = 'SELECT kch, zxf FROM t_jx_jxjh WHERE kch = (SELECT kch FROM t-pk_jxrw WHERE nd = ? AND xq = ? AND jsgh = ? AND kcxh = ?';
-			$course = DB::getInstance()->getRow($sql, array(Session::read('year'), Session::read('xq'), Session::read('username'), $cno));
+			$sql    = 'SELECT a.kch, a.xf FROM t_jx_kc a INNER JOIN t_pk_jxrw b ON b.kch = a.kch WHERE b.nd = ? AND b.xq = ? AND b.jsgh = ? AND b.kcxh = ?';
+			$course = DB::getInstance()->getRow($sql, array(Session::read('year'), Session::read('term'), Session::read('username'), $cno));
 			$items  = DB::getInstance()->searchRecord('t_cj_lscj', array('nd' => Session::read('year'), 'xq' => Session::read('term'), 'kcxh' => $cno));
 			foreach ($items as $item) {
 				$score = array(
@@ -92,19 +96,26 @@ class ReportController extends Controller {
 					'xm'   => $item['xm'],
 					'kch'  => $course['kch'],
 					'kcxz' => $item['kcxz'],
-					'kcpt' => $item['kcpt'],
-					'xl'   => $item['xl'],
+					'pt'   => $item['kcpt'],
+					'xl'   => is_null($item['xl']) ? '' : $item['xl'],
 					'nd'   => $item['nd'],
 					'xq'   => $item['xq'],
 					'kh'   => $item['kh'],
 					'cj'   => $item['zpcj'],
-					'xf'   => PASSLINE < $item['zpcj'] ? $course['zxf'] : 0,
+					'xf'   => PASSLINE <= $item['zpcj'] ? (empty($course['xf']) ? 0 : $course['xf']):0,
 					'jd'   => gpa($item['zpcj']),
 					'kszt' => $item['kszt'],
 				);
-				$inserted = DB::getInstance() - insertRecord('t_cj_zxscj', $score);}
+				$inserted = DB::getInstance()->insertRecord('t_cj_zxscj', $score);
+			}
+
+			if ($inserted) {
+				Session::flash('success', '成绩已确认');
+			} else {
+				Session::flash('danger', '成绩确认失败');
+			}
 		}
-		return $inserted;
+		return Redirect::to('report.input');
 	}
 
 	/**
@@ -128,10 +139,10 @@ class ReportController extends Controller {
 	 * @return array         成绩列表
 	 */
 	protected function score($year, $term, $cno) {
-		$sql    = 'SELECT DISTINCT kch, kcmc, xy, nj, zy FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND kch = ?';
+		$sql  = 'SELECT DISTINCT kch, kcmc, xy, nj, zy FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND kch = ?';
 		$info = DB::getInstance()->getRow($sql, array($year, $term, $cno));
 
-		$sql = 'SELECT * FROM v_cj_xscj WHERE nd = ? AND xq = ? AND kch = ? ORDER BY xh';
+		$sql  = 'SELECT * FROM v_cj_xscj WHERE nd = ? AND xq = ? AND kch = ? ORDER BY xh';
 		$data = DB::getInstance()->getAll($sql, array($year, $term, $cno));
 		return $this->view->display('report.score', array('info' => $info, 'scores' => $data));
 	}

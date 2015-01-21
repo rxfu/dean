@@ -210,7 +210,19 @@ if (!function_exists('gpa')) {
 	 * @return double        学生绩点
 	 */
 	function gpa($score) {
-		return PASSLINE < $score ? ($score / 10 - 5) : 0;
+		return PASSLINE <= $score ? ($score / 10 - 5) : 0;
+	}
+}
+
+if (!function_exists('img')) {
+
+	/**
+	 * 获取图像文件网站路径
+	 * @param  string $file 图像文件
+	 * @return string       图像文件网站路径
+	 */
+	function img($file) {
+		return getBaseUrl() . $file;
 	}
 }
 

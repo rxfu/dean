@@ -141,18 +141,21 @@ $(document).ready(function() {
 			}
 		});
 	});
-	$(':input[name^="grade"]').focus(function() {
-		$(this).closest('.panel').addClass('panel-primary');
-	});
-	$(':input[name^="grade"]').blur(function() {
-		$(this).closest('.panel').removeClass('panel-primary');
-
+	$(':input[name^="grade"]').change(function() {
 		var form = $(this).closest('form');
-		$.post(
-			form.prop('action'), {
-				'_token': form.find('input[name=_token]').val(),
-				'_method': form.find('input[name=_method]').val(),
-				'entry': $(this).val()
-			});
+		var sno = $(this).closest('tr').attr('data-row');
+		var mode = $(this).attr('name');
+		$.ajax({
+			type: "post",
+			url: form.prop("action"),
+			data: {
+				"sno": sno,
+				"mode": mode,
+				"score": $(this).val()
+			},
+			success: function(data) {
+				$('tr[data-row="' + sno + '"] > td[data-name="total"]').text(data);
+			}
+		});
 	});
 });
