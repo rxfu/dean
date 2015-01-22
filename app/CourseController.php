@@ -167,7 +167,7 @@ class CourseController extends Controller {
 	 * @return mixed 非本年级本专业课程数据包
 	 */
 	protected function notgs() {
-		$sql    = 'SELECT DISTINCT nj FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zy = ? AND nj <> ?';
+		$sql    = 'SELECT DISTINCT nj FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zy = ? AND nj <> ? ORDER BY nj';
 		$grades = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('spno'), Session::read('grade')));
 
 		$sql    = 'SELECT DISTINCT a.zy AS zyh, b.mc AS zy FROM v_xk_kxkcxx a INNER JOIN t_jx_zy b ON a.zy = b.zy WHERE a.nd = ? AND a.xq = ? AND a.zy <> ?';
