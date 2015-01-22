@@ -42,7 +42,7 @@ class Session {
 	private static function _started() {
 		$started = false;
 		if (version_compare(phpversion(), '5.4.0', '>=')) {
-			$started = PHP_SESSION_ACTIVE === session_status() ? true : false;
+			$started = (PHP_SESSION_ACTIVE === session_status() ? true : false);
 		} else {
 			$started = ('' === session_id() ? false : true);
 		}
@@ -295,7 +295,6 @@ class Session {
 			}
 		}
 
-		session_regenerate_id(true);
-		return session_id();
+		return session_regenerate_id(true);
 	}
 }

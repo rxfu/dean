@@ -32,9 +32,13 @@ class CourseController extends Controller {
 	/**
 	 * 获取当前学生可选课程表
 	 * @param  string $type 课程性质
+	 * @param  string $gm 年级或专业
 	 * @return mixed       可选课程数据
 	 */
-	protected function index($type) {
+	protected function index($type, $gm = null) {
+		$grade = Session::read('grade');
+		$major = Session::read('spno');
+
 		switch ($type) {
 			case 'pub':
 				$title    = '公共课程';
@@ -48,7 +52,7 @@ class CourseController extends Controller {
 
 				$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
 				foreach ($data as $pt) {
-					if ('T' !== $pt['dm']) {
+					if (!isEmpty($pt['dm']) && 'T' !== $pt['dm']) {
 						$platform[] = $pt['dm'];
 					}
 				}
@@ -60,7 +64,7 @@ class CourseController extends Controller {
 
 				$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
 				foreach ($data as $pt) {
-					if ('T' !== $pt['dm'] || 'W' !== $pt['dm'] || 'I' !== $pt['dm'] || 'Y' !== $pt['dm'] || 'Q' !== $pt['dm']) {
+					if (!isEmpty($pt['dm']) && ('T' !== $pt['dm'] || 'W' !== $pt['dm'] || 'I' !== $pt['dm'] || 'Y' !== $pt['dm'] || 'Q' !== $pt['dm'])) {
 						$platform[] = $pt['dm'];
 					}
 				}
@@ -90,23 +94,43 @@ class CourseController extends Controller {
 				$platform = 'Q';
 				break;
 
-			case 'ret':
-				$title = '重修课程';
+			case 'ngs':
+				$title = '通识素质课程';
+				if (isEmpty($major)) {
+					return Redirect::to('course.notgs');
+				}
+
+				$tmp = trim($gm);
+				if (7 == strlen($tmp)) {
+					$major = $tmp;
+
+		$sql    = 'SELECT DISTINCT nj FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zy = ? AND nj <> ?';
+		$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('spno'), Sesson::read('grade')));
+		foreach ($data as $d) {
+			$grade[] = $d['nj'];
+		}
+				} elseif (4 == strlen($tmp)) {
+$grade = $gm;
+				}
 				break;
 
 			default:
 				$title = '可选课程';
 				$data  = DB::getInstance()->getAll('SELECT dm FROM t_zd_xz');
 				foreach ($data as $xz) {
-					$property[] = $xz['dm'];
+					if (!isEmpty($xz['dm'])) {
+						$property[] = $xz['dm'];
+					}
 				}
 				$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
 				foreach ($data as $pt) {
-					$platform[] = $pt['dm'];
+					if (!isEmpty($pt['dm'])) {
+						$platform[] = $pt['dm'];
+					}
 				}
 				break;
 		}
-		$param = "'" . implode("','", array(Session::read('username'), array_to_pg($platform), array_to_pg($property))) . "'";
+		$param = "'" . implode("','", array(Session::read('username'), array_to_pg($grade), array_to_pg($major), array_to_pg($platform), array_to_pg($property))) . "'";
 		$data  = DB::getInstance()->query('SELECT * FROM p_kxkcb_sel(' . $param . ')');
 
 		$courses = array();
@@ -120,6 +144,20 @@ class CourseController extends Controller {
 		krsort($courses);
 
 		return $this->view->display('course.index', array('courses' => $courses, 'title' => $title));
+	}
+
+	/**
+	 * 获取当前学生非本年级本专业课程
+	 * @return mixed 非本年级本专业课程数据包
+	 */
+	protected function notgs() {
+		$sql    = 'SELECT DISTINCT nj FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zy = ? AND nj <> ?';
+		$grades = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('spno'), Sesson::read('grade')));
+
+		$sql    = 'SELECT DISTINCT a.zy AS zyh, b.mc AS zy FROM v_xk_kxkcxx a INNER JOIN t_jx_zy b ON a.zy = b.zy WHERE nd = ? AND xq = ? AND zy <> ?';
+		$majors = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('spno')));
+
+		return $this->view->display('course.notgs', array('grades' => $grades, 'majors' => $majors));
 	}
 
 	/**

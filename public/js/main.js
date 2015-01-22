@@ -9,7 +9,7 @@
 	};
 })(jQuery);
 $(document).ready(function() {
-	$('a[href="' + $(location).attr('href') + '"]').closest('ul.nav').addClass('collapse in');
+	$('a[href="' + $(location).attr('href') + '"]').parents('ul.nav').not('ul#side-menu').addClass('collapse in');
 	$('#loginForm')
 		.bootstrapValidator({
 			feedbackIcons: {

@@ -76,6 +76,9 @@
                                             <li>
                                                 <a href="<?php echo toLink('course.index', 'os') ?>">其他专项</a>
                                             </li>
+                                            <li>
+                                                <a href="<?php echo toLink('course.notgs') ?>">非本年级本专业</a>
+                                            </li>
                                         </ul>
                                     </li>
                                     <li>

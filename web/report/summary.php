@@ -6,12 +6,12 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <?php $i = 0; ?>
-                    <?php foreach ($courses as $course): ?>
-                        <?php if (0 == $i % 4): ?>
+                <?php $i = 0; ?>
+                <?php foreach ($courses as $course): ?>
+                    <?php if (0 == $i % 4): ?>
+                    <div class="row">
+                    <?php endif; ?>
                         <div class="col-md-3">
-                        <?php endif; ?>
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -32,10 +32,10 @@
                                     </div>
                                 </a>
                             </div>
-                        <?php if (0 == $i % 4): ?>
                         </div>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                </div>
+                    <?php if (0 == $i % 4): ?>
+                    </div>
+                    <?php endif; ?>
+                <?php endforeach; ?>
             </div>
 <?php section('footer') ?>
