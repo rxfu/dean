@@ -210,6 +210,7 @@ class CourseController extends Controller {
 
 			if ('true' == $checked) {
 				if ($this->full($cno)) {
+					echo 'full';
 					return 'full';
 				}
 				$param = "'" . implode("','", array(Session::read('username'), $cno)) . "'";
@@ -284,7 +285,7 @@ class CourseController extends Controller {
 		$sql  = 'SELECT jhrs, rs FROM t_xk_tj WHERE kcxh = ?';
 		$data = DB::getInstance()->getRow($sql, $course);
 
-		return 0 < $data['jhrs'] && $data['jhrs'] > $data['rs'];
+		return 0 < $data['jhrs'] && $data['rs'] > $data['jhrs'];
 	}
 
 	/**

@@ -12,11 +12,11 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">成绩方式：<?php echo $grades['name'] ?>
-                                <span class="pull-right">
+                                <!--span class="pull-right">
                                     <form method="post" action="<?php echo toLink('report.confirm', $info['kcxh']) ?>" role="form">
                                         <button type="submit" class="btn btn-success">确认成绩</button>
                                     </form>
-                                </span>
+                                </span-->
                             </div>
                             <div class="panel-body">
                                 <div class="table-responsive">

@@ -23,7 +23,7 @@
                                         <div class="tab-content">
                                             <?php foreach (array_keys($courses) as $campus): ?>
                                                 <div id="campus-<?php echo $campus ?>" class="tab-pane fade<?php echo Session::read('campus') == $campus ? ' in active' : '' ?>" role="tabpanel">
-                                                    <div class="table-responsive">
+                                                    <div class="table-responsive tab-table">
                                                         <table class="table table-bordered table-striped table-hover data-table">
                                                             <thead>
                                                                 <tr>
@@ -33,7 +33,6 @@
                                                                     <th rowspan="2" class="active">学分</th>
                                                                     <th rowspan="2" class="active">考核方式</th>
                                                                     <th colspan="3" class="active text-center">上课时间</th>
-                                                                    <th rowspan="2" class="active">开课学院</th>
                                                                     <th rowspan="2" class="active">所在校区</th>
                                                                     <th rowspan="2" class="active">主要任课老师</th>
                                                                     <th rowspan="2" class="active">上课人数</th>
@@ -64,17 +63,18 @@
                                                                         <td><?php echo $course[0]['ksz'] ?>~<?php echo $course[0]['jsz'] ?></td>
                                                                         <td><?php echo $course[0]['zc'] ?></td>
                                                                         <td><?php echo $course[0]['ksj'] ?><?php echo $course[0]['jsj'] <= $course[0]['ksj'] ? '' : '~' . $course[0]['jsj'] ?></td>
-                                                                        <td><?php echo $course[0]['kkxy'] ?></td>
                                                                         <td><?php echo Dictionary::get('xqh', $course[0]['xqh']) ?></td>
                                                                         <td><?php echo $course[0]['jsxm'] ?></td>
                                                                         <td><?php echo $course[0]['rs'] ?></td>
                                                                     </tr>
                                                                     <?php for($i = 1; $i < $rowspan; ++$i): ?>
                                                                         <tr data-name="<?php echo $course[0]['kcxh'] ?>">
+                                                                            <?php for($j = 0; $j < 5; ++$j): ?>
+                                                                                <td style="display: none"></td>
+                                                                            <?php endfor; ?>
                                                                             <td><?php echo $course[$i]['ksz'] ?>~<?php echo $course[$i]['jsz'] ?></td>
                                                                             <td><?php echo $course[$i]['zc'] ?></td>
                                                                             <td><?php echo $course[$i]['ksj'] ?><?php echo $course[$i]['jsj'] <= $course[$i]['ksj'] ? '' : '~' . $course[$i]['jsj'] ?></td>
-                                                                            <td><?php echo $course[0]['kkxy'] ?></td>
                                                                             <td><?php echo Dictionary::get('xqh', $course[$i]['xqh']) ?></td>
                                                                             <td><?php echo $course[$i]['jsxm'] ?></td>
                                                                             <td><?php echo $course[$i]['rs'] ?></td>
@@ -96,5 +96,10 @@
             </div>
 <?php section('footer') ?>
 <script>
-    $('#campus-tab a[href="#campus-<?php echo Session::read('campus') ?>"]').tab('show');
+    var campusId = '#campus-<?php echo Session::read('campus') ?>';
+    if ($('#campus-tab a[href="' + campusId + '"]').length) {
+        $('#campus-tab a[href="' + campusId + '"]').tab('show');
+    } else {
+        $('#campus-tab a:first').tab('show');
+    }
 </script>

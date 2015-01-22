@@ -96,3 +96,9 @@ define('DEFERMENT', '缓考');
 define('NOCLASS', '免听');
 
 define ('PASSLINE', 60);
+
+/**
+ * 用户角色代码
+ */
+define('STUDENT', 'student');
+define('TEACHER', 'teacher');

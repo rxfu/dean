@@ -23,7 +23,7 @@
                                         <div class="tab-content">
                                             <?php foreach (array_keys($courses) as $campus): ?>
                                                 <div id="campus-<?php echo $campus ?>" class="tab-pane fade<?php echo Session::read('campus') == $campus ? ' in active' : '' ?>" role="tabpanel">
-                                                    <div class="table-responsive">
+                                                    <div class="table-responsive tab-table">
                                                         <table class="table table-bordered table-striped table-hover data-table">
                                                             <thead>
                                                                 <tr>
@@ -69,7 +69,7 @@
                                                                     </tr>
                                                                     <?php for($i = 1; $i < $rowspan; ++$i): ?>
                                                                         <tr data-name="<?php echo $course[0]['kcxh'] ?>">
-                                                                            <?php for($j = 0; $j < 5; ++$i): ?>
+                                                                            <?php for($j = 0; $j < 5; ++$j): ?>
                                                                                 <td style="display: none"></td>
                                                                             <?php endfor; ?>
                                                                             <td><?php echo $course[$i]['ksz'] ?>~<?php echo $course[$i]['jsz'] ?></td>
@@ -96,5 +96,10 @@
             </div>
 <?php section('footer') ?>
 <script>
-    $('#campus-tab a[href="#campus-<?php echo Session::read('campus') ?>"]').tab('show');
+    var campusId = '#campus-<?php echo Session::read('campus') ?>';
+    if ($('#campus-tab a[href="' + campusId + '"]').length) {
+        $('#campus-tab a[href="' + campusId + '"]').tab('show');
+    } else {
+        $('#campus-tab a:first').tab('show');
+    }
 </script>

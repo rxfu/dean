@@ -31,6 +31,8 @@ class TeacherController extends Controller {
 				Session::write('year', $term['year']);
 				Session::write('term', $term['term']);
 
+				Session::write('role', TEACHER);
+
 				Session::write('reportCourses', $this->reportCourses($username));
 				Session::write('reportTerms', $this->reportTerms($username));
 

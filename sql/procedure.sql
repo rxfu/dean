@@ -73,7 +73,7 @@ BEGIN
     course_kcb.cdbh := course_rec.cdbh;
     course_kcb.zt := '1';
 
-    PERFORM 1 FROM t_xk_xkxx WHERE kch = course_kcb.kch AND xh = i_sno AND nd = c_year AND xq = c_term;
+    PERFORM 1 FROM t_xk_xkxx WHERE kcxh = course_kcb.kcxh AND xh = i_sno AND nd = c_year AND xq = c_term;
     IF FOUND THEN
       course_kcb.zt := '2';
     END IF;

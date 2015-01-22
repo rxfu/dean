@@ -92,6 +92,7 @@ $(document).ready(function() {
 			[10, 25, 50, '全部']
 		],
 		'pagingType': 'full_numbers',
+		'paging': false,
 		'ordering': false,
 		'language': {
 			'url': $().getBaseUrl() + 'js/plugins/dataTables/i18n/zh_cn.lang'

@@ -22,7 +22,6 @@
                                                 <th class="active">上课时间</th>
                                                 <th class="active">上课教室</th>
                                                 <th class="active">任课老师</th>
-                                                <th class="active">开课学院</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -38,7 +37,6 @@
                                                                 <?php echo $course['jsj'] <= $course['ksj'] ? '' : '~' . $course['jsj'] ?> 节</td>
                                                 <td><?php echo $course['jsmc'] ?></td>
                                                 <td><?php echo $course['jsxm'] ?></td>
-                                                <td><?php echo $course['kkxy'] ?></td>
                                             </tr>
                                             <?php endforeach; ?>
                                         </tbody>
