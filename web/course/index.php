@@ -69,6 +69,9 @@
                                                                     </tr>
                                                                     <?php for($i = 1; $i < $rowspan; ++$i): ?>
                                                                         <tr data-name="<?php echo $course[0]['kcxh'] ?>">
+                                                                            <?php for($j = 0; $j < 5; ++$i): ?>
+                                                                                <td style="display: none"></td>
+                                                                            <?php endfor; ?>
                                                                             <td><?php echo $course[$i]['ksz'] ?>~<?php echo $course[$i]['jsz'] ?></td>
                                                                             <td><?php echo $course[$i]['zc'] ?></td>
                                                                             <td><?php echo $course[$i]['ksj'] ?><?php echo $course[$i]['jsj'] <= $course[$i]['ksj'] ? '' : '~' . $course[$i]['jsj'] ?></td>
