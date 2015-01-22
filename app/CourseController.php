@@ -35,7 +35,7 @@ class CourseController extends Controller {
 	 * @param  string $gm 年级或专业
 	 * @return mixed       可选课程数据
 	 */
-	protected function index($type, $gm = null) {
+	protected function index($type, $gs = null) {
 		$grade = Session::read('grade');
 		$major = Session::read('spno');
 
@@ -100,17 +100,32 @@ class CourseController extends Controller {
 					return Redirect::to('course.notgs');
 				}
 
-				$tmp = trim($gm);
+				$tmp = trim($gs);
 				if (7 == strlen($tmp)) {
 					$major = $tmp;
 
-		$sql    = 'SELECT DISTINCT nj FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zy = ? AND nj <> ?';
-		$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('spno'), Sesson::read('grade')));
-		foreach ($data as $d) {
-			$grade[] = $d['nj'];
-		}
+					$sql  = 'SELECT DISTINCT nj FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zy = ?';
+					$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('spno')));
+					$grade = array();
+					foreach ($data as $d) {
+						$grade[] = $d['nj'];
+					}
 				} elseif (4 == strlen($tmp)) {
-$grade = $gm;
+					$grade = $tmp;
+				}
+
+				$data  = DB::getInstance()->getAll('SELECT dm FROM t_zd_xz');
+				foreach ($data as $xz) {
+					if (!isEmpty($xz['dm'])) {
+						$property[] = $xz['dm'];
+					}
+				}
+
+				$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
+				foreach ($data as $pt) {
+					if (!isEmpty($pt['dm'])) {
+						$platform[] = $pt['dm'];
+					}
 				}
 				break;
 
@@ -122,6 +137,7 @@ $grade = $gm;
 						$property[] = $xz['dm'];
 					}
 				}
+
 				$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
 				foreach ($data as $pt) {
 					if (!isEmpty($pt['dm'])) {
@@ -130,7 +146,7 @@ $grade = $gm;
 				}
 				break;
 		}
-		$param = "'" . implode("','", array(Session::read('username'), array_to_pg($grade), array_to_pg($major), array_to_pg($platform), array_to_pg($property))) . "'";
+		$param = "'" . implode("','", array(Session::read('username'), $major, array_to_pg($grade), array_to_pg($platform), array_to_pg($property), Session::read('season'))) . "'";
 		$data  = DB::getInstance()->query('SELECT * FROM p_kxkcb_sel(' . $param . ')');
 
 		$courses = array();
@@ -152,9 +168,9 @@ $grade = $gm;
 	 */
 	protected function notgs() {
 		$sql    = 'SELECT DISTINCT nj FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zy = ? AND nj <> ?';
-		$grades = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('spno'), Sesson::read('grade')));
+		$grades = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('spno'), Session::read('grade')));
 
-		$sql    = 'SELECT DISTINCT a.zy AS zyh, b.mc AS zy FROM v_xk_kxkcxx a INNER JOIN t_jx_zy b ON a.zy = b.zy WHERE nd = ? AND xq = ? AND zy <> ?';
+		$sql    = 'SELECT DISTINCT a.zy AS zyh, b.mc AS zy FROM v_xk_kxkcxx a INNER JOIN t_jx_zy b ON a.zy = b.zy WHERE a.nd = ? AND a.xq = ? AND a.zy <> ?';
 		$majors = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('spno')));
 
 		return $this->view->display('course.notgs', array('grades' => $grades, 'majors' => $majors));

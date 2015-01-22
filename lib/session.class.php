@@ -238,6 +238,7 @@ class Session {
 	 * @return boolean 成功返回TRUE，否则返回FALSE
 	 */
 	public static function start() {
+		session_start();
 		return self::_init();
 	}
 

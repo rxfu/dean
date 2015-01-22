@@ -179,7 +179,7 @@ class StudentController extends Controller {
 	 * @return array     年度学期数组
 	 */
 	protected function courseTerms($id) {
-		$sql  = 'SELECT nd, xq FROM t_xk_xkxx WHERE xh = ? GROUP BY nd, xq ORDER BY nd, xq';
+		$sql  = 'SELECT nd, xq FROM t_xk_xkxx WHERE xh = ? GROUP BY nd, xq ORDER BY nd DESC, xq DESC';
 		$data = DB::getInstance()->getAll($sql, $id);
 
 		return $data;
@@ -192,7 +192,7 @@ class StudentController extends Controller {
 	 * @return array     年度学期数组
 	 */
 	protected function reportTerms($id) {
-		$sql  = 'SELECT nd, xq FROM t_cj_zxscj WHERE xh = ? GROUP BY nd, xq ORDER BY nd, xq';
+		$sql  = 'SELECT nd, xq FROM t_cj_zxscj WHERE xh = ? GROUP BY nd, xq ORDER BY nd DESC, xq DESC';
 		$data = DB::getInstance()->getAll($sql, $id);
 
 		return $data;

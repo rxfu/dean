@@ -1,16 +1,13 @@
 <?php section('header') ?>
-<?php section('teacher.navigation') ?>
+<?php section('student.navigation') ?>
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header"><?php echo Session::read('year') ?>年度<?php echo Dictionary::get('xq', Session::read('term')) ?>学期本专业其他年级课程</h1>
                     </div>
                 </div>
 
-                <?php $i = 0; ?>
-                <?php foreach ($grades as $grade): ?>
-                    <?php if (0 == $i % 4): ?>
-                    <div class="row">
-                    <?php endif; ?>
+                <div class="row">
+                    <?php foreach ($grades as $grade): ?>
                         <div class="col-md-3">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
@@ -32,11 +29,8 @@
                                 </a>
                             </div>
                         </div>
-                    <?php if (0 == $i % 4): ?>
-                    </div>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            </div>
+                    <?php endforeach; ?>
+                </div>
 
                 <div class="row">
                     <div class="col-lg-12">
@@ -44,11 +38,8 @@
                     </div>
                 </div>
 
-                <?php $i = 0; ?>
-                <?php foreach ($majors as $major): ?>
-                    <?php if (0 == $i % 4): ?>
-                    <div class="row">
-                    <?php endif; ?>
+                <div class="row">
+                    <?php foreach ($majors as $major): ?>
                         <div class="col-md-3">
                             <div class="panel panel-green">
                                 <div class="panel-heading">
@@ -70,9 +61,7 @@
                                 </a>
                             </div>
                         </div>
-                    <?php if (0 == $i % 4): ?>
-                    </div>
-                    <?php endif; ?>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </div>
             </div>
 <?php section('footer') ?>

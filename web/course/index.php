@@ -24,7 +24,7 @@
                                             <?php foreach (array_keys($courses) as $campus): ?>
                                                 <div id="campus-<?php echo $campus ?>" class="tab-pane fade<?php echo Session::read('campus') == $campus ? ' in active' : '' ?>" role="tabpanel">
                                                     <div class="table-responsive">
-                                                        <table class="table table-bordered table-striped table-hover">
+                                                        <table class="table table-bordered table-striped table-hover data-table">
                                                             <thead>
                                                                 <tr>
                                                                     <th rowspan="2" class="active">操作</th>

@@ -29,38 +29,25 @@ COMMENT ON TYPE tp_kcb
 列出可选课程：
 CREATE OR REPLACE FUNCTION p_kxkcb_sel(
     i_sno text,
+    i_major text,
+    i_grade text[],
     i_platform text[],
-    i_property text[])
+    i_property text[],
+    i_season text)
   RETURNS SETOF tp_kcb AS
 $BODY$DECLARE
   course_rec RECORD;
   course_kcb tp_kcb;
   c_year TEXT;
   c_term TEXT;
-  c_query TEXT;
-  c_grade TEXT;
-  c_major TEXT;
-  c_season TEXT;
 BEGIN
-  SELECT nj, zy, zsjj INTO c_grade, c_major, c_season FROM t_xs_zxs WHERE xh = i_sno;
-  IF NOT FOUND THEN
-    RAISE EXCEPTION 'NO STUDENT!';
-    RETURN;
-  END IF;
-
   SELECT substr(value, 1, 4), substr(value, 5, 1) INTO c_year, c_term FROM t_xt WHERE id = 'XK_SJ';
   IF NOT FOUND THEN
     RAISE EXCEPTION 'NOT Setup Selective Time';
     RETURN;
   END IF;
-  
-  IF ARRAY['Q'] = i_platform AND ARRAY['X'] = i_property THEN
-    c_query = format('SELECT * FROM %I a WHERE a.nd = %L AND a.xq = %L AND a.zsjj = %L AND EXISTS (SELECT nj, zy FROM %1$I b WHERE a.nd = b.nd AND a.xq = b.xq AND (b.nj <> %L OR b.zy <> %L))', 'v_xk_kxkcxx', c_year, c_term, c_season, c_grade, c_major);
-  ELSE
-    c_query = format('SELECT * FROM %I a WHERE a.nd = %L AND a.xq = %L AND a.zsjj = %L AND a.nj = %L AND a.zy = %L AND pt = ANY($1) AND xz = ANY($2)', 'v_xk_kxkcxx', c_year, c_term, c_season, c_grade, c_major);
-  END IF;
-  
-  FOR course_rec IN EXECUTE c_query USING i_platform, i_property LOOP
+    
+  FOR course_rec IN EXECUTE format('SELECT * FROM %I WHERE nd = %L AND xq = %L AND zsjj = %L AND zy = %L AND nj = ANY($1) AND pt = ANY($2) AND xz = ANY($3)', 'v_xk_kxkcxx', c_year, c_term, i_season, i_major) USING i_grade, i_platform, i_property LOOP
     PERFORM 1 FROM t_cj_zxscj WHERE kch = course_rec.kch AND xh = i_sno;
     CONTINUE WHEN FOUND;
 
@@ -109,9 +96,9 @@ END$BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100
   ROWS 1000;
-ALTER FUNCTION p_kxkcb_sel(text, text[], text[])
+ALTER FUNCTION p_kxkcb_sel(text, text, text[], text[], text[], text)
   OWNER TO jwxt;
-COMMENT ON FUNCTION p_kxkcb_sel(text, text[], text[]) IS '列出可选课程';
+COMMENT ON FUNCTION p_kxkcb_sel(text, text, text[], text[], text[], text) IS '列出可选课程';
 
 列出重修课程：
 CREATE OR REPLACE FUNCTION p_cxkcb_sel(i_sno text)

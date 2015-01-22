@@ -13,7 +13,7 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered table-striped">
+                                    <table class="table table-bordered table-striped table-hover data-table">
                                         <thead>
                                             <tr>
                                                 <th class="active">课程代码</th>
