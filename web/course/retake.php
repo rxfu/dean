@@ -63,8 +63,7 @@
                                                                         <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kh'] ?></td>
                                                                         <td><?php echo $course[0]['ksz'] ?>~<?php echo $course[0]['jsz'] ?></td>
                                                                         <td><?php echo $course[0]['zc'] ?></td>
-                                                                        <td><?php echo $course[0]['ksj'] ?>
-                                                                            <?php echo $course[0]['jsj'] <= $course[0]['ksj'] ? '' : '~' . $course[0]['jsj'] ?></td>
+                                                                        <td><?php echo $course[0]['ksj'] ?><?php echo $course[0]['jsj'] <= $course[0]['ksj'] ? '' : '~' . $course[0]['jsj'] ?></td>
                                                                         <td><?php echo $course[0]['kkxy'] ?></td>
                                                                         <td><?php echo Dictionary::get('xqh', $course[0]['xqh']) ?></td>
                                                                         <td><?php echo $course[0]['jsxm'] ?></td>
@@ -74,8 +73,8 @@
                                                                         <tr data-name="<?php echo $course[0]['kcxh'] ?>">
                                                                             <td><?php echo $course[$i]['ksz'] ?>~<?php echo $course[$i]['jsz'] ?></td>
                                                                             <td><?php echo $course[$i]['zc'] ?></td>
-                                                                            <td><?php echo $course[$i]['ksj'] ?>
-                                                                                <?php echo $course[$i]['jsj'] <= $course[$i]['ksj'] ? '' : '~' . $course[$i]['jsj'] ?></td>
+                                                                            <td><?php echo $course[$i]['ksj'] ?><?php echo $course[$i]['jsj'] <= $course[$i]['ksj'] ? '' : '~' . $course[$i]['jsj'] ?></td>
+                                                                            <td><?php echo $course[0]['kkxy'] ?></td>
                                                                             <td><?php echo Dictionary::get('xqh', $course[$i]['xqh']) ?></td>
                                                                             <td><?php echo $course[$i]['jsxm'] ?></td>
                                                                             <td><?php echo $course[$i]['rs'] ?></td>
@@ -97,5 +96,5 @@
             </div>
 <?php section('footer') ?>
 <script>
-    $('#campus-tab a[href="#campus-<?php echo Session::read('campus') ?>'"]').tab('show');
+    $('#campus-tab a[href="#campus-<?php echo Session::read('campus') ?>"]').tab('show');
 </script>

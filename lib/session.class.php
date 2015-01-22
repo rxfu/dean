@@ -17,7 +17,10 @@ class Session {
 	 * @return boolean 会话创建成功返回TRUE，否则返回FALSE
 	 */
 	private static function _init() {
-		return self::_started() ? self::regenerate() : session_start();
+		// return self::_started() ? self::regenerate() : session_start();
+		if (false == self::_started()) {
+			session_start();
+		}
 	}
 
 	/**
@@ -238,7 +241,6 @@ class Session {
 	 * @return boolean 成功返回TRUE，否则返回FALSE
 	 */
 	public static function start() {
-		session_start();
 		return self::_init();
 	}
 

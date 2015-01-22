@@ -33,7 +33,7 @@
                     <div class="sidebar-nav navbar-collapse">
                         <ul id="side-menu" class="nav">
                             <li>
-                                <a href="<?php echo toLink('home.teacher') ?>"><i class="fa fa-dashboard fa-fw"></i> 仪表盘</a>
+                                <a href="<?php echo toLink('home.teacher') ?>"><i class="fa fa-dashboard fa-fw"></i> 综合管理系统</a>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-tasks fa-fw"></i> 成绩管理<span class="fa arrow"></span></a>
