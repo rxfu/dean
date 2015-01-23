@@ -5,6 +5,7 @@
                         <h1 class="page-header">
                             <?php echo $info['xy'] ?><?php echo $info['nj'] ?>级<?php echo $info['zy'] ?>专业<?php echo $info['kcxh'] ?><?php echo $info['kcmc'] ?>成绩录入
                         </h1>
+                        <div class="alert alert-danger" role="alert">录入成绩自动提交，无需点击提交按钮</div>
                     </div>
                 </div>
 
@@ -19,7 +20,7 @@
                                 </span-->
                             </div>
                             <div class="panel-body">
-                                <div class="table-responsive">
+                                <div class="table-responsive tab-table">
                                     <table class="table table-bordered table-striped table-hover data-table">
                                         <thead>
                                             <tr>

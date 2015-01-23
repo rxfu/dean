@@ -24,7 +24,7 @@
                                             <?php foreach (array_keys($courses) as $campus): ?>
                                                 <div id="campus-<?php echo $campus ?>" class="tab-pane fade<?php echo Session::read('campus') == $campus ? ' in active' : '' ?>" role="tabpanel">
                                                     <div class="table-responsive tab-table">
-                                                        <table class="table table-bordered table-striped table-hover data-table">
+                                                        <table class="table table-bordered table-striped table-hover course-table">
                                                             <thead>
                                                                 <tr>
                                                                     <th rowspan="2" class="active">操作</th>
@@ -52,7 +52,7 @@
                                                                                 待审核
                                                                             <?php else: ?>
                                                                                 <form method="post" action="<?php echo toLink('course.apply') ?>" role="form">
-                                                                                    <button type="submit" name="retake<?php echo $course[0]['kch'] ?>" value="<?php echo $course[0]['kcxh'] ?>" class="btn btn-primary<?php echo FORBIDDEN === $course[0]['zt'] ? ' disabled' : (SELECTED === $course[0]['zt'] ? ' checked' : '') ?>">申请重修</button>
+                                                                                    <button type="submit" name="retake<?php echo $course[0]['kch'] ?>" value="<?php echo $course[0]['kcxh'] ?>" title="申请重修" data-toggle="modal" data-target="#dialogConfirm" class="btn btn-primary<?php echo FORBIDDEN === $course[0]['zt'] ? ' disabled' : (SELECTED === $course[0]['zt'] ? ' checked' : '') ?>">申请重修</button>
                                                                                 </form>
                                                                             <?php endif; ?>
                                                                         </td>
@@ -93,6 +93,24 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="modal fade" id="dialogConfirm" tabindex="-1" role="dialog" aria-labelledby="#dialogConfirmLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="dialogConfirmLabel">确认申请重修</h4>
+                      </div>
+                      <div class="modal-body">
+                        <p>确认申请重修？</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary">确定</button>
+                      </div>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
             </div>
 <?php section('footer') ?>
 <script>

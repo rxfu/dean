@@ -86,12 +86,36 @@ $(document).ready(function() {
 				}
 			}
 		});
+	$('.gradeForm')
+		.bootstrapValidator({
+			feedbackIcons: {
+				valid: 'glyphicon glyphicon-ok',
+				invalid: 'glyphicon glyphicon-remove',
+				validating: 'glyphicon glyphicon-refresh'
+			},
+			fields: {
+				password: {
+					validators: {
+						regexp: {
+							regexp: "^\d{5}$",
+							message: '成绩只能是不超过100的非负数'
+						}
+					}
+				}
+			}
+		});
 	$('.data-table').dataTable({
 		'lengthMenu': [
 			[10, 25, 50, -1],
 			[10, 25, 50, '全部']
 		],
 		'pagingType': 'full_numbers',
+		'ordering': false,
+		'language': {
+			'url': $().getBaseUrl() + 'js/plugins/dataTables/i18n/zh_cn.lang'
+		}
+	});
+	$('.course-table').dataTable({
 		'paging': false,
 		'ordering': false,
 		'language': {
@@ -158,5 +182,19 @@ $(document).ready(function() {
 				$('tr[data-row="' + sno + '"] > td[data-name="total"]').text(data);
 			}
 		});
+	});
+	$('#dialogConfirm').on('show.bs.modal', function(e) {
+		$message = $(e.relatedTarget).attr('data-message');
+		$(this).find('.modal-body p').text($message);
+		$title = $(e.relatedTarget).attr('data-title');
+		$(this).find('.modal-title').text($title);
+		$course = $(e.relatedTarget).attr('data-whatever');
+		$(this).find('.modal-body #course').text($course);
+
+		var form = $(e.relatedTarget).closest('form');
+		$(this).find('.modal-footer #confirm').data('form', form);
+	});
+	$('#dialogConfirm').find('.modal-footer #confirm').on('click', function() {
+		$(this).data('form').submit();
 	});
 });
