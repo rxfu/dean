@@ -147,7 +147,6 @@ GRANT ALL ON TABLE v_xk_kxkcxx TO kongsir;
 COMMENT ON VIEW v_xk_kxkcxx
   IS '可选课程信息视图';
 
-
 教师信息：
 CREATE OR REPLACE VIEW v_pk_jsxx AS 
  SELECT a.jsgh, a.xm, b.mc AS xb, a.csrq, c.mc AS gj, d.mc AS zjlx, sfzh, e.mc AS xl, f.mc AS xw, g.mc AS zc, a.zy, a.jj, h.mc AS xy, i.mc AS xs, j.mc AS jys, a.zt
@@ -197,3 +196,16 @@ GRANT ALL ON TABLE v_pk_kczyxx TO jwxt;
 GRANT ALL ON TABLE v_pk_kczyxx TO kongsir;
 COMMENT ON VIEW v_pk_kczyxx
   IS '课程专业信息视图';
+
+学期专业课程表：
+CREATE OR REPLACE VIEW v_pk_xqzykcxx AS 
+ SELECT a.nd, a.xq
+ FROM t_pk_kb a 
+ LEFT JOIN t_pk_kczy b ON a.nd = b.nd AND a.xq = b.xq AND a.kcxh = b.kcxh
+
+ALTER TABLE v_pk_xqzykcxx
+  OWNER TO jwxt;
+GRANT ALL ON TABLE v_pk_xqzykcxx TO jwxt;
+GRANT ALL ON TABLE v_pk_xqzykcxx TO kongsir;
+COMMENT ON VIEW v_pk_kczyxx
+  IS '学期专业课程信息视图';

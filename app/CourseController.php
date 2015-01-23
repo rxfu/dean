@@ -314,4 +314,11 @@ class CourseController extends Controller {
 		}
 	}
 
+	/**
+	 * 检索课程
+	 * @param  string $type 检索类型
+	 * @return array          课程数组
+	 */
+	protected function search($type) {}
+
 }

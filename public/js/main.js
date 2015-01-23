@@ -166,7 +166,7 @@ $(document).ready(function() {
 			}
 		});
 	});
-	$(':input[name^="grade"]').change(function() {
+	$(':input[name^="ratio"]').change(function() {
 		var form = $(this).closest('form');
 		var sno = $(this).closest('tr').attr('data-row');
 		var mode = $(this).attr('name');

@@ -88,6 +88,17 @@ define('SELECTED', '2');
 define('UNAUDIT', '3');
 
 /**
+ * 课程类型代码
+ */
+define('BASIC', 'TB');
+define('REQUIRED', 'B');
+define('ELECTIVE', 'X');
+define('HUMANITY', 'TW');
+define('NATURAL', 'TI');
+define('ART', 'TY');
+define('OTHER', 'TQ');
+
+/**
  * 考试状态代码
  */
 define('NORMAL', '正常');

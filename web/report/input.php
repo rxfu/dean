@@ -12,13 +12,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
-                            <div class="panel-heading">成绩方式：<?php echo $grades['name'] ?>
-                                <!--span class="pull-right">
-                                    <form method="post" action="<?php echo toLink('report.confirm', $info['kcxh']) ?>" role="form">
-                                        <button type="submit" class="btn btn-success">确认成绩</button>
-                                    </form>
-                                </span-->
-                            </div>
+                            <div class="panel-heading">成绩方式：<?php echo $ratio['name'] ?></div>
                             <div class="panel-body">
                                 <div class="table-responsive tab-table">
                                     <table class="table table-bordered table-striped table-hover data-table">
@@ -26,8 +20,8 @@
                                             <tr>
                                                 <th class="active">学号</th>
                                                 <th class="active">姓名</th>
-                                                <?php foreach($grades['mode'] as $grade): ?>
-                                                    <th class="active"><?php echo $grade['idm'] ?>
+                                                <?php foreach($ratios['mode'] as $ratio): ?>
+                                                    <th class="active"><?php echo $ratio['idm'] ?>
                                                 <?php endforeach; ?>
                                                 <th class="active">总评</th>
                                                 <th class="active">状态</th>
@@ -38,10 +32,10 @@
                                             <tr data-row="<?php echo $score['xh'] ?>">
                                                 <td><?php echo $score['xh'] ?></td>
                                                 <td><?php echo $score['xm'] ?></td>
-                                                <?php foreach($grades['mode'] as $grade): ?>
+                                                <?php foreach($ratios['mode'] as $ratio): ?>
                                                     <td>
                                                         <form method="post" action="<?php echo toLink('report.enter', $info['kcxh']) ?>" role="form">
-                                                            <input type="text" name="grade<?php echo $grade['id'] ?>" value="<?php echo $score['cj' . $grade['id']] ?>">
+                                                            <input type="text" name="ratio<?php echo $ratio['id'] ?>" value="<?php echo $score['cj' . $ratio['id']] ?>" data-mode="<?php echo $ratios['id'] ?>">
                                                         </form>
                                                     </td>
                                                 <?php endforeach; ?>
