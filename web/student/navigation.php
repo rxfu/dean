@@ -50,7 +50,7 @@
                                 </ul>
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-table fa-fw"></i> 课程管理<span class="fa arrow"></span></a>
+                                <a href="#"><i class="fa fa-table fa-fw"></i> 选课管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
                                         <a href="<?php echo toLink('course.index', 'pub') ?>">公共课程</a>
@@ -87,7 +87,7 @@
                                 </ul>
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-calendar fa-fw"></i> 课程表<span class="fa arrow"></span></a>
+                                <a href="#"><i class="fa fa-calendar fa-fw"></i> 已选课课表<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <!--li>
                                         <a href="<?php echo toLink('schedule.index') ?>">当前课程表</a>
