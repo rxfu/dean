@@ -87,16 +87,14 @@
                                 </ul>
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-calendar fa-fw"></i> 已选课课表<span class="fa arrow"></span></a>
+                                <a href="#"><i class="fa fa-calendar fa-fw"></i> 课表管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
-                                    <!--li>
-                                        <a href="<?php echo toLink('schedule.index') ?>">当前课程表</a>
-                                    </li-->
-                                    <?php foreach (Session::read('courseTerms') as $item): ?>
                                     <li>
-                                        <a href="<?php echo toLink('schedule.term', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo Dictionary::get('xq', $item['xq']) ?>课程表</a>
+                                        <a href="<?php echo toLink('schedule.index') ?>">已选课程表</a>
                                     </li>
-                                    <?php endforeach ?>
+                                    <li>
+                                        <a href="<?php echo toLink('schedule.speciality') ?>">本学期专业课程表</a>
+                                    </li>
                                 </ul>
                             </li>
                             <li>
@@ -151,6 +149,9 @@
                                 <a href="#"><i class="fa fa-gear fa-fw"></i> 系统管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
+                                        <a href="<?php echo toLink('student.profile') ?>">个人资料</a>
+                                    </li>
+                                    <li>
                                         <a href="<?php echo toLink('system.log') ?>">选课日志</a>
                                     </li>
                                     <li>
@@ -160,6 +161,9 @@
                                         <a href="<?php echo toLink('student.password') ?>">修改密码</a>
                                     </li>
                                 </ul>
+                            </li>
+                            <li>
+                                <a href="<?php echo toLink('student.logout') ?>"><i class="fa fa-sign-out fa-fw"></i> 登出</a>
                             </li>
                         </ul>
                     </div>
