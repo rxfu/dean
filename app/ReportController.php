@@ -31,11 +31,12 @@ class ReportController extends Controller {
 
 	/**
 	 * 获取成绩方式对应的组合
-	 * @param  string $mid 成绩方式代码
+	 * @param  string $cno 课程序号
 	 * @return array      成绩方式组合，没有返回FALSE
 	 */
-	protected function ratio($mid) {
-		$modes = DB::getInstance()->searchRecord('t_jx_cjfs', array('fs' => $mid));
+	protected function ratio($cno) {
+		$sql = 'SELECT * FROM t_jx_cjfs WHERE nd = ? AND xq = ? AND kcxh = ?';
+		$modes = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), $cno));
 		if (is_array($modes)) {
 			$ratios = array();
 			foreach ($modes as $mode) {
@@ -55,10 +56,7 @@ class ReportController extends Controller {
 	 * @return array          学生成绩
 	 */
 	protected function input($cno) {
-		$sql    = 'SELECT * FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND kcxh = ?';
-		$course = DB::getInstance()->getRow($sql, array(Session::read('year'), Session::read('term'), $cno));
-
-		$ratios = $this->ratio($course['cjfs']);
+		$ratios = $this->ratio($cno);
 
 		$sql  = 'SELECT * FROM t_cj_lscj WHERE nd = ? AND xq = ? AND kcxh = ? ORDER BY xh';
 		$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), $cno));
@@ -76,10 +74,9 @@ class ReportController extends Controller {
 			$sno      = $_POST['sno'];
 			$mode     = substr($_POST['mode'], 5);
 			$score    = $_POST['score'];
-			$gradeId  = $_POST['grade'];
 			$modeName = urldecode($_POST['name']);
 
-			$ratios = $this->ratio($gradeId);
+			$ratios = $this->ratio($cno);
 			$fields = array();
 			foreach (array_keys($ratios['mode']) as $key) {
 				$fields[] = 'cj' . $key;

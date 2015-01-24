@@ -218,3 +218,15 @@ GRANT ALL ON TABLE v_cj_xslscj TO kongsir;
 COMMENT ON VIEW v_pk_kczyxx
   IS '学生成绩详细信息视图';
 
+成绩方式信息视图：
+CREATE OR REPLACE VIEW v_cj_cjfs AS 
+ SELECT b.nd, b.xq, b.kcxh, b.kch, b.jsgh, a.fs, a.khmc, a.ywmc, a.id, a.idm, a.mf, a.bl
+ FROM t_jx_cjfs a
+ INNER JOIN t_pk_jxrw b ON b.cjfs = a.cjfs AND b.id = a.id
+
+ALTER TABLE v_cj_cjfs
+  OWNER TO jwxt;
+GRANT ALL ON TABLE v_cj_cjfs TO jwxt;
+GRANT ALL ON TABLE v_cj_cjfs TO kongsir;
+COMMENT ON VIEW v_pk_kczyxx
+  IS '学生成绩详细信息视图';
