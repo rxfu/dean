@@ -177,6 +177,7 @@ CREATE OR REPLACE VIEW v_pk_kczyxx AS
     h.xs,
     h.xf,
     b.nj,
+    c.zyh,
     c.mc AS zy,
     d.mc AS pt,
     e.mc AS xz,

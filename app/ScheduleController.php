@@ -10,7 +10,7 @@ class ScheduleController extends Controller {
 	 * @return void
 	 */
 	protected function index() {
-		return $this->view->display('schedule.index', array('year' => Session::read('year'), 'term'=>Session::read('term')));
+		return $this->view->display('schedule.index', array('year' => Session::read('year'), 'term' => Session::read('term')));
 	}
 
 	/**
@@ -24,5 +24,16 @@ class ScheduleController extends Controller {
 		$data = DB::getInstance()->searchRecord('v_xk_xskcb', array('xh' => Session::read('username'), 'nd' => $year, 'xq' => $term));
 
 		return $this->view->display('schedule.term', array('courses' => $data, 'year' => $year, 'term' => $term));
+	}
+
+	/**
+	 * 列出当前年度、学期专业课程表
+	 * @return void
+	 */
+	protected function speciality() {
+		$sql  = 'SELECT DISTINCT kch, kcmc, kcywmc, xs, xf FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND nj = ? AND zyh = ?';
+		$data = DB::getInstance()->searchRecord($sql, array(Session::read('year'), Session::read('term'), Session::read('grade'), ession::read('spno')));
+
+		return $this->view->display('schedule.speciality', array('courses' => $data, 'year' => $year, 'term' => $term));
 	}
 }
