@@ -88,7 +88,7 @@ COMMENT ON VIEW v_xk_xsxx
 
 教学计划信息：
 CREATE OR REPLACE VIEW v_xk_jxjh AS 
- SELECT a.zy, a.nj, a.zsjj, a.kch, b.kcmc, b.kcywmc, c.mc AS pt, d.mc AS xz, a.xl, a.llxf, a.syxf, a.zxf, a.llxs, a.syxs, a.kxq, e.mc AS kkxy, f.mc AS kh, a.fs, a.lx
+ SELECT a.zy, a.nj, a.zsjj, a.kch, b.kcmc, b.kcywmc, c.mc AS pt, d.mc AS xz, a.xl, a.llxf, a.syxf, a.zxf, a.llxs, a.syxs, a.llxs + a.syxs AS zxs a.kxq, e.mc AS kkxy, f.mc AS kh, a.fs, a.lx
    FROM t_jx_jxjh a
    LEFT JOIN t_jx_kc b ON a.kch = b.kch
    LEFT JOIN t_zd_pt c ON a.pt = c.dm
@@ -174,10 +174,10 @@ CREATE OR REPLACE VIEW v_pk_kczyxx AS
     a.kcxh,
     g.kch,
     h.kcmc,
-    h.xs,
-    h.xf,
+    i.llxs + i.syxs AS xs,
+    i.zxf AS xf,
     b.nj,
-    c.zyh,
+    b.zy AS zyh,
     c.mc AS zy,
     d.mc AS pt,
     e.mc AS xz,
@@ -192,7 +192,8 @@ CREATE OR REPLACE VIEW v_pk_kczyxx AS
      LEFT JOIN t_zd_xz e ON e.dm::text = b.xz::text
      LEFT JOIN t_xt_department f ON f.dw::text = b.kkxy::text
      LEFT JOIN t_pk_jxrw g ON g.kcxh::text = a.kcxh::text AND g.nd::text = a.nd::text AND g.xq::text = a.xq::text
-     LEFT JOIN t_jx_kc h ON h.kch::text = h.kch::text;
+     LEFT JOIN t_jx_kc h ON h.kch::text = g.kch::text
+     LEFT JOIN t_jx_jxjh i ON i.zy = b.zy AND i.nj = b.nj AND i.zsjj = b.zsjj AND i.kch = g.kch;
 
 ALTER TABLE v_pk_kczyxx
   OWNER TO jwxt;

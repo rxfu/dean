@@ -42,7 +42,7 @@
                                                     <td><?php echo $plan['zxf'] ?></td>
                                                     <td><?php echo $plan['llxf'] ?></td>
                                                     <td><?php echo $plan['syxf'] ?></td>
-                                                    <td><?php echo $plan['llxs'] + $plan['syxs'] ?></td>
+                                                    <td><?php echo $plan['zxs'] ?></td>
                                                     <td><?php echo $plan['llxs'] ?></td>
                                                     <td><?php echo $plan['syxs'] ?></td>
                                                     <td><?php echo $plan['kxq'] ?></td>
