@@ -170,25 +170,28 @@ COMMENT ON VIEW v_pk_jsxx
 CREATE OR REPLACE VIEW v_pk_kczyxx AS 
  SELECT a.nd,
     a.xq,
-    a.zsjj,
+    b.zsjj,
     a.kcxh,
-    f.kch,
-    g.kcmc,
-    a.nj,
-    b.mc AS zy,
-    c.mc AS pt,
-    d.mc AS xz,
-    e.mc AS xy,
-    f.jsgh,
-    f.cjfs,
-    f.id
-   FROM t_pk_kczy a
-     LEFT JOIN t_jx_zy b ON b.zy::text = a.zy::text
-     LEFT JOIN t_zd_pt c ON c.dm::text = a.pt::text
-     LEFT JOIN t_zd_xz d ON d.dm::text = a.xz::text
-     LEFT JOIN t_xt_department e ON e.dw::text = a.kkxy::text
-     LEFT JOIN t_pk_jxrw f ON f.kcxh::text = a.kcxh::text AND f.nd::text = a.nd::text AND f.xq::text = a.xq::text
-     LEFT JOIN t_jx_kc g ON f.kch::text = g.kch::text;
+    g.kch,
+    h.kcmc,
+    h.xs,
+    h.xf,
+    b.nj,
+    c.mc AS zy,
+    d.mc AS pt,
+    e.mc AS xz,
+    f.mc AS kkxy,
+    g.jsgh,
+    g.cjfs,
+    g.id
+   FROM t_pk_kb a 
+     LEFT JOIN t_pk_kczy b ON b.nd = a.nd AND b.xq = a.xq AND b.kcxh = a.kcxh
+     LEFT JOIN t_jx_zy c ON c.zy::text = b.zy::text
+     LEFT JOIN t_zd_pt d ON d.dm::text = b.pt::text
+     LEFT JOIN t_zd_xz e ON e.dm::text = b.xz::text
+     LEFT JOIN t_xt_department f ON f.dw::text = b.kkxy::text
+     LEFT JOIN t_pk_jxrw g ON g.kcxh::text = a.kcxh::text AND g.nd::text = a.nd::text AND g.xq::text = a.xq::text
+     LEFT JOIN t_jx_kc h ON h.kch::text = h.kch::text;
 
 ALTER TABLE v_pk_kczyxx
   OWNER TO jwxt;
@@ -197,15 +200,20 @@ GRANT ALL ON TABLE v_pk_kczyxx TO kongsir;
 COMMENT ON VIEW v_pk_kczyxx
   IS '课程专业信息视图';
 
-学期专业课程表：
-CREATE OR REPLACE VIEW v_pk_xqzykcxx AS 
- SELECT a.nd, a.xq
- FROM t_pk_kb a 
- LEFT JOIN t_pk_kczy b ON a.nd = b.nd AND a.xq = b.xq AND a.kcxh = b.kcxh
+学生成绩详单：
+CREATE OR REPLACE VIEW v_cj_xslscj AS 
+ SELECT a.xh, a.xm,a.kcxh,b.kch,c.kcmc,a.kcpt,a.kcxz,a.xl,a.nd,a.xq,a.kh,a.cj1,a.cj2,a.cj3,a.cj4,a.cj5,a.cj6,a.zpcj,b.jsgh,b.cjfs,a.kszt,d.mc AS zy,t.tjzt,e.mc AS kkxy
+ FROM t_cj_lscj a 
+ LEFT JOIN t_pk_jxrw b ON b.kcxh=a.kcxh AND b.nd=a.nd AND b.xq=a.xq
+ LEFT JOIN t_pk_kc c ON c.kch=b.kch
+ LEFT JOIN t_jx_zy d ON d.zy=a.zy
+ LEFT JOIN t_xt_department e ON e.dw=a.kkxy
+ LEFT JOIN t_pk_kczy f ON f.nd=a.nd AND f.xq=a.xq AND f.kcxh=a.kcxh AND f.zy=a.zy
 
-ALTER TABLE v_pk_xqzykcxx
+ALTER TABLE v_cj_xslscj
   OWNER TO jwxt;
-GRANT ALL ON TABLE v_pk_xqzykcxx TO jwxt;
-GRANT ALL ON TABLE v_pk_xqzykcxx TO kongsir;
+GRANT ALL ON TABLE v_cj_xslscj TO jwxt;
+GRANT ALL ON TABLE v_cj_xslscj TO kongsir;
 COMMENT ON VIEW v_pk_kczyxx
-  IS '学期专业课程信息视图';
+  IS '学生成绩详细信息视图';
+

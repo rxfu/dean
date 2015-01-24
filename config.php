@@ -36,7 +36,7 @@ define('DB_NAME', 'dean');
 define('DB_USERNAME', 'jwxt');
 define('DB_PASSWORD', 'jwxt..');
 define('DB_CHARSET', 'UTF8');
-*/
+ */
 define('DB_PREFIX', 'pgsql');
 define('DB_HOST', '202.193.171.236');
 define('DB_PORT', '5432');
@@ -106,7 +106,8 @@ define('MAKEUP', '补考');
 define('DEFERMENT', '缓考');
 define('NOCLASS', '免听');
 
-define ('PASSLINE', 60);
+define('PASSLINE', 60);
+define('MAJORGRADE', '考试');
 
 /**
  * 用户角色代码

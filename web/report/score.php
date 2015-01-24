@@ -2,7 +2,7 @@
 <?php section('teacher.navigation') ?>
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header"><?php echo $info['xy'] ?><?php echo $info['nj'] ?>级<?php echo $info['zy'] ?>专业<?php echo $info['kch'] ?><?php echo $info['kcmc'] ?>课程成绩单</h1>
+                        <h1 class="page-header"><?php echo $info['kkxy'] ?><?php echo $info['nj'] ?>级<?php echo $info['zy'] ?>专业<?php echo $info['kcxh'] ?><?php echo $info['kcmc'] ?>课程成绩单</h1>
                     </div>
                 </div>
 
@@ -16,9 +16,10 @@
                                             <tr>
                                                 <th class="active">学号</th>
                                                 <th class="active">姓名</th>
-                                                <th class="active">成绩</th>
-                                                <th class="active">学分</th>
-                                                <th class="active">绩点</th>
+                                                <?php foreach ($ratios['mode'] as $ratio): ?>
+                                                    <th class="active"><?php echo $ratio['idm'] ?></th>
+                                                <?php endforeach; ?>
+                                                <th class="active">总评成绩</th>
                                                 <th class="active">考核方式</th>
                                                 <th class="active">状态</th>
                                             </tr>
@@ -28,9 +29,10 @@
                                             <tr>
                                                 <td><?php echo $score['xh'] ?></td>
                                                 <td><?php echo $score['xm'] ?></td>
-                                                <td><?php echo $score['cj'] ?></td>
-                                                <td><?php echo $score['xf'] ?></td>
-                                                <td><?php echo $score['jd'] ?></td>
+                                                <?php foreach (array_keys($ratios['mode']) as $key): ?>
+                                                    <td><?php echo $score['cj' . $key] ?></td>
+                                                <?php endforeach; ?>
+                                                <td><?php echo $score['zpcj'] ?></td>
                                                 <td><?php echo $score['kh'] ?></td>
                                                 <td><?php echo $score['kszt'] ?></td>
                                             </tr>

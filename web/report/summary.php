@@ -13,13 +13,13 @@
                                 <div class="panel-heading">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div><?php echo $course['kch'] ?></div>
+                                            <div><?php echo $course['kcxh'] ?></div>
                                             <div class="huge"><?php echo $course['kcmc'] ?></div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <a href="<?php echo toLink('report.score', $year, $term, $course['kch']) ?>">
+                                <a href="<?php echo toLink('report.score', $year, $term, $course['kcxh']) ?>">
                                     <div class="panel-footer">
                                         <span class="pull-left">查询成绩</span>
                                         <span class="pull-right">

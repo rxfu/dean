@@ -3,7 +3,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                            <?php echo $info['xy'] ?><?php echo $info['nj'] ?>级<?php echo $info['zy'] ?>专业<?php echo $info['kcxh'] ?><?php echo $info['kcmc'] ?>成绩录入
+                            <?php echo $info['kkxy'] ?><?php echo $info['nj'] ?>级<?php echo $info['zy'] ?>专业<?php echo $info['kcxh'] ?><?php echo $info['kcmc'] ?>成绩录入
                         </h1>
                         <div class="alert alert-danger" role="alert">录入成绩自动提交，无需点击提交按钮</div>
                     </div>
@@ -21,7 +21,7 @@
                                                 <th class="active">学号</th>
                                                 <th class="active">姓名</th>
                                                 <?php foreach($ratios['mode'] as $ratio): ?>
-                                                    <th class="active"><?php echo $ratio['idm'] ?>
+                                                    <th class="active"><?php echo $ratio['idm'] ?></th>
                                                 <?php endforeach; ?>
                                                 <th class="active">总评</th>
                                                 <th class="active">状态</th>
@@ -32,10 +32,10 @@
                                             <tr data-row="<?php echo $score['xh'] ?>">
                                                 <td><?php echo $score['xh'] ?></td>
                                                 <td><?php echo $score['xm'] ?></td>
-                                                <?php foreach($ratios['mode'] as $ratio): ?>
+                                                <?php foreach($ratios['mode'] as $key => $value): ?>
                                                     <td>
                                                         <form method="post" action="<?php echo toLink('report.enter', $info['kcxh']) ?>" role="form">
-                                                            <input type="text" name="ratio<?php echo $ratio['id'] ?>" value="<?php echo $score['cj' . $ratio['id']] ?>" data-mode="<?php echo $ratios['id'] ?>">
+                                                            <input type="text" name="ratio<?php echo $key ?>" value="<?php echo $score['cj' . $key] ?>" data-mode="<?php echo $grade ?>" data-name="<?php echo urlencode($value['idm']) ?>">
                                                         </form>
                                                     </td>
                                                 <?php endforeach; ?>

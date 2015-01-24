@@ -21,6 +21,18 @@ if (!function_exists('array_remove')) {
 	}
 }
 
+if (!function_exists('array_to_field')) {
+
+	/**
+	 * 数组转换成字段名格式
+	 * @param  array $array 字段数组
+	 * @return string        逗点格式字段名序列
+	 */
+	function array_to_field($array) {
+		return implode(',', $array);
+	}
+}
+
 if (!function_exists('array_to_pg')) {
 
 	/**
@@ -29,7 +41,7 @@ if (!function_exists('array_to_pg')) {
 	 * @return string        转换后数组格式
 	 */
 	function array_to_pg($array) {
-		return '{' . (is_array($array) ? implode(',', $array) : $array) . '}';
+		return '{' . (implode(',', $array)) . '}';
 	}
 }
 

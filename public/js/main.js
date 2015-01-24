@@ -96,9 +96,8 @@ $(document).ready(function() {
 			fields: {
 				password: {
 					validators: {
-						regexp: {
-							regexp: "^\d{5}$",
-							message: '成绩只能是不超过100的非负数'
+						integer: {
+							message: '成绩只能是不超过100的非负整数'
 						}
 					}
 				}
@@ -176,7 +175,9 @@ $(document).ready(function() {
 			data: {
 				"sno": sno,
 				"mode": mode,
-				"score": $(this).val()
+				"score": $(this).val(),
+				"grade": $(this).attr('data-mode'),
+				"name": $(this).attr('data-name')
 			},
 			success: function(data) {
 				$('tr[data-row="' + sno + '"] > td[data-name="total"]').text(data);
