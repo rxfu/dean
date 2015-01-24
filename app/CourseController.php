@@ -6,6 +6,34 @@
 class CourseController extends Controller {
 
 	/**
+	 * 课程平台性质对应代码表
+	 * @var array
+	 */
+	private $codes = array(
+		'bsc' => array(
+			'BT'=>'公共',
+			),
+		'req' => array(
+			'B' => '必修',
+			),
+		'lct' => array(
+			'X' => '选修',
+			),
+		'hs' => array(
+			'WT' => '人文社科通识素质',
+			),
+		'ns' => array(
+			'IT' => '自然科学通识素质',
+			),
+		'as' => array(
+			'YT' => '艺术体育通识素质',
+			),
+		'os' => array(
+			'QT' => '其他专项通识素质',
+			),
+		);
+
+	/**
 	 * 继承自基类before函数
 	 * @return NULL
 	 */
@@ -32,121 +60,42 @@ class CourseController extends Controller {
 	/**
 	 * 获取当前学生可选课程表
 	 * @param  string $type 课程性质
-	 * @param  string $gm 年级或专业
 	 * @return mixed       可选课程数据
 	 */
-	protected function index($type, $gs = null) {
-		$grade = Session::read('grade');
-		$major = Session::read('spno');
+	protected function index($type) {
+		list($property, $platform) = array_pad(str_split(key($codes[$type])),2,'');
 
-		switch ($type) {
-			case 'pub':
-				$title    = '公共课程';
-				$platform = 'T';
-				$property = 'B';
-				break;
+		if (array_key_exists($property.$platform, array_merge($codes['bsc'],$codes['req'],$codes['lct']))) {
+			$grade = Session::read('grade');
+			$speciality = Session::read('spno');
+		} else {
+			$sql = 'SELECT DISTINCT nj FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zsjj = ?';
+			$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('season')));
+			foreach ($data as $d) {
+				$grade[] = $d['nj'];
+			}
 
-			case 'req':
-				$title    = '必修课程';
-				$property = 'B';
-
-				$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
-				foreach ($data as $pt) {
-					if (!isEmpty($pt['dm']) && 'T' !== $pt['dm']) {
-						$platform[] = $pt['dm'];
-					}
-				}
-				break;
-
-			case 'sel':
-				$title    = '选修课程';
-				$property = 'X';
-
-				$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
-				foreach ($data as $pt) {
-					if (!isEmpty($pt['dm']) && ('T' !== $pt['dm'] || 'W' !== $pt['dm'] || 'I' !== $pt['dm'] || 'Y' !== $pt['dm'] || 'Q' !== $pt['dm'])) {
-						$platform[] = $pt['dm'];
-					}
-				}
-				break;
-
-			case 'hs':
-				$title    = '人文社科通识素质课程';
-				$property = 'X';
-				$platform = 'W';
-				break;
-
-			case 'ns':
-				$title    = '自然科学通识素质课程';
-				$property = 'X';
-				$platform = 'I';
-				break;
-
-			case 'as':
-				$title    = '艺术体育通识素质课程';
-				$property = 'X';
-				$platform = 'Y';
-				break;
-
-			case 'os':
-				$title    = '其他专项通识素质课程';
-				$property = 'X';
-				$platform = 'Q';
-				break;
-
-			case 'ngs':
-				$title = '通识素质课程';
-				if (isEmpty($major)) {
-					return Redirect::to('course.notgs');
-				}
-
-				$tmp = trim($gs);
-				if (7 == strlen($tmp)) {
-					$major = $tmp;
-
-					$sql  = 'SELECT DISTINCT nj FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zy = ?';
-					$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('spno')));
-					$grade = array();
-					foreach ($data as $d) {
-						$grade[] = $d['nj'];
-					}
-				} elseif (4 == strlen($tmp)) {
-					$grade = $tmp;
-				}
-
-				$data  = DB::getInstance()->getAll('SELECT dm FROM t_zd_xz');
-				foreach ($data as $xz) {
-					if (!isEmpty($xz['dm'])) {
-						$property[] = $xz['dm'];
-					}
-				}
-
-				$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
-				foreach ($data as $pt) {
-					if (!isEmpty($pt['dm'])) {
-						$platform[] = $pt['dm'];
-					}
-				}
-				break;
-
-			default:
-				$title = '可选课程';
-				$data  = DB::getInstance()->getAll('SELECT dm FROM t_zd_xz');
-				foreach ($data as $xz) {
-					if (!isEmpty($xz['dm'])) {
-						$property[] = $xz['dm'];
-					}
-				}
-
-				$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
-				foreach ($data as $pt) {
-					if (!isEmpty($pt['dm'])) {
-						$platform[] = $pt['dm'];
-					}
-				}
-				break;
+			$sql = 'SELECT DISTINCT zy FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zsjj = ?';
+			$data = DB::getInstance()->searchRecord($sql, array(Session::read('year'), Session::read('term'), Session::read('season')));
+			foreach ($data as $d) {
+				$speciality[] = $d['zy'];
+			}
 		}
-		$param = "'" . implode("','", array(Session::read('username'), $major, array_to_pg($grade), array_to_pg($platform), array_to_pg($property), Session::read('season'))) . "'";
+
+		if (isEmpty($platform)) {
+			$platform = is_array($platform)?$platform:array($platform);
+			$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
+			foreach ($data as $pt) {
+				if (isEmpty($data['dm']) || array_key_exists($property.$data['dm'], array_values($codes))) {
+					continue;
+				}
+				$platform[] = $pt['dm'];
+			}
+		}
+		$property = is_array($property)?$property : array($property);
+		$platform=is_array($platform)?$platform:array($platform);
+
+		$param = "'" . implode("','", array(Session::read('username'), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality), Session::read('season'))) . "'";
 		$data  = DB::getInstance()->query('SELECT * FROM p_kxkcb_sel(' . $param . ')');
 
 		$courses = array();
@@ -219,9 +168,9 @@ class CourseController extends Controller {
 				if (isAjax()) {
 					if ($selected) {
 						Logger::write(array('xh' => Session::read('username'), 'kcxh' => $cno, 'czlx' => LOG_INSERT));
-						echo 'select-success';
+						echo 'success';
 					} else {
-						echo 'select-failed';
+						echo 'failed';
 					}
 				} else {
 					return $selected;
@@ -233,11 +182,11 @@ class CourseController extends Controller {
 				if (isAjax()) {
 					if ($deleted) {
 						Logger::write(array('xh' => Session::read('username'), 'kcxh' => $cno, 'czlx' => LOG_DELETE));
-						echo 'delete-success';
+						echo 'success';
 					} else {
-						echo 'delete-failed';
+						echo 'failed';
 					}
-					echo $deleted ? 'delete-success' : 'delete-failed';
+					echo $deleted ? 'success' : 'failed';
 				} else {
 					return $deleted;
 				}
@@ -285,7 +234,7 @@ class CourseController extends Controller {
 		$sql  = 'SELECT jhrs, rs FROM t_xk_tj WHERE kcxh = ?';
 		$data = DB::getInstance()->getRow($sql, $course);
 
-		return 0 < $data['jhrs'] && $data['rs'] > $data['jhrs'];
+		return 0 < $data['jhrs'] && $data['jhrs'] < $data['rs'];
 	}
 
 	/**
@@ -319,6 +268,10 @@ class CourseController extends Controller {
 	 * @param  string $type 检索类型
 	 * @return array          课程数组
 	 */
-	protected function search($type) {}
+	protected function search($type) {
+		if (isPost()) {
+			
+		}
+	}
 
 }

@@ -53,13 +53,13 @@
                                 <a href="#"><i class="fa fa-table fa-fw"></i> 选课管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="<?php echo toLink('course.index', 'pub') ?>">公共课程</a>
+                                        <a href="<?php echo toLink('course.index', 'bsc') ?>">公共课程</a>
                                     </li>
                                     <li>
                                         <a href="<?php echo toLink('course.index', 'req') ?>">必修课程</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('course.index', 'sel') ?>">选修课程</a>
+                                        <a href="<?php echo toLink('course.index', 'lct') ?>">选修课程</a>
                                     </li>
                                     <li>
                                         <a href="#"> 通识素质课程<span class="fa arrow"></span></a>
