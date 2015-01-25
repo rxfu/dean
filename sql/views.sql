@@ -202,22 +202,22 @@ GRANT ALL ON TABLE v_pk_kczyxx TO kongsir;
 COMMENT ON VIEW v_pk_kczyxx
   IS '课程专业信息视图';
 
-学生成绩详单：
-CREATE OR REPLACE VIEW v_cj_xslscj AS 
+学生成绩录入表：
+CREATE OR REPLACE VIEW v_cj_xscjlr AS 
  SELECT a.xh, a.xm,a.kcxh,b.kch,c.kcmc,a.kcpt,a.kcxz,a.xl,a.nd,a.xq,a.kh,a.cj1,a.cj2,a.cj3,a.cj4,a.cj5,a.cj6,a.zpcj,b.jsgh,b.cjfs,a.kszt,d.mc AS zy,t.tjzt,e.mc AS kkxy
- FROM t_cj_lscj a 
+ FROM t_cj_web a 
  LEFT JOIN t_pk_jxrw b ON b.kcxh=a.kcxh AND b.nd=a.nd AND b.xq=a.xq
  LEFT JOIN t_pk_kc c ON c.kch=b.kch
  LEFT JOIN t_jx_zy d ON d.zy=a.zy
  LEFT JOIN t_xt_department e ON e.dw=a.kkxy
  LEFT JOIN t_pk_kczy f ON f.nd=a.nd AND f.xq=a.xq AND f.kcxh=a.kcxh AND f.zy=a.zy
 
-ALTER TABLE v_cj_xslscj
+ALTER TABLE v_cj_xscjlr
   OWNER TO jwxt;
-GRANT ALL ON TABLE v_cj_xslscj TO jwxt;
-GRANT ALL ON TABLE v_cj_xslscj TO kongsir;
+GRANT ALL ON TABLE v_cj_xscjlr TO jwxt;
+GRANT ALL ON TABLE v_cj_xscjlr TO kongsir;
 COMMENT ON VIEW v_pk_kczyxx
-  IS '学生成绩详细信息视图';
+  IS '学生成绩录入信息视图';
 
 成绩方式信息视图：
 CREATE OR REPLACE VIEW v_cj_cjfs AS 
@@ -230,4 +230,19 @@ ALTER TABLE v_cj_cjfs
 GRANT ALL ON TABLE v_cj_cjfs TO jwxt;
 GRANT ALL ON TABLE v_cj_cjfs TO kongsir;
 COMMENT ON VIEW v_pk_kczyxx
+  IS '成绩方式信息视图';
+
+学生成绩详单：
+CREATE OR REPLACE VIEW v_cj_xslscj AS 
+ SELECT a.xh, a.xm, a.nd, a.xq, b.kch, c.kcmc, c.kcywmc, a.cj1, a.cj2, a.cj3, a.cj4, a.cj5, a.cj6, a.zpcj, d.mc AS pt, e.mc AS xz, a.xl, f.mc AS kh, a.kszt, a.zy, a.tjzt, a.kkxy
+   FROM t_cj_lscj a
+   LEFT JOIN t_jx_jxrw b ON b.kcxh = a.kcxh AND b.nd = a.nd AND b.xq = a.xq
+   LEFT JOIN t_jx_kc c ON c.kch = b.kch
+   LEFT JOIN t_zd_pt d ON d.dm = a.kcpt
+   LEFT JOIN t_zd_xz e ON e.dm = a.kcxz
+   LEFT JOIN t_zd_khfs f ON f.dm = a.kh;
+
+ALTER TABLE v_cj_xslscj
+  OWNER TO jwxt;
+COMMENT ON VIEW v_cj_xslscj
   IS '学生成绩详细信息视图';

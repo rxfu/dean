@@ -85,21 +85,24 @@ define('PAGE_SIZE', 10);
 define('FORBIDDEN', '0');
 define('SELECTABLE', '1');
 define('SELECTED', '2');
-define('UNAUDIT', '3');
 
 /**
  * 考试状态代码
  */
-define('NORMAL', '正常');
-define('MAKEUP', '补考');
-define('DEFERMENT', '缓考');
-define('NOCLASS', '免听');
-
 define('PASSLINE', 60);
-define('MAJORGRADE', '考试');
+define('UNCOMIITED', '0');
+define('COLLEGE_CONFIRMED', '1');
+define('DEAN_CONFIRMED', '2');
 
 /**
  * 用户角色代码
  */
 define('STUDENT', 'student');
 define('TEACHER', 'teacher');
+
+/**
+ * 审核状态代码
+ */
+define('UNAUDITED', '0');
+define('PASSED', '1');
+define('REFUSED', '2');

@@ -101,13 +101,11 @@
                                 <a href="#"><i class="fa fa-tasks fa-fw"></i> 成绩管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
+                                        <a href="<?php echo toLink('report.unconfirmed') ?>">待确认成绩单</a>
+                                    </li>
+                                    <li>
                                         <a href="<?php echo toLink('report.index') ?>">综合成绩单</a>
                                     </li>
-                                    <?php foreach (Session::read('reportTerms') as $item): ?>
-                                    <li>
-                                        <a href="<?php echo toLink('report.term', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo Dictionary::get('xq', $item['xq']) ?>学期成绩单</a>
-                                    </li>
-                                    <?php endforeach ?>
                                 </ul>
                             </li>
                             <li>

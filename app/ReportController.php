@@ -17,16 +17,25 @@ class ReportController extends Controller {
 	}
 
 	/**
-	 * 根据年度、学期列出当前学生成绩
+	 * 根据课程号列出当前学生过程成绩清单
 	 *
-	 * @param string  $year 年度
-	 * @param string  $term 学期
+	 * @param string  $cno 课程号
 	 * @return array       学生成绩
 	 */
-	protected function term($year, $term) {
-		$data = DB::getInstance()->searchRecord('v_cj_xscj', array('xh' => Session::read('username'), 'nd' => $year, 'xq' => $term));
+	protected function detail($cno) {
+		$data = DB::getInstance()->searchRecord('v_cj_lscj', array('xh' => Session::read('username'), 'nd' => $year, 'xq' => $term));
 
 		return $this->view->display('report.term', array('scores' => $data, 'year' => $year, 'term' => $term));
+	}
+
+	/**
+	 * 列出当前学生未确认成绩表
+	 * @return void
+	 */
+	protected function unconfirmed($cno) {
+		$data = DB::getInstance()->searchRecord('v_cj_lscj', array('nd'=>Session::read('year'),'xq'=>Session::read('term'),'xh'=>Session::read('username'),'tjzt'=>COLLEGE_CONFIRMED));
+
+		return $this->view->display('report.unconfirmed', array('scores'=>$data));
 	}
 
 	/**
