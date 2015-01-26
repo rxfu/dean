@@ -9,29 +9,36 @@ class CourseController extends Controller {
 	 * 课程平台性质对应代码表
 	 * @var array
 	 */
-	private $codes = array(
+	protected $codes = array(
 		'bsc' => array(
-			'BT'=>'公共',
-			),
+			'code' => 'BT',
+			'name' => '公共',
+		),
 		'req' => array(
-			'B' => '必修',
-			),
+			'code' => 'B',
+			'name' => '必修',
+		),
 		'lct' => array(
-			'X' => '选修',
-			),
-		'hs' => array(
-			'WT' => '人文社科通识素质',
-			),
-		'ns' => array(
-			'IT' => '自然科学通识素质',
-			),
-		'as' => array(
-			'YT' => '艺术体育通识素质',
-			),
-		'os' => array(
-			'QT' => '其他专项通识素质',
-			),
-		);
+			'code' => 'X',
+			'name' => '选修',
+		),
+		'hs'  => array(
+			'code' => 'WT',
+			'name' => '人文社科通识素质',
+		),
+		'ns'  => array(
+			'code' => 'IT',
+			'name' => '自然科学通识素质',
+		),
+		'as'  => array(
+			'code' => 'XT',
+			'name' => '艺术体育通识素质',
+		),
+		'os'  => array(
+			'code' => 'QT',
+			'name' => '其他专项通识素质',
+		),
+	);
 
 	/**
 	 * 继承自基类before函数
@@ -63,19 +70,19 @@ class CourseController extends Controller {
 	 * @return mixed       可选课程数据
 	 */
 	protected function index($type) {
-		list($property, $platform) = array_pad(str_split(key($codes[$type])),2,'');
+		list($property, $platform) = array_pad(str_split($codes[$type]['code']), 2, '');
 
-		if (array_key_exists($property.$platform, array_merge($codes['bsc'],$codes['req'],$codes['lct']))) {
-			$grade = Session::read('grade');
+		if (in_array($property . $platform, array($codes['bsc']['code'], $codes['req']['code'], $codes['lct']['code']))) {
+			$grade      = Session::read('grade');
 			$speciality = Session::read('spno');
 		} else {
-			$sql = 'SELECT DISTINCT nj FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zsjj = ?';
+			$sql  = 'SELECT DISTINCT nj FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zsjj = ?';
 			$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('season')));
 			foreach ($data as $d) {
 				$grade[] = $d['nj'];
 			}
 
-			$sql = 'SELECT DISTINCT zy FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zsjj = ?';
+			$sql  = 'SELECT DISTINCT zy FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zsjj = ?';
 			$data = DB::getInstance()->searchRecord($sql, array(Session::read('year'), Session::read('term'), Session::read('season')));
 			foreach ($data as $d) {
 				$speciality[] = $d['zy'];
@@ -83,17 +90,17 @@ class CourseController extends Controller {
 		}
 
 		if (isEmpty($platform)) {
-			$platform = is_array($platform)?$platform:array($platform);
-			$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
+			$platform = is_array($platform) ? $platform : array($platform);
+			$data     = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
 			foreach ($data as $pt) {
-				if (isEmpty($data['dm']) || array_key_exists($property.$data['dm'], array_values($codes))) {
+				if (isEmpty($data['dm']) || array_key_exists($property . $data['dm'], array_values($codes))) {
 					continue;
 				}
 				$platform[] = $pt['dm'];
 			}
 		}
-		$property = is_array($property)?$property : array($property);
-		$platform=is_array($platform)?$platform:array($platform);
+		$property = is_array($property) ? $property : array($property);
+		$platform = is_array($platform) ? $platform : array($platform);
 
 		$param = "'" . implode("','", array(Session::read('username'), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality), Session::read('season'))) . "'";
 		$data  = DB::getInstance()->query('SELECT * FROM p_kxkcb_sel(' . $param . ')');
@@ -270,7 +277,7 @@ class CourseController extends Controller {
 	 */
 	protected function search($type) {
 		if (isPost()) {
-			
+
 		}
 	}
 

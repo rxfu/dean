@@ -33,9 +33,9 @@ class ReportController extends Controller {
 	 * @return void
 	 */
 	protected function unconfirmed($cno) {
-		$data = DB::getInstance()->searchRecord('v_cj_lscj', array('nd'=>Session::read('year'),'xq'=>Session::read('term'),'xh'=>Session::read('username'),'tjzt'=>COLLEGE_CONFIRMED));
+		$data = DB::getInstance()->searchRecord('v_cj_lscj', array('nd' => Session::read('year'), 'xq' => Session::read('term'), 'xh' => Session::read('username'), 'tjzt' => COLLEGE_CONFIRMED));
 
-		return $this->view->display('report.unconfirmed', array('scores'=>$data));
+		return $this->view->display('report.unconfirmed', array('scores' => $data));
 	}
 
 	/**
@@ -44,7 +44,7 @@ class ReportController extends Controller {
 	 * @return array      成绩方式组合，没有返回FALSE
 	 */
 	protected function ratio($cno) {
-		$sql = 'SELECT * FROM t_jx_cjfs WHERE nd = ? AND xq = ? AND kcxh = ?';
+		$sql   = 'SELECT * FROM t_jx_cjfs WHERE nd = ? AND xq = ? AND kcxh = ?';
 		$modes = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), $cno));
 		if (is_array($modes)) {
 			$ratios = array();
