@@ -106,3 +106,16 @@ define('TEACHER', 'teacher');
 define('UNAUDITED', '0');
 define('PASSED', '1');
 define('REFUSED', '2');
+
+/**
+ * 课程类型代码
+ */
+define('BASIC', 'bsc');
+define('REQUIRED', 'req');
+define('ELECTIVE', 'lct');
+define('HUMANITY', 'hs');
+define('NATURAL', 'ns');
+define('ART', 'as');
+define('SPECIAL', 'os');
+define('OTHERS', 'others');
+define('RETAKE', 'retake');

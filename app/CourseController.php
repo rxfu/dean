@@ -10,34 +10,42 @@ class CourseController extends Controller {
 	 * @var array
 	 */
 	protected $codes = array(
-		'bsc' => array(
+		BASIC => array(
 			'code' => 'BT',
 			'name' => '公共',
 		),
-		'req' => array(
+		REQUIRED => array(
 			'code' => 'B',
 			'name' => '必修',
 		),
-		'lct' => array(
+		ELECTIVE => array(
 			'code' => 'X',
 			'name' => '选修',
 		),
-		'hs'  => array(
+		HUMANITY  => array(
 			'code' => 'WT',
 			'name' => '人文社科通识素质',
 		),
-		'ns'  => array(
+		NATURAL  => array(
 			'code' => 'IT',
 			'name' => '自然科学通识素质',
 		),
-		'as'  => array(
+		ART  => array(
 			'code' => 'XT',
 			'name' => '艺术体育通识素质',
 		),
-		'os'  => array(
+		SPECIAL  => array(
 			'code' => 'QT',
 			'name' => '其他专项通识素质',
 		),
+		OTHERS => array(
+			'code' => 'OTHERS',
+			'name' => '其他课程',
+			),
+		RETAKE => array(
+			'code'=>'RETAKE',
+			'name' => '重修',
+			),
 	);
 
 	/**
@@ -66,26 +74,26 @@ class CourseController extends Controller {
 
 	/**
 	 * 获取当前学生可选课程表
-	 * @param  string $type 课程性质
+	 * @param  string $type 课程类型
 	 * @return mixed       可选课程数据
 	 */
 	protected function index($type) {
 		list($property, $platform) = array_pad(str_split($this->codes[$type]['code']), 2, '');
 
-		if (in_array($property . $platform, array($this->codes['bsc']['code'], $this->codes['req']['code'], $this->codes['lct']['code']))) {
+		if (in_array($property . $platform, array($this->codes[BASIC]['code'], $this->codes[REQUIRED]['code'], $this->codes[ELECTIVE]['code']))) {
 			$grade      = Session::read('grade');
 			$speciality = Session::read('spno');
 		} else {
 			$sql  = 'SELECT DISTINCT nj FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zsjj = ?';
 			$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('season')));
-			foreach ($data as $d) {
-				$grade[] = $d['nj'];
+			foreach ($data as $g) {
+				$grade[] = $g['nj'];
 			}
 
 			$sql  = 'SELECT DISTINCT zy FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zsjj = ?';
 			$data = DB::getInstance()->searchRecord($sql, array(Session::read('year'), Session::read('term'), Session::read('season')));
-			foreach ($data as $d) {
-				$speciality[] = $d['zy'];
+			foreach ($data as $sp) {
+				$speciality[] = $sp['zy'];
 			}
 		}
 
@@ -93,16 +101,14 @@ class CourseController extends Controller {
 			$platform = is_array($platform) ? $platform : array($platform);
 			$data     = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
 			foreach ($data as $pt) {
-				if (isEmpty($data['dm']) || in_array($property . $data['dm'], array_column($this->codes, 'code'))) {
+				if (isEmpty($pt['dm']) || in_array($property . $pt['dm'], array_column($this->codes, 'code'))) {
 					continue;
 				}
 				$platform[] = $pt['dm'];
 			}
 		}
-		$property = is_array($property) ? $property : array($property);
-		$platform = is_array($platform) ? $platform : array($platform);
 
-		$param = "'" . implode("','", array(Session::read('username'), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality), Session::read('season'))) . "'";
+		$param = "'" . implode("','", array(Session::read('season'), Session::read('username'), array_to_pg(Session::read('year')), array_to_pg(Session::read('term')), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality))) . "'";
 		$data  = DB::getInstance()->query('SELECT * FROM p_kxkcb_sel(' . $param . ')');
 
 		$courses = array();
@@ -115,7 +121,77 @@ class CourseController extends Controller {
 		}
 		krsort($courses);
 
-		return $this->view->display('course.index', array('courses' => $courses, 'title' => $title));
+		return $this->view->display('course.index', array('courses' => $courses, 'title' => $this->codes[$type]['name']));
+	}
+
+	/**
+	 * 检索课程
+	 * @param  string $type 检索类型
+	 * @return array          课程数组
+	 */
+	protected function search($type) {
+		$courses = array();
+		if (isPost()) {
+			switch($type) {
+				case OTHERS:
+				$year = Session::read('year');
+				$term = Session::read('term');
+					$grade = '*';
+					$speciality = '*';
+
+					$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
+					foreach ($data as $pt) {
+						if (!isEmpty($pt['dm'])) {
+							$platform[] = $pt['dm'];
+						}
+					}
+
+					$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_xz');
+					foreach ($data as $xz) {
+						if(isset($platform) && (isEmpty($xz['dm']) || in_array(array_map(function($pt) { return $pt.$xz['dm']; }, $platform), array($this->codes[HUMANITY]['code'], $this->codes[NATURAL]['code'], $this->codes[ART]['code'], $this->codes[SPECIAL]['code'])))) {
+							continue;
+						}
+
+						$property[] = $xz['dm'];
+					}
+
+					break;
+
+				case RETAKE:
+					$grade = '*';
+					$speciality = '*';
+					$platform = '*';
+					$property = '*';
+
+					$sql = 'SELECT year, term FROM v_xk_kxkcxx WHERE nd <> ? AND xq <> ? GROUP BY year, term';
+					$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term')));
+					foreach ($data as $d) {
+						$year[] = $d['year'];
+						$term[] = $d['term'];
+					}
+					break;
+
+				default:
+					break;
+			}
+
+			if (isset($grade) && isset($speciality) && isset($platform) && isset($property)) {
+				$param = "'" . implode("','", array(Session::read('season'), Session::read('username'), array_to_pg(Session::read('year')), array_to_pg(Session::read('term')), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality))) . "'";
+				$data  = DB::getInstance()->query('SELECT * FROM p_kxkcb_sel(' . $param . ')');
+	
+				$courses = array();
+				foreach ($data as $course) {
+					if (isEmpty($course['xqh'])) {
+						$courses['unknown'][$course['kcxh']][] = $course;
+					} else {
+						$courses[$course['xqh']][$course['kcxh']][] = $course;
+					}
+				}
+				krsort($courses);
+			}
+		}
+
+		return $this->view->display('course.search', array('type' => $type, 'courses' => $courses, 'title' => $this->codes[$type]['name']));
 	}
 
 	/**
@@ -267,17 +343,6 @@ class CourseController extends Controller {
 			Logger::write(array('xh' => Session::read('username'), 'kcxh' => $data['kcxh'], 'czlx' => LOG_APPLY));
 
 			echo 'success';
-		}
-	}
-
-	/**
-	 * 检索课程
-	 * @param  string $type 检索类型
-	 * @return array          课程数组
-	 */
-	protected function search($type) {
-		if (isPost()) {
-
 		}
 	}
 

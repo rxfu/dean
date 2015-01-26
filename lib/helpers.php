@@ -130,7 +130,8 @@ if (!function_exists('array_to_pg')) {
 	 * @return string        转换后数组格式
 	 */
 	function array_to_pg($array) {
-		return '{' . (implode(',', $array)) . '}';
+		$array = is_array($array) ? $array : array($array);
+		return '{' . implode(',', $array) . '}';
 	}
 }
 

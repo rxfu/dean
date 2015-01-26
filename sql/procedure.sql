@@ -28,14 +28,14 @@ COMMENT ON TYPE tp_kcb
 
 列出可选课程：
 CREATE OR REPLACE FUNCTION p_kxkcb_sel(
-    i_year text,
-    i_term text,
+    i_season text,
     i_sno text,
+    i_year text[],
+    i_term text[],
     i_platform text[],
     i_property text[],
     i_grade text[],
-    i_speciality text[],
-    i_season text)
+    i_speciality text[])
   RETURNS SETOF tp_kcb AS
 $BODY$DECLARE
   course_rec RECORD;
@@ -78,7 +78,7 @@ BEGIN
     course_kcb.cdbh := course_rec.cdbh;
     course_kcb.zt := '1';
 
-    PERFORM 1 FROM t_xk_xkxx WHERE kcxh = course_kcb.kcxh AND xh = i_sno AND nd = i_year AND xq = i_term;
+    PERFORM 1 FROM t_xk_xkxx WHERE kcxh = course_kcb.kcxh AND xh = i_sno AND nd = ANY(i_year) AND xq = ANY(i_term);
     IF FOUND THEN
       course_kcb.zt := '2';
     END IF;
@@ -101,9 +101,9 @@ END$BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100
   ROWS 1000;
-ALTER FUNCTION p_kxkcb_sel(text, text[], text[], text[], text[], text)
+ALTER FUNCTION p_kxkcb_sel(text, text, text[], text[], text[], text[], text[], text[])
   OWNER TO jwxt;
-COMMENT ON FUNCTION p_kxkcb_sel(text, text[], text[], text[], text[], text) IS '列出可选课程';
+COMMENT ON FUNCTION p_kxkcb_sel(text, text, text[], text[], text[], text[], text[], text[]) IS '列出可选课程';
 
 列出重修课程：
 CREATE OR REPLACE FUNCTION p_cxkcb_sel(i_year text, i_term text, i_sno text)
