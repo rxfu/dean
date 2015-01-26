@@ -28,6 +28,8 @@ COMMENT ON TYPE tp_kcb
 
 列出可选课程：
 CREATE OR REPLACE FUNCTION p_kxkcb_sel(
+    i_year text,
+    i_term text,
     i_sno text,
     i_platform text[],
     i_property text[],
@@ -38,16 +40,14 @@ CREATE OR REPLACE FUNCTION p_kxkcb_sel(
 $BODY$DECLARE
   course_rec RECORD;
   course_kcb tp_kcb;
-  c_year TEXT;
-  c_term TEXT;
+  c_query TEXT;
 BEGIN
-  SELECT substr(value, 1, 4), substr(value, 5, 1) INTO c_year, c_term FROM t_xt WHERE id = 'XK_SJ';
-  IF NOT FOUND THEN
-    RAISE EXCEPTION 'NOT Setup Selective Time';
-    RETURN;
+  c_query = 'SELECT * FROM %I WHERE nd = %L AND xq = %L AND zsjj = %L';
+  IF ARRAY[*] <> i_platform THEN
+    c_query = c_query || ' AND pt = ANY('
   END IF;
-    
-  FOR course_rec IN EXECUTE format('SELECT * FROM %I WHERE nd = %L AND xq = %L AND zsjj = %L AND pt = ANY($2) AND xz = ANY($3) AND nj = ANY($3) AND zy = ANY($4)', 'v_xk_kxkcxx', c_year, c_term, i_season) USING i_platform, i_property, i_grade, i_speciality LOOP
+
+  FOR course_rec IN EXECUTE format('SELECT * FROM %I WHERE nd = %L AND xq = %L AND zsjj = %L AND pt = ANY($2) AND xz = ANY($3) AND nj = ANY($3) AND zy = ANY($4)', 'v_xk_kxkcxx', i_year, i_term, i_season) USING i_platform, i_property, i_grade, i_speciality LOOP
     PERFORM 1 FROM t_cj_zxscj WHERE kch = course_rec.kch AND xh = i_sno;
     CONTINUE WHEN FOUND;
 
@@ -73,7 +73,7 @@ BEGIN
     course_kcb.cdbh := course_rec.cdbh;
     course_kcb.zt := '1';
 
-    PERFORM 1 FROM t_xk_xkxx WHERE kcxh = course_kcb.kcxh AND xh = i_sno AND nd = c_year AND xq = c_term;
+    PERFORM 1 FROM t_xk_xkxx WHERE kcxh = course_kcb.kcxh AND xh = i_sno AND nd = i_year AND xq = i_term;
     IF FOUND THEN
       course_kcb.zt := '2';
     END IF;
@@ -101,28 +101,13 @@ ALTER FUNCTION p_kxkcb_sel(text, text[], text[], text[], text[], text)
 COMMENT ON FUNCTION p_kxkcb_sel(text, text[], text[], text[], text[], text) IS '列出可选课程';
 
 列出重修课程：
-CREATE OR REPLACE FUNCTION p_cxkcb_sel(i_sno text)
+CREATE OR REPLACE FUNCTION p_cxkcb_sel(i_year text, i_term text, i_sno text)
   RETURNS SETOF tp_kcb AS
 $BODY$DECLARE
   course_rec RECORD;
   course_kcb tp_kcb;
-  c_year TEXT;
-  c_term TEXT;
-  c_query TEXT;
 BEGIN
-  PERFORM 1 FROM t_xs_zxs WHERE xh = i_sno;
-  IF NOT FOUND THEN
-    RAISE EXCEPTION 'NO STUDENT!';
-    RETURN;
-  END IF;
-
-  SELECT substr(value, 1, 4), substr(value, 5, 1) INTO c_year, c_term FROM t_xt WHERE id = 'XK_SJ';
-  IF NOT FOUND THEN
-    RAISE EXCEPTION 'NOT Setup Selective Time';
-    RETURN;
-  END IF;
-
-  FOR course_rec IN EXECUTE format('SELECT * FROM %I a WHERE EXISTS (SELECT 1 FROM t_cj_zxscj WHERE kch = a.kch AND xh = %L) AND nd = %L AND xq = %L', 'v_xk_kxkcxx', i_sno, c_year, c_term) LOOP
+  FOR course_rec IN EXECUTE format('SELECT * FROM %I a WHERE xh = %L AND nd = ANY($1) AND xq = ANY($2)', 'v_xk_kxkcxx', i_sno) USING i_year, i_term LOOP
     course_kcb.kch := course_rec.kch;
     course_kcb.kcxh := course_rec.kcxh;
     course_kcb.kcmc := course_rec.kcmc;
@@ -144,16 +129,6 @@ BEGIN
     course_kcb.jsj := course_rec.jsj;
     course_kcb.cdbh := course_rec.cdbh;
     course_kcb.zt := '1';
-
-    PERFORM 1 FROM t_xk_xkxx WHERE kch = course_kcb.kch AND xh = i_sno AND nd = c_year AND xq = c_term;
-    IF FOUND THEN
-      course_kcb.zt := '2';
-    END IF;
-
-    PERFORM 1 FROM t_xk_xksq WHERE kcxh = course_kcb.kcxh AND xh = i_sno AND nd = c_year AND xq = c_term AND sh = '0';
-    IF FOUND THEN
-      course_kcb.zt := '3';
-    END IF;
 
     RETURN NEXT course_kcb;
   END LOOP;

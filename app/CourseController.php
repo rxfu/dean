@@ -70,9 +70,9 @@ class CourseController extends Controller {
 	 * @return mixed       可选课程数据
 	 */
 	protected function index($type) {
-		list($property, $platform) = array_pad(str_split($codes[$type]['code']), 2, '');
+		list($property, $platform) = array_pad(str_split($this->codes[$type]['code']), 2, '');
 
-		if (in_array($property . $platform, array($codes['bsc']['code'], $codes['req']['code'], $codes['lct']['code']))) {
+		if (in_array($property . $platform, array($this->codes['bsc']['code'], $this->codes['req']['code'], $this->codes['lct']['code']))) {
 			$grade      = Session::read('grade');
 			$speciality = Session::read('spno');
 		} else {
@@ -93,7 +93,7 @@ class CourseController extends Controller {
 			$platform = is_array($platform) ? $platform : array($platform);
 			$data     = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
 			foreach ($data as $pt) {
-				if (isEmpty($data['dm']) || array_key_exists($property . $data['dm'], array_values($codes))) {
+				if (isEmpty($data['dm']) || in_array($property . $data['dm'], array_column($this->codes, 'code'))) {
 					continue;
 				}
 				$platform[] = $pt['dm'];
@@ -266,7 +266,7 @@ class CourseController extends Controller {
 
 			Logger::write(array('xh' => Session::read('username'), 'kcxh' => $data['kcxh'], 'czlx' => LOG_APPLY));
 
-			echo 'apply-success';
+			echo 'success';
 		}
 	}
 
