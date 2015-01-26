@@ -42,12 +42,17 @@ $BODY$DECLARE
   course_kcb tp_kcb;
   c_query TEXT;
 BEGIN
-  c_query = 'SELECT * FROM %I WHERE nd = %L AND xq = %L AND zsjj = %L';
-  IF ARRAY[*] <> i_platform THEN
-    c_query = c_query || ' AND pt = ANY('
-  END IF;
+  c_query := 'SELECT * FROM %I WHERE zsjj = %L';
+  c_query := c_query || concat_ws(' AND '
+    , CASE WHEN ARRAY['*'] <> i_platform THEN 'nd = ANY($1)' END
+    , CASE WHEN ARRAY['*'] <> i_platform THEN 'xq = ANY($2)' END
+    , CASE WHEN ARRAY['*'] <> i_platform THEN 'pt = ANY($3)' END
+    , CASE WHEN ARRAY['*'] <> i_platform THEN 'xz = ANY($4)' END
+    , CASE WHEN ARRAY['*'] <> i_platform THEN 'nj = ANY($5)' END
+    , CASE WHEN ARRAY['*'] <> i_platform THEN 'zy = ANY($6)' END
+    );
 
-  FOR course_rec IN EXECUTE format('SELECT * FROM %I WHERE nd = %L AND xq = %L AND zsjj = %L AND pt = ANY($2) AND xz = ANY($3) AND nj = ANY($3) AND zy = ANY($4)', 'v_xk_kxkcxx', i_year, i_term, i_season) USING i_platform, i_property, i_grade, i_speciality LOOP
+  FOR course_rec IN EXECUTE format(c_query, 'v_xk_kxkcxx', i_season) USING i_year, i_term, i_platform, i_property, i_grade, i_speciality LOOP
     PERFORM 1 FROM t_cj_zxscj WHERE kch = course_rec.kch AND xh = i_sno;
     CONTINUE WHEN FOUND;
 
