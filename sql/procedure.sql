@@ -61,10 +61,12 @@ BEGIN
     , CASE WHEN ARRAY['*'] <> i_grade THEN 'nj = ANY($5)' END
     , CASE WHEN ARRAY['*'] <> i_speciality THEN 'zy = ANY($6)' END
     );
-  c_query := c_query || ' AND (' || concat_ws(' OR '
+  IF (i_cno IS NOT NULL OR i_cname IS NOT NULL) THEN
+    c_query := c_query || ' AND (' || concat_ws(' OR '
     , CASE WHEN i_cno IS NOT NULL THEN 'kcxh LIKE $7' END
     , CASE WHEN i_cname IS NOT NULL THEN 'kcmc LIKE $8' END
     ) || ')';
+  END IF;
 raise notice '%',c_query;
   FOR course_rec IN EXECUTE format(c_query, 'v_xk_kxkcxx', i_season) USING i_year, i_term, i_platform, i_property, i_grade, i_speciality, i_cno || '%', i_cname || '%' LOOP
     course_kcb.kch := course_rec.kch;
