@@ -8,22 +8,22 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-6">
-                        <form class="form-inline" method="post" action="<?php echo toLink('course.search', $type) ?>" role="form">
+                    <div class="col-md-6 col-md-offset-3">
+                        <form method="post" action="<?php echo toLink('course.search', $type) ?>" role="form">
                             <div class="input-group">
                                 <div class="form-group">
-                                    <label class="sr-only" for="courseSearch">课程检索</label>
-                                    <input type="text" class="form-control" id="courseSearch" name="courseSearch" placeholder="请输入课程序号或课程名称...">
+                                    <label class="sr-only" for="keyword">课程检索</label>
+                                    <input type="text" class="form-control" id="keyword" name="keyword" placeholder="请输入课程序号或课程名称...">
                                 </div>
                                   <span class="input-group-btn">
-                                    <button class="btn btn-primary" type="button">Go!</button>
+                                    <button class="btn btn-primary" type="submit">Go!</button>
                                   </span>
                             </div>
                         </form>
                     </div>
                 </div>
 
-                <?php if (!isEmpty($course)): ?>
+                <?php if (!isEmpty($courses)): ?>
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="panel panel-default">

@@ -35,27 +35,38 @@ CREATE OR REPLACE FUNCTION p_kxkcb_sel(
     i_platform text[],
     i_property text[],
     i_grade text[],
-    i_speciality text[])
+    i_speciality text[],
+    i_cno text,
+    i_cname text)
   RETURNS SETOF tp_kcb AS
 $BODY$DECLARE
   course_rec RECORD;
   course_kcb tp_kcb;
   c_query TEXT;
+  c_year TEXT;
+  c_term TEXT;
 BEGIN
+  SELECT substr(value, 1, 4), substr(value, 5, 1) INTO c_year, c_term FROM t_xt WHERE id = 'XK_SJ';
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'NOT Setup Selective Time';
+    RETURN;
+  END IF;
+
   c_query := 'SELECT * FROM %I WHERE zsjj = %L';
-  c_query := c_query || concat_ws(' AND '
-    , CASE WHEN ARRAY['*'] <> i_platform THEN 'nd = ANY($1)' END
-    , CASE WHEN ARRAY['*'] <> i_platform THEN 'xq = ANY($2)' END
+  c_query := c_query || ' AND ' || concat_ws(' AND '
+    , CASE WHEN ARRAY['*'] <> i_year THEN 'nd = ANY($1)' END
+    , CASE WHEN ARRAY['*'] <> i_term THEN 'xq = ANY($2)' END
     , CASE WHEN ARRAY['*'] <> i_platform THEN 'pt = ANY($3)' END
-    , CASE WHEN ARRAY['*'] <> i_platform THEN 'xz = ANY($4)' END
-    , CASE WHEN ARRAY['*'] <> i_platform THEN 'nj = ANY($5)' END
-    , CASE WHEN ARRAY['*'] <> i_platform THEN 'zy = ANY($6)' END
+    , CASE WHEN ARRAY['*'] <> i_property THEN 'xz = ANY($4)' END
+    , CASE WHEN ARRAY['*'] <> i_grade THEN 'nj = ANY($5)' END
+    , CASE WHEN ARRAY['*'] <> i_speciality THEN 'zy = ANY($6)' END
     );
-
-  FOR course_rec IN EXECUTE format(c_query, 'v_xk_kxkcxx', i_season) USING i_year, i_term, i_platform, i_property, i_grade, i_speciality LOOP
-    PERFORM 1 FROM t_cj_zxscj WHERE kch = course_rec.kch AND xh = i_sno;
-    CONTINUE WHEN FOUND;
-
+  c_query := c_query || ' AND (' || concat_ws(' OR '
+    , CASE WHEN i_cno IS NOT NULL THEN 'kcxh LIKE $7' END
+    , CASE WHEN i_cname IS NOT NULL THEN 'kcmc LIKE $8' END
+    ) || ')';
+raise notice '%',c_query;
+  FOR course_rec IN EXECUTE format(c_query, 'v_xk_kxkcxx', i_season) USING i_year, i_term, i_platform, i_property, i_grade, i_speciality, i_cno || '%', i_cname || '%' LOOP
     course_kcb.kch := course_rec.kch;
     course_kcb.kcxh := course_rec.kcxh;
     course_kcb.kcmc := course_rec.kcmc;
@@ -78,7 +89,7 @@ BEGIN
     course_kcb.cdbh := course_rec.cdbh;
     course_kcb.zt := '1';
 
-    PERFORM 1 FROM t_xk_xkxx WHERE kcxh = course_kcb.kcxh AND xh = i_sno AND nd = ANY(i_year) AND xq = ANY(i_term);
+    PERFORM 1 FROM t_xk_xkxx WHERE kcxh = course_kcb.kcxh AND xh = i_sno AND nd = c_year AND xq = c_term;
     IF FOUND THEN
       course_kcb.zt := '2';
     END IF;
@@ -101,9 +112,12 @@ END$BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100
   ROWS 1000;
-ALTER FUNCTION p_kxkcb_sel(text, text, text[], text[], text[], text[], text[], text[])
+ALTER FUNCTION p_kxkcb_sel(text, text, text[], text[], text[], text[], text[], text[], text, text)
   OWNER TO jwxt;
-COMMENT ON FUNCTION p_kxkcb_sel(text, text, text[], text[], text[], text[], text[], text[]) IS '列出可选课程';
+GRANT EXECUTE ON FUNCTION p_kxkcb_sel(text, text, text[], text[], text[], text[], text[], text[], text, text) TO public;
+GRANT EXECUTE ON FUNCTION p_kxkcb_sel(text, text, text[], text[], text[], text[], text[], text[], text, text) TO jwxt;
+GRANT EXECUTE ON FUNCTION p_kxkcb_sel(text, text, text[], text[], text[], text[], text[], text[], text, text) TO kongsir;
+COMMENT ON FUNCTION p_kxkcb_sel(text, text, text[], text[], text[], text[], text[], text[], text, text) IS '列出可选课程';
 
 列出重修课程：
 CREATE OR REPLACE FUNCTION p_cxkcb_sel(i_year text, i_term text, i_sno text)

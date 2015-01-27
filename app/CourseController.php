@@ -10,7 +10,7 @@ class CourseController extends Controller {
 	 * @var array
 	 */
 	protected $codes = array(
-		BASIC => array(
+		BASIC    => array(
 			'code' => 'BT',
 			'name' => '公共',
 		),
@@ -22,7 +22,7 @@ class CourseController extends Controller {
 			'code' => 'X',
 			'name' => '选修',
 		),
-		HUMANITY  => array(
+		HUMANITY => array(
 			'code' => 'WT',
 			'name' => '人文社科通识素质',
 		),
@@ -30,7 +30,7 @@ class CourseController extends Controller {
 			'code' => 'IT',
 			'name' => '自然科学通识素质',
 		),
-		ART  => array(
+		ART      => array(
 			'code' => 'XT',
 			'name' => '艺术体育通识素质',
 		),
@@ -38,14 +38,14 @@ class CourseController extends Controller {
 			'code' => 'QT',
 			'name' => '其他专项通识素质',
 		),
-		OTHERS => array(
+		OTHERS   => array(
 			'code' => 'OTHERS',
 			'name' => '其他课程',
-			),
-		RETAKE => array(
-			'code'=>'RETAKE',
+		),
+		RETAKE   => array(
+			'code' => 'RETAKE',
 			'name' => '重修',
-			),
+		),
 	);
 
 	/**
@@ -87,19 +87,22 @@ class CourseController extends Controller {
 			$sql  = 'SELECT DISTINCT nj FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zsjj = ?';
 			$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('season')));
 			foreach ($data as $g) {
-				$grade[] = $g['nj'];
+				if (isEmpty($g['nj'])) {
+					$grade[] = $g['nj'];
+				}
 			}
 
 			$sql  = 'SELECT DISTINCT zy FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zsjj = ?';
-			$data = DB::getInstance()->searchRecord($sql, array(Session::read('year'), Session::read('term'), Session::read('season')));
+			$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('season')));
 			foreach ($data as $sp) {
-				$speciality[] = $sp['zy'];
+				if (isEmpty($sp['zy'])) {
+					$speciality[] = $sp['zy'];
+				}
 			}
 		}
 
 		if (isEmpty($platform)) {
-			$platform = is_array($platform) ? $platform : array($platform);
-			$data     = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
+			$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
 			foreach ($data as $pt) {
 				if (isEmpty($pt['dm']) || in_array($property . $pt['dm'], array_column($this->codes, 'code'))) {
 					continue;
@@ -109,8 +112,8 @@ class CourseController extends Controller {
 		}
 
 		$param = "'" . implode("','", array(Session::read('season'), Session::read('username'), array_to_pg(Session::read('year')), array_to_pg(Session::read('term')), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality))) . "'";
-		$data  = DB::getInstance()->query('SELECT * FROM p_kxkcb_sel(' . $param . ')');
-
+		$data  = DB::getInstance()->query('SELECT * FROM p_kxkcb_sel(' . $param . ', null, null)');
+var_dump($param);
 		$courses = array();
 		foreach ($data as $course) {
 			if (isEmpty($course['xqh'])) {
@@ -132,11 +135,13 @@ class CourseController extends Controller {
 	protected function search($type) {
 		$courses = array();
 		if (isPost()) {
-			switch($type) {
+			$keyword = $_POST['keyword'];
+
+			switch ($type) {
 				case OTHERS:
-				$year = Session::read('year');
-				$term = Session::read('term');
-					$grade = '*';
+					$year       = Session::read('year');
+					$term       = Session::read('term');
+					$grade      = '*';
 					$speciality = '*';
 
 					$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_pt');
@@ -148,7 +153,11 @@ class CourseController extends Controller {
 
 					$data = DB::getInstance()->getAll('SELECT dm FROM t_zd_xz');
 					foreach ($data as $xz) {
-						if(isset($platform) && (isEmpty($xz['dm']) || in_array(array_map(function($pt) { return $pt.$xz['dm']; }, $platform), array($this->codes[HUMANITY]['code'], $this->codes[NATURAL]['code'], $this->codes[ART]['code'], $this->codes[SPECIAL]['code'])))) {
+						if (isset($platform) && (isEmpty($xz['dm']) || in_array(array_map(
+							function ($pt) use ($xz) {
+								return $pt . $xz['dm'];
+							}
+							, $platform), array($this->codes[HUMANITY]['code'], $this->codes[NATURAL]['code'], $this->codes[ART]['code'], $this->codes[SPECIAL]['code'])))) {
 							continue;
 						}
 
@@ -158,16 +167,16 @@ class CourseController extends Controller {
 					break;
 
 				case RETAKE:
-					$grade = '*';
+					$grade      = '*';
 					$speciality = '*';
-					$platform = '*';
-					$property = '*';
+					$platform   = '*';
+					$property   = '*';
 
-					$sql = 'SELECT year, term FROM v_xk_kxkcxx WHERE nd <> ? AND xq <> ? GROUP BY year, term';
+					$sql  = 'SELECT nd, xq FROM v_xk_kxkcxx WHERE nd <> ? AND xq <> ? GROUP BY nd, xq';
 					$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term')));
 					foreach ($data as $d) {
-						$year[] = $d['year'];
-						$term[] = $d['term'];
+						$year[] = $d['nd'];
+						$term[] = $d['xq'];
 					}
 					break;
 
@@ -176,9 +185,9 @@ class CourseController extends Controller {
 			}
 
 			if (isset($grade) && isset($speciality) && isset($platform) && isset($property)) {
-				$param = "'" . implode("','", array(Session::read('season'), Session::read('username'), array_to_pg(Session::read('year')), array_to_pg(Session::read('term')), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality))) . "'";
+				$param = "'" . implode("','", array(Session::read('season'), Session::read('username'), array_to_pg(Session::read('year')), array_to_pg(Session::read('term')), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality), strtoupper($keyword), $keyword)) . "'";
 				$data  = DB::getInstance()->query('SELECT * FROM p_kxkcb_sel(' . $param . ')');
-	
+
 				$courses = array();
 				foreach ($data as $course) {
 					if (isEmpty($course['xqh'])) {
