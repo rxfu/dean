@@ -139,8 +139,6 @@ class CourseController extends Controller {
 
 			switch ($type) {
 				case OTHERS:
-					$year       = Session::read('year');
-					$term       = Session::read('term');
 					$grade      = '*';
 					$speciality = '*';
 
@@ -171,13 +169,6 @@ class CourseController extends Controller {
 					$speciality = '*';
 					$platform   = '*';
 					$property   = '*';
-
-					$sql  = 'SELECT nd, xq FROM v_xk_kxkcxx WHERE nd <> ? AND xq <> ? GROUP BY nd, xq';
-					$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term')));
-					foreach ($data as $d) {
-						$year[] = $d['nd'];
-						$term[] = $d['xq'];
-					}
 					break;
 
 				default:
@@ -201,42 +192,6 @@ class CourseController extends Controller {
 		}
 
 		return $this->view->display('course.search', array('type' => $type, 'courses' => $courses, 'title' => $this->codes[$type]['name']));
-	}
-
-	/**
-	 * 获取当前学生非本年级本专业课程
-	 * @return mixed 非本年级本专业课程数据包
-	 */
-	protected function notgs() {
-		$sql    = 'SELECT DISTINCT nj FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zy = ? AND nj <> ? ORDER BY nj';
-		$grades = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('spno'), Session::read('grade')));
-
-		$sql    = 'SELECT DISTINCT a.zy AS zyh, b.mc AS zy FROM v_xk_kxkcxx a INNER JOIN t_jx_zy b ON a.zy = b.zy WHERE a.nd = ? AND a.xq = ? AND a.zy <> ?';
-		$majors = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('spno')));
-
-		return $this->view->display('course.notgs', array('grades' => $grades, 'majors' => $majors));
-	}
-
-	/**
-	 * 获取当前学生可选重修课程表
-	 * @return mixed 重修课程数据包
-	 */
-	protected function retake() {
-		$title = '可重修课程';
-		$param = "'" . implode("','", array(Session::read('username'))) . "'";
-		$data  = DB::getInstance()->query('SELECT * FROM p_cxkcb_sel(' . $param . ')');
-
-		$courses = array();
-		foreach ($data as $course) {
-			if (isEmpty($course['xqh'])) {
-				$courses['unknown'][$course['kcxh']][] = $course;
-			} else {
-				$courses[$course['xqh']][$course['kcxh']][] = $course;
-			}
-		}
-		krsort($courses);
-
-		return $this->view->display('course.retake', array('courses' => $courses, 'title' => $title));
 	}
 
 	/**
@@ -331,20 +286,26 @@ class CourseController extends Controller {
 
 	/**
 	 * 选课申请
+	 * @param string $type 课程类型
 	 * @return NULL
 	 */
-	protected function apply() {
+	protected function apply($type) {
 		if (isPost()) {
+			if (RETAKE == $type) {
+				$data['ynd']   = $_POST['lyear'];
+				$data['yxq']   = $_POST['lterm'];
+				$data['ykcxh'] = $_POST['lcno'];
+			}
 			$data['xh']   = Session::read('username');
 			$data['xm']   = Session::read('name');
 			$data['nd']   = Session::read('year');
 			$data['xq']   = Session::read('term');
-			$data['kcxh'] = $_POST['course'];
+			$data['kcxh'] = $_POST['cno'];
 			$data['sj']   = date('Y-m-d H:i:s');
-			$data['cx']   = ENABLE;
+			$data['xkbz'] = ENABLE;
 
 			$sql          = 'SELECT kch, kkxy FROM v_xk_kxkcxx WHERE kcxh = ? AND nd = ? AND xq = ?';
-			$course       = DB::getInstance()->getRow($sql, array($_POST['course'], Session::read('year'), Session::read('term')));
+			$course       = DB::getInstance()->getRow($sql, array($_POST['cno'], Session::read('year'), Session::read('term')));
 			$data['kch']  = $course['kch'];
 			$data['kkxy'] = $course['kkxy'];
 			DB::getInstance()->insertRecord('t_xk_xksq', $data);
@@ -353,6 +314,17 @@ class CourseController extends Controller {
 
 			echo 'success';
 		}
+
+		return $this->view->display('course.apply', array('type' => $type, 'title' => $this->codes[$type['name']]));
+	}
+
+	/**
+	 * 列出当前学生的课程申请列表
+	 * @return array 课程申请列表
+	 */
+	protected function process() {
+		$data = DB::getInstance()->searchRecord('t_xk_xksq', array('xh' => Session::read('username')));
+		return $this->view->display('course.process', array('courses' => $data));
 	}
 
 }

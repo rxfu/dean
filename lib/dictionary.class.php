@@ -41,4 +41,17 @@ final class Dictionary extends Prefab {
 		return empty($data['mc']) ? '未知' : $data['mc'];
 	}
 
+	/**
+	 * 遍历字典表
+	 * @param  string $table 字典名称
+	 * @return array        字典列表
+	 */
+	public static function getAll($table) {
+		$dict = selft::getInstance();
+
+		$data = $dict::$_dbh->searchRecord(self::$_prefix . $table);
+
+		return $data;
+	}
+
 }
