@@ -111,7 +111,7 @@ class CourseController extends Controller {
 			}
 		}
 
-		$param = "'" . implode("','", array(Session::read('season'), Session::read('username'), array_to_pg(Session::read('year')), array_to_pg(Session::read('term')), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality))) . "'";
+		$param = "'" . implode("','", array(Session::read('season'), Session::read('username'), Session::read('year'), Session::read('term'), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality))) . "'";
 		$data  = DB::getInstance()->query('SELECT * FROM p_kxkcb_sel(' . $param . ', null, null)');
 
 		$courses = array();
@@ -176,7 +176,7 @@ class CourseController extends Controller {
 			}
 
 			if (isset($grade) && isset($speciality) && isset($platform) && isset($property)) {
-				$param = "'" . implode("','", array(Session::read('season'), Session::read('username'), array_to_pg(Session::read('year')), array_to_pg(Session::read('term')), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality), strtoupper($keyword), $keyword)) . "'";
+				$param = "'" . implode("','", array(Session::read('season'), Session::read('username'), Session::read('year'), Session::read('term'), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality), strtoupper($keyword), $keyword)) . "'";
 				$data  = DB::getInstance()->query('SELECT * FROM p_kxkcb_sel(' . $param . ')');
 
 				$courses = array();
