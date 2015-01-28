@@ -37,8 +37,17 @@ define('DB_USERNAME', 'jwxt');
 define('DB_PASSWORD', 'jwxt..');
 define('DB_CHARSET', 'UTF8');
  */
+/*
 define('DB_PREFIX', 'pgsql');
 define('DB_HOST', '202.193.171.236');
+define('DB_PORT', '5432');
+define('DB_NAME', 'dean');
+define('DB_USERNAME', 'jwxt');
+define('DB_PASSWORD', 'jwxt..');
+define('DB_CHARSET', 'UTF8');
+*/
+define('DB_PREFIX', 'pgsql');
+define('DB_HOST', '202.193.171.253');
 define('DB_PORT', '5432');
 define('DB_NAME', 'dean');
 define('DB_USERNAME', 'jwxt');

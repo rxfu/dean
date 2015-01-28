@@ -88,7 +88,7 @@ COMMENT ON VIEW v_xk_xsxx
 
 教学计划信息：
 CREATE OR REPLACE VIEW v_xk_jxjh AS 
- SELECT a.zy, a.nj, a.zsjj, a.kch, b.kcmc, b.kcywmc, c.mc AS pt, d.mc AS xz, a.xl, a.llxf, a.syxf, a.zxf, a.llxs, a.syxs, a.llxs + a.syxs AS zxs a.kxq, e.mc AS kkxy, f.mc AS kh, a.fs, a.lx
+ SELECT a.zy, a.nj, a.zsjj, a.kch, b.kcmc, b.kcywmc, c.mc AS pt, d.mc AS xz, a.xl, a.llxf, a.syxf, a.zxf, a.llxs, a.syxs, a.llxs + a.syxs AS zxs, a.kxq, e.mc AS kkxy, f.mc AS kh, a.fs, a.lx
    FROM t_jx_jxjh a
    LEFT JOIN t_jx_kc b ON a.kch = b.kch
    LEFT JOIN t_zd_pt c ON a.pt = c.dm
@@ -204,32 +204,32 @@ COMMENT ON VIEW v_pk_kczyxx
 
 学生成绩录入表：
 CREATE OR REPLACE VIEW v_cj_xscjlr AS 
- SELECT a.xh, a.xm,a.kcxh,b.kch,c.kcmc,a.kcpt,a.kcxz,a.xl,a.nd,a.xq,a.kh,a.cj1,a.cj2,a.cj3,a.cj4,a.cj5,a.cj6,a.zpcj,b.jsgh,b.cjfs,a.kszt,d.mc AS zy,t.tjzt,e.mc AS kkxy
+ SELECT a.xh, a.xm,a.kcxh,b.kch,c.kcmc,a.kcpt,a.kcxz,a.xl,a.nd,a.xq,a.kh,a.cj1,a.cj2,a.cj3,a.cj4,a.cj5,a.cj6,a.zpcj,b.jsgh,b.cjfs,a.kszt,d.mc AS zy,a.tjzt,e.mc AS kkxy
  FROM t_cj_web a 
  LEFT JOIN t_pk_jxrw b ON b.kcxh=a.kcxh AND b.nd=a.nd AND b.xq=a.xq
- LEFT JOIN t_pk_kc c ON c.kch=b.kch
+ LEFT JOIN t_jx_kc c ON c.kch=b.kch
  LEFT JOIN t_jx_zy d ON d.zy=a.zy
  LEFT JOIN t_xt_department e ON e.dw=a.kkxy
- LEFT JOIN t_pk_kczy f ON f.nd=a.nd AND f.xq=a.xq AND f.kcxh=a.kcxh AND f.zy=a.zy
+ LEFT JOIN t_pk_kczy f ON f.nd=a.nd AND f.xq=a.xq AND f.kcxh=a.kcxh AND f.zy=a.zy;
 
 ALTER TABLE v_cj_xscjlr
   OWNER TO jwxt;
 GRANT ALL ON TABLE v_cj_xscjlr TO jwxt;
 GRANT ALL ON TABLE v_cj_xscjlr TO kongsir;
-COMMENT ON VIEW v_pk_kczyxx
+COMMENT ON VIEW v_cj_xscjlr
   IS '学生成绩录入信息视图';
 
 成绩方式信息视图：
 CREATE OR REPLACE VIEW v_cj_cjfs AS 
  SELECT b.nd, b.xq, b.kcxh, b.kch, b.jsgh, a.fs, a.khmc, a.ywmc, a.id, a.idm, a.mf, a.bl
  FROM t_jx_cjfs a
- INNER JOIN t_pk_jxrw b ON b.cjfs = a.cjfs AND b.id = a.id
+ INNER JOIN t_pk_jxrw b ON b.cjfs = a.fs AND b.id = a.id;
 
 ALTER TABLE v_cj_cjfs
   OWNER TO jwxt;
 GRANT ALL ON TABLE v_cj_cjfs TO jwxt;
 GRANT ALL ON TABLE v_cj_cjfs TO kongsir;
-COMMENT ON VIEW v_pk_kczyxx
+COMMENT ON VIEW v_cj_cjfs
   IS '成绩方式信息视图';
 
 学生成绩详单：
