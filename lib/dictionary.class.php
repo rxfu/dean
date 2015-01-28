@@ -47,7 +47,7 @@ final class Dictionary extends Prefab {
 	 * @return array        字典列表
 	 */
 	public static function getAll($table) {
-		$dict = selft::getInstance();
+		$dict = self::getInstance();
 
 		$data = $dict::$_dbh->searchRecord(self::$_prefix . $table);
 

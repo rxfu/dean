@@ -45,19 +45,18 @@ $BODY$DECLARE
   course_kcb tp_kcb;
   c_query TEXT;
 BEGIN
-  c_query := 'SELECT * FROM %I WHERE zsjj = %L AND nd = %L AND xq = %L';
-  c_query := c_query || ' AND ' || concat_ws(' AND '
+  c_query := 'SELECT * FROM %I WHERE ';
+  c_query := c_query || concat_ws(' AND '
+    , 'zsjj = %L'
+    , 'nd = %L'
+    , 'xq = %L'
     , CASE WHEN ARRAY['*'] <> i_platform THEN 'pt = ANY($1)' END
     , CASE WHEN ARRAY['*'] <> i_property THEN 'xz = ANY($2)' END
     , CASE WHEN ARRAY['*'] <> i_grade THEN 'nj = ANY($3)' END
     , CASE WHEN ARRAY['*'] <> i_speciality THEN 'zy = ANY($4)' END
-    );
-  IF (i_cno IS NOT NULL OR i_cname IS NOT NULL) THEN
-    c_query := c_query || ' AND (' || concat_ws(' OR '
     , CASE WHEN i_cno IS NOT NULL THEN 'kcxh LIKE $5' END
     , CASE WHEN i_cname IS NOT NULL THEN 'kcmc LIKE $6' END
-    ) || ')';
-  END IF;
+    );
 
   FOR course_rec IN EXECUTE format(c_query, 'v_xk_kxkcxx', i_season, i_year, i_term) USING i_platform, i_property, i_grade, i_speciality, i_cno || '%', i_cname || '%' LOOP
     course_kcb.kch := course_rec.kch;
@@ -113,6 +112,7 @@ END$BODY$
   ROWS 1000;
 ALTER FUNCTION p_kxkcb_sel(text, text, text, text, text[], text[], text[], text[], text, text)
   OWNER TO jwxt;
+GRANT EXECUTE ON FUNCTION p_kxkcb_sel(text, text, text, text, text[], text[], text[], text[], text, text) TO public;
 GRANT EXECUTE ON FUNCTION p_kxkcb_sel(text, text, text, text, text[], text[], text[], text[], text, text) TO jwxt;
 COMMENT ON FUNCTION p_kxkcb_sel(text, text, text, text, text[], text[], text[], text[], text, text) IS '列出可选课程';
 

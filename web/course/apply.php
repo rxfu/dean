@@ -10,11 +10,11 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <form action="<?php echo toLink('course.apply', $type) ?>" class="form-horizontal">
+                                <form action="<?php echo toLink('course.apply', $type, $cno) ?>" class="form-horizontal">
                                     <div class="form-group">
                                         <label for="cno" class="col-md-2">课程序号</label>
                                         <div class="col-md-6">
-                                            <input type="text" class="form-control disabled" id="cno" name="cno" placeholde="课程序号">
+                                            <input type="text" class="form-control" id="cno" name="cno" placeholde="课程序号" value="<?php echo $cno ?>" disabled>
                                         </div>
                                     </div>
                                     <?php if (RETAKE == $type): ?>

@@ -63,7 +63,7 @@
                                                                     <tr data-row="<?php echo $course[0]['kcxh'] ?>">
                                                                         <?php $rowspan = count($course) ?>
                                                                         <td rowspan="<?php echo $rowspan ?>" class="text-center" id="<?php echo $course[0]['kcxh'] ?>">
-                                                                            <a class="btn btn-primary" href="<?php echo toLink('course.apply', $course[0]['kcxh']) ?>" title="申请修读" role="button">申请修读</a>
+                                                                            <a class="btn btn-primary" href="<?php echo toLink('course.apply', $type, $course[0]['kcxh']) ?>" title="申请修读" role="button">申请修读</a>
                                                                         </td>
                                                                         <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kcxh'] ?></td>
                                                                         <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kcmc'] ?></td>

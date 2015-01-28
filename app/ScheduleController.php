@@ -10,7 +10,7 @@ class ScheduleController extends Controller {
 	 * @return void
 	 */
 	protected function index() {
-		$data = DB::getInstance()->searchRecord('v_xk_kskcb', array('xh'=>Session::read('username'), 'nd' => Session::read('year'), 'xq' => Session::read('term')))
+		$data = DB::getInstance()->searchRecord('v_xk_xskcb', array('xh'=>Session::read('username'), 'nd' => Session::read('year'), 'xq' => Session::read('term')));
 		return $this->view->display('schedule.index', array('courses' => $data));
 	}
 
@@ -33,7 +33,7 @@ class ScheduleController extends Controller {
 	 */
 	protected function speciality() {
 		$sql  = 'SELECT DISTINCT kch, kcmc, kcywmc, xs, xf FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND nj = ? AND zyh = ?';
-		$data = DB::getInstance()->searchRecord($sql, array(Session::read('year'), Session::read('term'), Session::read('grade'), ession::read('spno')));
+		$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('grade'), Session::read('spno')));
 
 		return $this->view->display('schedule.speciality', array('courses' => $data, 'year' => $year, 'term' => $term));
 	}

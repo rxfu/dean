@@ -31,7 +31,7 @@ class CourseController extends Controller {
 			'name' => '自然科学通识素质',
 		),
 		ART      => array(
-			'code' => 'XT',
+			'code' => 'YT',
 			'name' => '艺术体育通识素质',
 		),
 		SPECIAL  => array(
@@ -133,9 +133,16 @@ class CourseController extends Controller {
 	 * @return array          课程数组
 	 */
 	protected function search($type) {
+		$cno     = null;
+		$cname   = null;
 		$courses = array();
 		if (isPost()) {
 			$keyword = $_POST['keyword'];
+			if (isAlphaNumber($keyword)) {
+				$cno = strtoupper($keyword);
+			} else {
+				$cname = $keyword;
+			}
 
 			switch ($type) {
 				case OTHERS:
@@ -176,7 +183,7 @@ class CourseController extends Controller {
 			}
 
 			if (isset($grade) && isset($speciality) && isset($platform) && isset($property)) {
-				$param = "'" . implode("','", array(Session::read('season'), Session::read('username'), Session::read('year'), Session::read('term'), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality), strtoupper($keyword), $keyword)) . "'";
+				$param = "'" . implode("','", array(Session::read('season'), Session::read('username'), Session::read('year'), Session::read('term'), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality), $cno, $cname)) . "'";
 				$data  = DB::getInstance()->query('SELECT * FROM p_kxkcb_sel(' . $param . ')');
 
 				$courses = array();
@@ -287,9 +294,10 @@ class CourseController extends Controller {
 	/**
 	 * 选课申请
 	 * @param string $type 课程类型
+	 * @param string $cno 课程序号
 	 * @return NULL
 	 */
-	protected function apply($type) {
+	protected function apply($type, $cno) {
 		if (isPost()) {
 			if (RETAKE == $type) {
 				$data['ynd']   = $_POST['lyear'];
@@ -300,12 +308,12 @@ class CourseController extends Controller {
 			$data['xm']   = Session::read('name');
 			$data['nd']   = Session::read('year');
 			$data['xq']   = Session::read('term');
-			$data['kcxh'] = $_POST['cno'];
+			$data['kcxh'] = $cno;
 			$data['sj']   = date('Y-m-d H:i:s');
 			$data['xkbz'] = ENABLE;
 
 			$sql          = 'SELECT kch, kkxy FROM v_xk_kxkcxx WHERE kcxh = ? AND nd = ? AND xq = ?';
-			$course       = DB::getInstance()->getRow($sql, array($_POST['cno'], Session::read('year'), Session::read('term')));
+			$course       = DB::getInstance()->getRow($sql, array($cno, Session::read('year'), Session::read('term')));
 			$data['kch']  = $course['kch'];
 			$data['kkxy'] = $course['kkxy'];
 			DB::getInstance()->insertRecord('t_xk_xksq', $data);
@@ -315,7 +323,7 @@ class CourseController extends Controller {
 			echo 'success';
 		}
 
-		return $this->view->display('course.apply', array('type' => $type, 'title' => $this->codes[$type['name']]));
+		return $this->view->display('course.apply', array('type' => $type, 'cno' => $cno, 'title' => $this->codes[$type]['name']));
 	}
 
 	/**
