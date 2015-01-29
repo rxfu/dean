@@ -90,7 +90,10 @@
                                 <a href="#"><i class="fa fa-calendar fa-fw"></i> 课表管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="<?php echo toLink('schedule.index') ?>">已选课程表</a>
+                                        <a href="<?php echo toLink('schedule.timetable') ?>">课程表</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo toLink('schedule.index') ?>">已选课程列表</a>
                                     </li>
                                     <li>
                                         <a href="<?php echo toLink('schedule.speciality') ?>">本学期专业课程表</a>

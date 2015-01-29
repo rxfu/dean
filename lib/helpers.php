@@ -185,7 +185,6 @@ if (!function_exists('error')) {
 	 * @return NULL
 	 */
 	function error($code, $message, $file, $line) {
-		header("Content-type:text/html;charset=utf-8");
 		switch ($code) {
 			case E_USER_ERROR:
 				echo '<b>ERROR</b>: [' . $code . '] ' . $message . '<br />' . PHP_EOL;

@@ -37,7 +37,7 @@ class ScheduleController extends Controller {
 	 */
 	protected function timetable() {
 		$sql  = 'SELECT * FROM v_xk_xskcb WHERE nd = ? AND xq = ? AND xh = ? ORDER BY ksj, zc';
-		$data = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term')));
+		$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('username')));
 
 		$courses = array_fill(1, 12, array_fill(1, 7, '&nbsp;'));
 		foreach ($data as $course) {
