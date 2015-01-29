@@ -165,11 +165,14 @@ BEGIN
     RETURN FALSE;
   END IF;
 
-  EXECUTE format('UPDATE %I SET rs = rs + 1 WHERE kcxh = %L', 't_xk_tj', i_cno);
-  GET DIAGNOSTICS n_count = ROW_COUNT;
-  IF 0 >= n_count THEN
-    RAISE EXCEPTION 'Update FAILED!';
-    RETURN FALSE;
+  PERFORM 1 FROM t_xk_tj WHERE kcxh = i_cno;
+  IF FOUND THEN
+    EXECUTE format('UPDATE %I SET rs = rs + 1 WHERE kcxh = %L', 't_xk_tj', i_cno);
+    GET DIAGNOSTICS n_count = ROW_COUNT;
+    IF 0 >= n_count THEN
+      RAISE EXCEPTION 'Update FAILED!';
+      RETURN FALSE;
+    END IF;
   END IF;
 
   RETURN TRUE;
@@ -204,6 +207,40 @@ BEGIN
   IF 0 >= n_count THEN
     RAISE EXCEPTION 'Update FAILED!';
     RETURN FALSE;
+  END IF;
+
+  RETURN TRUE;
+END$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION p_scxk_del(text, text, text, text)
+  OWNER TO jwxt;
+COMMENT ON FUNCTION p_scxk_del(text, text, text, text) IS '取消所选课程';CREATE OR REPLACE FUNCTION p_scxk_del(
+    i_year text,
+    i_term text,
+    i_sno text,
+    i_cno text)
+  RETURNS boolean AS
+$BODY$DECLARE
+  c_year TEXT;
+  c_term TEXT;
+  n_count INTEGER;
+BEGIN
+  EXECUTE format('DELETE FROM %I WHERE nd = %L AND xq = %L AND xh = %L AND kcxh = %L', 't_xk_xkxx', i_year, i_term, i_sno, i_cno);
+  GET DIAGNOSTICS n_count = ROW_COUNT;
+  IF 0 >= n_count THEN
+    RAISE EXCEPTION 'Delete FAILED!';
+    RETURN FALSE;
+  END IF;
+
+  PERFORM 1 FROM t_xk_tj WHERE kcxh = i_cno;
+  IF FOUND THEN
+    EXECUTE format('UPDATE %I SET rs = rs - 1 WHERE kcxh = %L', 't_xk_tj', i_cno);
+    GET DIAGNOSTICS n_count = ROW_COUNT;
+    IF 0 >= n_count THEN
+      RAISE EXCEPTION 'Update FAILED!';
+      RETURN FALSE;
+    END IF;
   END IF;
 
   RETURN TRUE;
