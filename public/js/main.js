@@ -148,27 +148,9 @@ $(document).ready(function() {
 			}
 		});
 	});
-	$(':submit[name^="retake"]').click(function(e) {
-		e.preventDefault();
-		var form = $(this).closest('form');
-		var course = $(this).val();
-		var cno = $(this).attr('name');
-		$.ajax({
-			type: "post",
-			url: form.prop("action"),
-			data: {
-				"course": course
-			},
-			success: function(data) {
-				$(':submit[name="retake' + cno + '"]').prop('disabled');
-				$('td#' + course).text('待审核');
-			}
-		});
-	});
 	$(':input[name^="ratio"]').change(function() {
 		var form = $(this).closest('form');
 		var sno = $(this).closest('tr').attr('data-row');
-		var mode = $(this).attr('name');
 		$.ajax({
 			type: "post",
 			url: form.prop("action"),
@@ -176,8 +158,7 @@ $(document).ready(function() {
 				"sno": sno,
 				"mode": mode,
 				"score": $(this).val(),
-				"grade": $(this).attr('data-mode'),
-				"name": $(this).attr('data-name')
+				"grade": $(this).attr('data-mode')
 			},
 			success: function(data) {
 				$('tr[data-row="' + sno + '"] > td[data-name="total"]').text(data);

@@ -35,7 +35,7 @@
                                                 <?php foreach($ratios['mode'] as $key => $value): ?>
                                                     <td>
                                                         <form method="post" action="<?php echo toLink('report.enter', $info['kcxh']) ?>" role="form">
-                                                            <input type="text" name="ratio<?php echo $key ?>" value="<?php echo $score['cj' . $key] ?>" data-mode="<?php echo $grade ?>" data-name="<?php echo urlencode($value['idm']) ?>">
+                                                            <input type="text" name="ratio<?php echo $key ?>" value="<?php echo $score['cj' . $key] ?>" data-mode="<?php echo $grade ?>">
                                                         </form>
                                                     </td>
                                                 <?php endforeach; ?>

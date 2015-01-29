@@ -41,7 +41,18 @@ class PlanController extends Controller {
 	 * @return array         毕业要求的学分数组
 	 */
 	protected function graduation() {
-		$data         = false;
+		$data = array(
+			'TB' => 0,
+			'KB' => 0,
+			'JB' => 0,
+			'SB' => 0,
+			'TW' => 0,
+			'TI' => 0,
+			'TY' => 0,
+			'TQ' => 0,
+			'KX' => 0,
+			'JX' => 0,
+		);
 		$requirements = DB::getInstance()->searchRecord('t_jx_byyq', array('zy' => Session::read('spno'), 'nj' => Session::read('grade'), 'zsjj' => Session::read('season'), 'byfa' => Session::read('plan')));
 
 		if (is_array($requirements)) {

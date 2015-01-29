@@ -26,34 +26,6 @@ ALTER TABLE v_xk_kcxx
 COMMENT ON VIEW v_xk_kcxx
   IS '课程基本信息视图';
 
-学生成绩单：
-CREATE OR REPLACE VIEW v_cj_xscj AS 
- SELECT a.xh,
-    a.xm,
-    a.nd,
-    a.xq,
-    a.kch,
-    b.kcmc,
-    b.kcywmc,
-    a.cj,
-    a.xf,
-    a.jd,
-    c.mc AS pt,
-    d.mc AS xz,
-    e.mc AS kh,
-    a.kszt
-   FROM t_cj_zxscj a
-     LEFT JOIN t_jx_kc b ON b.kch::text = a.kch::text
-     LEFT JOIN t_zd_pt c ON c.dm::text = a.pt::text
-     LEFT JOIN t_zd_xz d ON d.dm::text = a.kcxz::text
-     LEFT JOIN t_zd_khfs e ON e.dm::text = a.kh::text;
-
-ALTER TABLE v_cj_xscj
-  OWNER TO jwxt;
-COMMENT ON VIEW v_cj_xscj
-  IS '学生成绩单视图';
-
-
 学生已选课程表：
 CREATE OR REPLACE VIEW v_xk_xskcb AS 
  SELECT a.xh,
@@ -422,12 +394,40 @@ GRANT ALL ON TABLE v_cj_cjfs TO kongsir;
 COMMENT ON VIEW v_cj_cjfs
   IS '成绩方式信息视图';
 
-学生成绩详单：
-CREATE OR REPLACE VIEW v_cj_xslscj AS 
+学生成绩单：
+CREATE OR REPLACE VIEW v_cj_xscj AS 
  SELECT a.xh,
     a.xm,
     a.nd,
     a.xq,
+    a.kch,
+    b.kcmc,
+    b.kcywmc,
+    a.cj,
+    a.xf,
+    a.jd,
+    c.mc AS pt,
+    d.mc AS xz,
+    e.mc AS kh,
+    a.kszt
+   FROM t_cj_zxscj a
+     LEFT JOIN t_jx_kc b ON b.kch::text = a.kch::text
+     LEFT JOIN t_zd_pt c ON c.dm::text = a.pt::text
+     LEFT JOIN t_zd_xz d ON d.dm::text = a.kcxz::text
+     LEFT JOIN t_zd_khfs e ON e.dm::text = a.kh::text;
+
+ALTER TABLE v_cj_xscj
+  OWNER TO jwxt;
+COMMENT ON VIEW v_cj_xscj
+  IS '学生成绩单视图';
+
+学生成绩详单：
+CREATE OR REPLACE VIEW v_cj_xsgccj AS 
+ SELECT a.xh,
+    a.xm,
+    a.nd,
+    a.xq,
+    a.kcxh,
     b.kch,
     c.kcmc,
     c.kcywmc,
@@ -442,6 +442,7 @@ CREATE OR REPLACE VIEW v_cj_xslscj AS
     e.mc AS xz,
     a.xl,
     f.mc AS kh,
+    b.cjfs,
     a.kszt,
     a.zy,
     a.tjzt,
@@ -453,7 +454,7 @@ CREATE OR REPLACE VIEW v_cj_xslscj AS
      LEFT JOIN t_zd_xz e ON e.dm::text = a.kcxz::text
      LEFT JOIN t_zd_khfs f ON f.dm::text = a.kh::text;
 
-ALTER TABLE v_cj_xslscj
+ALTER TABLE v_cj_xsgccj
   OWNER TO jwxt;
-COMMENT ON VIEW v_cj_xslscj
+COMMENT ON VIEW v_cj_xsgccj
   IS '学生成绩详细信息视图';

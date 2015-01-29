@@ -23,7 +23,7 @@ class ReportController extends Controller {
 	 * @return array       学生成绩
 	 */
 	protected function detail($cno) {
-		$data = DB::getInstance()->searchRecord('v_cj_lscj', array('xh' => Session::read('username'), 'nd' => $year, 'xq' => $term));
+		$data = DB::getInstance()->searchRecord('v_cj_xsgccj', array('xh' => Session::read('username'), 'nd' => $year, 'xq' => $term));
 
 		return $this->view->display('report.term', array('scores' => $data, 'year' => $year, 'term' => $term));
 	}
@@ -32,20 +32,26 @@ class ReportController extends Controller {
 	 * 列出当前学生未确认成绩表
 	 * @return void
 	 */
-	protected function unconfirmed($cno) {
-		$data = DB::getInstance()->searchRecord('v_cj_lscj', array('nd' => Session::read('year'), 'xq' => Session::read('term'), 'xh' => Session::read('username'), 'tjzt' => COLLEGE_CONFIRMED));
+	protected function unconfirmed() {
+		$sql  = 'SELECT * FROM v_cj_xsgccj WHERE nd = ? AND xq = ? AND xh = ? AND tjzt = ? ORDER BY kcxh';
+		$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('username'), COLLEGE_CONFIRMED));
 
-		return $this->view->display('report.unconfirmed', array('scores' => $data));
+		$ratios = array();
+		foreach ($data as $score) {
+			$scores[$score['cjfs']]['ratios']   = $this->ratio($score['cjfs']);
+			$scores[$score['cjfs']]['courses'][] = $score;
+		}
+		return $this->view->display('report.unconfirmed', array('scores' => $scores));
 	}
 
 	/**
 	 * 获取成绩方式对应的组合
-	 * @param  string $cno 课程序号
+	 * @param  string $grade 成绩方式代码
 	 * @return array      成绩方式组合，没有返回FALSE
 	 */
-	protected function ratio($cno) {
-		$sql   = 'SELECT * FROM t_jx_cjfs WHERE nd = ? AND xq = ? AND kcxh = ?';
-		$modes = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), $cno));
+	protected function ratio($grade) {
+		$sql   = 'SELECT * FROM t_jx_cjfs WHERE nd = ? AND xq = ? AND cjfs = ?';
+		$modes = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), $grade));
 		if (is_array($modes)) {
 			$ratios = array();
 			foreach ($modes as $mode) {
@@ -65,10 +71,12 @@ class ReportController extends Controller {
 	 * @return array          学生成绩
 	 */
 	protected function input($cno) {
-		$ratios = $this->ratio($cno);
-
-		$sql  = 'SELECT * FROM t_cj_lscj WHERE nd = ? AND xq = ? AND kcxh = ? ORDER BY xh';
+		$sql  = 'SELECT * FROM t_cj_xscjlr WHERE nd = ? AND xq = ? AND kcxh = ? ORDER BY xh';
 		$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), $cno));
+		$ratios = $this->ratio($data[0]['cjfs']);
+
+		Session::write('mode', $data[0]['cjfs']);
+		Session::write('major_grade', max(array_keys($ratios['mode'])));
 
 		return $this->view->display('report.input', array('info' => $course, 'scores' => $data, 'ratios' => $ratios, 'grade' => $course['cjfs']));
 	}
@@ -83,9 +91,8 @@ class ReportController extends Controller {
 			$sno      = $_POST['sno'];
 			$mode     = substr($_POST['mode'], 5);
 			$score    = $_POST['score'];
-			$modeName = urldecode($_POST['name']);
 
-			$ratios = $this->ratio($cno);
+			$ratios = $this->ratio(Session::read('mode'));
 			$fields = array();
 			foreach (array_keys($ratios['mode']) as $key) {
 				$fields[] = 'cj' . $key;
@@ -93,10 +100,10 @@ class ReportController extends Controller {
 			$field = empty($fields) ? '*' : array_to_field($fields);
 
 			// 计算总评成绩
-			$sql                  = 'SELECT ' . $field . ' FROM t_cj_lscj WHERE nd = ? AND xq = ? AND kcxh = ? AND xh = ?';
+			$sql                  = 'SELECT ' . $field . ' FROM t_cj_web WHERE nd = ? AND xq = ? AND kcxh = ? AND xh = ? AND tjzt = 0';
 			$grades               = DB::getInstance()->getRow($sql, array(Session::read('year'), Session::read('term'), $cno, $sno));
 			$grades['cj' . $mode] = $score;
-			if (MAJORGRADE == $modeName && PASSLINE > $score) {
+			if (Session::read('major_grade') == $mode && PASSLINE > $score) {
 				$total = $grades['cj' . $mode];
 			} else {
 				$total = 0;
@@ -106,10 +113,10 @@ class ReportController extends Controller {
 				$total = round($total);
 			}
 
-			// 更新临时成绩表
-			$updated = DB::getInstance()->updateRecord('t_cj_lscj', array('cj' . $mode => $score, 'zpcj' => $total), array('nd' => $item['nd'], 'xq' => $item['xq'], 'xh' => $sno, 'kcxh' => $cno));
+			// 更新WEB成绩表
+			$updated = DB::getInstance()->updateRecord('t_cj_web', array('cj' . $mode => $score, 'zpcj' => $total), array('nd' => Session::read('year'), 'xq' => Session::read('term'), 'xh' => $sno, 'kcxh' => $cno));
 			if ($updated) {
-				$data  = DB::getInstance()->searchRecord('t_cj_lscj', array('nd' => Session::read('year'), Session::read('term'), 'kcxh' => $cno, 'xh' => $sno), array('zpcj'));
+				$data  = DB::getInstance()->searchRecord('t_cj_web', array('nd' => Session::read('year'), Session::read('term'), 'kcxh' => $cno, 'xh' => $sno), array('zpcj'));
 				$total = $data[0]['zpcj'];
 			}
 
@@ -122,13 +129,22 @@ class ReportController extends Controller {
 	}
 
 	/**
+	 * 确认成绩
+	 * @param  string $cno 课程序号
+	 * @return boolean      确认成功为TRUE，否则为FALSE
+	 */
+	protected function confirm($cno) {
+		DB::getInstance()->updateRecord('t_cj_web', array('tjzt' => DISABLE), array('nd' => Session::read('year'), 'xq' => Session::read('term'), 'kcxh' => $cno));
+	}
+
+	/**
 	 * 按年度按学期列出成绩单
 	 * @param  string $year 年度
 	 * @param  string $term 学期
 	 * @return array       成绩单列表
 	 */
 	protected function summary($year, $term) {
-		$sql  = 'SELECT DISTINCT kcxh, kcmc FROM v_cj_xscjxx WHERE nd = ? AND xq = ? AND jsgh = ?';
+		$sql  = 'SELECT DISTINCT kcxh, kcmc FROM v_cj_xsgccj WHERE nd = ? AND xq = ? AND jsgh = ?';
 		$data = DB::getInstance()->getAll($sql, array($year, $term, Session::read('username')));
 
 		return $this->view->display('report.summary', array('courses' => $data, 'year' => $year, 'term' => $term));
@@ -145,7 +161,7 @@ class ReportController extends Controller {
 		$sql  = 'SELECT kcxh, kcmc, kkxy, nj, zy FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND kcxh = ?';
 		$info = DB::getInstance()->getRow($sql, array($year, $term, $cno));
 
-		$sql    = 'SELECT * FROM v_cj_xslscj WHERE nd = ? AND xq = ? AND kcxh = ? ORDER BY xh';
+		$sql    = 'SELECT * FROM v_cj_xsgccj WHERE nd = ? AND xq = ? AND kcxh = ? ORDER BY xh';
 		$data   = DB::getInstance()->getAll($sql, array($year, $term, $cno));
 		$ratios = is_array($data) ? $this->ratio($data[0]['cjfs']) : array();
 		return $this->view->display('report.score', array('info' => $info, 'scores' => $data, 'ratios' => $ratios));

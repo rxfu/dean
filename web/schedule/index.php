@@ -14,7 +14,7 @@
                                     <table class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th class="active">课程号</th>
+                                                <th class="active">课程代码</th>
                                                 <th class="active">课程名称</th>
                                                 <th class="active">课程英文名称</th>
                                                 <th class="active">学分</th>
@@ -28,7 +28,7 @@
                                             <?php foreach ($courses as $course): ?>
                                                 <tr>
                                                     <?php $rowspan = count($course) ?>
-                                                    <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kch'] ?></td>
+                                                    <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kcxh'] ?></td>
                                                     <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kcmc'] ?></td>
                                                     <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kcywmc'] ?></td>
                                                     <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['xf'] ?></td>
