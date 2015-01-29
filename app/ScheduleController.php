@@ -52,10 +52,9 @@ class ScheduleController extends Controller {
 			$endClass = $course['jsj'];
 			$week     = $course['zc'];
 
-			if (is_array($courses[$begClass][$week]) && in_array($course['kcxh'], array_column($courses[$begClass][$week], 'kcxh'))) {
-				continue;
+			if ('&nbsp;' == $courses[$begClass][$week]) {
+				$courses[$begClass][$week] = array();
 			}
-
 			$courses[$begClass][$week][] = array(
 				'kcxh'   => $course['kcxh'],
 				'kcmc'   => $course['kcmc'],
@@ -74,6 +73,6 @@ class ScheduleController extends Controller {
 				$courses[$i][$week] = null;
 			}
 		}
-		return $this->view->display('schedule.index', array('courses' => $courses));
+		return $this->view->display('schedule.timetable', array('courses' => $courses));
 	}
 }
