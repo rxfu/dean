@@ -26,18 +26,31 @@
                                         </thead>
                                         <tbody>
                                             <?php foreach ($courses as $course): ?>
-                                            <tr>
-                                                <td><?php echo $course['kch'] ?></td>
-                                                <td><?php echo $course['kcmc'] ?></td>
-                                                <td><?php echo $course['kcywmc'] ?></td>
-                                                <td><?php echo $course['xf'] ?></td>
-                                                <td><?php echo $course['xqh'] ?></td>
-                                                <td>第 <?php echo $course['ksz'] ?>~<?php echo $course['jsz'] ?> 周<?php echo weekend($course['zc']) ?>
-                                                                第 <?php echo $course['ksj'] ?>
-                                                                <?php echo $course['jsj'] <= $course['ksj'] ? '' : '~' . $course['jsj'] ?> 节</td>
-                                                <td><?php echo $course['jsmc'] ?></td>
-                                                <td><?php echo $course['jsxm'] ?></td>
-                                            </tr>
+                                                <tr>
+                                                    <?php $rowspan = count($course) ?>
+                                                    <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kch'] ?></td>
+                                                    <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kcmc'] ?></td>
+                                                    <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kcywmc'] ?></td>
+                                                    <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['xf'] ?></td>
+                                                    <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['xqh'] ?></td>
+                                                    <td>第 <?php echo $course[0]['ksz'] ?>~<?php echo $course[0]['jsz'] ?> 周<?php echo weekend($course[0]['zc']) ?>
+                                                                    第 <?php echo $course[0]['ksj'] ?>
+                                                                    <?php echo $course[0]['jsj'] <= $course[0]['ksj'] ? '' : '~' . $course[0]['jsj'] ?> 节</td>
+                                                    <td><?php echo $course[0]['jsmc'] ?></td>
+                                                    <td><?php echo $course[0]['jsxm'] ?></td>
+                                                </tr>                                            
+                                                <?php for($i = 1; $i < $rowspan; ++$i): ?>
+                                                    <tr>
+                                                        <?php for($j = 0; $j < 5; ++$j): ?>
+                                                            <td style="display: none"></td>
+                                                        <?php endfor; ?>
+                                                        <td>第 <?php echo $course[$i]['ksz'] ?>~<?php echo $course[$i]['jsz'] ?> 周<?php echo weekend($course[$i]['zc']) ?>
+                                                                        第 <?php echo $course[$i]['ksj'] ?>
+                                                                        <?php echo $course[$i]['jsj'] <= $course[$i]['ksj'] ? '' : '~' . $course[$i]['jsj'] ?> 节</td>
+                                                        <td><?php echo $course[$i]['jsmc'] ?></td>
+                                                        <td><?php echo $course[$i]['jsxm'] ?></td>
+                                                    </tr>
+                                                <?php endfor; ?>
                                             <?php endforeach; ?>
                                         </tbody>
                                     </table>

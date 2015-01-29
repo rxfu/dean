@@ -39,10 +39,8 @@ class StudentController extends Controller {
 				Session::write('system', $info['xz']);
 				Session::write('campus', $info['xqh']);
 
-				$electTerm = Configuration::get('XK_SJ');
-				$term      = parseTerm($electTerm);
-				Session::write('year', $term['year']);
-				Session::write('term', $term['term']);
+				Session::write('year', Configuration::get('XK_ND'));
+				Session::write('term', Configuration::get('XK_XQ'));
 
 				Session::write('role', STUDENT);
 

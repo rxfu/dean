@@ -26,10 +26,8 @@ class TeacherController extends Controller {
 				Session::write('college', $info['xy']);
 				Session::write('speciality', $info['zy']);
 
-				$electTerm = Configuration::get('CJ_WEBSJ');
-				$term      = parseTerm($electTerm);
-				Session::write('year', $term['year']);
-				Session::write('term', $term['term']);
+				Session::write('year', Configuration::get('CJ_WEB_ND'););
+				Session::write('term', Configuration::get('CJ_WEB_ND'););
 
 				Session::write('role', TEACHER);
 
