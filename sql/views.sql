@@ -106,7 +106,9 @@ CREATE OR REPLACE VIEW v_xk_xsxx AS
 ALTER TABLE v_xk_xsxx
   OWNER TO jwxt;
 COMMENT ON VIEW v_xk_xsxx
-  IS '学生详细信息视图';CREATE OR REPLACE VIEW v_xk_xsxx AS 
+  IS '学生详细信息视图';
+
+CREATE OR REPLACE VIEW v_xk_xsxx AS 
  SELECT a.xh,
     a.xm,
     a.cym,
