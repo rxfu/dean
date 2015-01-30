@@ -76,10 +76,10 @@
                                             <li>
                                                 <a href="<?php echo toLink('course.index', SPECIAL) ?>">其他专项</a>
                                             </li>
-                                            <li>
-                                                <a href="<?php echo toLink('course.search', OTHERS) ?>">其他课程</a>
-                                            </li>
                                         </ul>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo toLink('course.search', OTHERS) ?>">其他课程</a>
                                     </li>
                                     <li>
                                         <a href="<?php echo toLink('course.search', RETAKE) ?>">重修课程</a>
