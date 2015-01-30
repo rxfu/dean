@@ -59,7 +59,7 @@ BEGIN
     , CASE WHEN i_cname IS NOT NULL THEN 'kcmc LIKE $6' END
     );
 
-  FOR course_rec IN EXECUTE format(c_query, 'v_xk_kxkcxx', i_season, i_year, i_term) USING i_platform, i_property, i_grade, i_speciality, i_cno || '%', i_cname || '%' LOOP
+  FOR course_rec IN EXECUTE format(c_query, 'v_xk_kxkcxx', i_season, i_year, i_term) USING i_platform, i_property, i_grade, i_speciality, '%' || i_cno || '%', '%' || i_cname || '%' LOOP
     course_kcb.kch := course_rec.kch;
     course_kcb.kcxh := course_rec.kcxh;
     course_kcb.kcmc := course_rec.kcmc;

@@ -84,6 +84,9 @@
                                     <li>
                                         <a href="<?php echo toLink('course.search', RETAKE) ?>">重修课程</a>
                                     </li>
+                                    <li>
+                                        <a href="<?php echo toLink('course.process') ?>">课程申请进度</a>
+                                    </li>
                                 </ul>
                             </li>
                             <li>

@@ -213,7 +213,7 @@ class CourseController extends Controller {
 			$type    = $_POST['type'];
 
 			if ('true' == $checked) {
-				if ($this->full($cno)) {
+				if ($this->isFull($cno)) {
 					echo 'full';
 					return 'full';
 				}
@@ -247,7 +247,7 @@ class CourseController extends Controller {
 	 * @param  string $course 课程序号
 	 * @return mixed 冲突为冲突课程序号数组，否则为FALSE
 	 */
-	protected function check($course) {
+	protected function isClash($course) {
 		if (isPost()) {
 			$collision = false;
 
@@ -278,7 +278,7 @@ class CourseController extends Controller {
 	 * @param  string $course 课程序号
 	 * @return boolean         人数已满为TRUE，未满为FALSE
 	 */
-	protected function full($course) {
+	protected function isFull($course) {
 		$sql  = 'SELECT jhrs, rs FROM t_xk_tj WHERE kcxh = ?';
 		$data = DB::getInstance()->getRow($sql, $course);
 
@@ -297,26 +297,41 @@ class CourseController extends Controller {
 				$data['ynd']   = $_POST['lyear'];
 				$data['yxq']   = $_POST['lterm'];
 				$data['ykcxh'] = $_POST['lcno'];
+				$data['xklx']  = APPLY_RETAKE;
+			} elseif (OTHERS == $type) {
+				$data['xklx'] = APPLY_OTHERS;
 			}
 			$data['xh']   = Session::read('username');
 			$data['xm']   = Session::read('name');
 			$data['nd']   = Session::read('year');
 			$data['xq']   = Session::read('term');
 			$data['kcxh'] = $cno;
-			$data['sj']   = date('Y-m-d H:i:s');
-			$data['xkbz'] = ENABLE;
+			$data['xksj'] = date('Y-m-d H:i:s');
 
-			$sql          = 'SELECT kch, kkxy FROM v_xk_kxkcxx WHERE kcxh = ? AND nd = ? AND xq = ?';
+			$sql          = 'SELECT kch, pt, xz, kkxy FROM v_xk_kxkcxx WHERE kcxh = ? AND nd = ? AND xq = ?';
 			$course       = DB::getInstance()->getRow($sql, array($cno, Session::read('year'), Session::read('term')));
 			$data['kch']  = $course['kch'];
+			$data['pt']   = $course['pt'];
+			$data['xz']   = $course['xz'];
 			$data['kkxy'] = $course['kkxy'];
 			DB::getInstance()->insertRecord('t_xk_xksq', $data);
 
 			Logger::write(array('xh' => Session::read('username'), 'kcxh' => $data['kcxh'], 'czlx' => LOG_APPLY));
 
-			echo 'success';
+			return Redirect::to('course.process');
 		}
 
+		if (RETAKE == $type) {
+			$sql    = 'SELECT DISTINCT nd FROM t_xk_xkxx WHERE xh = ?';
+			$lyears = DB::getInstance()->getAll($sql, array(Session::read('username')));
+
+			$lterms = Dictionary::getAll('xq');
+
+			$sql   = 'SELECT DISTINCT kcxh, kcmc FROM v_xk_xskcb WHERE xh = ? ORDER BY kcxh';
+			$lcnos = DB::getInstance()->getAll($sql, array(Session::read('username')));
+
+			return $this->view->display('course.apply', array('type' => $type, 'cno' => $cno, 'title' => $this->codes[$type]['name'], 'lyears' => $lyears, 'lterms' => $lterms, 'lcnos' => $lcnos));
+		}
 		return $this->view->display('course.apply', array('type' => $type, 'cno' => $cno, 'title' => $this->codes[$type]['name']));
 	}
 

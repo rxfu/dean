@@ -82,33 +82,6 @@ COMMENT ON VIEW v_xk_xsjbxx
 
 学生详细信息：
 CREATE OR REPLACE VIEW v_xk_xsxx AS 
- SELECT a.xh, a.xm, a.cym, a.xmpy, b.mc AS xb, a.csny, c.mc AS mz, d.mc AS gj, e.mc AS xy, f.mc AS xs, g.mc AS zy, a.zyfs, h.mc AS zy2, i.mc AS fxzy, a.bj, a.xz, j.mc AS xjzt, k.mc AS zylb, a.rxrq, l.mc AS rxfs, r.mc AS bxxs, m.mc AS bxlx, s.mc AS xxxs, n.mc AS zsjj, o.mc AS syd, a.jg, a.csd, p.mc AS zzmm, a.jrrq, a.tc, a.zxmc, a.jzxm, a.yzbm, a.jtdz, a.lxdh, q.mc AS zjlx, a.sfzh, a.nj, a.sfldm, a.zxwyyz, a.zxwyjb, a.jsjdj, a.bz, a.zp, a.byfa, a.hcdz, a.ksh
-   FROM t_xs_zxs a
-   LEFT JOIN t_zd_xb b ON a.xbdm = b.dm
-   LEFT JOIN t_zd_mz c ON a.mzdm = c.dm
-   LEFT JOIN t_zd_gj d ON a.gj = d.dm
-   LEFT JOIN t_xt_department e ON a.xy = e.dw
-   LEFT JOIN t_zd_xsh f ON a.xsh = f.dm
-   LEFT JOIN t_jx_zy g ON a.zy = g.zy
-   LEFT JOIN t_jx_zy h ON a.zy2 = h.zy
-   LEFT JOIN t_jx_zy i ON a.fxzy = i.zy
-   LEFT JOIN t_zd_xjzt j ON a.xjzt = j.dm::bpchar
-   LEFT JOIN t_zd_zylb k ON a.zylb = k.dm
-   LEFT JOIN t_zd_rxfs l ON a.rxfs = l.dm
-   LEFT JOIN t_zd_bxlx m ON a.bxlx = m.dm
-   LEFT JOIN t_zd_zsjj n ON a.zsjj = n.dm
-   LEFT JOIN t_zd_syszd o ON a.syszd = o.dm::bpchar
-   LEFT JOIN t_zd_zzmm p ON a.zzmm = p.dm
-   LEFT JOIN t_zd_zjlx q ON a.zjlx = q.dm
-   LEFT JOIN t_zd_bxxs r ON a.bxxs = r.dm
-   LEFT JOIN t_zd_xxxs s ON a.xxxs = s.dm;
-
-ALTER TABLE v_xk_xsxx
-  OWNER TO jwxt;
-COMMENT ON VIEW v_xk_xsxx
-  IS '学生详细信息视图';
-
-CREATE OR REPLACE VIEW v_xk_xsxx AS 
  SELECT a.xh,
     a.xm,
     a.cym,
@@ -168,13 +141,13 @@ CREATE OR REPLACE VIEW v_xk_xsxx AS
      LEFT JOIN t_zd_xjzt j ON a.xjzt::bpchar = j.dm::bpchar
      LEFT JOIN t_zd_zylb k ON a.zylb::text = k.dm::text
      LEFT JOIN t_zd_rxfs l ON a.rxfs::text = l.dm::text
-     LEFT JOIN t_zd_bxxs m ON a.bxxs::text = r.dm::text
-     LEFT JOIN t_zd_bxlx n ON a.bxlx::text = m.dm::text
-     LEFT JOIN t_zd_xxxs o ON a.xxxs::text = s.dm::text
-     LEFT JOIN t_zd_zsjj p ON a.zsjj::text = n.dm::text
-     LEFT JOIN t_zd_syszd q ON a.syszd::bpchar = o.dm::bpchar
-     LEFT JOIN t_zd_zzmm r ON a.zzmm::text = p.dm::text
-     LEFT JOIN t_zd_zjlx s ON a.zjlx::text = q.dm::text;
+     LEFT JOIN t_zd_bxxs m ON a.bxxs::text = m.dm::text
+     LEFT JOIN t_zd_bxlx n ON a.bxlx::text = n.dm::text
+     LEFT JOIN t_zd_xxxs o ON a.xxxs::text = o.dm::text
+     LEFT JOIN t_zd_zsjj p ON a.zsjj::text = p.dm::text
+     LEFT JOIN t_zd_syszd q ON a.syszd::bpchar = q.dm::bpchar
+     LEFT JOIN t_zd_zzmm r ON a.zzmm::text = r.dm::text
+     LEFT JOIN t_zd_zjlx s ON a.zjlx::text = s.dm::text;
 
 ALTER TABLE v_xk_xsxx
   OWNER TO jwxt;

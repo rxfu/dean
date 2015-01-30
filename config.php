@@ -113,7 +113,7 @@ define('TEACHER', 'teacher');
 /**
  * 审核状态代码
  */
-define('UNAUDITED', '0');
+define('UNAUDITTED', '0');
 define('PASSED', '1');
 define('REFUSED', '2');
 
@@ -129,3 +129,9 @@ define('ART', 'as');
 define('SPECIAL', 'os');
 define('OTHERS', 'others');
 define('RETAKE', 'retake');
+
+/**
+ * 课程申请类型代码
+ */
+define('APPLY_OTHERS', '0');
+define('APPLY_RETAKE', '1');

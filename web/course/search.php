@@ -88,6 +88,9 @@
                                                                             <td><?php echo $course[$i]['ksj'] ?><?php echo $course[$i]['jsj'] <= $course[$i]['ksj'] ? '' : '~' . $course[$i]['jsj'] ?></td>
                                                                             <td><?php echo Dictionary::get('xqh', $course[$i]['xqh']) ?></td>
                                                                             <td><?php echo $course[$i]['jsxm'] ?></td>
+                                                                            <?php for($j = 0; $j < 2; ++$j): ?>
+                                                                                <td style="display: none"></td>
+                                                                            <?php endfor; ?>
                                                                         </tr>
                                                                     <?php endfor; ?>
                                                                 <?php endforeach; ?>

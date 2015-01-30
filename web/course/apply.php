@@ -10,35 +10,42 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <form action="<?php echo toLink('course.apply', $type, $cno) ?>" class="form-horizontal">
+                                <form method="post" action="<?php echo toLink('course.apply', $type, $cno) ?>" class="form-horizontal">
                                     <div class="form-group">
                                         <label for="cno" class="col-md-2">课程序号</label>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <input type="text" class="form-control" id="cno" name="cno" placeholde="课程序号" value="<?php echo $cno ?>" disabled>
                                         </div>
                                     </div>
                                     <?php if (RETAKE == $type): ?>
                                         <div class="form-group">
                                             <label for="lyear" class="col-md-2">原年度</label>
-                                            <div class="col-md-6">
-                                                <input type="text" class="form-control" id="lyear" name="lyear" placeholder="原年度">
+                                            <div class="col-md-4">
+                                                <select name="lyear" id="lyear" class="form-control">
+                                                    <?php foreach ($lyears as $lyear): ?>
+                                                        <option value="<?php echo $lyear['nd'] ?>"><?php echo $lyear['nd'] ?> 年度</option>
+                                                    <?php endforeach; ?>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="lterm" class="col-md-2">原学期</label>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <select name="lterm" id="lterm" class="form-control">
-                                                    <?php $terms = Dictionary::getAll('xq'); ?>
-                                                    <?php foreach ($terms as $term): ?>
-                                                        <option value="<?php echo $term['dm'] ?>"><?php echo $term['mc'] ?>学期</option>
+                                                    <?php foreach ($lterms as $lterm): ?>
+                                                        <option value="<?php echo $lterm['dm'] ?>"><?php echo $lterm['mc'] ?>学期</option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="lcno" class="col-md-2">原课程序号</label>
-                                            <div class="col-md-6">
-                                                <input type="text" class="form-control" id="lcno" name="lcno" placeholder="原课程序号">
+                                            <div class="col-md-4">
+                                                <select name="lcno" id="lcno" class="form-control">
+                                                    <?php foreach ($lcnos as $lcno): ?>
+                                                        <option value="<?php echo $lcno['kcxh'] ?>"><?php echo $lcno['kcxh'] ?>-<?php echo $lcno['kcmc'] ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
                                             </div>
                                         </div>
                                     <?php endif; ?>
