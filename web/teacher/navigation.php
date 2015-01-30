@@ -64,9 +64,15 @@
                                 <a href="#"><i class="fa fa-gear fa-fw"></i> 系统管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
+                                        <a href="<?php echo toLink('teacher.profile') ?>">个人资料</a>
+                                    </li>
+                                    <li>
                                         <a href="<?php echo toLink('teacher.password') ?>">修改密码</a>
                                     </li>
                                 </ul>
+                            </li>
+                            <li>
+                                <a href="<?php echo toLink('teacher.logout') ?>"><i class="fa fa-sign-out fa-fw"></i> 登出</a>
                             </li>
                         </ul>
                     </div>

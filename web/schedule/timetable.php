@@ -32,7 +32,7 @@
                                                     <?php endif; ?>
                                                     <th class="active">第<?php echo $i ?>节</th>
                                                     <?php for ($j = 1; $j <= 7; ++$j): ?>
-                                                        <td>
+                                                        <td<?php echo 1 < $courses[$i][$j][0]['jsj'] - $i ? ' rowspan="' . $courses[$i][$j][0]['jsj'] - $i . '"' : '' ?>>
                                                             <?php if (is_array($courses[$i][$j])): ?>
                                                                 <?php foreach ($courses[$i][$j] as $course): ?>
                                                                     <?php echo $course['kcmc'] ?><br>

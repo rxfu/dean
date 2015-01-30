@@ -124,7 +124,7 @@ class CourseController extends Controller {
 		}
 		krsort($courses);
 
-		return $this->view->display('course.index', array('courses' => $courses, 'title' => $this->codes[$type]['name']));
+		return $this->view->display('course.index', array('courses' => $courses, 'title' => $this->codes[$type]['name'], 'type' => $type));
 	}
 
 	/**
@@ -210,41 +210,35 @@ class CourseController extends Controller {
 		if (isPost()) {
 			$cno     = $_POST['course'];
 			$checked = $_POST['checked'];
+			$type    = $_POST['type'];
 
 			if ('true' == $checked) {
 				if ($this->full($cno)) {
 					echo 'full';
 					return 'full';
 				}
-				$param = "'" . implode("','", array(Session::read('username'), $cno)) . "'";
+				$param = "'" . implode("','", array(Session::read('year'), Session::read('term'), Session::read('username'), $cno, Session::read('name'), Session::read('grade'), Session::read('spno'), Session::read('season'))) . "'";
 
 				$selected = DB::getInstance()->query('SELECT p_xzkc_save(' . $param . ')');
-				if (isAjax()) {
-					if ($selected) {
-						Logger::write(array('xh' => Session::read('username'), 'kcxh' => $cno, 'czlx' => LOG_INSERT));
-						echo 'success';
-					} else {
-						echo 'failed';
-					}
+				if ($selected) {
+					Logger::write(array('xh' => Session::read('username'), 'kcxh' => $cno, 'czlx' => LOG_INSERT));
+					echo 'success';
 				} else {
-					return $selected;
+					echo 'failed';
 				}
 			} else {
-				$param = "'" . implode("','", array(Session::read('username'), $cno)) . "'";
+				$param = "'" . implode("','", array(Session::read('year'), Session::read('term'), Session::read('username'), $cno)) . "'";
 
 				$deleted = DB::getInstance()->query('SELECT p_scxk_del(' . $param . ')');
-				if (isAjax()) {
-					if ($deleted) {
-						Logger::write(array('xh' => Session::read('username'), 'kcxh' => $cno, 'czlx' => LOG_DELETE));
-						echo 'success';
-					} else {
-						echo 'failed';
-					}
-					echo $deleted ? 'success' : 'failed';
+				if ($deleted) {
+					Logger::write(array('xh' => Session::read('username'), 'kcxh' => $cno, 'czlx' => LOG_DELETE));
+					echo 'success';
 				} else {
-					return $deleted;
+					echo 'failed';
 				}
 			}
+
+			return Redirect::to('course.index.' . $type);
 		}
 	}
 

@@ -125,29 +125,6 @@ $(document).ready(function() {
 		e.preventDefault();
 		$(this).tab('show');
 	});
-	$('input:checkbox').click(function(e) {
-		var form = $(this).closest('form');
-		var course = $(this).val();
-		$.ajax({
-			type: "post",
-			url: form.prop('action'),
-			data: {
-				'course': course,
-				'checked': (true === $(this).is(':checked')) ? 'true' : 'false'
-			},
-			success: function(data) {
-				var tr = $('tr[data-row="' + course + '"] > td');
-				if ('select-success' == data) {
-					tr.removeClass();
-					tr.addClass('success');
-				}
-				if ('delete-success' == data) {
-					tr.removeClass();
-					tr.addClass('warning');
-				}
-			}
-		});
-	});
 	$(':input[name^="ratio"]').change(function() {
 		var form = $(this).closest('form');
 		var sno = $(this).closest('tr').attr('data-row');
@@ -166,17 +143,24 @@ $(document).ready(function() {
 		});
 	});
 	$('#dialogConfirm').on('show.bs.modal', function(e) {
-		$message = $(e.relatedTarget).attr('data-message');
-		$(this).find('.modal-body p').text($message);
-		$title = $(e.relatedTarget).attr('data-title');
-		$(this).find('.modal-title').text($title);
-		$course = $(e.relatedTarget).attr('data-whatever');
-		$(this).find('.modal-body #course').text($course);
-
 		var form = $(e.relatedTarget).closest('form');
 		$(this).find('.modal-footer #confirm').data('form', form);
+
+		if (true === form.find('input:checkbox').is(':checked')) {
+			$(this).find('modal-title').text('选课确认');
+			$(this).find('.modal-body p').html('即将选择<span id="course" class="text-danger">' + $(e.relatedTarget).attr('data-whatever') + '</span>课程，确认选课？');
+		} else {
+			$(this).find('modal-title').text('退课确认');
+			$(this).find('.modal-body p').html('即将退选<span id="course" class="text-danger">' + $(e.relatedTarget).attr('data-whatever') + '</span>课程，确认退课？');			
+		}
 	});
 	$('#dialogConfirm').find('.modal-footer #confirm').on('click', function() {
+		var checkbox = $(this).data('form').find('input:checkbox');	
+		var checked = (true === checkbox.is(':checked')) ? 'true' : 'false';
+		checkbox.siblings('input:hidden[name="checked"]').val(checked);
 		$(this).data('form').submit();
+	});
+	$('#dialogConfirm').find('.modal-footer #cancel').on('click', function() {
+		window.location.reload();
 	});
 });

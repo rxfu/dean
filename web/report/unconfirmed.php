@@ -20,7 +20,7 @@
                                                     <th class="active">课程代码</th>
                                                     <th class="active">课程名称</th>
                                                     <th class="active">课程英文名称</th>
-                                                    <?php foreach ($score['radios']['mode'] as $ratio): ?>
+                                                    <?php foreach ($score['ratios']['mode'] as $ratio): ?>
                                                         <th class="active"><?php echo $ratio['idm'] ?></th>
                                                     <?php endforeach; ?>
                                                     <th class="active">总评成绩</th>
@@ -31,15 +31,15 @@
                                             <tbody>
                                                 <?php foreach ($score['courses'] as $course): ?>
                                                 <tr>
-                                                    <td><?php echo $score['kcxh'] ?></td>
-                                                    <td><?php echo $score['kcmc'] ?></td>
-                                                    <td><?php echo $score['kcywmc'] ?></td>
-                                                    <?php foreach ($score['radios']['mode'] as $key => $value): ?>
+                                                    <td><?php echo $course['kcxh'] ?></td>
+                                                    <td><?php echo $course['kcmc'] ?></td>
+                                                    <td><?php echo $course['kcywmc'] ?></td>
+                                                    <?php foreach ($score['ratios']['mode'] as $key => $value): ?>
                                                         <td><?php echo $course['cj' . $key] ?></td>
                                                     <?php endforeach; ?>
-                                                    <td><?php echo $score['zpcj'] ?></td>
-                                                    <td><?php echo $score['kh'] ?></td>
-                                                    <td><?php echo $score['kszt'] ?></td>
+                                                    <td><?php echo $course['zpcj'] ?></td>
+                                                    <td><?php echo $course['kh'] ?></td>
+                                                    <td><?php echo $course['kszt'] ?></td>
                                                 </tr>
                                                 <?php endforeach; ?>
                                             </tbody>

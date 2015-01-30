@@ -26,8 +26,8 @@ class TeacherController extends Controller {
 				Session::write('college', $info['xy']);
 				Session::write('speciality', $info['zy']);
 
-				Session::write('year', Configuration::get('CJ_WEB_ND'););
-				Session::write('term', Configuration::get('CJ_WEB_ND'););
+				Session::write('year', Configuration::get('CJ_WEB_ND'));
+				Session::write('term', Configuration::get('CJ_WEB_ND'));
 
 				Session::write('role', TEACHER);
 
@@ -150,7 +150,7 @@ class TeacherController extends Controller {
 	 * @return array     课程数组
 	 */
 	protected function reportCourses($id) {
-		$sql  = 'SELECT kcxh FROM v_pk_kczyxx WHERE jsgh = ? AND nd = ? AND xq = ? GROUP BY kcxh ORDER BY kcxh';
+		$sql  = 'SELECT kcxh FROM v_cj_xscjlr WHERE jsgh = ? AND nd = ? AND xq = ? GROUP BY kcxh ORDER BY kcxh';
 		$data = DB::getInstance()->getAll($sql, array($id, Session::read('year'), Session::read('term')));
 
 		return $data;
@@ -163,7 +163,7 @@ class TeacherController extends Controller {
 	 * @return array     学期数据
 	 */
 	protected function reportTerms($id) {
-		$sql  = 'SELECT nd, xq FROM v_pk_kczyxx WHERE jsgh = ? GROUP BY nd, xq ORDER BY nd DESC, xq DESC';
+		$sql  = 'SELECT nd, xq FROM v_cj_xsgccj WHERE jsgh = ? GROUP BY nd, xq ORDER BY nd DESC, xq DESC';
 		$data = DB::getInstance()->getAll($sql, $id);
 
 		return $data;

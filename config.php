@@ -99,7 +99,8 @@ define('SELECTED', '2');
  * 考试状态代码
  */
 define('PASSLINE', 60);
-define('UNCOMIITED', '0');
+define('UNCOMMITTED', '0');
+define('COMMIT', '1');
 define('COLLEGE_CONFIRMED', '1');
 define('DEAN_CONFIRMED', '2');
 

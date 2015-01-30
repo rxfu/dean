@@ -33,10 +33,11 @@ class ReportController extends Controller {
 	 * @return void
 	 */
 	protected function unconfirmed() {
-		$sql  = 'SELECT * FROM v_cj_xsgccj WHERE nd = ? AND xq = ? AND xh = ? AND tjzt = ? ORDER BY kcxh';
-		$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('username'), COLLEGE_CONFIRMED));
+		$sql  = 'SELECT * FROM v_cj_xsgccj WHERE nd = ? AND xq = ? AND xh = ? ORDER BY kcxh';
+		$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('username')));
 
 		$ratios = array();
+		$scores = array();
 		foreach ($data as $score) {
 			$scores[$score['cjfs']]['ratios']   = $this->ratio($score['cjfs']);
 			$scores[$score['cjfs']]['courses'][] = $score;
@@ -50,8 +51,7 @@ class ReportController extends Controller {
 	 * @return array      成绩方式组合，没有返回FALSE
 	 */
 	protected function ratio($grade) {
-		$sql   = 'SELECT * FROM t_jx_cjfs WHERE nd = ? AND xq = ? AND cjfs = ?';
-		$modes = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), $grade));
+		$modes = DB::getInstance()->searchRecord('t_jx_cjfs', array('fs' => $grade));
 		if (is_array($modes)) {
 			$ratios = array();
 			foreach ($modes as $mode) {
@@ -100,7 +100,7 @@ class ReportController extends Controller {
 			$field = empty($fields) ? '*' : array_to_field($fields);
 
 			// 计算总评成绩
-			$sql                  = 'SELECT ' . $field . ' FROM t_cj_web WHERE nd = ? AND xq = ? AND kcxh = ? AND xh = ? AND tjzt = 0';
+			$sql                  = 'SELECT ' . $field . ' FROM t_cj_web WHERE nd = ? AND xq = ? AND kcxh = ? AND xh = ?';
 			$grades               = DB::getInstance()->getRow($sql, array(Session::read('year'), Session::read('term'), $cno, $sno));
 			$grades['cj' . $mode] = $score;
 			if (Session::read('major_grade') == $mode && PASSLINE > $score) {
@@ -144,7 +144,7 @@ class ReportController extends Controller {
 	 * @return array       成绩单列表
 	 */
 	protected function summary($year, $term) {
-		$sql  = 'SELECT DISTINCT kcxh, kcmc FROM v_cj_xsgccj WHERE nd = ? AND xq = ? AND jsgh = ?';
+		$sql  = 'SELECT DISTINCT kcxh, kcmc FROM v_cj_xsgccj WHERE nd = ? AND xq = ? AND jsgh = ? ORDER BY kcxh';
 		$data = DB::getInstance()->getAll($sql, array($year, $term, Session::read('username')));
 
 		return $this->view->display('report.summary', array('courses' => $data, 'year' => $year, 'term' => $term));

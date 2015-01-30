@@ -446,6 +446,7 @@ CREATE OR REPLACE VIEW v_cj_xsgccj AS
     a.kszt,
     a.zy,
     a.tjzt,
+    b.jsgh,
     a.kkxy
    FROM t_cj_lscj a
      LEFT JOIN t_pk_jxrw b ON b.kcxh::text = a.kcxh::text AND b.nd::text = a.nd::text AND b.xq::text = a.xq::text

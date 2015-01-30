@@ -51,7 +51,10 @@
                                                                             <form method="post" action="<?php echo toLink('course.select') ?>" role="form">
                                                                                 <div class="checkbox">
                                                                                     <label>
-                                                                                        <input type="checkbox" value="<?php echo $course[0]['kcxh'] ?>" title="选课" data-toggle="modal" data-target="#dialogConfirm" data-whatever="<?php echo $course[0]['kcmc'] . '(' . $course[0]['kcxh'] . ')' ?>"<?php echo FORBIDDEN === $course[0]['zt'] ? ' disabled' : (SELECTED === $course[0]['zt'] ? ' checked' : '') ?>>
+                                                                                        <input type="checkbox" name="checkbox" value="<?php echo $course[0]['kcxh'] ?>" title="选课" data-toggle="modal" data-target="#dialogConfirm" data-whatever="<?php echo $course[0]['kcmc'] . '(' . $course[0]['kcxh'] . ')' ?>"<?php echo FORBIDDEN === $course[0]['zt'] ? ' disabled' : (SELECTED === $course[0]['zt'] ? ' checked' : '') ?>>
+                                                                                        <input type="hidden" name="checked" value="<?php echo SELECTED === $course[0]['zt'] ? 'true' : 'false' ?>">
+                                                                                        <input type="hidden" name="course" value="<?php echo $course[0]['kcxh'] ?>">
+                                                                                        <input type="hidden" name="type" value="<?php echo $type ?>">
                                                                                     </label>
                                                                                 </div>
                                                                             </form>
@@ -95,21 +98,21 @@
                 </div>
 
                 <div class="modal fade" id="dialogConfirm" tabindex="-1" role="dialog" aria-labelledby="#dialogConfirmLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="dialogConfirmLabel">确认选课</h4>
-                      </div>
-                      <div class="modal-body">
-                        <p>即将选择<span id="course" class="text-danger"></span>课程，确认选课？</p>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                        <button type="button" class="btn btn-primary">确定</button>
-                      </div>
-                    </div><!-- /.modal-content -->
-                  </div><!-- /.modal-dialog -->
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="dialogConfirmLabel"></h4>
+                            </div>
+                        <div class="modal-body">
+                            <p></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel">取消</button>
+                            <button type="button" class="btn btn-primary" id="confirm">确定</button>
+                        </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
                 </div><!-- /.modal -->
             </div>
 <?php section('footer') ?>
