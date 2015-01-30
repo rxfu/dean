@@ -127,14 +127,14 @@ COMMENT ON VIEW v_xk_xsxx
     k.mc AS zylb,
     a.rxrq,
     l.mc AS rxfs,
-    r.mc AS bxxs,
-    m.mc AS bxlx,
-    s.mc AS xxxs,
-    n.mc AS zsjj,
-    o.mc AS syd,
+    m.mc AS bxxs,
+    n.mc AS bxlx,
+    o.mc AS xxxs,
+    p.mc AS zsjj,
+    q.mc AS syd,
     a.jg,
     a.csd,
-    p.mc AS zzmm,
+    r.mc AS zzmm,
     a.jrrq,
     a.tc,
     a.zxmc,
@@ -142,7 +142,7 @@ COMMENT ON VIEW v_xk_xsxx
     a.yzbm,
     a.jtdz,
     a.lxdh,
-    q.mc AS zjlx,
+    s.mc AS zjlx,
     a.sfzh,
     a.nj,
     a.sfldm,
@@ -166,13 +166,13 @@ COMMENT ON VIEW v_xk_xsxx
      LEFT JOIN t_zd_xjzt j ON a.xjzt::bpchar = j.dm::bpchar
      LEFT JOIN t_zd_zylb k ON a.zylb::text = k.dm::text
      LEFT JOIN t_zd_rxfs l ON a.rxfs::text = l.dm::text
-     LEFT JOIN t_zd_bxlx m ON a.bxlx::text = m.dm::text
-     LEFT JOIN t_zd_zsjj n ON a.zsjj::text = n.dm::text
-     LEFT JOIN t_zd_syszd o ON a.syszd::bpchar = o.dm::bpchar
-     LEFT JOIN t_zd_zzmm p ON a.zzmm::text = p.dm::text
-     LEFT JOIN t_zd_zjlx q ON a.zjlx::text = q.dm::text
-     LEFT JOIN t_zd_bxxs r ON a.bxxs::text = r.dm::text
-     LEFT JOIN t_zd_xxxs s ON a.xxxs::text = s.dm::text;
+     LEFT JOIN t_zd_bxxs m ON a.bxxs::text = r.dm::text
+     LEFT JOIN t_zd_bxlx n ON a.bxlx::text = m.dm::text
+     LEFT JOIN t_zd_xxxs o ON a.xxxs::text = s.dm::text
+     LEFT JOIN t_zd_zsjj p ON a.zsjj::text = n.dm::text
+     LEFT JOIN t_zd_syszd q ON a.syszd::bpchar = o.dm::bpchar
+     LEFT JOIN t_zd_zzmm r ON a.zzmm::text = p.dm::text
+     LEFT JOIN t_zd_zjlx s ON a.zjlx::text = q.dm::text;
 
 ALTER TABLE v_xk_xsxx
   OWNER TO jwxt;
@@ -240,7 +240,8 @@ CREATE OR REPLACE VIEW v_xk_kxkcxx AS
     a.jsgh,
     b.xm AS jsxm,
     a.hb,
-    a.rs,
+    h.jhrs,
+    h.rs,
     e.kkxy,
     g.mc AS kh,
     e.bz
@@ -250,7 +251,8 @@ CREATE OR REPLACE VIEW v_xk_kxkcxx AS
      LEFT JOIN t_jx_kc d ON d.kch::text = c.kch::text
      LEFT JOIN t_pk_kczy e ON e.nd::text = a.nd::text AND e.xq::text = a.xq::text AND e.kcxh::text = a.kcxh::text
      LEFT JOIN t_jx_jxjh f ON f.zy::text = e.zy::text AND f.nj::text = e.nj::text AND f.zsjj::text = e.zsjj::text AND f.kch::text = c.kch::text
-     LEFT JOIN t_zd_khfs g ON g.dm::text = f.kh::text;
+     LEFT JOIN t_zd_khfs g ON g.dm::text = f.kh::text
+     LEFT JOIN t_xk_tj h ON h.kcxh::text = a.kcxh::text;
 
 ALTER TABLE v_xk_kxkcxx
   OWNER TO jwxt;

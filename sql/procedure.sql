@@ -10,6 +10,7 @@ CREATE TYPE tp_kcb AS
     jsgh character varying(10),
     jsxm character varying(60),
     zg character varying(1),
+    jhrs integer,
     rs integer,
     kkxy character varying(2),
     xqh character varying(6),
@@ -69,6 +70,7 @@ BEGIN
     course_kcb.jsgh := course_rec.jsgh;
     course_kcb.jsxm := course_rec.jsxm;
     course_kcb.zg := course_rec.bz;
+    course_kcb.jhrs := course_rec.jhrs;
     course_kcb.rs := course_rec.rs;
     course_kcb.kkxy := course_rec.kkxy;
     course_kcb.xqh := course_rec.xqh;
@@ -151,7 +153,7 @@ BEGIN
     RETURN FALSE;
   END IF;
 
-  EXECUTE format('SELECT kch, pt, xz, xl, jsgh, xf, bz, kkxy FROM %I WHERE zsjj = %L AND nd = %L AND xq = %L AND nj = %L AND zy = %L AND kcxh = %L', 'v_xk_kxkcxx', i_season, i_year, i_term, i_grade, i_speciality, i_cno) INTO course_rec;
+  EXECUTE format('SELECT kch, pt, xz, xl, jsgh, xf, bz, kkxy FROM %I WHERE zsjj = %L AND nd = %L AND xq = %L AND kcxh = %L', 'v_xk_kxkcxx', i_season, i_year, i_term, i_grade, i_speciality, i_cno) INTO course_rec;
   GET DIAGNOSTICS n_count = ROW_COUNT;
   IF 0 >= n_count THEN
     RAISE EXCEPTION 'NO COURSE!';

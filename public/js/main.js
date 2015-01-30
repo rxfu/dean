@@ -151,11 +151,11 @@ $(document).ready(function() {
 			$(this).find('.modal-body p').html('即将选择<span id="course" class="text-danger">' + $(e.relatedTarget).attr('data-whatever') + '</span>课程，确认选课？');
 		} else {
 			$(this).find('modal-title').text('退课确认');
-			$(this).find('.modal-body p').html('即将退选<span id="course" class="text-danger">' + $(e.relatedTarget).attr('data-whatever') + '</span>课程，确认退课？');			
+			$(this).find('.modal-body p').html('即将退选<span id="course" class="text-danger">' + $(e.relatedTarget).attr('data-whatever') + '</span>课程，确认退课？');
 		}
 	});
 	$('#dialogConfirm').find('.modal-footer #confirm').on('click', function() {
-		var checkbox = $(this).data('form').find('input:checkbox');	
+		var checkbox = $(this).data('form').find('input:checkbox');
 		var checked = (true === checkbox.is(':checked')) ? 'true' : 'false';
 		checkbox.siblings('input:hidden[name="checked"]').val(checked);
 		$(this).data('form').submit();

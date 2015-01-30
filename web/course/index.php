@@ -36,6 +36,7 @@
                                                                     <th rowspan="2" class="active">所在校区</th>
                                                                     <th rowspan="2" class="active">主要任课老师</th>
                                                                     <th rowspan="2" class="active">上课人数</th>
+                                                                    <th rowspan="2" class="active">已选人数</th>
                                                                 </tr>
                                                                 <tr>
                                                                     <th class="active">起始周次</th>
@@ -68,7 +69,8 @@
                                                                         <td><?php echo $course[0]['ksj'] ?><?php echo $course[0]['jsj'] <= $course[0]['ksj'] ? '' : '~' . $course[0]['jsj'] ?></td>
                                                                         <td><?php echo Dictionary::get('xqh', $course[0]['xqh']) ?></td>
                                                                         <td><?php echo $course[0]['jsxm'] ?></td>
-                                                                        <td><?php echo $course[0]['rs'] ?></td>
+                                                                        <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['jhrs'] ?></td>
+                                                                        <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['rs'] ?></td>
                                                                     </tr>
                                                                     <?php for($i = 1; $i < $rowspan; ++$i): ?>
                                                                         <tr data-name="<?php echo $course[0]['kcxh'] ?>">
@@ -80,7 +82,6 @@
                                                                             <td><?php echo $course[$i]['ksj'] ?><?php echo $course[$i]['jsj'] <= $course[$i]['ksj'] ? '' : '~' . $course[$i]['jsj'] ?></td>
                                                                             <td><?php echo Dictionary::get('xqh', $course[$i]['xqh']) ?></td>
                                                                             <td><?php echo $course[$i]['jsxm'] ?></td>
-                                                                            <td><?php echo $course[$i]['rs'] ?></td>
                                                                         </tr>
                                                                     <?php endfor; ?>
                                                                 <?php endforeach; ?>
