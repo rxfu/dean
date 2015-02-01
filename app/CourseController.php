@@ -75,9 +75,10 @@ class CourseController extends Controller {
 	/**
 	 * 获取当前学生可选课程表
 	 * @param  string $type 课程类型
+	 * @param  string $status 课程状态
 	 * @return mixed       可选课程数据
 	 */
-	protected function index($type) {
+	protected function index($type, $status = false) {
 		list($property, $platform) = array_pad(str_split($this->codes[$type]['code']), 2, '');
 
 		if (in_array($property . $platform, array($this->codes[BASIC]['code'], $this->codes[REQUIRED]['code'], $this->codes[ELECTIVE]['code']))) {
@@ -124,7 +125,7 @@ class CourseController extends Controller {
 		}
 		krsort($courses);
 
-		return $this->view->display('course.index', array('courses' => $courses, 'title' => $this->codes[$type]['name'], 'type' => $type));
+		return $this->view->display('course.index', array('courses' => $courses, 'title' => $this->codes[$type]['name'], 'type' => $type, 'status' => $status));
 	}
 
 	/**
@@ -214,8 +215,10 @@ class CourseController extends Controller {
 
 			if ('true' == $checked) {
 				if ($this->isFull($cno)) {
-					echo 'full';
-					return 'full';
+					return Redirect::to('course.index.' . $type . '.full');
+				}
+				if ($this->isClash($cno)) {
+					return Redirect::to('course.index.' . $type . '.clash');
 				}
 				$param = "'" . implode("','", array(Session::read('year'), Session::read('term'), Session::read('username'), $cno, Session::read('name'), Session::read('grade'), Session::read('spno'), Session::read('season'))) . "'";
 

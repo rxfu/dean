@@ -127,4 +127,16 @@
     } else {
         $('#campus-tab a:first').tab('show');
     }
+
+    <?php if ('full' == $status): ?>
+        $('#courseConfirm').on('show.bs.modal', function(e) {
+            $(this).find('modal-title').text('人数超限');
+            $(this).find('.modal-body p').html('选课人数已达上限！');
+        });
+    <?php elseif ('clash' == $status): ?>        
+        $('#courseConfirm').on('show.bs.modal', function(e) {
+            $(this).find('modal-title').text('时间冲突');
+            $(this).find('.modal-body p').html('选课时间冲突！');
+        });
+    <?php endif; ?>
 </script>
