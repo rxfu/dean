@@ -14,7 +14,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading clearfix">
                                 <div class="panel-title pull-left">成绩方式：<?php echo $ratios['name'] ?></div>
-                                <div class="pull-right"><a href="<?php echo toLink('report.confirm', $info['kcxh']) ?>" class="btn btn-primary">成绩确认</a></div>
+                                <div class="pull-right"><button class="btn btn-primary" title="成绩确认" data-toggle="modal" data-target="#gradeConfirm">成绩确认</button></div>
                             </div>
                             <div class="panel-body">
                                 <div class="table-responsive tab-table">
@@ -70,7 +70,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel">取消</button>
-                            <button type="button" class="btn btn-primary" id="confirm">确定</button>
+                            <a role="button" class="btn btn-primary" id="confirm" href="<?php echo toLink('report.confirm', $info['kcxh']) ?>">确定</a>
                         </div>
                         </div><!-- /.modal-content -->
                     </div><!-- /.modal-dialog -->

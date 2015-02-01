@@ -106,7 +106,7 @@ class ReportController extends Controller {
 			$sql                  = 'SELECT ' . $field . ' FROM t_cj_web WHERE nd = ? AND xq = ? AND kcxh = ? AND xh = ?';
 			$grades               = DB::getInstance()->getRow($sql, array(Session::read('year'), Session::read('term'), $cno, $sno));
 			$grades['cj' . $mode] = $score;
-			$majorGrade = Session::read('major_grade');
+			$majorGrade           = Session::read('major_grade');
 			if (PASSLINE > $grades['cj' . $majorGrade]) {
 				$total = $grades['cj' . $majorGrade];
 			} else {
@@ -139,6 +139,7 @@ class ReportController extends Controller {
 	 */
 	protected function confirm($cno) {
 		DB::getInstance()->updateRecord('t_cj_web', array('tjzt' => COMMITTED), array('nd' => Session::read('year'), 'xq' => Session::read('term'), 'kcxh' => $cno));
+		return Redirect::to('report.input.' . $cno);
 	}
 
 	/**

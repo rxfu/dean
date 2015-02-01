@@ -148,7 +148,4 @@ $(document).ready(function() {
 	$('#courseConfirm').find('.modal-footer #cancel').on('click', function() {
 		window.location.reload();
 	});
-	$('#gradeConfirm').on('show.bs.modal', function(e) {
-		$(this).find('.modal-footer #confirm').data('href', $(e.relatedTarget).closest('a'));
-	});
 });

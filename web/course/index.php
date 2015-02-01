@@ -52,7 +52,7 @@
                                                                             <form method="post" action="<?php echo toLink('course.select') ?>" role="form">
                                                                                 <div class="checkbox">
                                                                                     <label>
-                                                                                        <input type="checkbox" name="checkbox" value="<?php echo $course[0]['kcxh'] ?>" title="选课" data-toggle="modal" data-target="#dialogConfirm" data-whatever="<?php echo $course[0]['kcmc'] . '(' . $course[0]['kcxh'] . ')' ?>"<?php echo FORBIDDEN === $course[0]['zt'] ? ' disabled' : (SELECTED === $course[0]['zt'] ? ' checked' : '') ?>>
+                                                                                        <input type="checkbox" name="checkbox" value="<?php echo $course[0]['kcxh'] ?>" title="选课" data-toggle="modal" data-target="#courseConfirm" data-whatever="<?php echo $course[0]['kcmc'] . '(' . $course[0]['kcxh'] . ')' ?>"<?php echo FORBIDDEN === $course[0]['zt'] ? ' disabled' : (SELECTED === $course[0]['zt'] ? ' checked' : '') ?>>
                                                                                         <input type="hidden" name="checked" value="<?php echo SELECTED === $course[0]['zt'] ? 'true' : 'false' ?>">
                                                                                         <input type="hidden" name="course" value="<?php echo $course[0]['kcxh'] ?>">
                                                                                         <input type="hidden" name="type" value="<?php echo $type ?>">
