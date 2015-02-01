@@ -138,7 +138,7 @@ class ReportController extends Controller {
 	 * @return boolean      确认成功为TRUE，否则为FALSE
 	 */
 	protected function confirm($cno) {
-		DB::getInstance()->updateRecord('t_cj_web', array('tjzt' => ENABLE), array('nd' => Session::read('year'), 'xq' => Session::read('term'), 'kcxh' => $cno));
+		DB::getInstance()->updateRecord('t_cj_web', array('tjzt' => COMMITTED), array('nd' => Session::read('year'), 'xq' => Session::read('term'), 'kcxh' => $cno));
 	}
 
 	/**

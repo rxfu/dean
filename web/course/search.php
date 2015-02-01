@@ -13,7 +13,7 @@
                             <div class="input-group">
                                 <div class="form-group">
                                     <label class="sr-only" for="keyword">课程检索</label>
-                                    <input type="text" class="form-control" id="keyword" name="keyword" placeholder="请输入课程序号或课程名称...">
+                                    <input type="search" class="form-control" id="keyword" name="keyword" placeholder="请输入课程序号或课程名称...">
                                 </div>
                                   <span class="input-group-btn">
                                     <button class="btn btn-primary" type="submit">Go!</button>

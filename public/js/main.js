@@ -1,6 +1,3 @@
-function checkGrade(value, validator, field) {
-	return 0 === value % 1 && 0 <= value && 100 >= value;
-}
 (function($) {
 	$.fn.getJsUrl = function() {
 		var url = $("script").last().attr("src");
@@ -130,7 +127,7 @@ $(document).ready(function() {
 			}
 		});
 	});
-	$('#dialogConfirm').on('show.bs.modal', function(e) {
+	$('#courseConfirm').on('show.bs.modal', function(e) {
 		var form = $(e.relatedTarget).closest('form');
 		$(this).find('.modal-footer #confirm').data('form', form);
 
@@ -142,13 +139,16 @@ $(document).ready(function() {
 			$(this).find('.modal-body p').html('即将退选<span id="course" class="text-danger">' + $(e.relatedTarget).attr('data-whatever') + '</span>课程，确认退课？');
 		}
 	});
-	$('#dialogConfirm').find('.modal-footer #confirm').on('click', function() {
+	$('#courseConfirm').find('.modal-footer #confirm').on('click', function() {
 		var checkbox = $(this).data('form').find('input:checkbox');
 		var checked = (true === checkbox.is(':checked')) ? 'true' : 'false';
 		checkbox.siblings('input:hidden[name="checked"]').val(checked);
 		$(this).data('form').submit();
 	});
-	$('#dialogConfirm').find('.modal-footer #cancel').on('click', function() {
+	$('#courseConfirm').find('.modal-footer #cancel').on('click', function() {
 		window.location.reload();
+	});
+	$('#gradeConfirm').on('show.bs.modal', function(e) {
+		$(this).find('.modal-footer #confirm').data('href', $(e.relatedTarget).closest('a'));
 	});
 });

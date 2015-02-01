@@ -37,9 +37,13 @@
                                                 <td><?php echo $score['xm'] ?></td>
                                                 <?php foreach($ratios['mode'] as $key => $value): ?>
                                                     <td>
-                                                        <form class="gradeForm" method="post" action="<?php echo toLink('report.enter', $info['kcxh']) ?>" role="form" onsubmit="return false">
-                                                            <input type="text" name="grade<?php echo $key ?>" value="<?php echo $score['cj' . $key] ?>">
-                                                        </form>
+                                                        <?php if (UNCOMMITTED == $score['tjzt']): ?>
+                                                            <form class="gradeForm" method="post" action="<?php echo toLink('report.enter', $info['kcxh']) ?>" role="form" onsubmit="return false">
+                                                                <input type="text" name="grade<?php echo $key ?>" value="<?php echo $score['cj' . $key] ?>">
+                                                            </form>
+                                                        <?php elseif (COMMITTED == $score['tjzt']): ?>
+                                                            <?php echo $score['cj' . $key] ?>
+                                                        <?php endif; ?>
                                                     </td>
                                                 <?php endforeach; ?>
                                                 <td data-name="total"><?php echo $score['zpcj'] ?></td>
@@ -53,5 +57,23 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="modal fade" id="gradeConfirm" tabindex="-1" role="dialog" aria-labelledby="#gradeConfirmLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="gradeConfirmLabel">成绩确认</h4>
+                            </div>
+                        <div class="modal-body">
+                            <p>注意：请检查成绩是否已经录入完毕并且正确，成绩确认后将不可更改！</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel">取消</button>
+                            <button type="button" class="btn btn-primary" id="confirm">确定</button>
+                        </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
             </div>
 <?php section('footer') ?>

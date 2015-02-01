@@ -101,12 +101,12 @@
                     </div>
                 </div>
 
-                <div class="modal fade" id="dialogConfirm" tabindex="-1" role="dialog" aria-labelledby="#dialogConfirmLabel" aria-hidden="true">
+                <div class="modal fade" id="courseConfirm" tabindex="-1" role="dialog" aria-labelledby="#courseConfirmLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="dialogConfirmLabel"></h4>
+                                <h4 class="modal-title" id="courseConfirmLabel"></h4>
                             </div>
                         <div class="modal-body">
                             <p></p>
