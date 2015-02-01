@@ -78,7 +78,7 @@ class CourseController extends Controller {
 	 * @param  string $status 课程状态
 	 * @return mixed       可选课程数据
 	 */
-	protected function index($type, $status = false) {
+	protected function index($type) {
 		list($property, $platform) = array_pad(str_split($this->codes[$type]['code']), 2, '');
 
 		if (in_array($property . $platform, array($this->codes[BASIC]['code'], $this->codes[REQUIRED]['code'], $this->codes[ELECTIVE]['code']))) {
@@ -125,7 +125,7 @@ class CourseController extends Controller {
 		}
 		krsort($courses);
 
-		return $this->view->display('course.index', array('courses' => $courses, 'title' => $this->codes[$type]['name'], 'type' => $type, 'status' => $status));
+		return $this->view->display('course.index', array('courses' => $courses, 'title' => $this->codes[$type]['name'], 'type' => $type));
 	}
 
 	/**
@@ -214,12 +214,6 @@ class CourseController extends Controller {
 			$type    = $_POST['type'];
 
 			if ('true' == $checked) {
-				if ($this->isFull($cno)) {
-					return Redirect::to('course.index.' . $type . '.full');
-				}
-				if ($this->isClash($cno)) {
-					return Redirect::to('course.index.' . $type . '.clash');
-				}
 				$param = "'" . implode("','", array(Session::read('year'), Session::read('term'), Session::read('username'), $cno, Session::read('name'), Session::read('grade'), Session::read('spno'), Session::read('season'))) . "'";
 
 				$selected = DB::getInstance()->query('SELECT p_xzkc_save(' . $param . ')');
@@ -250,30 +244,31 @@ class CourseController extends Controller {
 	 * @param  string $course 课程序号
 	 * @return mixed 冲突为冲突课程序号数组，否则为FALSE
 	 */
-	protected function isClash($course) {
-		if (isPost()) {
-			$collision = false;
+	protected function clash($course) {
+		$collision = false;
 
-			$sql      = 'SELECT kcxh, ksz, jsz, zc, ksj, jsj FROM t_pk_kb WHERE nd = ? AND xq = ? AND kcxh = ?';
-			$currents = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), $course));
+		$sql      = 'SELECT kcxh, ksz, jsz, zc, ksj, jsj FROM t_pk_kb WHERE nd = ? AND xq = ? AND kcxh = ?';
+		$currents = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), $course));
 
-			$sql      = 'SELECT kcxh, ksz, jsz, zc, ksj, jsj FROM v_xk_xskcb WHERE xh = ? AND nd = ? AND xq = ?';
-			$compares = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term')));
+		$sql      = 'SELECT kcxh, ksz, jsz, zc, ksj, jsj FROM v_xk_xskcb WHERE xh = ? AND nd = ? AND xq = ?';
+		$compares = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term')));
 
-			foreach ($currents as $current) {
-				foreach ($compares as $compare) {
-					if ($compare['zc'] == $current['zc']) {
-						if (between($current['ksj'], $compare['ksj'], $compare['jsj'])) {
-							if (between($current['ksz'], $compare['ksz'], $compare['jsz'])) {
-								$collision[] = $compare['kcxh'];
-							}
+		foreach ($currents as $current) {
+			foreach ($compares as $compare) {
+				if ($compare['zc'] == $current['zc']) {
+					if (between($current['ksj'], $compare['ksj'], $compare['jsj'])) {
+						if (between($current['ksz'], $compare['ksz'], $compare['jsz'])) {
+							$collision[] = $compare['kcxh'];
 						}
 					}
 				}
 			}
-
-			return $collision;
 		}
+
+		$status = $collision;
+
+		echo json_encode(array('status' => $status));
+		return $status;
 	}
 
 	/**
@@ -281,11 +276,13 @@ class CourseController extends Controller {
 	 * @param  string $course 课程序号
 	 * @return boolean         人数已满为TRUE，未满为FALSE
 	 */
-	protected function isFull($course) {
-		$sql  = 'SELECT jhrs, rs FROM t_xk_tj WHERE kcxh = ?';
-		$data = DB::getInstance()->getRow($sql, $course);
+	protected function full($course) {
+		$sql    = 'SELECT jhrs, rs FROM t_xk_tj WHERE kcxh = ?';
+		$data   = DB::getInstance()->getRow($sql, $course);
+		$status = 0 < $data['jhrs'] && $data['jhrs'] < $data['rs'];
 
-		return 0 < $data['jhrs'] && $data['jhrs'] < $data['rs'];
+		echo $status ? 'true' : 'false';
+		return $status;
 	}
 
 	/**

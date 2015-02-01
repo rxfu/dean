@@ -132,16 +132,36 @@ $(document).ready(function() {
 		$(this).find('.modal-footer #confirm').data('form', form);
 
 		if (true === form.find('input:checkbox').is(':checked')) {
-			$(this).find('modal-title').text('选课确认');
+			$(this).find('.modal-title').text('选课确认');
 			$(this).find('.modal-body p').html('即将选择<span id="course" class="text-danger">' + $(e.relatedTarget).attr('data-whatever') + '</span>课程，确认选课？');
 		} else {
-			$(this).find('modal-title').text('退课确认');
+			$(this).find('.modal-title').text('退课确认');
 			$(this).find('.modal-body p').html('即将退选<span id="course" class="text-danger">' + $(e.relatedTarget).attr('data-whatever') + '</span>课程，确认退课？');
 		}
 	});
 	$('#courseConfirm').find('.modal-footer #confirm').on('click', function() {
 		var checkbox = $(this).data('form').find('input:checkbox');
 		var checked = (true === checkbox.is(':checked')) ? 'true' : 'false';
+
+		if ('true' == checked) {
+			var cno = $(this).data('form').find('input[name="course"]').val();
+			var status;
+			$.ajax({
+				async: false,
+				url: $().getBaseUrl() + 'course/full/' + cno,
+				success: function(data) {
+					status = data;
+				}
+			});
+			if ('false' == status) {
+				$('#fullConfirm').on('show.bs.model', function(e) {
+					$(this).find('.modal-title').text('人数超限');
+					$(this).find('.modal-body p').html('选课人数已达上限！');
+				});
+				$('#fullConfirm').modal('show');
+			}
+		}
+
 		checkbox.siblings('input:hidden[name="checked"]').val(checked);
 		$(this).data('form').submit();
 	});

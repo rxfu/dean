@@ -118,6 +118,42 @@
                         </div><!-- /.modal-content -->
                     </div><!-- /.modal-dialog -->
                 </div><!-- /.modal -->
+
+                <div class="modal fade" id="fullConfirm" tabindex="-1" role="dialog" aria-labelledby="#fullConfirmLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="fullConfirmLabel">人数超限</h4>
+                            </div>
+                        <div class="modal-body">
+                            <p>选课人数已达上限！</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel">取消</button>
+                            <button type="button" class="btn btn-primary" id="confirm">确定</button>
+                        </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+
+                <div class="modal fade" id="clashConfirm" tabindex="-1" role="dialog" aria-labelledby="#clashConfirmLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="clashConfirmLabel">时间冲突</h4>
+                            </div>
+                        <div class="modal-body">
+                            <p>选课时间冲突！</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel">取消</button>
+                            <button type="button" class="btn btn-primary" id="confirm">确定</button>
+                        </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
             </div>
 <?php section('footer') ?>
 <script>
@@ -127,16 +163,4 @@
     } else {
         $('#campus-tab a:first').tab('show');
     }
-
-    <?php if ('full' == $status): ?>
-        $('#courseConfirm').on('show.bs.modal', function(e) {
-            $(this).find('modal-title').text('人数超限');
-            $(this).find('.modal-body p').html('选课人数已达上限！');
-        });
-    <?php elseif ('clash' == $status): ?>        
-        $('#courseConfirm').on('show.bs.modal', function(e) {
-            $(this).find('modal-title').text('时间冲突');
-            $(this).find('.modal-body p').html('选课时间冲突！');
-        });
-    <?php endif; ?>
 </script>
