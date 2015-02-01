@@ -27,7 +27,7 @@ class TeacherController extends Controller {
 				Session::write('speciality', $info['zy']);
 
 				Session::write('year', Configuration::get('CJ_WEB_ND'));
-				Session::write('term', Configuration::get('CJ_WEB_ND'));
+				Session::write('term', Configuration::get('CJ_WEB_XQ'));
 
 				Session::write('role', TEACHER);
 

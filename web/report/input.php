@@ -12,7 +12,10 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
-                            <div class="panel-heading">成绩方式：<?php echo $ratios['name'] ?></div>
+                            <div class="panel-heading clearfix">
+                                <div class="panel-title pull-left">成绩方式：<?php echo $ratios['name'] ?></div>
+                                <div class="pull-right"><a href="<?php echo toLink('report.confirm', $info['kcxh']) ?>" class="btn btn-primary">成绩确认</a></div>
+                            </div>
                             <div class="panel-body">
                                 <div class="table-responsive tab-table">
                                     <table class="table table-bordered table-striped table-hover data-table">
@@ -34,8 +37,8 @@
                                                 <td><?php echo $score['xm'] ?></td>
                                                 <?php foreach($ratios['mode'] as $key => $value): ?>
                                                     <td>
-                                                        <form method="post" action="<?php echo toLink('report.enter', $info['kcxh']) ?>" role="form">
-                                                            <input type="text" name="ratio<?php echo $key ?>" value="<?php echo $score['cj' . $key] ?>" data-mode="<?php echo $grade ?>">
+                                                        <form class="gradeForm" method="post" action="<?php echo toLink('report.enter', $info['kcxh']) ?>" role="form" onsubmit="return false">
+                                                            <input type="text" name="grade<?php echo $key ?>" value="<?php echo $score['cj' . $key] ?>">
                                                         </form>
                                                     </td>
                                                 <?php endforeach; ?>

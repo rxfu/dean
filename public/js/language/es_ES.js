@@ -1,78 +1,78 @@
 (function($) {
     /**
-     * Chilean Spanish language package
-     * Translated by @marceloampuerop6
+     * Spanish language package
+     * Translated by @vadail
      */
     FormValidation.I18n = $.extend(true, FormValidation.I18n, {
-        'es_CL': {
+        'es_ES': {
             base64: {
-                'default': 'Por favor ingrese un valor válido en base 64'
+                'default': 'Por favor introduce un valor válido en base 64'
             },
             between: {
-                'default': 'Por favor ingrese un valor entre %s y %s',
-                notInclusive: 'Por favor ingrese un valor sólo entre %s and %s'
+                'default': 'Por favor introduce un valor entre %s y %s',
+                notInclusive: 'Por favor introduce un valor sólo entre %s and %s'
             },
             bic: {
-                'default': 'Por favor ingrese un número BIC válido'
+                'default': 'Por favor introduce un número BIC válido'
             },
             callback: {
-                'default': 'Por favor ingrese un valor válido'
+                'default': 'Por favor introduce un valor válido'
             },
             choice: {
-                'default': 'Por favor ingrese un valor válido',
+                'default': 'Por favor introduce un valor válido',
                 less: 'Por favor elija %s opciones como mínimo',
                 more: 'Por favor elija %s optiones como máximo',
                 between: 'Por favor elija de %s a %s opciones'
             },
             color: {
-                'default': 'Por favor ingrese un color válido'
+                'default': 'Por favor introduce un color válido'
             },
             creditCard: {
-                'default': 'Por favor ingrese un número válido de tarjeta de crédito'
+                'default': 'Por favor introduce un número válido de tarjeta de crédito'
             },
             cusip: {
-                'default': 'Por favor ingrese un número CUSIP válido'
+                'default': 'Por favor introduce un número CUSIP válido'
             },
             cvv: {
-                'default': 'Por favor ingrese un número CVV válido'
+                'default': 'Por favor introduce un número CVV válido'
             },
             date: {
-                'default': 'Por favor ingrese una fecha válida',
-                min: 'Por favor ingrese una fecha posterior a %s',
-                max: 'Por favor ingrese una fecha anterior a %s',
-                range: 'Por favor ingrese una fecha en el rango %s - %s'
+                'default': 'Por favor introduce una fecha válida',
+                min: 'Por favor introduce una fecha posterior al %s',
+                max: 'Por favor introduce una fecha previa al %s',
+                range: 'Por favor introduce una fecha entre el %s y el %s'
             },
             different: {
-                'default': 'Por favor ingrese un valor distinto'
+                'default': 'Por favor introduce un valor distinto'
             },
             digits: {
-                'default': 'Por favor ingrese sólo dígitos'
+                'default': 'Por favor introduce sólo dígitos'
             },
             ean: {
-                'default': 'Por favor ingrese un número EAN válido'
+                'default': 'Por favor introduce un número EAN válido'
             },
             ein: {
-                'default': 'Por favor ingrese un número EIN válido'
+                'default': 'Por favor introduce un número EIN válido'
             },
             emailAddress: {
-                'default': 'Por favor ingrese un email válido'
+                'default': 'Por favor introduce un email válido'
             },
             file: {
                 'default': 'Por favor elija un archivo válido'
             },
             greaterThan: {
-                'default': 'Por favor ingrese un valor mayor o igual a %s',
-                notInclusive: 'Por favor ingrese un valor mayor que %s'
+                'default': 'Por favor introduce un valor mayor o igual a %s',
+                notInclusive: 'Por favor introduce un valor mayor que %s'
             },
             grid: {
-                'default': 'Por favor ingrese un número GRId válido'
+                'default': 'Por favor introduce un número GRId válido'
             },
             hex: {
-                'default': 'Por favor ingrese un valor hexadecimal válido'
+                'default': 'Por favor introduce un valor hexadecimal válido'
             },
             iban: {
-                'default': 'Por favor ingrese un número IBAN válido',
-                country: 'Por favor ingrese un número IBAN válido en %s',
+                'default': 'Por favor introduce un número IBAN válido',
+                country: 'Por favor introduce un número IBAN válido en %s',
                 countries: {
                     AD: 'Andorra',
                     AE: 'Emiratos Árabes Unidos',
@@ -156,8 +156,8 @@
                 }
             },
             id: {
-                'default': 'Por favor ingrese un número de identificación válido',
-                country: 'Por favor ingrese un número de identificación válido en %s',
+                'default': 'Por favor introduce un número de identificación válido',
+                country: 'Por favor introduce un número válido de identificación en %s',
                 countries: {
                     BA: 'Bosnia Herzegovina',
                     BG: 'Bulgaria',
@@ -190,53 +190,53 @@
                 }
             },
             identical: {
-                'default': 'Por favor ingrese el mismo valor'
+                'default': 'Por favor introduce el mismo valor'
             },
             imei: {
-                'default': 'Por favor ingrese un número IMEI válido'
+                'default': 'Por favor introduce un número IMEI válido'
             },
             imo: {
-                'default': 'Por favor ingrese un número IMO válido'
+                'default': 'Por favor introduce un número IMO válido'
             },
             integer: {
-                'default': 'Por favor ingrese un número válido'
+                'default': 'Por favor introduce un número válido'
             },
             ip: {
-                'default': 'Por favor ingrese una dirección IP válida',
-                ipv4: 'Por favor ingrese una dirección IPv4 válida',
-                ipv6: 'Por favor ingrese una dirección IPv6 válida'
+                'default': 'Por favor introduce una dirección IP válida',
+                ipv4: 'Por favor introduce una dirección IPv4 válida',
+                ipv6: 'Por favor introduce una dirección IPv6 válida'
             },
             isbn: {
-                'default': 'Por favor ingrese un número ISBN válido'
+                'default': 'Por favor introduce un número ISBN válido'
             },
             isin: {
-                'default': 'Por favor ingrese un número ISIN válido'
+                'default': 'Por favor introduce un número ISIN válido'
             },
             ismn: {
-                'default': 'Por favor ingrese un número ISMN válido'
+                'default': 'Por favor introduce un número ISMN válido'
             },
             issn: {
-                'default': 'Por favor ingrese un número ISSN válido'
+                'default': 'Por favor introduce un número ISSN válido'
             },
             lessThan: {
-                'default': 'Por favor ingrese un valor menor o igual a %s',
-                notInclusive: 'Por favor ingrese un valor menor que %s'
+                'default': 'Por favor introduce un valor menor o igual a %s',
+                notInclusive: 'Por favor introduce un valor menor que %s'
             },
             mac: {
-                'default': 'Por favor ingrese una dirección MAC válida'
+                'default': 'Por favor introduce una dirección MAC válida'
             },
             meid: {
-                'default': 'Por favor ingrese un número MEID válido'
+                'default': 'Por favor introduce un número MEID válido'
             },
             notEmpty: {
-                'default': 'Por favor ingrese un valor'
+                'default': 'Por favor introduce un valor'
             },
             numeric: {
-                'default': 'Por favor ingrese un número decimal válido'
+                'default': 'Por favor introduce un número decimal válido'
             },
             phone: {
-                'default': 'Por favor ingrese un número válido de teléfono',
-                country: 'Por favor ingrese un número válido de teléfono en %s',
+                'default': 'Por favor introduce un número válido de teléfono',
+                country: 'Por favor introduce un número válido de teléfono en %s',
                 countries: {
                     AE: 'Emiratos Árabes Unidos',
                     BG: 'Bulgaria',
@@ -261,46 +261,46 @@
                 }
             },
             regexp: {
-                'default': 'Por favor ingrese un valor que coincida con el patrón'
+                'default': 'Por favor introduce un valor que coincida con el patrón'
             },
             remote: {
-                'default': 'Por favor ingrese un valor válido'
+                'default': 'Por favor introduce un valor válido'
             },
             rtn: {
-                'default': 'Por favor ingrese un número RTN válido'
+                'default': 'Por favor introduce un número RTN válido'
             },
             sedol: {
-                'default': 'Por favor ingrese un número SEDOL válido'
+                'default': 'Por favor introduce un número SEDOL válido'
             },
             siren: {
-                'default': 'Por favor ingrese un número SIREN válido'
+                'default': 'Por favor introduce un número SIREN válido'
             },
             siret: {
-                'default': 'Por favor ingrese un número SIRET válido'
+                'default': 'Por favor introduce un número SIRET válido'
             },
             step: {
-                'default': 'Por favor ingrese un paso válido de %s'
+                'default': 'Por favor introduce un paso válido de %s'
             },
             stringCase: {
-                'default': 'Por favor ingrese sólo caracteres en minúscula',
-                upper: 'Por favor ingrese sólo caracteres en mayúscula'
+                'default': 'Por favor introduce sólo caracteres en minúscula',
+                upper: 'Por favor introduce sólo caracteres en mayúscula'
             },
             stringLength: {
-                'default': 'Por favor ingrese un valor con una longitud válida',
-                less: 'Por favor ingrese menos de %s caracteres',
-                more: 'Por favor ingrese más de %s caracteres',
-                between: 'Por favor ingrese un valor con una longitud entre %s y %s caracteres'
+                'default': 'Por favor introduce un valor con una longitud válida',
+                less: 'Por favor introduce menos de %s caracteres',
+                more: 'Por favor introduce más de %s caracteres',
+                between: 'Por favor introduce un valor con una longitud entre %s y %s caracteres'
             },
             uri: {
-                'default': 'Por favor ingresese una URI válida'
+                'default': 'Por favor introduce una URI válida'
             },
             uuid: {
-                'default': 'Por favor ingrese un número UUID válido',
-                version: 'Por favor ingrese una versión UUID válida para %s'
+                'default': 'Por favor introduce un número UUID válido',
+                version: 'Por favor introduce una versión UUID válida para %s'
             },
             vat: {
-                'default': 'Por favor ingrese un número VAT válido',
-                country: 'Por favor ingrese un número VAT válido en %s',
+                'default': 'Por favor introduce un número IVA válido',
+                country: 'Por favor introduce un número IVA válido en %s',
                 countries: {
                     AT: 'Austria',
                     BE: 'Bélgica',
@@ -342,11 +342,11 @@
                 }
             },
             vin: {
-                'default': 'Por favor ingrese un número VIN válido'
+                'default': 'Por favor introduce un número VIN válido'
             },
             zipCode: {
-                'default': 'Por favor ingrese un código postal válido',
-                country: 'Por favor ingrese un código postal válido en %s',
+                'default': 'Por favor introduce un código postal válido',
+                country: 'Por favor introduce un código postal válido en %s',
                 countries: {
                     AT: 'Austria',
                     BG: 'Bulgaria',
@@ -367,7 +367,7 @@
                     PL: 'Poland',
                     PT: 'Portugal',
                     RO: 'Rumanía',
-                    RU: 'Rusia',
+                    RU: 'Rusa',
                     SE: 'Suecia',
                     SG: 'Singapur',
                     SK: 'Eslovaquia',

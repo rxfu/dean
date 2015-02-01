@@ -330,15 +330,12 @@ CREATE OR REPLACE VIEW v_cj_xscjlr AS
     b.jsgh,
     b.cjfs,
     a.kszt,
-    d.mc AS zy,
+    a.zy,
     a.tjzt,
-    e.mc AS kkxy
+    a.kkxy
    FROM t_cj_web a
      LEFT JOIN t_pk_jxrw b ON b.kcxh::text = a.kcxh::text AND b.nd::text = a.nd::text AND b.xq::text = a.xq::text
-     LEFT JOIN t_jx_kc c ON c.kch::text = b.kch::text
-     LEFT JOIN t_jx_zy d ON d.zy::text = a.zy::text
-     LEFT JOIN t_xt_department e ON e.dw::text = a.kkxy::text
-     LEFT JOIN t_pk_kczy f ON f.nd::text = a.nd::text AND f.xq::text = a.xq::text AND f.kcxh::text = a.kcxh::text AND f.zy::text = a.zy::text;
+     LEFT JOIN t_jx_kc c ON c.kch::text = b.kch::text;
 
 ALTER TABLE v_cj_xscjlr
   OWNER TO jwxt;

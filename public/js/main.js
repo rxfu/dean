@@ -1,3 +1,6 @@
+function checkGrade(value, validator, field) {
+	return 0 === value % 1 && 0 <= value && 100 >= value;
+}
 (function($) {
 	$.fn.getJsUrl = function() {
 		var url = $("script").last().attr("src");
@@ -11,8 +14,9 @@
 $(document).ready(function() {
 	$('a[href="' + $(location).attr('href') + '"]').parents('ul.nav').not('ul#side-menu').addClass('collapse in');
 	$('#loginForm')
-		.bootstrapValidator({
-			feedbackIcons: {
+		.formValidation({
+			framework: 'bootstrap',
+			icon: {
 				valid: 'glyphicon glyphicon-ok',
 				invalid: 'glyphicon glyphicon-remove',
 				validating: 'glyphicon glyphicon-refresh'
@@ -40,8 +44,9 @@ $(document).ready(function() {
 			}
 		});
 	$('#passwordForm')
-		.bootstrapValidator({
-			feedbackIcons: {
+		.formValidation({
+			framework: 'bootstrap',
+			icon: {
 				valid: 'glyphicon glyphicon-ok',
 				invalid: 'glyphicon glyphicon-remove',
 				validating: 'glyphicon glyphicon-refresh'
@@ -86,23 +91,6 @@ $(document).ready(function() {
 				}
 			}
 		});
-	$('.gradeForm')
-		.bootstrapValidator({
-			feedbackIcons: {
-				valid: 'glyphicon glyphicon-ok',
-				invalid: 'glyphicon glyphicon-remove',
-				validating: 'glyphicon glyphicon-refresh'
-			},
-			fields: {
-				password: {
-					validators: {
-						integer: {
-							message: '成绩只能是不超过100的非负整数'
-						}
-					}
-				}
-			}
-		});
 	$('.data-table').dataTable({
 		'lengthMenu': [
 			[10, 25, 50, -1],
@@ -125,17 +113,17 @@ $(document).ready(function() {
 		e.preventDefault();
 		$(this).tab('show');
 	});
-	$(':input[name^="ratio"]').change(function() {
+	$(':input[name^="grade"]').change(function() {
 		var form = $(this).closest('form');
 		var sno = $(this).closest('tr').attr('data-row');
+		var mode = $(this).attr('name');
 		$.ajax({
 			type: "post",
 			url: form.prop("action"),
 			data: {
 				"sno": sno,
 				"mode": mode,
-				"score": $(this).val(),
-				"grade": $(this).attr('data-mode')
+				"score": $(this).val()
 			},
 			success: function(data) {
 				$('tr[data-row="' + sno + '"] > td[data-name="total"]').text(data);

@@ -7,7 +7,8 @@
         <?php echo js('js/jquery-1.11.0.min.js') ?>
         <?php echo js('js/jquery-ui-1.10.4.custom.min.js') ?>
         <?php echo js('js/bootstrap.min.js') ?>
-        <?php echo js('js/bootstrapValidator.min.js') ?>
+        <?php echo js('js/formValidation.min.js') ?>
+        <?php echo js('js/framework/bootstrap.min.js') ?>
         <?php echo js('js/language/zh_CN.js') ?>
         <?php echo js('js/bootstrap-paginator.js') ?>
         <?php echo js('js/bootstrap-select.js') ?>
