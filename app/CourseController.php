@@ -281,7 +281,7 @@ class CourseController extends Controller {
 		$data   = DB::getInstance()->getRow($sql, $course);
 		$status = 0 < $data['jhrs'] && $data['jhrs'] < $data['rs'];
 
-		echo $status ? 'true' : 'false';
+		echo json_encode(array('status' => $status));
 		return $status;
 	}
 

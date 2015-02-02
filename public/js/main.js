@@ -140,30 +140,51 @@ $(document).ready(function() {
 		}
 	});
 	$('#courseConfirm').find('.modal-footer #confirm').on('click', function() {
+		var form = $(this).data('form');
 		var checkbox = $(this).data('form').find('input:checkbox');
 		var checked = (true === checkbox.is(':checked')) ? 'true' : 'false';
 
 		if ('true' == checked) {
 			var cno = $(this).data('form').find('input[name="course"]').val();
-			var status;
+			var result;
 			$.ajax({
 				async: false,
 				url: $().getBaseUrl() + 'course/full/' + cno,
 				success: function(data) {
-					status = data;
+					result = $.parseJSON(data);
 				}
 			});
-			if ('false' == status) {
+			if (false == result.status) {
 				$('#fullConfirm').on('show.bs.model', function(e) {
 					$(this).find('.modal-title').text('人数超限');
 					$(this).find('.modal-body p').html('选课人数已达上限！');
 				});
 				$('#fullConfirm').modal('show');
+			} else {
+				$.ajax({
+					async: false,
+					url: $().getBaseUrl() + 'course/clash'+cno,
+					success: function(data) {
+						result = data;
+					}
+				});
+				if ('object' == typeof result.status) {
+					$('#clashConfirm').on('show.bs.model', function(e) {
+					$(this).find('.modal-title').text('时间冲突');
+					$(this).find('.modal-body p').html('选课时间冲突！是否继续选课？');
+				});
+				$('#clashConfirm').modal('show');
+	$('#clashConfirm').find('.modal-footer #cancel').on('click', function() {
+		window.location.reload();
+	});
+				}
 			}
+			checkbox.siblings('input:hidden[name="checked"]').val(checked);
+			$(this).data('form').submit();
+		} else {
+			checkbox.siblings('input:hidden[name="checked"]').val(checked);
+			$(this).data('form').submit();
 		}
-
-		checkbox.siblings('input:hidden[name="checked"]').val(checked);
-		$(this).data('form').submit();
 	});
 	$('#courseConfirm').find('.modal-footer #cancel').on('click', function() {
 		window.location.reload();
