@@ -141,12 +141,14 @@ $(document).ready(function() {
 	});
 	$('#courseConfirm').find('.modal-footer #confirm').on('click', function() {
 		var form = $(this).data('form');
-		var checkbox = $(this).data('form').find('input:checkbox');
+		var checkbox = form.find('input:checkbox');
 		var checked = (true === checkbox.is(':checked')) ? 'true' : 'false';
 
 		if ('true' == checked) {
-			var cno = $(this).data('form').find('input[name="course"]').val();
+			var cno = form.find('input[name="course"]').val();
 			var result;
+
+			// 人数是否已满
 			$.ajax({
 				async: false,
 				url: $().getBaseUrl() + 'course/full/' + cno,
@@ -155,40 +157,43 @@ $(document).ready(function() {
 				}
 			});
 			if (true == result.status) {
-				$('#fullConfirm').on('show.bs.model', function(e) {
+				$('#fullConfirm').on('show.bs.modal', function(e) {
 					$(this).find('.modal-title').text('人数超限');
 					$(this).find('.modal-body p').html('选课人数已达上限！');
 				});
+				$('#fullConfirm').on('hidden.bs.modal', function(e) {
+					$('#courseConfirm').modal('hide');
+				})
 				$('#fullConfirm').modal('show');
-			} else {
-				$.ajax({
-					async: false,
-					url: $().getBaseUrl() + 'course/clash/' + cno,
-					success: function(data) {
-						result = $.parseJSON(data);
-					}
-				});
-				if ('object' == typeof result.status) {
-					$('#clashConfirm').on('show.bs.model', function(e) {
-						$(this).find('.modal-title').text('时间冲突');
-						$(this).find('.modal-body p').html('选课时间冲突！是否继续选课？');
-					});
-					$('#courseConfirm').find('.modal-footer #confirm').on('click', function() {
-						checkbox.siblings('input:hidden[name="checked"]').val(checked);
-						$(this).data('form').submit();
-					});
-					$('#clashConfirm').find('.modal-footer #cancel').on('click', function() {
-						window.location.reload();
-					});
-					$('#clashConfirm').modal('show');
-				}
+				return false;
 			}
-			checkbox.siblings('input:hidden[name="checked"]').val(checked);
-			$(this).data('form').submit();
-		} else {
-			checkbox.siblings('input:hidden[name="checked"]').val(checked);
-			$(this).data('form').submit();
+
+			// 选课时间是否冲突
+			$.ajax({
+				async: false,
+				url: $().getBaseUrl() + 'course/clash/' + cno,
+				success: function(data) {
+					result = $.parseJSON(data);
+				}
+			});
+			if ('object' == typeof result.status) {
+				$('#clashConfirm').on('show.bs.modal', function(e) {
+					$(this).find('.modal-title').text('时间冲突');
+					$(this).find('.modal-body p').html('选课时间冲突！是否继续选课？');
+				});
+				$('#clashConfirm').find('.modal-footer #confirm').on('click', function() {
+					checkbox.siblings('input:hidden[name="checked"]').val(checked);
+					form.submit();
+				});
+				$('#clashConfirm').find('.modal-footer #cancel').on('click', function() {
+					$('#courseConfirm').modal('hide');
+				});
+				$('#clashConfirm').modal('show');
+				return false;
+			}
 		}
+		checkbox.siblings('input:hidden[name="checked"]').val(checked);
+		form.submit();
 	});
 	$('#courseConfirm').on('hidden.bs.modal', function(e) {
 		location.reload();
