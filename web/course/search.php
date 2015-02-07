@@ -1,13 +1,12 @@
 <?php section('header') ?>
-<?php section('student.navigation') ?>
-            <div class="row">
+                <section class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header"><?php echo Session::read('name') ?>同学<?php echo Session::read('year') ?>年度<?php echo Dictionary::get('xq', Session::read('term')) ?>学期<?php echo $title ?>课程检索</h1>
                         <div class="alert alert-danger" role="alert">请输入课程序号或课程中文名称进行检索并申请<?php echo $title ?></div>
                     </div>
-                </div>
+                </section>
 
-                <div class="row">
+                <section class="row">
                     <div class="col-md-6 col-md-offset-3">
                         <form method="post" action="<?php echo toLink('course.search', $type) ?>" role="form">
                             <div class="input-group">
@@ -21,10 +20,10 @@
                             </div>
                         </form>
                     </div>
-                </div>
+                </section>
 
                 <?php if (!isEmpty($courses)): ?>
-                    <div class="row">
+                    <section class="row">
                         <div class="col-lg-12">
                             <div class="panel panel-default">
                                 <div class="panel-body">
@@ -104,7 +103,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </section>
                 <?php endif; ?>
 <?php section('footer') ?>
 <script>

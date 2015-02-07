@@ -1,12 +1,11 @@
 <?php section('header') ?>
-<?php section('teacher.navigation') ?>
-                <div class="row">
+                <section class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header"><?php echo $year ?>年度<?php echo Dictionary::get('xq', $term) ?>学期成绩单列表</h1>
                     </div>
-                </div>
+                </section>
 
-                <div class="row">
+                <section class="row">
                     <?php foreach ($courses as $course): ?>
                         <div class="col-md-3">
                             <div class="panel panel-primary">
@@ -31,6 +30,5 @@
                             </div>
                         </div>
                     <?php endforeach; ?>
-                </div>
-            </div>
+                </section>
 <?php section('footer') ?>

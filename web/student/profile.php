@@ -1,12 +1,11 @@
 <?php section('header') ?>
-<?php section('student.navigation') ?>
-                <div class="row">
+                <section class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">个人资料</h1>
                     </div>
-                </div>
+                </section>
 
-                <div class="row">
+                <section class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">基本资料</div>
@@ -79,9 +78,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </section>
 
-                <div class="row">
+                <section class="row">
                 	<div class="col-lg-12">
                 		<div class="panel panel-default">
                             <div class="panel-heading">扩展资料</div>
@@ -165,7 +164,5 @@
                 			</div>
                 		</div>
                 	</div>
-                </div>
-            </div>
-
+                </section>
 <?php section('footer') ?>

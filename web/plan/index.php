@@ -1,12 +1,11 @@
 <?php section('header') ?>
-<?php section('student.navigation') ?>
-                <div class="row">
+                <section class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">教学计划</h1>
                     </div>
-                </div>
+                </section>
 
-                <div class="row">
+                <section class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading"><?php echo Session::read('college') ?><?php echo Session::read('grade') ?>级<?php echo Session::read('speciality') ?>专业课程设置计划总表</div>
@@ -56,6 +55,5 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </section>
 <?php section('footer') ?>

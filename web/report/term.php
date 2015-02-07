@@ -1,14 +1,13 @@
 <?php section('header') ?>
-<?php section('student.navigation') ?>
-                <div class="row">
+                <section class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
                             <?php echo Session::read('name') ?>同学<?php echo $year ?>年度<?php echo Dictionary::get('xq', $term) ?>学期成绩单
                         </h1>
                     </div>
-                </div>
+                </section>
 
-                <div class="row">
+                <section class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
@@ -47,6 +46,5 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </section>
 <?php section('footer') ?>

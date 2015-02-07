@@ -1,15 +1,14 @@
 <?php section('header') ?>
-<?php section('teacher.navigation') ?>
-                <div class="row">
+                <section class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
                             <?php echo $info['kkxy'] ?><?php echo $info['nj'] ?>级<?php echo $info['zy'] ?>专业<?php echo $info['kcxh'] ?><?php echo $info['kcmc'] ?>成绩录入
                         </h1>
                         <div class="alert alert-danger" role="alert">录入成绩自动提交，无需点击提交按钮</div>
                     </div>
-                </div>
+                </section>
 
-                <div class="row">
+                <section class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading clearfix">
@@ -56,24 +55,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </section>
 
-                <div class="modal fade" id="gradeConfirm" tabindex="-1" role="dialog" aria-labelledby="#gradeConfirmLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="gradeConfirmLabel">成绩确认</h4>
-                            </div>
-                        <div class="modal-body">
-                            <p>注意：请检查成绩是否已经录入完毕并且正确，成绩确认后将不可更改！</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel">取消</button>
-                            <a role="button" class="btn btn-primary" id="confirm" href="<?php echo toLink('report.confirm', $info['kcxh']) ?>">确定</a>
-                        </div>
-                        </div><!-- /.modal-content -->
-                    </div><!-- /.modal-dialog -->
-                </div><!-- /.modal -->
-            </div>
+                <?php section('grade_confirm') ?>
 <?php section('footer') ?>

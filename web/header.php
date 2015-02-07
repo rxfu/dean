@@ -25,3 +25,28 @@
             <?php echo js('js/respond.min.js') ?>
         <![endif]-->
     </head>
+
+    <body>
+        <div class="wrapper">
+            <!-- 页面头部Logo -->
+            <header role="banner">
+                
+            </header>
+            
+            <?php
+                if ('student' == Session::read('role')) {
+                    section('student.navigation');
+                } elseif ('teacher' == Session::read('role')) {
+                    section('teacher.navigation');
+                }
+            ?>
+
+            <!-- 页面主体 -->
+            <main class="page-wrapper">
+                <!-- 页面消息 -->
+                <section class="row">
+                    <div class="col-lg-12">
+                        <?php Session::render() ?>
+                    </div>
+                </section>
+            

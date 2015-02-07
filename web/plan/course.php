@@ -1,20 +1,11 @@
 <?php section('header') ?>
-<?php section('student.navigation') ?>
-<?php
-$current = array_pop($courses);
-$count = array_pop($courses);
-$pages = array_pop($courses);
-
-$first = max(1, $current - 4);
-$last = min($pages, $current + 4);
-?>
-                <div class="row">
+                <section class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">课程基本信息</h1>
                     </div>
-                </div>
+                </section>
 
-                <div class="row">
+                <section class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
@@ -53,6 +44,5 @@ $last = min($pages, $current + 4);
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </section>
 <?php section('footer') ?>

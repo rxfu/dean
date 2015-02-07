@@ -24,13 +24,7 @@ class PlanController extends Controller {
 	 * @return array       课程详细信息列表
 	 */
 	protected function course($current = PAGE_INIT, $size = PAGE_SIZE) {
-		$count = 0;
-		$sql   = 'SELECT * FROM t_jx_kc_xx';
-
-		$data            = DB::getInstance()->getPage($sql, null, $current, $size, $count);
-		$data['pages']   = ceil($count / $size);
-		$data['count']   = $count;
-		$data['current'] = $current;
+		$data = DB::getInstance()->searchRecord('t_jx_kc_xx');
 
 		return $this->view->display('plan.course', array('courses' => $data));
 	}
