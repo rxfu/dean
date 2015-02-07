@@ -17,13 +17,11 @@ class PlanController extends Controller {
 	}
 
 	/**
-	 * 分页列出课程详细信息
+	 * 列出课程详细信息
 	 *
-	 * @param int     $current  当前页码
-	 * @param int     $size 每页记录数
 	 * @return array       课程详细信息列表
 	 */
-	protected function course($current = PAGE_INIT, $size = PAGE_SIZE) {
+	protected function course() {
 		$data = DB::getInstance()->searchRecord('t_jx_kc_xx');
 
 		return $this->view->display('plan.course', array('courses' => $data));
