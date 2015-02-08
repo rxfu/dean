@@ -148,6 +148,21 @@ if (!function_exists('between')) {
 	}
 }
 
+if (!function_exists('camelToSnake')) {
+
+	/**
+	 * 转换camel到snake
+	 * @param  string $text camel字符串
+	 * @return string       snake字符串
+	 */
+	function camelToSnake($text) {
+		$text = preg_replace('/[A-Z]/', '_\0', $text);
+		$text = strtolower($text);
+
+		return ltrim($text,'_');
+	}
+}
+
 if (!function_exists('css')) {
 
 	/**
@@ -385,39 +400,6 @@ if (!function_exists('js')) {
 	}
 }
 
-if (!function_exists('toLink')) {
-
-	/**
-	 * 生成路由信息地址
-	 * @return string 路由信息地址，生成失败为NULL
-	 */
-	function toLink() {
-		if (0 == func_num_args()) {
-			return '/';
-		}
-
-		if (1 <= func_num_args()) {
-			$args  = func_get_args();
-			$route = array_shift($args);
-			$route = str_replace('.', '/', $route);
-
-			$param = '';
-			if (!empty($args)) {
-				foreach ($args as $index => $value) {
-					if (is_array($args[$index])) {
-						$args[$index] = implode('/', $args[$index]);
-					}
-				}
-				$param = '/' . implode('/', $args);
-			}
-
-			return getBaseUrl() . $route . $param;
-		}
-
-		return NULL;
-	}
-}
-
 if (!function_exists('parseCourse')) {
 
 	/**
@@ -503,6 +485,54 @@ if (!function_exists('section')) {
 		$path = WEBROOT . DS . $path . '.php';
 
 		include $path;
+	}
+}
+
+if (!function_exists('snakeToCamel')) {
+
+	/**
+	 * 转换snake到camel
+	 * @param  string $text snake字符串
+	 * @return string       camel字符串
+	 */
+	function snakeToCamel($text) {
+		$text = strtr($text, '_', ' ');
+		$text = ucwords($text);
+
+		return str_replace(' ', '', $text);
+	}
+}
+
+if (!function_exists('toLink')) {
+
+	/**
+	 * 生成路由信息地址
+	 * @return string 路由信息地址，生成失败为NULL
+	 */
+	function toLink() {
+		if (0 == func_num_args()) {
+			return '/';
+		}
+
+		if (1 <= func_num_args()) {
+			$args  = func_get_args();
+			$route = array_shift($args);
+			$route = str_replace('.', '/', $route);
+
+			$param = '';
+			if (!empty($args)) {
+				foreach ($args as $index => $value) {
+					if (is_array($args[$index])) {
+						$args[$index] = implode('/', $args[$index]);
+					}
+				}
+				$param = '/' . implode('/', $args);
+			}
+
+			return getBaseUrl() . $route . $param;
+		}
+
+		return NULL;
 	}
 }
 

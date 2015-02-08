@@ -3,7 +3,7 @@
 /**
  * 路由类
  */
-class Route extends Prefab {
+class Route {
 
 	/**
 	 * 路由信息
