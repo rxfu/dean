@@ -159,7 +159,7 @@ if (!function_exists('camelToSnake')) {
 		$text = preg_replace('/[A-Z]/', '_\0', $text);
 		$text = strtolower($text);
 
-		return ltrim($text,'_');
+		return ltrim($text, '_');
 	}
 }
 
