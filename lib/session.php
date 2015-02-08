@@ -10,7 +10,7 @@ class Session {
 	 *
 	 * @var integer
 	 */
-	private static $_session_age = SESS_EXPIRATION;
+	private static $_session_age = SESSION_EXPIRATION;
 
 	/**
 	 * 初始化新会话并保存原有会话
@@ -18,7 +18,7 @@ class Session {
 	 */
 	private static function _init() {
 		// return self::_started() ? self::regenerate() : session_start();
-		if (false == self::_started()) {
+		if (false == self::isStarted()) {
 			session_start();
 		}
 	}
@@ -42,7 +42,7 @@ class Session {
 	 * 判断会话是否开启
 	 * @return boolean 会话开启则为TRUE，未开启则为FALSE
 	 */
-	private static function _started() {
+	public static function isStarted() {
 		$started = false;
 		if (version_compare(phpversion(), '5.4.0', '>=')) {
 			$started = (PHP_SESSION_ACTIVE === session_status() ? true : false);
@@ -59,17 +59,16 @@ class Session {
 	 * @param  mixed $value 会话值
 	 * @return string 写入会话数据
 	 */
-	public static function write($key, $value = '') {
-		if (!is_string($key)) {
-			trigger_error('无效会话参数类型', E_USER_ERROR);
-			return null;
-		}
-
+	public static function set($key, $value = false) {
 		self::_init();
 
-		$_SESSION[$key] = $value;
-
-		self::_age();
+		if (is_array($key) && false === $value) {
+			foreach ($key as $name => $value) {
+				$_SESSION[SESSION_PREFIX . $name] = $value;
+			}
+		} else {
+			$_SESSION[SESSION_PREFIX . $name] = $value;
+		}
 
 		return $value;
 	}
@@ -77,9 +76,10 @@ class Session {
 	/**
 	 * 读取会话数据
 	 * @param  string $key 会话名称
+	 * @param  string $child 子会话名称
 	 * @return mixed      成功返回会话数据，否则返回FALSE
 	 */
-	public static function read($key) {
+	public static function get($key, $child = false) {
 		if (!is_string($key)) {
 			trigger_error('无效会话参数类型', E_USER_ERROR);
 			return false;
@@ -87,10 +87,14 @@ class Session {
 
 		self::_init();
 
-		if (isset($_SESSION[$key])) {
-			self::_age();
-
-			return $_SESSION[$key];
+		if (false === $child) {
+			if (isset($_SESSION[SESSION_PREFIX . $key])) {
+				return $_SESSION[SESSION_PREFIX . $key];
+			}
+		} else {
+			if (isset($_SESSION[$key][$child])) {
+				return $_SESSION[$key][$child];
+			}
 		}
 
 		return false;
@@ -99,7 +103,7 @@ class Session {
 	/**
 	 * 删除会话数据
 	 * @param  string $key 会话名称
-	 * @return void
+	 * @return mixed 删除的会话数据
 	 */
 	public static function delete($key) {
 		if (!is_string($key)) {
@@ -109,122 +113,24 @@ class Session {
 
 		self::_init();
 
-		unset($_SESSION[$key]);
+		$value = $_SESSION[SESSION_PREFIX . $key];
+		unset($_SESSION[SESSION_PREFIX . $key]);
 
-		self::_age();
+		return $value;
 	}
 
 	/**
-	 * 添加flash消息
-	 * @param  string $type    消息类型
-	 * @param  string $message 消息内容
-	 * @return void
+	 * 判断是否有会话数据
+	 * @param  string  $key 会话名称
+	 * @return boolean       有会话数据则为TRUE，无会话数据则为FALSE
 	 */
-	public static function flash($type, $message) {
-		if (!is_string($type) || !is_string($message)) {
-			trigger_error('无效消息类型', E_USER_ERROR);
+	public static function has($key) {
+		if (!is_string($key)) {
+			trigger_error('无效会话参数类型', E_USER_ERROR);
 			return;
 		}
 
-		$types = array('info', 'success', 'warning', 'danger');
-		$type  = strtolower($type);
-
-		if (!in_array($type, $types)) {
-			$type = 'unknown';
-		}
-
-		self::_init();
-
-		if (!isset($_SESSION['flash'])) {
-			$_SESSION['flash'] = array();
-		}
-
-		$_SESSION['flash'][$type][] = $message;
-	}
-
-	/**
-	 * 显示flash消息
-	 * @param  string  $type  消息类型
-	 * @param  boolean $print 输出标志，输出为TRUE，返回数据为FALSE
-	 * @return mixed         格式化后的flash数据
-	 */
-	public static function render($type = 'all', $print = true) {
-		if (is_null($type) || !is_string($type)) {
-			trigger_error('无效消息类型', E_USER_ERROR);
-			return;
-		}
-
-		self::_init();
-
-		if (!isset($_SESSION['flash'])) {
-			return false;
-		}
-
-		if ('all' === $type) {
-			foreach ($_SESSION['flash'] as $type => $messages) {
-				foreach ($messages as $message) {
-					$flash = '<div id="flash_' . $type . '" class="alert alert-dismissable alert-' . $type . '">';
-					$flash .= '<button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
-					$flash .= $message;
-					$flash .= '</div>';
-				}
-			}
-
-			self::clear();
-		} else {
-			if (!isset($_SESSION['flash'][$type])) {
-				$type = 'unknown';
-			}
-
-			foreach ($_SESSION['flash'][$type] as $message) {
-				$flash = '<div id="flash_' . $type . '" class="alert alert-dismissable alert-' . $type . '">';
-				$flash .= '<button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
-				$flash .= $message;
-				$flash .= '</div>';
-			}
-
-			self::clear($type);
-		}
-
-		if ($print) {
-			echo $flash;
-		} else {
-			return $flash;
-		}
-	}
-
-	/**
-	 * 判断对应类型中是否有消息
-	 * @param  string  $type 消息类型
-	 * @return boolean       有消息内容则为TRUE，无消息内容则为FALSE
-	 */
-	public static function has($type) {
-		if (is_null($type) || !is_string($type)) {
-			trigger_error('无效消息类型', E_USER_ERROR);
-			return;
-		}
-
-		return !empty($_SESSION['flash'][$type]);
-	}
-
-	/**
-	 * 清除消息记录
-	 * @param  string $type 消息类型
-	 * @return boolean       成功为TRUE，失败为FALSE
-	 */
-	public static function clear($type = 'all') {
-		if (!is_string($type)) {
-			trigger_error('无效消息类型', E_USER_ERROR);
-			return;
-		}
-
-		if ('all' === $type) {
-			unset($_SESSION['flash']);
-		} else {
-			unset($_SESSION['flash'][$type]);
-		}
-
-		return true;
+		return isset($_SESSION[$key]);
 	}
 
 	/**

@@ -3,7 +3,9 @@
 /**
  * 数据库访问类，单例模式
  */
-class DB extends Prefab {
+class DB {
+
+	use Singleton;
 
 	/**
 	 * 保存数据库查询语句

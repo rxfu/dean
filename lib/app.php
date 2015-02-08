@@ -1,15 +1,17 @@
 <?php
 
 /**
- * 应用程序类
+ * 应用程序类，单例模式
  */
-class App extends Prefab {
+class App {
+
+	use Singleton;
 
 	/**
 	 * 程序版本号
 	 * @var string
 	 */
-	const VERSION = '1.0.0';
+	const VERSION = '1.1.0';
 
 	/**
 	 * 运行网站系统

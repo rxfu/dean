@@ -68,7 +68,8 @@ define('DISABLE', '0');
 /**
  * 会话参数配置
  */
-define('SESS_EXPIRATION', 7200);
+define('SESSION_PREFIX', 'dean_');
+define('SESSION_EXPIRATION', 7200);
 
 /**
  * 日志操作类型配置
