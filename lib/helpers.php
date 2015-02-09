@@ -466,7 +466,7 @@ if (!function_exists('sanitize')) {
 	/**
 	 * 清理输入变量
 	 * @param  array|string $value 转义变量
-	 * @return array|string        转移后变量
+	 * @return array|string        转义后变量
 	 */
 	function sanitize($value) {
 		return is_array($value) ? array_map('sanitize', $value) : trim(htmlentities(strip_tags($value)));

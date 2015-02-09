@@ -117,7 +117,16 @@
                                 <a href="#"><i class="fa fa-tablet fa-fw"></i> 考试报名<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="#">四六级报名</a>
+                                        <a href="<?php echo toLink('exam.cet') ?>">英语等级考试</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo toLink('exam.ncre') ?>">计算机等级考试</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo toLink('exam.psc') ?>">普通话水平测试</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo toLink('exam.tkt') ?>">教师职业能力测试</a>
                                     </li>
                                 </ul>
                             </li>
