@@ -15,7 +15,7 @@ class Message {
 	 * 初始化消息
 	 * @return void
 	 */
-	private static function _init() {
+	protected static function _init() {
 		if (!array_key_exists(SESSION_PREFIX . 'flash', $_SESSION)) {
 			$_SESSION[SESSION_PREFIX . 'flash'] = array();
 		}

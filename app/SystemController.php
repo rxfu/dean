@@ -12,7 +12,7 @@ class SystemController extends Controller {
 	 */
 	protected function log() {
 		$sql  = 'SELECT * FROM t_xk_log WHERE xh = ? ORDER BY czsj DESC';
-		$data = DB::getInstance()->getAll($sql, array(Session::read('username')));
+		$data = DB::getInstance()->getAll($sql, array(Session::get('username')));
 
 		return $this->view->display('system.log', array('logs' => $data));
 	}
@@ -24,7 +24,7 @@ class SystemController extends Controller {
 	 */
 	function message() {
 		$sql  = 'SELECT * FROM t_xk_dxx WHERE xh = ? ORDER BY fssj DESC';
-		$data = DB::getInstance()->getAll($sql, array(Session::read('username')));
+		$data = DB::getInstance()->getAll($sql, array(Session::get('username')));
 
 		return $this->view->display('system.message', array('messages' => $data));
 	}

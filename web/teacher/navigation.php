@@ -11,11 +11,11 @@
                 </div>                    
 
                 <ul class="nav navbar-top-links navbar-right">
-                    <li>欢迎<?php echo Session::read('college') ?><?php echo Session::read('name') ?>老师使用教师管理系统！</li>
+                    <li>欢迎<?php echo Session::get('college') ?><?php echo Session::get('name') ?>老师使用教师管理系统！</li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-user fa-fw"></i>
-                            <span><?php echo Session::read('name') ?></span>
+                            <span><?php echo Session::get('name') ?></span>
                             <i class="fa fa-caret-down"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-user">
@@ -39,7 +39,7 @@
                                     <li>
                                         <a href="#"> 成绩录入<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
-                                            <?php foreach(Session::read('reportCourses') as $item): ?>
+                                            <?php foreach(Session::get('reportCourses') as $item): ?>
                                                 <li>
                                                     <a href="<?php echo toLink('report.input', $item['kcxh']) ?>"><?php echo $item['kcxh'] ?></a>
                                                 </li>
@@ -49,7 +49,7 @@
                                     <li>
                                         <a href="#"> 成绩查询<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
-                                            <?php foreach(Session::read('reportTerms') as $item): ?>
+                                            <?php foreach(Session::get('reportTerms') as $item): ?>
                                                 <li>
                                                     <a href="<?php echo toLink('report.summary', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo Dictionary::get('xq', $item['xq']) ?>学期成绩单</a>
                                                 </li>

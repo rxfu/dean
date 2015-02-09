@@ -34,9 +34,9 @@
             </header>
             
             <?php
-                if ('student' == Session::read('role')) {
+                if ('student' == Session::get('role')) {
                     section('student.navigation');
-                } elseif ('teacher' == Session::read('role')) {
+                } elseif ('teacher' == Session::get('role')) {
                     section('teacher.navigation');
                 }
             ?>
@@ -46,7 +46,7 @@
                 <!-- 页面消息 -->
                 <section class="row">
                     <div class="col-lg-12">
-                        <?php Session::render() ?>
+                        <?php Message::display() ?>
                     </div>
                 </section>
             

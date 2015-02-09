@@ -11,7 +11,7 @@ class PlanController extends Controller {
 	 * @return array         教学计划信息
 	 */
 	protected function index() {
-		$data = DB::getInstance()->searchRecord('v_xk_jxjh', array('zy' => Session::read('spno'), 'nj' => Session::read('grade'), 'zsjj' => Session::read('season')));
+		$data = DB::getInstance()->searchRecord('v_xk_jxjh', array('zy' => Session::get('spno'), 'nj' => Session::get('grade'), 'zsjj' => Session::get('season')));
 
 		return $this->view->display('plan.index', array('plans' => $data));
 	}
@@ -45,7 +45,7 @@ class PlanController extends Controller {
 			'KX' => 0,
 			'JX' => 0,
 		);
-		$requirements = DB::getInstance()->searchRecord('t_jx_byyq', array('zy' => Session::read('spno'), 'nj' => Session::read('grade'), 'zsjj' => Session::read('season'), 'byfa' => Session::read('plan')));
+		$requirements = DB::getInstance()->searchRecord('t_jx_byyq', array('zy' => Session::get('spno'), 'nj' => Session::get('grade'), 'zsjj' => Session::get('season'), 'byfa' => Session::get('plan')));
 
 		if (is_array($requirements)) {
 			foreach ($requirements as $requirement) {

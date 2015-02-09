@@ -15,43 +15,43 @@ class StudentController extends Controller {
 			$password = $_POST['password'];
 
 			if (empty($username) || empty($password)) {
-				Session::flash('danger', '用户名或密码无效');
+				Message::add('danger', '用户名或密码无效');
 				break;
 			}
 
 			if (!(is_numeric($username) && isset($username{11}) && !isset($username{12}))) {
-				Session::flash('danger', '用户名必须是12位学号');
+				Message::add('danger', '用户名必须是12位学号');
 				break;
 			}
 
 			if ($this->auth($username, $password)) {
-				Logger::write(array('xh' => Session::read('username'), 'czlx' => LOG_LOGIN));
+				Logger::write(array('xh' => Session::get('username'), 'czlx' => LOG_LOGIN));
 
 				$info = $this->info($username);
 
-				Session::write('name', $info['xm']);
-				Session::write('college', $info['xy']);
-				Session::write('speciality', $info['zy']);
-				Session::write('spno', $info['zyh']);
-				Session::write('grade', $info['nj']);
-				Session::write('season', $info['zsjj']);
-				Session::write('plan', $info['byfa']);
-				Session::write('system', $info['xz']);
-				Session::write('campus', $info['xqh']);
+				Session::set('name', $info['xm']);
+				Session::set('college', $info['xy']);
+				Session::set('speciality', $info['zy']);
+				Session::set('spno', $info['zyh']);
+				Session::set('grade', $info['nj']);
+				Session::set('season', $info['zsjj']);
+				Session::set('plan', $info['byfa']);
+				Session::set('system', $info['xz']);
+				Session::set('campus', $info['xqh']);
 
-				Session::write('year', Configuration::get('XK_ND'));
-				Session::write('term', Configuration::get('XK_XQ'));
+				Session::set('year', Configuration::get('XK_ND'));
+				Session::set('term', Configuration::get('XK_XQ'));
 
-				Session::write('role', STUDENT);
+				Session::set('role', STUDENT);
 
-				Session::write('courseTerms', $this->courseTerms($username));
-				Session::write('reportTerms', $this->reportTerms($username));
+				Session::set('courseTerms', $this->courseTerms($username));
+				Session::set('reportTerms', $this->reportTerms($username));
 
-				Session::flash('success', '你已经成功登录系统');
+				Message::add('success', '你已经成功登录系统');
 
 				return Redirect::to('home.student');
 			} else {
-				Session::flash('danger', '登录失败，请检查用户名和密码是否正确');
+				Message::add('danger', '登录失败，请检查用户名和密码是否正确');
 			}
 		}
 
@@ -73,8 +73,8 @@ class StudentController extends Controller {
 					$username    = $data[0]['xh'];
 					$currentTime = date('Y-m-d H:i:s');
 
-					Session::write('id', encrypt($username . $currentTime));
-					Session::write('username', $username);
+					Session::set('id', encrypt($username . $currentTime));
+					Session::set('username', $username);
 
 					return true;
 				}
@@ -89,7 +89,7 @@ class StudentController extends Controller {
 	 * @return NULL
 	 */
 	protected function logout() {
-		Logger::write(array('xh' => Session::read('username'), 'czlx' => LOG_LOGOUT));
+		Logger::write(array('xh' => Session::get('username'), 'czlx' => LOG_LOGOUT));
 		Session::destroy();
 
 		return Redirect::to('student.login');
@@ -110,20 +110,20 @@ class StudentController extends Controller {
 				if (($new === $confirmed) && ($old !== $new)) {
 					$db = DB::getInstance();
 
-					$data = $db->searchRecord('t_xk_xsmm', array('xh' => Session::read('username'), 'mm' => hashString($old)), array('xh'));
+					$data = $db->searchRecord('t_xk_xsmm', array('xh' => Session::get('username'), 'mm' => hashString($old)), array('xh'));
 					if (is_array($data)) {
 						if (1 == count($data)) {
-							$db->updateRecord('t_xk_xsmm', array('mm' => hashString($new)), array('xh' => Session::read('username')));
-							Logger::write(array('xh' => Session::read('username'), 'czlx' => LOG_CHGPWD));
+							$db->updateRecord('t_xk_xsmm', array('mm' => hashString($new)), array('xh' => Session::get('username')));
+							Logger::write(array('xh' => Session::get('username'), 'czlx' => LOG_CHGPWD));
 
-							Session::flash('success', '修改密码成功');
+							Message::add('success', '修改密码成功');
 							break;
 						}
 					}
 				}
 			}
 
-			Session::flash('danger', '修改密码失败');
+			Message::add('danger', '修改密码失败');
 		}
 		return $this->view->display('student.password');
 	}
@@ -147,7 +147,7 @@ class StudentController extends Controller {
 	 * @return array 学生详细信息
 	 */
 	protected function profile() {
-		$id = Session::read('username');
+		$id = Session::get('username');
 		if (is_numeric($id) && isset($id{11}) && !isset($id{12})) {
 			$sql  = 'SELECT * FROM v_xk_xsxx WHERE xh = ?';
 			$data = DB::getInstance()->getRow($sql, $id);
@@ -163,7 +163,7 @@ class StudentController extends Controller {
 	 */
 	protected function portrait($file) {
 		$sql = 'SELECT zp FROM t_xs_zxs WHERE xh = ?';
-		$portrait = DB::getInstance()->getRow($sql, Session::read('username'));
+		$portrait = DB::getInstance()->getRow($sql, Session::get('username'));
 		$path     = PORTRAIT . DS;;
 		if (ENABLE == $portrait['zp']) {
 			return readfile($path . $file . '.jpg');

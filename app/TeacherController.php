@@ -15,30 +15,30 @@ class TeacherController extends Controller {
 			$password = $_POST['password'];
 
 			if (empty($username) || empty($password)) {
-				Session::flash('danger', '用户名或密码无效');
+				Message::add('danger', '用户名或密码无效');
 				break;
 			}
 
 			if ($this->auth($username, $password)) {
 				$info = $this->info($username);
 
-				Session::write('name', $info['xm']);
-				Session::write('college', $info['xy']);
-				Session::write('speciality', $info['zy']);
+				Session::set('name', $info['xm']);
+				Session::set('college', $info['xy']);
+				Session::set('speciality', $info['zy']);
 
-				Session::write('year', Configuration::get('CJ_WEB_ND'));
-				Session::write('term', Configuration::get('CJ_WEB_XQ'));
+				Session::set('year', Configuration::get('CJ_WEB_ND'));
+				Session::set('term', Configuration::get('CJ_WEB_XQ'));
 
-				Session::write('role', TEACHER);
+				Session::set('role', TEACHER);
 
-				Session::write('reportCourses', $this->reportCourses($username));
-				Session::write('reportTerms', $this->reportTerms($username));
+				Session::set('reportCourses', $this->reportCourses($username));
+				Session::set('reportTerms', $this->reportTerms($username));
 
-				Session::flash('success', '你已经成功登录系统');
+				Message::add('success', '你已经成功登录系统');
 
 				return Redirect::to('home.teacher');
 			} else {
-				Session::flash('danger', '登录失败，请检查用户名和密码是否正确');
+				Message::add('danger', '登录失败，请检查用户名和密码是否正确');
 			}
 		}
 
@@ -61,8 +61,8 @@ class TeacherController extends Controller {
 						$username    = $data[0]['jsgh'];
 						$currentTime = date('Y-m-d H:i:s');
 
-						Session::write('id', encrypt($username . $currentTime));
-						Session::write('username', $username);
+						Session::set('id', encrypt($username . $currentTime));
+						Session::set('username', $username);
 
 						return true;
 					}
@@ -98,19 +98,19 @@ class TeacherController extends Controller {
 				if (($new === $confirmed) && ($old !== $new)) {
 					$db = DB::getInstance();
 
-					$data = $db->searchRecord('t_pk_js', array('jsgh' => Session::read('username'), 'mm' => hashString($old)), array('jsgh'));
+					$data = $db->searchRecord('t_pk_js', array('jsgh' => Session::get('username'), 'mm' => hashString($old)), array('jsgh'));
 					if (is_array($data)) {
 						if (1 == count($data)) {
-							$db->updateRecord('t_pk_js', array('mm' => hashString($new)), array('jsgh' => Session::read('username')));
+							$db->updateRecord('t_pk_js', array('mm' => hashString($new)), array('jsgh' => Session::get('username')));
 
-							Session::flash('success', '修改密码成功');
+							Message::add('success', '修改密码成功');
 							break;
 						}
 					}
 				}
 			}
 
-			Session::flash('danger', '修改密码失败');
+			Message::add('danger', '修改密码失败');
 		}
 		return $this->view->display('teacher.password');
 	}
@@ -134,7 +134,7 @@ class TeacherController extends Controller {
 	 * @return array 教师详细信息
 	 */
 	protected function profile() {
-		$id = Session::read('username');
+		$id = Session::get('username');
 		if (is_numeric($id)) {
 			$sql  = 'SELECT * FROM v_pk_jsxx WHERE jsgh = ?';
 			$data = DB::getInstance()->getRow($sql, $id);
@@ -151,7 +151,7 @@ class TeacherController extends Controller {
 	 */
 	protected function reportCourses($id) {
 		$sql  = 'SELECT kcxh FROM v_cj_xscjlr WHERE jsgh = ? AND nd = ? AND xq = ? GROUP BY kcxh ORDER BY kcxh';
-		$data = DB::getInstance()->getAll($sql, array($id, Session::read('year'), Session::read('term')));
+		$data = DB::getInstance()->getAll($sql, array($id, Session::get('year'), Session::get('term')));
 
 		return $data;
 	}

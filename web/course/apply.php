@@ -1,7 +1,7 @@
 <?php section('header') ?>
                 <section class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header"><?php echo Session::read('name') ?>同学<?php echo Session::read('year') ?>年度<?php echo Dictionary::get('xq', Session::read('term')) ?>学期<?php echo $title ?>课程申请表</h1>
+                        <h1 class="page-header"><?php echo Session::get('name') ?>同学<?php echo Session::get('year') ?>年度<?php echo Dictionary::get('xq', Session::get('term')) ?>学期<?php echo $title ?>课程申请表</h1>
                     </div>
                 </section>
 

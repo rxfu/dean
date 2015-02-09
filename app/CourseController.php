@@ -67,9 +67,9 @@ class CourseController extends Controller {
 	 */
 	protected function unpaid() {
 		$sql  = 'SELECT xh FROM t_xk_xsqf WHERE xh = ?';
-		$data = DB::getInstance()->getRow($sql, Session::read('username'));
+		$data = DB::getInstance()->getRow($sql, Session::get('username'));
 
-		return strcasecmp($data['xh'], Session::read('username')) ? false : true;
+		return strcasecmp($data['xh'], Session::get('username')) ? false : true;
 	}
 
 	/**
@@ -82,11 +82,11 @@ class CourseController extends Controller {
 		list($property, $platform) = array_pad(str_split($this->codes[$type]['code']), 2, '');
 
 		if (in_array($property . $platform, array($this->codes[BASIC]['code'], $this->codes[REQUIRED]['code'], $this->codes[ELECTIVE]['code']))) {
-			$grade      = Session::read('grade');
-			$speciality = Session::read('spno');
+			$grade      = Session::get('grade');
+			$speciality = Session::get('spno');
 		} else {
 			$sql  = 'SELECT DISTINCT nj FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zsjj = ?';
-			$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('season')));
+			$data = DB::getInstance()->getAll($sql, array(Session::get('year'), Session::get('term'), Session::get('season')));
 			foreach ($data as $g) {
 				if (!isEmpty($g['nj'])) {
 					$grade[] = $g['nj'];
@@ -94,7 +94,7 @@ class CourseController extends Controller {
 			}
 
 			$sql  = 'SELECT DISTINCT zy FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zsjj = ?';
-			$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('season')));
+			$data = DB::getInstance()->getAll($sql, array(Session::get('year'), Session::get('term'), Session::get('season')));
 			foreach ($data as $sp) {
 				if (!isEmpty($sp['zy'])) {
 					$speciality[] = $sp['zy'];
@@ -112,7 +112,7 @@ class CourseController extends Controller {
 			}
 		}
 
-		$param = "'" . implode("','", array(Session::read('season'), Session::read('username'), Session::read('year'), Session::read('term'), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality))) . "'";
+		$param = "'" . implode("','", array(Session::get('season'), Session::get('username'), Session::get('year'), Session::get('term'), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality))) . "'";
 		$data  = DB::getInstance()->query('SELECT * FROM p_kxkcb_sel(' . $param . ', null, null)');
 
 		$courses = array();
@@ -184,7 +184,7 @@ class CourseController extends Controller {
 			}
 
 			if (isset($grade) && isset($speciality) && isset($platform) && isset($property)) {
-				$param = "'" . implode("','", array(Session::read('season'), Session::read('username'), Session::read('year'), Session::read('term'), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality), $cno, $cname)) . "'";
+				$param = "'" . implode("','", array(Session::get('season'), Session::get('username'), Session::get('year'), Session::get('term'), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality), $cno, $cname)) . "'";
 				$data  = DB::getInstance()->query('SELECT * FROM p_kxkcb_sel(' . $param . ')');
 
 				$courses = array();
@@ -214,21 +214,21 @@ class CourseController extends Controller {
 			$type    = $_POST['type'];
 
 			if ('true' == $checked) {
-				$param = "'" . implode("','", array(Session::read('year'), Session::read('term'), Session::read('username'), $cno, Session::read('name'), Session::read('grade'), Session::read('spno'), Session::read('season'))) . "'";
+				$param = "'" . implode("','", array(Session::get('year'), Session::get('term'), Session::get('username'), $cno, Session::get('name'), Session::get('grade'), Session::get('spno'), Session::get('season'))) . "'";
 
 				$selected = DB::getInstance()->query('SELECT p_xzkc_save(' . $param . ')');
 				if ($selected) {
-					Logger::write(array('xh' => Session::read('username'), 'kcxh' => $cno, 'czlx' => LOG_INSERT));
+					Logger::write(array('xh' => Session::get('username'), 'kcxh' => $cno, 'czlx' => LOG_INSERT));
 					echo 'success';
 				} else {
 					echo 'failed';
 				}
 			} else {
-				$param = "'" . implode("','", array(Session::read('year'), Session::read('term'), Session::read('username'), $cno)) . "'";
+				$param = "'" . implode("','", array(Session::get('year'), Session::get('term'), Session::get('username'), $cno)) . "'";
 
 				$deleted = DB::getInstance()->query('SELECT p_scxk_del(' . $param . ')');
 				if ($deleted) {
-					Logger::write(array('xh' => Session::read('username'), 'kcxh' => $cno, 'czlx' => LOG_DELETE));
+					Logger::write(array('xh' => Session::get('username'), 'kcxh' => $cno, 'czlx' => LOG_DELETE));
 					echo 'success';
 				} else {
 					echo 'failed';
@@ -248,10 +248,10 @@ class CourseController extends Controller {
 		$collision = false;
 
 		$sql      = 'SELECT kcxh, ksz, jsz, zc, ksj, jsj FROM t_pk_kb WHERE nd = ? AND xq = ? AND kcxh = ?';
-		$currents = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), $course));
+		$currents = DB::getInstance()->getAll($sql, array(Session::get('year'), Session::get('term'), $course));
 
 		$sql      = 'SELECT kcxh, ksz, jsz, zc, ksj, jsj FROM v_xk_xskcb WHERE xh = ? AND nd = ? AND xq = ?';
-		$compares = DB::getInstance()->getAll($sql, array(Session::read('username'), Session::read('year'), Session::read('term')));
+		$compares = DB::getInstance()->getAll($sql, array(Session::get('username'), Session::get('year'), Session::get('term')));
 
 		foreach ($currents as $current) {
 			foreach ($compares as $compare) {
@@ -301,34 +301,34 @@ class CourseController extends Controller {
 			} elseif (OTHERS == $type) {
 				$data['xklx'] = APPLY_OTHERS;
 			}
-			$data['xh']   = Session::read('username');
-			$data['xm']   = Session::read('name');
-			$data['nd']   = Session::read('year');
-			$data['xq']   = Session::read('term');
+			$data['xh']   = Session::get('username');
+			$data['xm']   = Session::get('name');
+			$data['nd']   = Session::get('year');
+			$data['xq']   = Session::get('term');
 			$data['kcxh'] = $cno;
 			$data['xksj'] = date('Y-m-d H:i:s');
 
 			$sql          = 'SELECT kch, pt, xz, kkxy FROM v_xk_kxkcxx WHERE kcxh = ? AND nd = ? AND xq = ?';
-			$course       = DB::getInstance()->getRow($sql, array($cno, Session::read('year'), Session::read('term')));
+			$course       = DB::getInstance()->getRow($sql, array($cno, Session::get('year'), Session::get('term')));
 			$data['kch']  = $course['kch'];
 			$data['pt']   = $course['pt'];
 			$data['xz']   = $course['xz'];
 			$data['kkxy'] = $course['kkxy'];
 			DB::getInstance()->insertRecord('t_xk_xksq', $data);
 
-			Logger::write(array('xh' => Session::read('username'), 'kcxh' => $data['kcxh'], 'czlx' => LOG_APPLY));
+			Logger::write(array('xh' => Session::get('username'), 'kcxh' => $data['kcxh'], 'czlx' => LOG_APPLY));
 
 			return Redirect::to('course.process');
 		}
 
 		if (RETAKE == $type) {
 			$sql    = 'SELECT DISTINCT nd FROM t_xk_xkxx WHERE xh = ?';
-			$lyears = DB::getInstance()->getAll($sql, array(Session::read('username')));
+			$lyears = DB::getInstance()->getAll($sql, array(Session::get('username')));
 
 			$lterms = Dictionary::getAll('xq');
 
 			$sql   = 'SELECT DISTINCT kcxh, kcmc FROM v_xk_xskcb WHERE xh = ? ORDER BY kcxh';
-			$lcnos = DB::getInstance()->getAll($sql, array(Session::read('username')));
+			$lcnos = DB::getInstance()->getAll($sql, array(Session::get('username')));
 
 			return $this->view->display('course.apply', array('type' => $type, 'cno' => $cno, 'title' => $this->codes[$type]['name'], 'lyears' => $lyears, 'lterms' => $lterms, 'lcnos' => $lcnos));
 		}
@@ -340,7 +340,7 @@ class CourseController extends Controller {
 	 * @return array 课程申请列表
 	 */
 	protected function process() {
-		$data = DB::getInstance()->searchRecord('t_xk_xksq', array('xh' => Session::read('username')));
+		$data = DB::getInstance()->searchRecord('t_xk_xksq', array('xh' => Session::get('username')));
 		return $this->view->display('course.process', array('courses' => $data));
 	}
 

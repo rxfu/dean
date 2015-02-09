@@ -11,7 +11,7 @@ class ReportController extends Controller {
 	 * @return array     学生成绩
 	 */
 	protected function index() {
-		$data = DB::getInstance()->searchRecord('v_cj_xscj', array('xh' => Session::read('username')));
+		$data = DB::getInstance()->searchRecord('v_cj_xscj', array('xh' => Session::get('username')));
 
 		return $this->view->display('report.index', array('scores' => $data));
 	}
@@ -23,7 +23,7 @@ class ReportController extends Controller {
 	 * @return array       学生成绩
 	 */
 	protected function detail($cno) {
-		$data = DB::getInstance()->searchRecord('v_cj_xsgccj', array('xh' => Session::read('username'), 'nd' => $year, 'xq' => $term));
+		$data = DB::getInstance()->searchRecord('v_cj_xsgccj', array('xh' => Session::get('username'), 'nd' => $year, 'xq' => $term));
 
 		return $this->view->display('report.term', array('scores' => $data, 'year' => $year, 'term' => $term));
 	}
@@ -34,7 +34,7 @@ class ReportController extends Controller {
 	 */
 	protected function unconfirmed() {
 		$sql  = 'SELECT * FROM v_cj_xsgccj WHERE nd = ? AND xq = ? AND xh = ? AND tjzt = ?ORDER BY kcxh';
-		$data = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), Session::read('username'), COLLEGE_CONFIRMED));
+		$data = DB::getInstance()->getAll($sql, array(Session::get('year'), Session::get('term'), Session::get('username'), COLLEGE_CONFIRMED));
 
 		$ratios = array();
 		$scores = array();
@@ -72,14 +72,14 @@ class ReportController extends Controller {
 	 */
 	protected function input($cno) {
 		$sql  = 'SELECT kcxh, kcmc, kkxy, nj, zy FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND kcxh = ?';
-		$info = DB::getInstance()->getRow($sql, array(Session::read('year'), Session::read('term'), $cno));
+		$info = DB::getInstance()->getRow($sql, array(Session::get('year'), Session::get('term'), $cno));
 
 		$sql    = 'SELECT * FROM v_cj_xscjlr WHERE nd = ? AND xq = ? AND kcxh = ? ORDER BY xh';
-		$data   = DB::getInstance()->getAll($sql, array(Session::read('year'), Session::read('term'), $cno));
+		$data   = DB::getInstance()->getAll($sql, array(Session::get('year'), Session::get('term'), $cno));
 		$ratios = $this->ratio($data[0]['cjfs']);
 
-		Session::write('mode', $data[0]['cjfs']);
-		Session::write('major_grade', max(array_keys($ratios['mode'])));
+		Session::set('mode', $data[0]['cjfs']);
+		Session::set('major_grade', max(array_keys($ratios['mode'])));
 
 		return $this->view->display('report.input', array('info' => $info, 'scores' => $data, 'ratios' => $ratios));
 	}
@@ -95,7 +95,7 @@ class ReportController extends Controller {
 			$mode  = substr($_POST['mode'], 5);
 			$score = $_POST['score'];
 
-			$ratios = $this->ratio(Session::read('mode'));
+			$ratios = $this->ratio(Session::get('mode'));
 			$fields = array();
 			foreach (array_keys($ratios['mode']) as $key) {
 				$fields[] = 'cj' . $key;
@@ -104,9 +104,9 @@ class ReportController extends Controller {
 
 			// 计算总评成绩
 			$sql                  = 'SELECT ' . $field . ' FROM t_cj_web WHERE nd = ? AND xq = ? AND kcxh = ? AND xh = ?';
-			$grades               = DB::getInstance()->getRow($sql, array(Session::read('year'), Session::read('term'), $cno, $sno));
+			$grades               = DB::getInstance()->getRow($sql, array(Session::get('year'), Session::get('term'), $cno, $sno));
 			$grades['cj' . $mode] = $score;
-			$majorGrade           = Session::read('major_grade');
+			$majorGrade           = Session::get('major_grade');
 			if (PASSLINE > $grades['cj' . $majorGrade]) {
 				$total = $grades['cj' . $majorGrade];
 			} else {
@@ -118,9 +118,9 @@ class ReportController extends Controller {
 			}
 
 			// 更新WEB成绩表
-			$updated = DB::getInstance()->updateRecord('t_cj_web', array('cj' . $mode => $score, 'zpcj' => $total), array('nd' => Session::read('year'), 'xq' => Session::read('term'), 'xh' => $sno, 'kcxh' => $cno));
+			$updated = DB::getInstance()->updateRecord('t_cj_web', array('cj' . $mode => $score, 'zpcj' => $total), array('nd' => Session::get('year'), 'xq' => Session::get('term'), 'xh' => $sno, 'kcxh' => $cno));
 			if ($updated) {
-				$data  = DB::getInstance()->searchRecord('t_cj_web', array('nd' => Session::read('year'), 'xq' => Session::read('term'), 'kcxh' => $cno, 'xh' => $sno), array('zpcj'));
+				$data  = DB::getInstance()->searchRecord('t_cj_web', array('nd' => Session::get('year'), 'xq' => Session::get('term'), 'kcxh' => $cno, 'xh' => $sno), array('zpcj'));
 				$total = $data[0]['zpcj'];
 			}
 
@@ -138,7 +138,7 @@ class ReportController extends Controller {
 	 * @return boolean      确认成功为TRUE，否则为FALSE
 	 */
 	protected function confirm($cno) {
-		DB::getInstance()->updateRecord('t_cj_web', array('tjzt' => COMMITTED), array('nd' => Session::read('year'), 'xq' => Session::read('term'), 'kcxh' => $cno));
+		DB::getInstance()->updateRecord('t_cj_web', array('tjzt' => COMMITTED), array('nd' => Session::get('year'), 'xq' => Session::get('term'), 'kcxh' => $cno));
 		return Redirect::to('report.input.' . $cno);
 	}
 
@@ -150,7 +150,7 @@ class ReportController extends Controller {
 	 */
 	protected function summary($year, $term) {
 		$sql  = 'SELECT DISTINCT kcxh, kcmc FROM v_cj_xsgccj WHERE nd = ? AND xq = ? AND jsgh = ? ORDER BY kcxh';
-		$data = DB::getInstance()->getAll($sql, array($year, $term, Session::read('username')));
+		$data = DB::getInstance()->getAll($sql, array($year, $term, Session::get('username')));
 
 		return $this->view->display('report.summary', array('courses' => $data, 'year' => $year, 'term' => $term));
 	}
