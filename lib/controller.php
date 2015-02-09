@@ -12,6 +12,12 @@ class Controller {
 	protected $view = null;
 
 	/**
+	 * 排除列表
+	 * @var array
+	 */
+	protected $excepts = array();
+
+	/**
 	 * 控制器构造方法
 	 */
 	public function __construct() {

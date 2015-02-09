@@ -3,7 +3,9 @@
 /**
  * 系统配置类
  */
-final class Configuration extends Prefab {
+final class Configuration {
+
+	use Singleton;
 
 	/**
 	 * 系统参数表
@@ -32,7 +34,7 @@ final class Configuration extends Prefab {
 	 * @return string|integer      系统参数值
 	 */
 	public static function get($id) {
-		$config = Configuration::getInstance();
+		$config = self::getInstance();
 		$sql    = 'SELECT value FROM ' . self::$_table . ' WHERE id = ?';
 		$data   = $config::$_dbh->getRow($sql, $id);
 

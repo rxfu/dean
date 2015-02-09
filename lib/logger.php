@@ -3,7 +3,9 @@
 /**
  * 日志类
  */
-class Logger extends Prefab {
+class Logger {
+
+	use Singleton;
 
 	/**
 	 * 日志表

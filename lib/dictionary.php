@@ -3,7 +3,9 @@
 /**
  * 字典类
  */
-final class Dictionary extends Prefab {
+final class Dictionary {
+
+	use Singleton;
 
 	/**
 	 * 字典表前缀

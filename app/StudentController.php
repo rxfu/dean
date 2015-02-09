@@ -206,16 +206,4 @@ class StudentController extends Controller {
 		return $this->view->display('student.unpaid');
 	}
 
-	/**
-	 * 获取校区号
-	 * @return string 校区号
-	 */
-	public function campus() {
-		if (isAjax()) {
-			echo Session::read('campus');
-		}
-
-		return Session::read('campus');
-	}
-
 }
