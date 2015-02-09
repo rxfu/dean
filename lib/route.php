@@ -38,4 +38,15 @@ class Route {
 
 		return array($controller, $action, $queryString);
 	}
+
+	/**
+	 * 分发路由信息
+	 * @param  string $url 请求URL
+	 * @return [type] [description]
+	 */
+	public static function dispatch($url) {
+		$uri = explode('/', trim($url, '/'));
+		
+	}
+
 }
