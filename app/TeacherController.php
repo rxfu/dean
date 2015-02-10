@@ -33,8 +33,8 @@ class TeacherController extends TeacherAdminController {
 
 				Session::set('role', TEACHER);
 
-				Session::set('reportCourses', $this->reportCourses($username));
-				Session::set('reportTerms', $this->reportTerms($username));
+				Session::set('scoreCourses', $this->scoreCourses($username));
+				Session::set('scoreTerms', $this->scoreTerms($username));
 
 				Message::add('success', '你已经成功登录系统');
 
@@ -102,13 +102,13 @@ class TeacherController extends TeacherAdminController {
 				if (($new === $confirmed) && ($old !== $new)) {
 					$db = DB::getInstance();
 
-					$data = $db->searchRecord('t_pk_js', array('jsgh' => Session::get('username'), 'mm' => hashString($old)), array('jsgh'));
+					$data = $db->searchRecord('t_pk_js', array('jsgh' => Session::get('username'), 'mm' => encrypt($old)), array('jsgh'));
 					if (is_array($data)) {
 						if (1 == count($data)) {
-							$db->updateRecord('t_pk_js', array('mm' => hashString($new)), array('jsgh' => Session::get('username')));
+							$db->updateRecord('t_pk_js', array('mm' => encrypt($new)), array('jsgh' => Session::get('username')));
 
 							Message::add('success', '修改密码成功');
-							break;
+							return $this->view->display('teacher.password');
 						}
 					}
 				}
@@ -153,7 +153,7 @@ class TeacherController extends TeacherAdminController {
 	 * @param string  $id 教师工号
 	 * @return array     课程数组
 	 */
-	protected function reportCourses($id) {
+	protected function scoreCourses($id) {
 		$sql  = 'SELECT kcxh FROM v_cj_xscjlr WHERE jsgh = ? AND nd = ? AND xq = ? GROUP BY kcxh ORDER BY kcxh';
 		$data = DB::getInstance()->getAll($sql, array($id, Session::get('year'), Session::get('term')));
 
@@ -166,7 +166,7 @@ class TeacherController extends TeacherAdminController {
 	 * @param string  $id 学号
 	 * @return array     学期数据
 	 */
-	protected function reportTerms($id) {
+	protected function scoreTerms($id) {
 		$sql  = 'SELECT nd, xq FROM v_cj_xsgccj WHERE jsgh = ? GROUP BY nd, xq ORDER BY nd DESC, xq DESC';
 		$data = DB::getInstance()->getAll($sql, $id);
 

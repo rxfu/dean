@@ -38,7 +38,7 @@ class Controller {
 	 */
 	public function __call($method, $arguments) {
 		if (method_exists($this, $method)) {
-			if (!in_array($method, $before_excepts)) {
+			if (!in_array($method, $this->before_excepts)) {
 				$this->before();
 			}
 
@@ -56,7 +56,7 @@ class Controller {
 				call_user_func_array(array($this, $afterMethod), $arguments);
 			}
 
-			if (!in_array($method, $after_excepts)) {
+			if (!in_array($method, $this->after_excepts)) {
 				$this->after();
 			}
 		}

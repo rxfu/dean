@@ -9,7 +9,7 @@ class Message {
 	 * 消息类型
 	 * @var array
 	 */
-	private $types = array('info', 'success', 'warning', 'danger');
+	private static $types = array('info', 'success', 'warning', 'danger');
 
 	/**
 	 * 初始化消息
@@ -29,14 +29,14 @@ class Message {
 	 */
 	public static function add($type, $message) {
 		if (!isset($_SESSION[SESSION_PREFIX . 'flash'])) {
-			return false;
+			self::_init();
 		}
 
 		if (!isset($type) || !isset($message[0])) {
 			return false;
 		}
 
-		if (!in_array($type, $this->types)) {
+		if (!in_array($type, self::$types)) {
 			trigger_error('无效消息类型', E_USER_ERROR);
 			return;
 		}
@@ -66,7 +66,7 @@ class Message {
 			return false;
 		}
 
-		if (in_array($type, $this->types)) {
+		if (in_array($type, self::$types)) {
 			foreach ($_SESSION[SESSION_PREFIX . 'flash'][$type] as $message) {
 				$data = '<div id="flash_' . $type . '" class="alert alert-dismissable alert-' . $type . '">';
 				$data .= '<button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';

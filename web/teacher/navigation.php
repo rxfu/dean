@@ -39,9 +39,9 @@
                                     <li>
                                         <a href="#"> 成绩录入<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
-                                            <?php foreach(Session::get('reportCourses') as $item): ?>
+                                            <?php foreach(Session::get('scoreCourses') as $item): ?>
                                                 <li>
-                                                    <a href="<?php echo toLink('report.input', $item['kcxh']) ?>"><?php echo $item['kcxh'] ?></a>
+                                                    <a href="<?php echo toLink('score.input', $item['kcxh']) ?>"><?php echo $item['kcxh'] ?></a>
                                                 </li>
                                             <?php endforeach; ?>
                                         </ul>
@@ -49,9 +49,9 @@
                                     <li>
                                         <a href="#"> 成绩查询<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
-                                            <?php foreach(Session::get('reportTerms') as $item): ?>
+                                            <?php foreach(Session::get('scoreTerms') as $item): ?>
                                                 <li>
-                                                    <a href="<?php echo toLink('report.summary', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo Dictionary::get('xq', $item['xq']) ?>学期成绩单</a>
+                                                    <a href="<?php echo toLink('score.summary', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo Dictionary::get('xq', $item['xq']) ?>学期成绩单</a>
                                                 </li>
                                             <?php endforeach; ?>
                                         </ul>

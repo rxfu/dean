@@ -474,9 +474,9 @@ if (!function_exists('redirect')) {
 	 */
 	function redirect($url, $params = null) {
 		$url = strtr($url, '.', '/') . '/';
-		
-		if (isEmtpy($params)) {
-			header('Location: '.getBaseUrl().$url);
+
+		if (isEmpty($params)) {
+			header('Location: ' . getBaseUrl() . $url);
 		} elseif (is_array($params)) {
 			header('Location: ' . getBaseUrl() . $url . implode('/', $params));
 		}

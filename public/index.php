@@ -12,10 +12,8 @@ define('ROOT', dirname(__DIR__));
 require_once ROOT . DS . 'config.php';
 require_once LIBROOT . DS . 'helpers.php';
 
-require_once LIBROOT . DS . 'autoloader.class.php';
+require_once LIBROOT . DS . 'autoloader.php';
 Autoloader::register();
-
-require_once ROOT . DS . 'routes.php';
 
 $app = App::getInstance();
 $app->run();

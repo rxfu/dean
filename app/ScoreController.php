@@ -41,7 +41,7 @@ class ScoreController extends TeacherAdminController {
 		Session::set('mode', $data[0]['cjfs']);
 		Session::set('major_grade', max(array_keys($ratios['mode'])));
 
-		return $this->view->display('report.input', array('info' => $info, 'scores' => $data, 'ratios' => $ratios));
+		return $this->view->display('score.input', array('info' => $info, 'scores' => $data, 'ratios' => $ratios));
 	}
 
 	/**
@@ -101,7 +101,7 @@ class ScoreController extends TeacherAdminController {
 	 */
 	protected function confirm($cno) {
 		DB::getInstance()->updateRecord('t_cj_web', array('tjzt' => COMMITTED), array('nd' => Session::get('year'), 'xq' => Session::get('term'), 'kcxh' => $cno));
-		return Redirect::to('report.input.' . $cno);
+		return Redirect::to('score.input.' . $cno);
 	}
 
 	/**
@@ -114,7 +114,7 @@ class ScoreController extends TeacherAdminController {
 		$sql  = 'SELECT DISTINCT kcxh, kcmc FROM v_cj_xsgccj WHERE nd = ? AND xq = ? AND jsgh = ? ORDER BY kcxh';
 		$data = DB::getInstance()->getAll($sql, array($year, $term, Session::get('username')));
 
-		return $this->view->display('report.summary', array('courses' => $data, 'year' => $year, 'term' => $term));
+		return $this->view->display('score.summary', array('courses' => $data, 'year' => $year, 'term' => $term));
 	}
 
 	/**
@@ -131,7 +131,7 @@ class ScoreController extends TeacherAdminController {
 		$sql    = 'SELECT * FROM v_cj_xsgccj WHERE nd = ? AND xq = ? AND kcxh = ? ORDER BY xh';
 		$data   = DB::getInstance()->getAll($sql, array($year, $term, $cno));
 		$ratios = is_array($data) ? $this->ratio($data[0]['cjfs']) : array();
-		return $this->view->display('report.score', array('info' => $info, 'scores' => $data, 'ratios' => $ratios));
+		return $this->view->display('score.score', array('info' => $info, 'scores' => $data, 'ratios' => $ratios));
 	}
 
 }

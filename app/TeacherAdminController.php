@@ -10,6 +10,8 @@ class TeacherAdminController extends Controller {
 	 */
 	public function __construct() {
 		$this->before_excepts = array('login', 'auth', 'logout');
+
+		parent::__construct();
 	}
 
 	/**
@@ -18,7 +20,7 @@ class TeacherAdminController extends Controller {
 	 */
 	protected function before() {
 		parent::before();
-		
+
 		if ('teacher' != Session::get('role')) {
 			redirect('teacher.login');
 		}

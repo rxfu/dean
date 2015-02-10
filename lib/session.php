@@ -67,7 +67,7 @@ class Session {
 				$_SESSION[SESSION_PREFIX . $name] = $value;
 			}
 		} else {
-			$_SESSION[SESSION_PREFIX . $name] = $value;
+			$_SESSION[SESSION_PREFIX . $key] = $value;
 		}
 
 		return $value;
@@ -169,7 +169,7 @@ class Session {
 	 * @return boolean 成功返回TRUE，失败返回FALSE
 	 */
 	public static function close() {
-		if (self::_started()) {
+		if (self::isStarted()) {
 			return session_write_close();
 		}
 
@@ -181,7 +181,7 @@ class Session {
 	 * @return void
 	 */
 	public static function destroy() {
-		if (self::_started()) {
+		if (self::isStarted()) {
 			session_unset();
 
 			if (ini_get('session.use_cookies')) {

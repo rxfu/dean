@@ -27,7 +27,7 @@
     </head>
 
     <body>
-        <div class="wrapper">
+        <div id="wrapper">
             <!-- 页面头部Logo -->
             <header role="banner">
                 
@@ -42,7 +42,7 @@
             ?>
 
             <!-- 页面主体 -->
-            <main class="page-wrapper">
+            <main id="page-wrapper">
                 <!-- 页面消息 -->
                 <section class="row">
                     <div class="col-lg-12">

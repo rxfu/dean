@@ -114,14 +114,14 @@ class StudentController extends StudentAdminController {
 				if (($new === $confirmed) && ($old !== $new)) {
 					$db = DB::getInstance();
 
-					$data = $db->searchRecord('t_xk_xsmm', array('xh' => Session::get('username'), 'mm' => hashString($old)), array('xh'));
+					$data = $db->searchRecord('t_xk_xsmm', array('xh' => Session::get('username'), 'mm' => encrypt($old)), array('xh'));
 					if (is_array($data)) {
 						if (1 == count($data)) {
-							$db->updateRecord('t_xk_xsmm', array('mm' => hashString($new)), array('xh' => Session::get('username')));
+							$db->updateRecord('t_xk_xsmm', array('mm' => encrypt($new)), array('xh' => Session::get('username')));
 							Logger::write(array('xh' => Session::get('username'), 'czlx' => LOG_CHGPWD));
 
 							Message::add('success', '修改密码成功');
-							break;
+							return $this->view->display('student.password');
 						}
 					}
 				}
