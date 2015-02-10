@@ -3,7 +3,7 @@
 /**
  * 课程表类
  */
-class ScheduleController extends Controller {
+class ScheduleController extends StudentAdminController {
 
 	/**
 	 * 列出当前学生当前年度、学期选课课程表

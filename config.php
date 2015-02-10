@@ -66,6 +66,12 @@ define('ENABLE', '1');
 define('DISABLE', '0');
 
 /**
+ * 默认路由配置
+ */
+define('DEFAULT_CONTROLLER', 'home');
+define('DEFAULT_METHOD', 'index');
+
+/**
  * 会话参数配置
  */
 define('SESSION_PREFIX', 'dean_');

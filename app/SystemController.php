@@ -3,7 +3,7 @@
 /**
  * 系统控制器
  */
-class SystemController extends Controller {
+class SystemController extends StudentAdminController {
 
 	/**
 	 * 列出选课日志

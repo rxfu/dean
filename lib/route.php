@@ -54,8 +54,6 @@ class Route {
 			$args       = is_array($parts) && count($parts) > 2 ? array_slice($parts, 2) : array();
 
 			$controller = snakeToCamel($controller) . 'Controller';
-			$method     = snakeToCamel($method);
-
 			if (!file_exists(APPROOT . DS . $controller . '.php')) {
 				trigger_error('类文件' . $controller . '.php 不存在');
 				return;
@@ -65,7 +63,7 @@ class Route {
 			if (method_exists($dispatch, $method)) {
 				call_user_func_array(array($dispatch, $method), $args);
 			} else {
-				trigger_error('方法 ' . $action . ' 在类 ' . $controller . ' 中不存在');
+				trigger_error('方法 ' . $method . ' 在类 ' . $controller . ' 中不存在');
 				return;
 			}
 		}

@@ -27,7 +27,7 @@ class View {
 	 * @return string           渲染后的模板
 	 */
 	public function render($template, array $data = array()) {
-		$templateFile = str_replace('.', DS, $template) . '.php';
+		$templateFile = strtr($template, '.', DS) . '.php';
 		$templatePath = $this->templateDirectory . DS . ltrim($templateFile, DS);
 		if (!is_file($templatePath)) {
 			throw new RuntimeException('模板文件 ' . $templatePath . ' 不存在！');

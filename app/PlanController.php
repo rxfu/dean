@@ -3,7 +3,7 @@
 /**
  * 教学计划类
  */
-class PlanController extends Controller {
+class PlanController extends StudentAdminController {
 
 	/**
 	 * 列出当前学生的教学计划

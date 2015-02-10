@@ -1,9 +1,9 @@
 <?php
 
 /**
- * 用户控制器
+ * 学生控制器
  */
-class StudentController extends Controller {
+class StudentController extends StudentAdminController {
 
 	/**
 	 * 登录系统
@@ -11,6 +11,8 @@ class StudentController extends Controller {
 	 */
 	protected function login() {
 		if (isPost()) {
+			$_POST = sanitize($_POST);
+
 			$username = $_POST['username'];
 			$password = $_POST['password'];
 
@@ -101,6 +103,8 @@ class StudentController extends Controller {
 	 */
 	protected function password() {
 		if (isPost()) {
+			$_POST = sanitize($_POST);
+			
 			$old       = $_POST['oldPassword'];
 			$new       = $_POST['newPassword'];
 			$confirmed = $_POST['confirmedPassword'];

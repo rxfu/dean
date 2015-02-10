@@ -3,7 +3,7 @@
 /**
  * 课程类
  */
-class CourseController extends Controller {
+class CourseController extends StudentAdminController {
 
 	/**
 	 * 课程平台性质对应代码表
@@ -209,6 +209,8 @@ class CourseController extends Controller {
 	 */
 	protected function select() {
 		if (isPost()) {
+			$_POST = sanitize($_POST);
+
 			$cno     = $_POST['course'];
 			$checked = $_POST['checked'];
 			$type    = $_POST['type'];
@@ -293,6 +295,8 @@ class CourseController extends Controller {
 	 */
 	protected function apply($type, $cno) {
 		if (isPost()) {
+			$_POST = sanitize($_POST);
+			
 			if (RETAKE == $type) {
 				$data['ynd']   = $_POST['lyear'];
 				$data['yxq']   = $_POST['lterm'];

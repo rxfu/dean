@@ -20,14 +20,9 @@ class App {
 	public function run() {
 		$this->setReporting();
 		set_error_handler('error', E_USER_ERROR);
+
 		Session::start();
-
-		if (isset($_GET['url'])) {
-			$this->call($_GET['url']);
-		} else {
-			$this->call();
-		}
-
+		Route::dispatch();
 		Session::close();
 	}
 
@@ -43,23 +38,6 @@ class App {
 			ini_set('display_errors', 'Off');
 			ini_set('log_errors', 'On');
 			ini_set('error_log', LOGROOT . DS . 'error.log');
-		}
-	}
-
-	/**
-	 * 请求执行控制器中方法
-	 * @param  string $url 请求URL
-	 * @return NULL
-	 */
-	public function call($url = NULL) {
-		$url                                     = is_null($url) ? '/' : $url;
-		list($controller, $action, $queryString) = Route::parse($url);
-		$controller                              = ucwords($controller) . 'Controller';
-		$dispatch                                = new $controller;
-		if (method_exists($dispatch, $action)) {
-			call_user_func_array(array($dispatch, $action), $queryString);
-		} else {
-			throw new RuntimeException('方法 ' . $action . ' 在类 ' . $controller . ' 中不存在');
 		}
 	}
 

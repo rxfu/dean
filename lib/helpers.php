@@ -200,6 +200,9 @@ if (!function_exists('error')) {
 	 * @return NULL
 	 */
 	function error($code, $message, $file, $line) {
+		if (!headers_sent()) {
+			header('Content-Type:text/html; charset=utf-8');
+		}
 		switch ($code) {
 			case E_USER_ERROR:
 				echo '<b>ERROR</b>: [' . $code . '] ' . $message . '<br />' . PHP_EOL;
@@ -457,6 +460,25 @@ if (!function_exists('parseType')) {
 				return '重修申请';
 			default:
 				return '未知类型';
+		}
+	}
+}
+
+if (!function_exists('redirect')) {
+
+	/**
+	 * 重定向页面
+	 * @param  string $url 重定向URL
+	 * @param  array $params 重定向参数
+	 * @return void
+	 */
+	function redirect($url, $params = null) {
+		$url = strtr($url, '.', '/') . '/';
+		
+		if (isEmtpy($params)) {
+			header('Location: '.getBaseUrl().$url);
+		} elseif (is_array($params)) {
+			header('Location: ' . getBaseUrl() . $url . implode('/', $params));
 		}
 	}
 }

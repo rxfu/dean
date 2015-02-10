@@ -12,10 +12,16 @@ class Controller {
 	protected $view = null;
 
 	/**
-	 * 排除列表
+	 * 前过滤器排除列表
 	 * @var array
 	 */
-	protected $excepts = array();
+	protected $before_excepts = array();
+
+	/**
+	 * 后过滤器排除列表
+	 * @var array
+	 */
+	protected $after_excepts = array();
 
 	/**
 	 * 控制器构造方法
@@ -32,8 +38,11 @@ class Controller {
 	 */
 	public function __call($method, $arguments) {
 		if (method_exists($this, $method)) {
-			$this->before();
-			$beforeMethod = 'before_' . $method;
+			if (!in_array($method, $before_excepts)) {
+				$this->before();
+			}
+
+			$beforeMethod = 'before' . snakeToCamel($method);
 			if (method_exists($this, $beforeMethod)) {
 				if (call_user_func_array(array($this, $beforeMethod), $arguments)) {
 					call_user_func_array(array($this, $method), $arguments);
@@ -42,11 +51,14 @@ class Controller {
 				call_user_func_array(array($this, $method), $arguments);
 			}
 
-			$afterMethod = 'after_' . $method;
+			$afterMethod = 'after' . snakeToCamel($method);
 			if (method_exists($this, $afterMethod)) {
 				call_user_func_array(array($this, $afterMethod), $arguments);
 			}
-			$this->after();
+
+			if (!in_array($method, $after_excepts)) {
+				$this->after();
+			}
 		}
 	}
 
@@ -55,10 +67,7 @@ class Controller {
 	 * @return NULL
 	 */
 	protected function before() {
-		$_POST    = isset($_POST) ? sanitize($_POST) : null;
-		$_GET     = isset($_GET) ? sanitize($_GET) : null;
-		$_REQUEST = isset($_REQUEST) ? sanitize($_REQUEST) : null;
-		$_COOKIE  = isset($_COOKIE) ? sanitize($_COOKIE) : null;
+		// TODO::
 	}
 
 	/**

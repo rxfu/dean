@@ -3,7 +3,7 @@
 /**
  * 用户控制器
  */
-class TeacherController extends Controller {
+class TeacherController extends TeacherAdminController {
 
 	/**
 	 * 登录系统
@@ -11,6 +11,8 @@ class TeacherController extends Controller {
 	 */
 	protected function login() {
 		if (isPost()) {
+			$_POST = sanitize($_POST);
+
 			$username = $_POST['username'];
 			$password = $_POST['password'];
 
@@ -89,6 +91,8 @@ class TeacherController extends Controller {
 	 */
 	protected function password() {
 		if (isPost()) {
+			$_POST = sanitize($_POST);
+			
 			$old       = $_POST['oldPassword'];
 			$new       = $_POST['newPassword'];
 			$confirmed = $_POST['confirmedPassword'];
