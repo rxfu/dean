@@ -33,6 +33,7 @@ class Session {
 		if (false !== $last && (time() - $last > self::$_session_age)) {
 			self::destroy();
 			trigger_error('会话已过期', E_USER_WARNING);
+			return;
 		}
 
 		$_SESSION['LAST_ACTIVE'] = time();
@@ -70,6 +71,8 @@ class Session {
 			$_SESSION[SESSION_PREFIX . $key] = $value;
 		}
 
+		self::_age();
+
 		return $value;
 	}
 
@@ -97,6 +100,8 @@ class Session {
 			}
 		}
 
+		self::_age();
+
 		return false;
 	}
 
@@ -115,6 +120,8 @@ class Session {
 
 		$value = $_SESSION[SESSION_PREFIX . $key];
 		unset($_SESSION[SESSION_PREFIX . $key]);
+
+		self::_age();
 
 		return $value;
 	}

@@ -23,9 +23,17 @@ class ReportController extends StudentAdminController {
 	 * @return array       学生成绩
 	 */
 	protected function detail($cno) {
-		$data = DB::getInstance()->searchRecord('v_cj_xsgccj', array('xh' => Session::get('username'), 'nd' => $year, 'xq' => $term));
+		$sql  = 'SELECT * FROM v_cj_xsgccj WHERE kch = ? AND xh = ? AND tjzt = ? ORDER BY nd, xq';
+		$data = DB::getInstance()->getAll($sql, array($cno, Session::get('username'), DEAN_CONFIRMED));
 
-		return $this->view->display('report.term', array('scores' => $data, 'year' => $year, 'term' => $term));
+		$ratios = array();
+		$scores = array();
+		foreach ($data as $score) {
+			$scores[$score['cjfs']]['ratios']    = $this->ratio($score['cjfs']);
+			$scores[$score['cjfs']]['courses'][] = $score;
+		}
+
+		return $this->view->display('report.detail', array('scores' => $scores, 'cname' => $data[0]['kcmc']));
 	}
 
 	/**
@@ -33,7 +41,7 @@ class ReportController extends StudentAdminController {
 	 * @return void
 	 */
 	protected function unconfirmed() {
-		$sql  = 'SELECT * FROM v_cj_xsgccj WHERE nd = ? AND xq = ? AND xh = ? AND tjzt = ?ORDER BY kcxh';
+		$sql  = 'SELECT * FROM v_cj_xsgccj WHERE nd = ? AND xq = ? AND xh = ? AND tjzt = ? ORDER BY kcxh';
 		$data = DB::getInstance()->getAll($sql, array(Session::get('year'), Session::get('term'), Session::get('username'), COLLEGE_CONFIRMED));
 
 		$ratios = array();

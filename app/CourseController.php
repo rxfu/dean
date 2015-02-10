@@ -55,9 +55,19 @@ class CourseController extends StudentAdminController {
 	protected function before() {
 		parent::before();
 
+		
+
 		if ($this->unpaid()) {
-			return Redirect::to('student.unpaid');
+			return redirect('student.unpaid');
 		}
+	}
+
+	/**
+	 * 禁止学生选课
+	 * @return void
+	 */
+	protected function forbidden() {
+		return $this->view->display('course.forbidden');
 	}
 
 	/**
@@ -296,7 +306,7 @@ class CourseController extends StudentAdminController {
 	protected function apply($type, $cno) {
 		if (isPost()) {
 			$_POST = sanitize($_POST);
-			
+
 			if (RETAKE == $type) {
 				$data['ynd']   = $_POST['lyear'];
 				$data['yxq']   = $_POST['lterm'];
