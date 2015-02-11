@@ -1,32 +1,17 @@
 <?php section('header') ?>
                 <section class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header"><?php echo Session::get('name') ?>同学<?php echo Session::get('year') ?>年度<?php echo Dictionary::get('xq', Session::get('term')) ?>学期<?php echo $title ?>课程检索</h1>
-                        <div class="alert alert-danger" role="alert">请输入课程序号或课程中文名称进行检索并申请<?php echo $title ?></div>
+                        <h1 class="page-header"><?php echo Session::get('name') ?>同学<?php echo Session::get('year') ?>年度<?php echo Dictionary::get('xq', Session::get('term')) ?>学期<?php echo $title ?>课程选课表</h1>
                     </div>
                 </section>
 
                 <section class="row">
-                    <div class="col-md-6 col-md-offset-3">
-                        <form method="post" action="<?php echo toLink('course.search', $type) ?>" role="form">
-                            <div class="input-group">
-                                <div class="form-group">
-                                    <label class="sr-only" for="keyword">课程检索</label>
-                                    <input type="search" class="form-control" id="keyword" name="keyword" placeholder="请输入课程序号或课程名称...">
-                                </div>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-primary" type="submit">Go!</button>
-                                </span>
-                            </div>
-                        </form>
-                    </div>
-                </section>
-
-                <?php if (!isEmpty($courses)): ?>
-                    <section class="row">
-                        <div class="col-lg-12">
-                            <div class="panel panel-default">
-                                <div class="panel-body">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <?php if(empty($courses)): ?>
+                                    <div class="well">现在无可选课程</div>
+                                <?php else: ?>
                                     <div role="tabpanel">
                                         <ul id="campus-tab" class="nav nav-tabs" role="tablist">
                                             <?php foreach (array_keys($courses) as $campus): ?>
@@ -60,10 +45,19 @@
                                                             </thead>
                                                             <tbody>
                                                                 <?php foreach ($courses[$campus] as $course): ?>
-                                                                    <tr data-row="<?php echo $course[0]['kcxh'] ?>">
+                                                                    <tr data-name="<?php echo $course[0]['kcxh'] ?>">
                                                                         <?php $rowspan = count($course) ?>
-                                                                        <td rowspan="<?php echo $rowspan ?>" class="text-center" id="<?php echo $course[0]['kcxh'] ?>">
-                                                                            <a class="btn btn-primary" href="<?php echo toLink('course.apply', $type, $course[0]['kcxh']) ?>" title="申请修读" role="button">申请修读</a>
+                                                                        <td rowspan="<?php echo $rowspan ?>" class="text-center">
+                                                                            <form method="post" action="<?php echo toLink('course.select') ?>" role="form">
+                                                                                <div class="checkbox">
+                                                                                    <label>
+                                                                                        <input type="checkbox" name="checkbox" value="<?php echo $course[0]['kcxh'] ?>" title="选课" data-toggle="modal" data-target="#courseConfirm" data-whatever="<?php echo $course[0]['kcmc'] . '(' . $course[0]['kcxh'] . ')' ?>"<?php echo FORBIDDEN === $course[0]['zt'] ? ' disabled' : (SELECTED === $course[0]['zt'] ? ' checked' : '') ?>>
+                                                                                        <input type="hidden" name="checked" value="<?php echo SELECTED === $course[0]['zt'] ? 'true' : 'false' ?>">
+                                                                                        <input type="hidden" name="course" value="<?php echo $course[0]['kcxh'] ?>">
+                                                                                        <input type="hidden" name="type" value="<?php echo $type ?>">
+                                                                                    </label>
+                                                                                </div>
+                                                                            </form>
                                                                         </td>
                                                                         <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kcxh'] ?></td>
                                                                         <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kcmc'] ?></td>
@@ -100,11 +94,15 @@
                                             <?php endforeach ?>
                                         </div>
                                     </div>
-                                </div>
+                                <?php endif ?>
                             </div>
                         </div>
-                    </section>
-                <?php endif; ?>
+                    </div>
+                </section>
+
+                <?php section('course_confirm') ?>
+                <?php section('full_confirm') ?>
+                <?php section('clash_confirm') ?>
 <?php section('footer') ?>
 <script>
     var campusId = '#campus-<?php echo Session::get('campus') ?>';

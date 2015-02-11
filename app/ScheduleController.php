@@ -9,7 +9,7 @@ class ScheduleController extends StudentAdminController {
 	 * 列出当前学生当前年度、学期选课课程表
 	 * @return void
 	 */
-	protected function index() {
+	protected function current() {
 		$data = DB::getInstance()->searchRecord('v_xk_xskcb', array('xh' => Session::get('username'), 'nd' => Session::get('year'), 'xq' => Session::get('term')));
 		
 		$courses = array();
@@ -17,7 +17,7 @@ class ScheduleController extends StudentAdminController {
 			$courses[$course['kcxh']][] = $course;
 		}
 
-		return $this->view->display('schedule.index', array('courses' => $courses));
+		return $this->view->display('schedule.current', array('courses' => $courses));
 	}
 
 	/**

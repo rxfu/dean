@@ -10,10 +10,10 @@ class PlanController extends StudentAdminController {
 	 *
 	 * @return array         教学计划信息
 	 */
-	protected function index() {
+	protected function plan() {
 		$data = DB::getInstance()->searchRecord('v_xk_jxjh', array('zy' => Session::get('spno'), 'nj' => Session::get('grade'), 'zsjj' => Session::get('season')));
 
-		return $this->view->display('plan.index', array('plans' => $data));
+		return $this->view->display('plan.plan', array('plans' => $data));
 	}
 
 	/**

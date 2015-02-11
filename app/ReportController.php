@@ -10,10 +10,10 @@ class ReportController extends StudentAdminController {
 	 *
 	 * @return array     学生成绩
 	 */
-	protected function index() {
+	protected function report() {
 		$data = DB::getInstance()->searchRecord('v_cj_xscj', array('xh' => Session::get('username')));
 
-		return $this->view->display('report.index', array('scores' => $data));
+		return $this->view->display('report.report', array('scores' => $data));
 	}
 
 	/**

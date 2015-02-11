@@ -41,7 +41,7 @@
                                         <a href="<?php echo toLink('plan.course') ?>">课程信息</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('plan.index') ?>">教学计划</a>
+                                        <a href="<?php echo toLink('plan.plan') ?>">教学计划</a>
                                     </li>
                                     <li>
                                         <a href="<?php echo toLink('plan.graduation') ?>">毕业要求</a>
@@ -53,29 +53,29 @@
                                 <ul class="nav nav-second-level">
                                     <?php if (ENABLE == Configuration::get('XK_KG')): ?>
                                         <li>
-                                            <a href="<?php echo toLink('course.index', BASIC) ?>">公共课程</a>
+                                            <a href="<?php echo toLink('course.course', BASIC) ?>">公共课程</a>
                                         </li>
                                         <li>
-                                            <a href="<?php echo toLink('course.index', REQUIRED) ?>">必修课程</a>
+                                            <a href="<?php echo toLink('course.course', REQUIRED) ?>">必修课程</a>
                                         </li>
                                         <li>
-                                            <a href="<?php echo toLink('course.index', ELECTIVE) ?>">选修课程</a>
+                                            <a href="<?php echo toLink('course.course', ELECTIVE) ?>">选修课程</a>
                                         </li>
                                         <?php if (ENABLE == Configuration::get('XK_TS')): ?>
                                             <li>
                                                 <a href="#"> 通识素质课程<span class="fa arrow"></span></a>
                                                 <ul class="nav nav-third-level">
                                                     <li>
-                                                        <a href="<?php echo toLink('course.index', HUMANITY) ?>">人文社科</a>
+                                                        <a href="<?php echo toLink('course.course', HUMANITY) ?>">人文社科</a>
                                                     </li>
                                                     <li>
-                                                        <a href="<?php echo toLink('course.index', NATURAL) ?>">自然科学</a>
+                                                        <a href="<?php echo toLink('course.course', NATURAL) ?>">自然科学</a>
                                                     </li>
                                                     <li>
-                                                        <a href="<?php echo toLink('course.index', ART) ?>">艺术体育</a>
+                                                        <a href="<?php echo toLink('course.course', ART) ?>">艺术体育</a>
                                                     </li>
                                                     <li>
-                                                        <a href="<?php echo toLink('course.index', SPECIAL) ?>">其他专项</a>
+                                                        <a href="<?php echo toLink('course.course', SPECIAL) ?>">其他专项</a>
                                                     </li>
                                                 </ul>
                                             </li>
@@ -101,7 +101,7 @@
                                         <a href="<?php echo toLink('schedule.timetable') ?>">课程表</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('schedule.index') ?>">已选课程列表</a>
+                                        <a href="<?php echo toLink('schedule.current') ?>">已选课程列表</a>
                                     </li>
                                     <li>
                                         <a href="<?php echo toLink('schedule.speciality') ?>">本学期专业课程表</a>
@@ -115,7 +115,7 @@
                                         <a href="<?php echo toLink('report.unconfirmed') ?>">待确认成绩单</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('report.index') ?>">综合成绩单</a>
+                                        <a href="<?php echo toLink('report.report') ?>">综合成绩单</a>
                                     </li>
                                 </ul>
                             </li>
