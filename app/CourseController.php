@@ -134,8 +134,62 @@ class CourseController extends StudentAdminController {
 		if ($this->isOpen()) {
 			if ($this->isUnpaid()) {
 				list($property, $platform) = array_pad(str_split($this->codes[$type]['code']), 2, '');
+				$code                      = $property . $platform;
 
-				if (in_array($property . $platform, array($this->codes[BASIC]['code'], $this->codes[REQUIRED]['code'], $this->codes[ELECTIVE]['code']))) {
+				$now = date('Y-m-d H:i:s');
+				if ($this->isLimitCourseTime()) {
+					$sql  = 'SELECT * FROM t_xk_sjxz WHERE xz = ? AND nj = ?';
+					$data = DB::getInstance()->getAll($sql, array(Session::get('system'), Session::get('grade')));
+
+					if (FALSE !== $data && !empty($data)) {
+						$allow = false;
+						foreach ($data as $limit) {
+							if ($now >= $limit['kssj'] && $now <= $limit['jssj']) {
+								$allow = true;
+								break;
+							}
+						}
+					}
+
+					if (!$allow) {
+						redirect('course.forbidden');
+						return;
+					}
+				}
+
+				if (!$this->isGeneralOpen()) {
+					if (in_array($code, array($this->codes[HUMANITY]['code'], $this->codes[NATURAL]['code'], $this->codes[ART]['code'], $this->codes[SPECIAL]['code']))) {
+						redirect('course.forbidden');
+						return;
+					}
+				}
+
+				$limitCourse = COURSE_UNLIMITED;
+				$limitRatio  = COURSE_UNLIMITED;
+				if ($this->isLimitGeneral()) {
+					$sql  = 'SELECT * FROM t_xk_tsxz WHERE xz = ? AND nj = ?';
+					$data = DB::getInstance()->getAll($sql, array(Session::get('system'), Session::get('grade')));
+
+					if (FALSE !== $data && !empty($data)) {
+						$allow = false;
+						foreach ($data as $limit) {
+							if ($now >= $limit['kssj'] && $now <= $limit['jssj']) {
+								$allow = true;
+								break;
+							}
+						}
+
+						if (!$allow) {
+							redirect('course.forbidden');
+							return;
+						}
+
+						$limitCourse = $data['ms'];
+						$limitRatio  = $data['bl'] / 100;
+					}
+				}
+
+				if (in_array($code, array($this->codes[BASIC]['code'], $this->codes[REQUIRED]['code'], $this->codes[ELECTIVE]['code']))) {
 					$grade      = Session::get('grade');
 					$speciality = Session::get('spno');
 				} else {
@@ -171,6 +225,20 @@ class CourseController extends StudentAdminController {
 
 				$courses = array();
 				foreach ($data as $course) {
+					if (in_array($code, array($this->codes[HUMANITY]['code'], $this->codes[NATURAL]['code'], $this->codes[ART]['code'], $this->codes[SPECIAL]['code']))) {
+						if (COURSE_UNLIMITED < $limitRatio) {
+							$course['jhrs'] = $course['jhrs'] * $limitRatio;
+
+							if ($course['rs'] >= $course['jhrs']) {
+								$course['zt'] = FORBIDDEN;
+							}
+						}
+
+						if (COURSE_UNLIMITED < $limitCourse) {
+							$sql = 'SELECT COUNT(*) FROM t_xk_xkxx WHERE nd = ? AND xq = ? AND xh = ?';
+						}
+					}
+
 					if (isEmpty($course['xqh'])) {
 						$courses['unknown'][$course['kcxh']][] = $course;
 					} else {

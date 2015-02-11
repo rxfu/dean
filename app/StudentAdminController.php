@@ -21,7 +21,7 @@ class StudentAdminController extends Controller {
 	protected function before() {
 		parent::before();
 
-		if (!Session::isStarted() || 'student' != Session::get('role')) {
+		if (!Session::isStarted() || STUDENT != Session::get('role')) {
 			redirect('student.login');
 		}
 	}

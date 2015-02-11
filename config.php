@@ -142,3 +142,8 @@ define('RETAKE', 'retake');
  */
 define('APPLY_OTHERS', '0');
 define('APPLY_RETAKE', '1');
+
+/**
+ * 选课状态代码
+ */
+define('COURSE_UNLIMITED', -1);
