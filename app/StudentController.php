@@ -29,7 +29,7 @@ class StudentController extends StudentAdminController {
 			if ($this->auth($username, $password)) {
 				Logger::write(array('xh' => Session::get('username'), 'czlx' => LOG_LOGIN));
 
-				$info = $this->info($username);
+				$info = $this->getInfo($username);
 
 				Session::set('name', $info['xm']);
 				Session::set('college', $info['xy']);
@@ -51,7 +51,7 @@ class StudentController extends StudentAdminController {
 
 				Message::add('success', '你已经成功登录系统');
 
-				return Redirect::to('home.student');
+				return redirect('home.student');
 			} else {
 				Message::add('danger', '登录失败，请检查用户名和密码是否正确');
 			}
@@ -94,7 +94,7 @@ class StudentController extends StudentAdminController {
 		Logger::write(array('xh' => Session::get('username'), 'czlx' => LOG_LOGOUT));
 		Session::destroy();
 
-		return Redirect::to('student.login');
+		return redirect('student.login');
 	}
 
 	/**
@@ -137,7 +137,7 @@ class StudentController extends StudentAdminController {
 	 * @param  string $id 学号
 	 * @return array     学生基本信息
 	 */
-	protected function info($id) {
+	protected function getInfo($id) {
 		if (is_numeric($id) && isset($id{11}) && !isset($id{12})) {
 			$sql  = 'SELECT * FROM v_xk_xsjbxx WHERE xh = ?';
 			$data = DB::getInstance()->getRow($sql, $id);

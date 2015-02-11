@@ -22,7 +22,7 @@ class TeacherController extends TeacherAdminController {
 			}
 
 			if ($this->auth($username, $password)) {
-				$info = $this->info($username);
+				$info = $this->getInfo($username);
 
 				Session::set('name', $info['xm']);
 				Session::set('college', $info['xy']);
@@ -38,7 +38,7 @@ class TeacherController extends TeacherAdminController {
 
 				Message::add('success', '你已经成功登录系统');
 
-				return Redirect::to('home.teacher');
+				return redirect('home.teacher');
 			} else {
 				Message::add('danger', '登录失败，请检查用户名和密码是否正确');
 			}
@@ -82,7 +82,7 @@ class TeacherController extends TeacherAdminController {
 	protected function logout() {
 		Session::destroy();
 
-		return Redirect::to('teacher.login');
+		return redirect('teacher.login');
 	}
 
 	/**
@@ -124,7 +124,7 @@ class TeacherController extends TeacherAdminController {
 	 * @param  string $id 教师工号
 	 * @return array     教师基本信息
 	 */
-	protected function info($id) {
+	protected function getInfo($id) {
 		if (is_numeric($id)) {
 			$sql  = 'SELECT * FROM v_pk_jsxx WHERE jsgh = ?';
 			$data = DB::getInstance()->getRow($sql, $id);

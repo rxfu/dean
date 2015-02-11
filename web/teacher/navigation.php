@@ -36,16 +36,18 @@
                             <li>
                                 <a href="#"><i class="fa fa-tasks fa-fw"></i> 成绩管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
-                                    <li>
-                                        <a href="#"> 成绩录入<span class="fa arrow"></span></a>
-                                        <ul class="nav nav-third-level">
-                                            <?php foreach(Session::get('scoreCourses') as $item): ?>
-                                                <li>
-                                                    <a href="<?php echo toLink('score.input', $item['kcxh']) ?>"><?php echo $item['kcxh'] ?></a>
-                                                </li>
-                                            <?php endforeach; ?>
-                                        </ul>
-                                    </li>
+                                    <?php if (ENABLE == Configuration::get('CJ_WEB_KG')): ?>
+                                        <li>
+                                            <a href="#"> 成绩录入<span class="fa arrow"></span></a>
+                                            <ul class="nav nav-third-level">
+                                                <?php foreach(Session::get('scoreCourses') as $item): ?>
+                                                    <li>
+                                                        <a href="<?php echo toLink('score.input', $item['kcxh']) ?>"><?php echo $item['kcxh'] ?></a>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        </li>
+                                    <?php endif; ?>
                                     <li>
                                         <a href="#"> 成绩查询<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
