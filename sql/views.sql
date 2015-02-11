@@ -433,3 +433,15 @@ ALTER TABLE v_cj_xsgccj
   OWNER TO jwxt;
 COMMENT ON VIEW v_cj_xsgccj
   IS '学生成绩详细信息视图';
+
+通识素质课统计信息：
+CREATE OR REPLACE VIEW v_xk_tssztj AS 
+ SELECT nd, xq, xh, COUNT(*) AS ms
+   FROM t_xk_xkxx
+ WHERE pt = 'T' AND (xz = 'W' OR xz = 'I' OR xz = 'Y' OR xz = 'Q')
+ GROUP BY nd, xq, xh;
+
+ALTER TABLE v_xk_tssztj
+  OWNER TO jwxt;
+COMMENT ON VIEW v_xk_tssztj
+  IS '通识素质课统计信息视图';

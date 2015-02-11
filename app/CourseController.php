@@ -136,6 +136,7 @@ class CourseController extends StudentAdminController {
 				list($property, $platform) = array_pad(str_split($this->codes[$type]['code']), 2, '');
 				$code                      = $property . $platform;
 
+				// 是否限制选课时间
 				$now = date('Y-m-d H:i:s');
 				if ($this->isLimitCourseTime()) {
 					$sql  = 'SELECT * FROM t_xk_sjxz WHERE xz = ? AND nj = ?';
@@ -157,6 +158,7 @@ class CourseController extends StudentAdminController {
 					}
 				}
 
+				// 是否允许选择通识素质课
 				if (!$this->isGeneralOpen()) {
 					if (in_array($code, array($this->codes[HUMANITY]['code'], $this->codes[NATURAL]['code'], $this->codes[ART]['code'], $this->codes[SPECIAL]['code']))) {
 						redirect('course.forbidden');
@@ -164,6 +166,7 @@ class CourseController extends StudentAdminController {
 					}
 				}
 
+				// 是否限制选择通识素质课
 				$limitCourse = COURSE_UNLIMITED;
 				$limitRatio  = COURSE_UNLIMITED;
 				if ($this->isLimitGeneral()) {
@@ -226,16 +229,23 @@ class CourseController extends StudentAdminController {
 				$courses = array();
 				foreach ($data as $course) {
 					if (in_array($code, array($this->codes[HUMANITY]['code'], $this->codes[NATURAL]['code'], $this->codes[ART]['code'], $this->codes[SPECIAL]['code']))) {
+						// 限制通识素质课选课人数
 						if (COURSE_UNLIMITED < $limitRatio) {
-							$course['jhrs'] = $course['jhrs'] * $limitRatio;
+							$course['jhrs'] = ceil($course['jhrs'] * $limitRatio);
 
 							if ($course['rs'] >= $course['jhrs']) {
 								$course['zt'] = FORBIDDEN;
 							}
 						}
 
+						// 限制通识素质课门数
 						if (COURSE_UNLIMITED < $limitCourse) {
-							$sql = 'SELECT COUNT(*) FROM t_xk_xkxx WHERE nd = ? AND xq = ? AND xh = ?';
+							$sql         = 'SELECT ms FROM v_xk_tsxztj WHERE nd = ? AND xq = ? AND xh = ?';
+							$courseCount = DB::getInstance()->getColumn($sql, array(Session::get('year'), Session::get('term'), Session::get('username')));
+
+							if ($limitCourse <= $courseCount) {
+								$course['zt'] = FORBIDDEN;
+							}
 						}
 					}
 
@@ -264,6 +274,34 @@ class CourseController extends StudentAdminController {
 	protected function search($type) {
 		if ($this->isOpen()) {
 			if ($this->isUnpaid()) {
+				// 是否限制选课时间
+				$now = date('Y-m-d H:i:s');
+				if ($this->isLimitCourseTime()) {
+					$sql  = 'SELECT * FROM t_xk_sjxz WHERE xz = ? AND nj = ?';
+					$data = DB::getInstance()->getAll($sql, array(Session::get('system'), Session::get('grade')));
+
+					if (FALSE !== $data && !empty($data)) {
+						$allow = false;
+						foreach ($data as $limit) {
+							if ($now >= $limit['kssj'] && $now <= $limit['jssj']) {
+								$allow = true;
+								break;
+							}
+						}
+					}
+
+					if (!$allow) {
+						redirect('course.forbidden');
+						return;
+					}
+				}
+
+				// 是否允许选择其他课程
+				if (OTHERS == $type && !$this->isOthersOpen()) {
+					redirect('course.forbidden');
+					return;
+				}
+
 				$cno     = null;
 				$cname   = null;
 				$courses = array();
@@ -346,7 +384,63 @@ class CourseController extends StudentAdminController {
 	protected function select() {
 		if ($this->isOpen()) {
 			if ($this->isUnpaid()) {
+				// 是否限制选课时间
+				$now = date('Y-m-d H:i:s');
+				if ($this->isLimitCourseTime()) {
+					$sql  = 'SELECT * FROM t_xk_sjxz WHERE xz = ? AND nj = ?';
+					$data = DB::getInstance()->getAll($sql, array(Session::get('system'), Session::get('grade')));
+
+					if (FALSE !== $data && !empty($data)) {
+						$allow = false;
+						foreach ($data as $limit) {
+							if ($now >= $limit['kssj'] && $now <= $limit['jssj']) {
+								$allow = true;
+								break;
+							}
+						}
+					}
+
+					if (!$allow) {
+						redirect('course.forbidden');
+						return;
+					}
+				}
+
 				if (isPost()) {
+					// 是否允许选择通识素质课
+					if (!$this->isGeneralOpen()) {
+						if (in_array($this->codes[$type]['code'], array($this->codes[HUMANITY]['code'], $this->codes[NATURAL]['code'], $this->codes[ART]['code'], $this->codes[SPECIAL]['code']))) {
+							redirect('course.forbidden');
+							return;
+						}
+					}
+
+					// 是否限制选择通识素质课
+					$limitCourse = COURSE_UNLIMITED;
+					$limitRatio  = COURSE_UNLIMITED;
+					if ($this->isLimitGeneral()) {
+						$sql  = 'SELECT * FROM t_xk_tsxz WHERE xz = ? AND nj = ?';
+						$data = DB::getInstance()->getAll($sql, array(Session::get('system'), Session::get('grade')));
+
+						if (FALSE !== $data && !empty($data)) {
+							$allow = false;
+							foreach ($data as $limit) {
+								if ($now >= $limit['kssj'] && $now <= $limit['jssj']) {
+									$allow = true;
+									break;
+								}
+							}
+
+							if (!$allow) {
+								redirect('course.forbidden');
+								return;
+							}
+
+							$limitCourse = $data['ms'];
+							$limitRatio  = $data['bl'] / 100;
+						}
+					}
+
 					$_POST = sanitize($_POST);
 
 					$cno     = $_POST['course'];
@@ -354,6 +448,29 @@ class CourseController extends StudentAdminController {
 					$type    = $_POST['type'];
 
 					if ('true' == $checked) {
+						if (in_array($this->codes[$type]['code'], array($this->codes[HUMANITY]['code'], $this->codes[NATURAL]['code'], $this->codes[ART]['code'], $this->codes[SPECIAL]['code']))) {
+							// 限制通识素质课选课人数
+							if (COURSE_UNLIMITED < $limitRatio) {
+								$course['jhrs'] = ceil($course['jhrs'] * $limitRatio);
+
+								if ($course['rs'] >= $course['jhrs']) {
+									redirect('course.forbidden');
+									return;
+								}
+							}
+
+							// 限制通识素质课门数
+							if (COURSE_UNLIMITED < $limitCourse) {
+								$sql         = 'SELECT ms FROM v_xk_tsxztj WHERE nd = ? AND xq = ? AND xh = ?';
+								$courseCount = DB::getInstance()->getColumn($sql, array(Session::get('year'), Session::get('term'), Session::get('username')));
+
+								if ($limitCourse <= $courseCount) {
+									redirect('course.forbidden');
+									return;
+								}
+							}
+						}
+
 						$param = "'" . implode("','", array(Session::get('year'), Session::get('term'), Session::get('username'), $cno, Session::get('name'), Session::get('grade'), Session::get('spno'), Session::get('season'))) . "'";
 
 						$selected = DB::getInstance()->query('SELECT p_xzkc_save(' . $param . ')');
@@ -434,13 +551,40 @@ class CourseController extends StudentAdminController {
 	/**
 	 * 选课申请
 	 * @param string $type 课程类型
-	 * @param string $cno 课程序号
 	 * @return NULL
 	 */
-	protected function apply($type, $cno) {
+	protected function apply($type) {
 		if ($this->isOpen()) {
 			if ($this->isUnpaid()) {
+				// 是否限制选课时间
+				$now = date('Y-m-d H:i:s');
+				if ($this->isLimitCourseTime()) {
+					$sql  = 'SELECT * FROM t_xk_sjxz WHERE xz = ? AND nj = ?';
+					$data = DB::getInstance()->getAll($sql, array(Session::get('system'), Session::get('grade')));
+
+					if (FALSE !== $data && !empty($data)) {
+						$allow = false;
+						foreach ($data as $limit) {
+							if ($now >= $limit['kssj'] && $now <= $limit['jssj']) {
+								$allow = true;
+								break;
+							}
+						}
+					}
+
+					if (!$allow) {
+						redirect('course.forbidden');
+						return;
+					}
+				}
+
 				if (isPost()) {
+					// 是否允许选择其他课程
+					if (OTHERS == $type && !$this->isOthersOpen()) {
+						redirect('course.forbidden');
+						return;
+					}
+
 					$_POST = sanitize($_POST);
 
 					if (RETAKE == $type) {
@@ -455,7 +599,7 @@ class CourseController extends StudentAdminController {
 					$data['xm']   = Session::get('name');
 					$data['nd']   = Session::get('year');
 					$data['xq']   = Session::get('term');
-					$data['kcxh'] = $cno;
+					$data['kcxh'] = $_POST['cno'];
 					$data['xksj'] = date('Y-m-d H:i:s');
 
 					$sql          = 'SELECT kch, pt, xz, kkxy FROM v_xk_kxkcxx WHERE kcxh = ? AND nd = ? AND xq = ?';
