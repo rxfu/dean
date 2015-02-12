@@ -554,9 +554,10 @@ class CourseController extends StudentAdminController {
 	/**
 	 * 选课申请
 	 * @param string $type 课程类型
+	 * @param string $cno 课程序号
 	 * @return NULL
 	 */
-	protected function apply($type) {
+	protected function apply($type, $cno) {
 		if (!$this->isOpen()) {
 			redirect('course.forbidden');
 			return;
@@ -613,7 +614,7 @@ class CourseController extends StudentAdminController {
 			$data['xksj'] = date('Y-m-d H:i:s');
 
 			$sql          = 'SELECT kch, pt, xz, kkxy FROM v_xk_kxkcxx WHERE kcxh = ? AND nd = ? AND xq = ?';
-			$course       = DB::getInstance()->getRow($sql, array($cno, Session::get('year'), Session::get('term')));
+			$course       = DB::getInstance()->getRow($sql, array($_POST['cno'], Session::get('year'), Session::get('term')));
 			$data['kch']  = $course['kch'];
 			$data['pt']   = $course['pt'];
 			$data['xz']   = $course['xz'];
