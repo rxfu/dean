@@ -610,11 +610,11 @@ class CourseController extends StudentAdminController {
 			$data['xm']   = Session::get('name');
 			$data['nd']   = Session::get('year');
 			$data['xq']   = Session::get('term');
-			$data['kcxh'] = $_POST['cno'];
+			$data['kcxh'] = sanitize($cno);
 			$data['xksj'] = date('Y-m-d H:i:s');
 
 			$sql          = 'SELECT kch, pt, xz, kkxy FROM v_xk_kxkcxx WHERE kcxh = ? AND nd = ? AND xq = ?';
-			$course       = DB::getInstance()->getRow($sql, array($_POST['cno'], Session::get('year'), Session::get('term')));
+			$course       = DB::getInstance()->getRow($sql, array($data['kcxh'], Session::get('year'), Session::get('term')));
 			$data['kch']  = $course['kch'];
 			$data['pt']   = $course['pt'];
 			$data['xz']   = $course['xz'];

@@ -13,7 +13,7 @@
                                     <div class="form-group">
                                         <label for="cno" class="col-md-2">课程序号</label>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control" id="cno" name="cno" placeholde="课程序号" value="<?php echo $cno ?>" disabled>
+                                            <input type="text" class="form-control" id="cno" name="cno" value="<?php echo $cno ?>" disabled>
                                         </div>
                                     </div>
                                     <?php if (RETAKE == $type): ?>
