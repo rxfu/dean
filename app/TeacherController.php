@@ -18,7 +18,7 @@ class TeacherController extends TeacherAdminController {
 
 			if (empty($username) || empty($password)) {
 				Message::add('danger', '用户名或密码无效');
-				break;
+				return;
 			}
 
 			if ($this->auth($username, $password)) {

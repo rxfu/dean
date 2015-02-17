@@ -18,12 +18,12 @@ class StudentController extends StudentAdminController {
 
 			if (empty($username) || empty($password)) {
 				Message::add('danger', '用户名或密码无效');
-				break;
+				return;
 			}
 
 			if (!(is_numeric($username) && isset($username{11}) && !isset($username{12}))) {
 				Message::add('danger', '用户名必须是12位学号');
-				break;
+				return;
 			}
 
 			if ($this->auth($username, $password)) {
