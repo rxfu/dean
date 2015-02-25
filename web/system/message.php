@@ -6,16 +6,7 @@
 
                 <section class="row">
                     <div class="col-lg-12">
-                        <div class="panel panel-default">                            
-                            <div class="panel-heading">
-                                共<?php echo $count ?>条系统消息，共<?php echo $pages ?>页，目前在第
-                                <select onchange="window.location=this.value;">
-                                    <?php for ($i = 1; $i <= $pages; $i++): ?>
-                                    <option value="<?php echo toLink('system.message', array($i)) ?>"<?php echo ($p == $i) ? ' selected' : ''?>><?php echo $i ?></option>
-                                    <?php endfor ?>
-                                </select>
-                                页
-                            </div>
+                        <div class="panel panel-default">
                             <div class="panel-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-striped table-hover data-table">                                        
