@@ -9,7 +9,7 @@ class Message {
 	 * 消息类型
 	 * @var array
 	 */
-	private static $types = array('info', 'success', 'warning', 'danger');
+	private static $_types = array('info', 'success', 'warning', 'danger');
 
 	/**
 	 * 初始化消息
@@ -36,7 +36,7 @@ class Message {
 			return false;
 		}
 
-		if (!in_array($type, self::$types)) {
+		if (!in_array($type, self::$_types)) {
 			trigger_error('无效消息类型', E_USER_ERROR);
 			return;
 		}
@@ -66,7 +66,7 @@ class Message {
 			return false;
 		}
 
-		if (in_array($type, self::$types)) {
+		if (in_array($type, self::$_types)) {
 			foreach ($_SESSION[SESSION_PREFIX . 'flash'][$type] as $message) {
 				$data = '<div id="flash_' . $type . '" class="alert alert-dismissable alert-' . $type . '">';
 				$data .= '<button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
@@ -103,14 +103,16 @@ class Message {
 	 * @return boolean       有消息内容则为TRUE，无消息内容则为FALSE
 	 */
 	public static function has($type = null) {
-		if (!is_null($type) && is_string($type)) {
-			if (!empty($_SESSION[SESSION_PREFIX . 'flash'][$type])) {
-				return $_SESSION[SESSION_PREFIX . 'flash'][$type];
-			}
-		} else {
-			foreach ($this->types as $type) {
-				if (!empty($_SESSION[SESSION_PREFIX . 'flash'])) {
-					return true;
+		if (isset($_SESSION[SESSION_PREFIX . 'flash'])) {
+			if (!is_null($type) && is_string($type)) {
+				if (!empty($_SESSION[SESSION_PREFIX . 'flash'][$type])) {
+					return $_SESSION[SESSION_PREFIX . 'flash'][$type];
+				}
+			} else {
+				foreach (self::$_types as $type) {
+					if (!empty($_SESSION[SESSION_PREFIX . 'flash'])) {
+						return true;
+					}
 				}
 			}
 		}

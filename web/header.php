@@ -29,25 +29,23 @@
     <body>
         <div id="wrapper">
             <!-- 页面头部Logo -->
-            <header role="banner">
-                
-            </header>
+            <header role="banner"></header>
             
-            <?php
-                if ('student' == Session::get('role')) {
-                    section('student.navigation');
-                } elseif ('teacher' == Session::get('role')) {
-                    section('teacher.navigation');
-                }
-            ?>
-
-            <!-- 页面主体 -->
-            <main id="page-wrapper">
-                <?php if (Message::has()): ?>
-                    <!-- 页面消息 -->
-                    <section class="row">
-                        <div class="col-lg-12">
-                            <?php Message::display() ?>
-                        </div>
-                    </section>
-                <?php endif; ?>
+            <?php if (STUDENT == Session::get('role')): ?>
+                <?php section('student.navigation') ?>
+                <main id="page-wrapper">
+            <?php elseif (TEACHER == Session::get('role')): ?>
+                <?php section('teacher.navigation') ?>
+                <main id="page-wrapper">
+            <?php else: ?>
+                <main class="container">
+            <?php endif; ?>
+            
+            <?php if (Message::has()): ?>
+                <!-- 页面消息 -->
+                <section class="row">
+                    <div class="col-lg-12">
+                        <?php Message::display() ?>
+                    </div>
+                </section>
+            <?php endif; ?>

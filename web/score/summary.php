@@ -1,4 +1,3 @@
-<?php section('header') ?>
                 <section class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header"><?php echo $year ?>年度<?php echo Dictionary::get('xq', $term) ?>学期成绩单列表</h1>
@@ -31,4 +30,3 @@
                         </div>
                     <?php endforeach; ?>
                 </section>
-<?php section('footer') ?>

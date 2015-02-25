@@ -1,7 +1,7 @@
-<?php section('header') ?>
                 <section class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header"><?php echo Session::get('name') ?>同学<?php echo Session::get('year') ?>年度<?php echo Dictionary::get('xq', Session::get('term')) ?>学期<?php echo $title ?>课程选课表</h1>
+                        <div id="campus" class="hidden sr-only"><?php echo Session::get('campus') ?></div>
                     </div>
                 </section>
 
@@ -103,12 +103,3 @@
                 <?php section('course_confirm') ?>
                 <?php section('full_confirm') ?>
                 <?php section('clash_confirm') ?>
-<?php section('footer') ?>
-<script>
-    var campusId = '#campus-<?php echo Session::get('campus') ?>';
-    if ($('#campus-tab a[href="' + campusId + '"]').length) {
-        $('#campus-tab a[href="' + campusId + '"]').tab('show');
-    } else {
-        $('#campus-tab a:first').tab('show');
-    }
-</script>

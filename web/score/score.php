@@ -1,4 +1,3 @@
-<?php section('header') ?>
                 <section class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header"><?php echo $info['kkxy'] ?><?php echo $info['nj'] ?>级<?php echo $info['zy'] ?>专业<?php echo $info['kcxh'] ?><?php echo $info['kcmc'] ?>课程成绩单</h1>
@@ -44,4 +43,3 @@
                         </div>
                     </div>
                 </section>
-<?php section('footer') ?>

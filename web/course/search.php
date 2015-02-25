@@ -1,8 +1,8 @@
-<?php section('header') ?>
                 <section class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header"><?php echo Session::get('name') ?>同学<?php echo Session::get('year') ?>年度<?php echo Dictionary::get('xq', Session::get('term')) ?>学期<?php echo $title ?>课程检索</h1>
                         <div class="alert alert-danger" role="alert">请输入课程序号或课程中文名称进行检索并申请<?php echo $title ?></div>
+                        <div id="campus" class="hidden sr-only"><?php echo Session::get('campus') ?></div>
                     </div>
                 </section>
 
@@ -105,12 +105,3 @@
                         </div>
                     </section>
                 <?php endif; ?>
-<?php section('footer') ?>
-<script>
-    var campusId = '#campus-<?php echo Session::get('campus') ?>';
-    if ($('#campus-tab a[href="' + campusId + '"]').length) {
-        $('#campus-tab a[href="' + campusId + '"]').tab('show');
-    } else {
-        $('#campus-tab a:first').tab('show');
-    }
-</script>

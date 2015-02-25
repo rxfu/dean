@@ -49,8 +49,9 @@ class View {
 	 * @return void
 	 */
 	public function display($template, array $data = array()) {
+		print $this->render('header', $data);
 		print $this->render($template, $data);
-		
+		print $this->render('footer', $data);		
 		exit(0);
 	}
 

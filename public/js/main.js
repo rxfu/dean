@@ -198,4 +198,11 @@ $(document).ready(function() {
 	$('#courseConfirm').on('hidden.bs.modal', function(e) {
 		location.reload();
 	});
+
+	var campusId = '#campus-' + $('#campus').text();
+    if ($('#campus-tab a[href="' + campusId + '"]').length) {
+        $('#campus-tab a[href="' + campusId + '"]').tab('show');
+    } else {
+        $('#campus-tab a:first').tab('show');
+    }
 });
