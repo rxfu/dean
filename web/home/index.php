@@ -103,7 +103,6 @@
         <?php echo js('js/bootstrap-typeahead.js') ?>
         <?php echo js('js/jquery.placeholder.js') ?>
         <?php echo js('js/jquery.stacktable.js') ?>
-        <?php echo js('js/sb-admin-2.js') ?>
         <?php echo js('js/main.js') ?>
     </body>
 </html>

@@ -43,10 +43,11 @@
 
             <!-- 页面主体 -->
             <main id="page-wrapper">
-                <!-- 页面消息 -->
-                <section class="row">
-                    <div class="col-lg-12">
-                        <?php Message::display() ?>
-                    </div>
-                </section>
-            
+                <?php if (Message::has()): ?>
+                    <!-- 页面消息 -->
+                    <section class="row">
+                        <div class="col-lg-12">
+                            <?php Message::display() ?>
+                        </div>
+                    </section>
+                <?php endif; ?>
