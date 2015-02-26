@@ -15,7 +15,8 @@ class HomeController extends Controller {
 	 * @return void
 	 */
 	protected function student() {
-		return $this->view->display('student.dashboard');
+		$message = DB::getInstance()->getColumn('SELECT text FROM t_xt_message');
+		return $this->view->display('student.dashboard', array('message' => $message));
 	}
 
 	/**

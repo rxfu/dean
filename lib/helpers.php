@@ -480,7 +480,7 @@ if (!function_exists('redirect')) {
 		} elseif (is_array($params)) {
 			header('Location: ' . getBaseUrl() . $url . implode('/', $params));
 		} elseif (is_string($params)) {
-			header('Location: ' . getBaseUrl() . $url . '/' . $params);
+			header('Location: ' . getBaseUrl() . $url . $params);
 		}
 
 		exit(0);

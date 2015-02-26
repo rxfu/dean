@@ -39,7 +39,7 @@ class Logger {
 
 			$data['ip']   = getClientIp();
 			$data['czsj'] = date('Y-m-d H:i:s');
-			$expected     = array('xh', 'kcxh', 'kcmc', 'kcxz', 'czlx', 'bz');
+			$expected     = array('xh', 'kcxh', 'kcmc', 'czlx', 'bz');
 			foreach ($expected as $key) {
 				$data[$key] = isset($log[$key]) ? $log[$key] : null;
 			}

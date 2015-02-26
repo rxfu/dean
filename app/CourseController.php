@@ -501,7 +501,7 @@ class CourseController extends StudentAdminController {
 				}
 			}
 
-			return redirect('course.index', $type);
+			return redirect('course.course', $type);
 		}
 	}
 
