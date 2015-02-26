@@ -20,6 +20,8 @@
                                                     <th class="active">课程代码</th>
                                                     <th class="active">课程名称</th>
                                                     <th class="active">课程英文名称</th>
+                                                    <th class="active">课程平台</th>
+                                                    <th class="active">课程性质</th>
                                                     <?php foreach ($score['ratios']['mode'] as $ratio): ?>
                                                         <th class="active"><?php echo $ratio['idm'] ?></th>
                                                     <?php endforeach; ?>
@@ -36,6 +38,8 @@
                                                     <td><?php echo $course['kcxh'] ?></td>
                                                     <td><?php echo $course['kcmc'] ?></td>
                                                     <td><?php echo $course['kcywmc'] ?></td>
+                                                    <td><?php echo $course['pt'] ?></td>
+                                                    <td><?php echo $course['xz'] ?></td>
                                                     <?php foreach ($score['ratios']['mode'] as $key => $value): ?>
                                                         <td><?php echo $course['cj' . $key] ?></td>
                                                     <?php endforeach; ?>

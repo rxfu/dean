@@ -215,7 +215,7 @@ CREATE OR REPLACE VIEW v_xk_kxkcxx AS
     a.jsgh,
     b.xm AS jsxm,
     a.hb,
-    h.jhrs,
+    a.rs AS jhrs,
     h.rs,
     e.kkxy,
     g.mc AS kh,
