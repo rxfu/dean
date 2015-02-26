@@ -139,7 +139,7 @@ class CourseController extends StudentAdminController {
 			redirect('student.unpaid');
 			return;
 		}
-		
+
 		list($property, $platform) = array_pad(str_split($this->codes[$type]['code']), 2, '');
 		$code                      = $property . $platform;
 
@@ -543,8 +543,8 @@ class CourseController extends StudentAdminController {
 	 * @return boolean         人数已满为TRUE，未满为FALSE
 	 */
 	protected function full($course) {
-		$sql    = 'SELECT jhrs, rs FROM t_xk_tj WHERE kcxh = ?';
-		$data   = DB::getInstance()->getRow($sql, $course);
+		$sql    = 'SELECT jhrs, rs FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND kcxh = ?';
+		$data   = DB::getInstance()->getRow($sql, array(Session::get('year'), Session::get('term'), $course));
 		$status = 0 < $data['jhrs'] && $data['jhrs'] < $data['rs'];
 
 		echo json_encode(array('status' => $status));
