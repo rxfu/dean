@@ -307,7 +307,7 @@
                 <main id="page-wrapper">
             <?php else: ?>
                 <!-- 页面主体 -->
-                <main class="cotntainer">
+                <main class="container">
             <?php endif; ?>
             
             <?php if (Message::has()): ?>
