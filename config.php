@@ -41,7 +41,7 @@ define('DB_CHARSET', 'UTF8');
  */
 /*
 define('DB_PREFIX', 'pgsql');
-define('DB_HOST', '202.193.171.236');
+define('DB_HOST', '202.193.171.253');
 define('DB_PORT', '5432');
 define('DB_NAME', 'dean');
 define('DB_USERNAME', 'jwxt');
@@ -63,7 +63,23 @@ define('DB_TCH_DBNAME', 'dean');
 define('DB_TCH_USERNAME', 'jwxt');
 define('DB_TCH_PASSWORD', 'jwxt..');
 define('DB_TCH_CHARSET', 'UTF8');
+/*
+define('DB_STU_ENGINE', 'pgsql');
+define('DB_STU_HOST', '202.193.171.253');
+define('DB_STU_PORT', '5432');
+define('DB_STU_DBNAME', 'dean');
+define('DB_STU_USERNAME', 't_web');
+define('DB_STU_PASSWORD', 't_web.0');
+define('DB_STU_CHARSET', 'UTF8');
 
+define('DB_TCH_ENGINE', 'pgsql');
+define('DB_TCH_HOST', '202.193.171.253');
+define('DB_TCH_PORT', '5432');
+define('DB_TCH_DBNAME', 'dean');
+define('DB_TCH_USERNAME', 's_web');
+define('DB_TCH_PASSWORD', 's_web.0');
+define('DB_TCH_CHARSET', 'UTF8');
+*/
 /**
  * SALT配置
  */
@@ -84,8 +100,8 @@ define('DEFAULT_METHOD', 'index');
 /**
  * 会话参数配置
  */
-define('SESSION_KEY', 'academic_manage_system');
-define('SESSION_NAME', 'AMS');
+define('SESSION_KEY', 'GXNUAcademicManageSystem');
+define('SESSION_NAME', 'GXNUAMS');
 define('SESSION_PREFIX', 'dean_');
 define('SESSION_TTL', 120); // 单位：分钟
 

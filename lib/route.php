@@ -29,7 +29,6 @@ class Route {
 		$dispatcher = snakeToCamel($controller) . 'Controller';
 		if (!file_exists(APPROOT . DS . $dispatcher . '.php')) {
 			trigger_error('类文件' . $dispatcher . '.php 不存在');
-			Session::set('error', '非法路由');
 			return;
 		}
 		$dispatch = new $dispatcher;
@@ -38,8 +37,7 @@ class Route {
 		if (method_exists($dispatch, $method)) {
 			call_user_func_array(array($dispatch, $method), $args);
 		} else {
-			trigger_error('方法 ' . $method . ' 在类 ' . $controller . ' 中不存在');
-			Session::set('error', '非法路由');
+			trigger_error('方法 ' . $method . ' 在类 ' . $dispatcher . ' 中不存在');
 			return;
 		}
 	}

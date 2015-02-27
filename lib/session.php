@@ -79,7 +79,7 @@ class Session extends SessionHandler {
 	 * @return boolean 成功为TRUE，失败为FALSE
 	 */
 	public function forget() {
-		if (!$this->isStarted) {
+		if (!$this->isStarted()) {
 			return false;
 		}
 
@@ -87,7 +87,7 @@ class Session extends SessionHandler {
 
 		setcookie($this->name, '', time() - 42000, $this->cookie['path'], $this->cookie['domain'], $this->cookie['secure'], $this->cookie['httponly']);
 
-		return session_destory();
+		return session_destroy();
 	}
 
 	/**
@@ -139,7 +139,7 @@ class Session extends SessionHandler {
 	 * @return boolean 匹配为TRUE，否则为FALSE
 	 */
 	public function isFingerprint() {
-		$hash = md5($_SERVER['USER_AGENT'] . (ip2long($_SERVER['REMOTE_ADDR']) & ip2long('255.255.0.0')));
+		$hash = md5($_SERVER['HTTP_USER_AGENT'] . (ip2long($_SERVER['REMOTE_ADDR']) & ip2long('255.255.0.0')));
 
 		if (isset($_SESSION['_fingerprint'])) {
 			return $_SESSION['_fingerprint'] === $hash;

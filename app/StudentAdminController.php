@@ -22,7 +22,7 @@ class StudentAdminController extends Controller {
 	protected function before() {
 		parent::before();
 
-		if (STUDENT != $this->session->get('role')) {
+		if (!$this->session->isValid() || STUDENT != $this->session->get('role')) {
 			redirect('student.login');
 		}
 	}
