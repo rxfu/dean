@@ -123,7 +123,6 @@ $(document).ready(function() {
 				"score": $(this).val()
 			},
 			success: function(data) {
-				alert(data);
 				$('tr[data-row="' + sno + '"] > td[data-name="total"]').text(data);
 			}
 		});

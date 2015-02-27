@@ -79,7 +79,6 @@ class ScoreController extends TeacherAdminController {
 				$score = $_POST['score'];
 
 				$ratios = $this->ratio($this->session->get('mode'));
-				var_dump($ratios);return;
 				$fields = array();
 				foreach (array_keys($ratios['mode']) as $key) {
 					$fields[] = 'cj' . $key;
