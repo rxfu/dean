@@ -49,14 +49,14 @@ class ScoreController extends TeacherAdminController {
 	protected function input($cno) {
 		if ($this->isOpen()) {
 			$sql  = 'SELECT kcxh, kcmc, kkxy, nj, zy FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND kcxh = ?';
-			$info = DB::getInstance()->getRow($sql, array(Session::get('year'), Session::get('term'), $cno));
+			$info = DB::getInstance()->getRow($sql, array($this->session->get('year'), $this->session->get('term'), $cno));
 
 			$sql    = 'SELECT * FROM v_cj_xscjlr WHERE nd = ? AND xq = ? AND kcxh = ? ORDER BY xh';
-			$data   = DB::getInstance()->getAll($sql, array(Session::get('year'), Session::get('term'), $cno));
+			$data   = DB::getInstance()->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $cno));
 			$ratios = $this->ratio($data[0]['cjfs']);
 
-			Session::set('mode', $data[0]['cjfs']);
-			Session::set('major_grade', max(array_keys($ratios['mode'])));
+			$this->session->put('mode', $data[0]['cjfs']);
+			$this->session->put('major_grade', max(array_keys($ratios['mode'])));
 
 			return $this->view->display('score.input', array('info' => $info, 'scores' => $data, 'ratios' => $ratios));
 		} else {
@@ -78,7 +78,7 @@ class ScoreController extends TeacherAdminController {
 				$mode  = substr($_POST['mode'], 5);
 				$score = $_POST['score'];
 
-				$ratios = $this->ratio(Session::get('mode'));
+				$ratios = $this->ratio($this->session->get('mode'));
 				$fields = array();
 				foreach (array_keys($ratios['mode']) as $key) {
 					$fields[] = 'cj' . $key;
@@ -87,9 +87,9 @@ class ScoreController extends TeacherAdminController {
 
 				// 计算总评成绩
 				$sql                  = 'SELECT ' . $field . ' FROM t_cj_web WHERE nd = ? AND xq = ? AND kcxh = ? AND xh = ?';
-				$grades               = DB::getInstance()->getRow($sql, array(Session::get('year'), Session::get('term'), $cno, $sno));
+				$grades               = DB::getInstance()->getRow($sql, array($this->session->get('year'), $this->session->get('term'), $cno, $sno));
 				$grades['cj' . $mode] = $score;
-				$majorGrade           = Session::get('major_grade');
+				$majorGrade           = $this->session->get('major_grade');
 				if (PASSLINE > $grades['cj' . $majorGrade]) {
 					$total = $grades['cj' . $majorGrade];
 				} else {
@@ -101,9 +101,9 @@ class ScoreController extends TeacherAdminController {
 				}
 
 				// 更新WEB成绩表
-				$updated = DB::getInstance()->updateRecord('t_cj_web', array('cj' . $mode => $score, 'zpcj' => $total), array('nd' => Session::get('year'), 'xq' => Session::get('term'), 'xh' => $sno, 'kcxh' => $cno));
+				$updated = DB::getInstance()->updateRecord('t_cj_web', array('cj' . $mode => $score, 'zpcj' => $total), array('nd' => $this->session->get('year'), 'xq' => $this->session->get('term'), 'xh' => $sno, 'kcxh' => $cno));
 				if ($updated) {
-					$data  = DB::getInstance()->searchRecord('t_cj_web', array('nd' => Session::get('year'), 'xq' => Session::get('term'), 'kcxh' => $cno, 'xh' => $sno), array('zpcj'));
+					$data  = DB::getInstance()->searchRecord('t_cj_web', array('nd' => $this->session->get('year'), 'xq' => $this->session->get('term'), 'kcxh' => $cno, 'xh' => $sno), array('zpcj'));
 					$total = $data[0]['zpcj'];
 				}
 
@@ -125,7 +125,7 @@ class ScoreController extends TeacherAdminController {
 	 */
 	protected function confirm($cno) {
 		if ($this->isOpen()) {
-			DB::getInstance()->updateRecord('t_cj_web', array('tjzt' => COMMITTED), array('nd' => Session::get('year'), 'xq' => Session::get('term'), 'kcxh' => $cno));
+			DB::getInstance()->updateRecord('t_cj_web', array('tjzt' => COMMITTED), array('nd' => $this->session->get('year'), 'xq' => $this->session->get('term'), 'kcxh' => $cno));
 			return redirect('score.input', $cno);
 		} else {
 			redirect('score.forbidden');
@@ -140,7 +140,7 @@ class ScoreController extends TeacherAdminController {
 	 */
 	protected function summary($year, $term) {
 		$sql  = 'SELECT DISTINCT kcxh, kcmc FROM v_cj_xsgccj WHERE nd = ? AND xq = ? AND jsgh = ? ORDER BY kcxh';
-		$data = DB::getInstance()->getAll($sql, array($year, $term, Session::get('username')));
+		$data = DB::getInstance()->getAll($sql, array($year, $term, $this->session->get('username')));
 
 		return $this->view->display('score.summary', array('courses' => $data, 'year' => $year, 'term' => $term));
 	}

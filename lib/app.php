@@ -11,7 +11,7 @@ class App {
 	 * 程序版本号
 	 * @var string
 	 */
-	const VERSION = '1.2.0';
+	const VERSION = '1.3.0';
 
 	/**
 	 * 运行网站系统
@@ -21,9 +21,7 @@ class App {
 		$this->setReporting();
 		set_error_handler('error', E_USER_ERROR);
 
-		Session::start();
 		Route::dispatch();
-		Session::close();
 	}
 
 	/**
@@ -39,6 +37,17 @@ class App {
 			ini_set('log_errors', 'On');
 			ini_set('error_log', LOGROOT . DS . 'error.log');
 		}
+	}
+
+	/**
+	 * 设置会话参数
+	 */
+	public function setSession() {
+		$session = Session::getInstance(SESSION_KEY);
+
+		ini_set('session.save_hanlder', 'files');
+		session_set_save_handler($session, true);
+		session_save_path(SESSION);
 	}
 
 }

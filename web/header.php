@@ -30,13 +30,15 @@
         <div id="wrapper">
             <!-- 页面头部Logo -->
             <header role="banner"></header>
-            
-            <?php if (STUDENT == Session::get('role')): ?>
-                <?php section('student.navigation') ?>
-                <main id="page-wrapper">
-            <?php elseif (TEACHER == Session::get('role')): ?>
-                <?php section('teacher.navigation') ?>
-                <main id="page-wrapper">
+            <?php var_dump($session) ?>
+            <!-- 页面主体 -->
+            <?php if (isset($session['logged']) && true == $session['logged']): ?>
+                <?php if (STUDENT == $session['role']): ?>
+                    <?php section('student.navigation') ?>
+                <?php elseif (TEACHER == $session['role']): ?>
+                    <?php section('teacher.navigation') ?>
+                <?php endif; ?>
+                <main id="page-wrapper"><?php echo $session['name'] ?>
             <?php else: ?>
                 <main class="container">
             <?php endif; ?>

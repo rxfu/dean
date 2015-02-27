@@ -10,7 +10,7 @@ class ScheduleController extends StudentAdminController {
 	 * @return void
 	 */
 	protected function current() {
-		$data = DB::getInstance()->searchRecord('v_xk_xskcb', array('xh' => Session::get('username'), 'nd' => Session::get('year'), 'xq' => Session::get('term')));
+		$data = DB::getInstance()->searchRecord('v_xk_xskcb', array('xh' => $this->session->get('username'), 'nd' => $this->session->get('year'), 'xq' => $this->session->get('term')));
 		
 		$courses = array();
 		foreach ($data as $course) {
@@ -26,7 +26,7 @@ class ScheduleController extends StudentAdminController {
 	 */
 	protected function speciality() {
 		$sql  = 'SELECT DISTINCT kch, kcmc, kcywmc, pt, xz, xs, xf FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND nj = ? AND zyh = ?';
-		$data = DB::getInstance()->getAll($sql, array(Session::get('year'), Session::get('term'), Session::get('grade'), Session::get('spno')));
+		$data = DB::getInstance()->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('grade'), $this->session->get('spno')));
 
 		return $this->view->display('schedule.speciality', array('courses' => $data));
 	}
@@ -37,7 +37,7 @@ class ScheduleController extends StudentAdminController {
 	 */
 	protected function timetable() {
 		$sql  = 'SELECT * FROM v_xk_xskcb WHERE nd = ? AND xq = ? AND xh = ? ORDER BY ksj, zc';
-		$data = DB::getInstance()->getAll($sql, array(Session::get('year'), Session::get('term'), Session::get('username')));
+		$data = DB::getInstance()->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('username')));
 
 		$courses = array_fill(1, 12, array_fill(1, 7, '&nbsp;'));
 		foreach ($data as $course) {

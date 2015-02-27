@@ -27,27 +27,28 @@ class StudentController extends StudentAdminController {
 			}
 
 			if ($this->auth($username, $password)) {
-				Logger::write(array('xh' => Session::get('username'), 'czlx' => LOG_LOGIN));
+				Logger::write(array('xh' => $this->session->get('username'), 'czlx' => LOG_LOGIN));
 
 				$info = $this->getInfo($username);
 
-				Session::set('name', $info['xm']);
-				Session::set('college', $info['xy']);
-				Session::set('speciality', $info['zy']);
-				Session::set('spno', $info['zyh']);
-				Session::set('grade', $info['nj']);
-				Session::set('season', $info['zsjj']);
-				Session::set('plan', $info['byfa']);
-				Session::set('system', $info['xz']);
-				Session::set('campus', $info['xqh']);
+				$this->session->put('name', $info['xm']);
+				$this->session->put('college', $info['xy']);
+				$this->session->put('speciality', $info['zy']);
+				$this->session->put('spno', $info['zyh']);
+				$this->session->put('grade', $info['nj']);
+				$this->session->put('season', $info['zsjj']);
+				$this->session->put('plan', $info['byfa']);
+				$this->session->put('system', $info['xz']);
+				$this->session->put('campus', $info['xqh']);
 
-				Session::set('year', Configuration::get('XK_ND'));
-				Session::set('term', Configuration::get('XK_XQ'));
+				$this->session->put('year', Configuration::get('XK_ND'));
+				$this->session->put('term', Configuration::get('XK_XQ'));
 
-				Session::set('role', STUDENT);
+				$this->session->put('role', STUDENT);
+				$this->session->put('logged', true);
 
-				Session::set('courseTerms', $this->courseTerms($username));
-				Session::set('reportTerms', $this->reportTerms($username));
+				$this->session->put('courseTerms', $this->courseTerms($username));
+				$this->session->put('reportTerms', $this->reportTerms($username));
 
 				Message::add('success', '你已经成功登录系统');
 
@@ -75,8 +76,8 @@ class StudentController extends StudentAdminController {
 					$username    = $data[0]['xh'];
 					$currentTime = date('Y-m-d H:i:s');
 
-					Session::set('id', encrypt($username . $currentTime));
-					Session::set('username', $username);
+					$this->session->put('id', encrypt($username . $currentTime));
+					$this->session->put('username', $username);
 
 					return true;
 				}
@@ -91,8 +92,9 @@ class StudentController extends StudentAdminController {
 	 * @return NULL
 	 */
 	protected function logout() {
-		Logger::write(array('xh' => Session::get('username'), 'czlx' => LOG_LOGOUT));
-		Session::destroy();
+		Logger::write(array('xh' => $this->session->get('username'), 'czlx' => LOG_LOGOUT));
+		$this->session->put('logged', false);
+		$this->session->forget();
 
 		return redirect('student.login');
 	}
@@ -114,11 +116,11 @@ class StudentController extends StudentAdminController {
 				if (($new === $confirmed) && ($old !== $new)) {
 					$db = DB::getInstance();
 
-					$data = $db->searchRecord('t_xk_xsmm', array('xh' => Session::get('username'), 'mm' => encrypt($old)), array('xh'));
+					$data = $db->searchRecord('t_xk_xsmm', array('xh' => $this->session->get('username'), 'mm' => encrypt($old)), array('xh'));
 					if (is_array($data)) {
 						if (1 == count($data)) {
-							$db->updateRecord('t_xk_xsmm', array('mm' => encrypt($new)), array('xh' => Session::get('username')));
-							Logger::write(array('xh' => Session::get('username'), 'czlx' => LOG_CHGPWD));
+							$db->updateRecord('t_xk_xsmm', array('mm' => encrypt($new)), array('xh' => $this->session->get('username')));
+							Logger::write(array('xh' => $this->session->get('username'), 'czlx' => LOG_CHGPWD));
 
 							Message::add('success', '修改密码成功');
 							return $this->view->display('student.password');
@@ -151,7 +153,7 @@ class StudentController extends StudentAdminController {
 	 * @return array 学生详细信息
 	 */
 	protected function profile() {
-		$id = Session::get('username');
+		$id = $this->session->get('username');
 		if (is_numeric($id) && isset($id{11}) && !isset($id{12})) {
 			$sql  = 'SELECT * FROM v_xk_xsxx WHERE xh = ?';
 			$data = DB::getInstance()->getRow($sql, $id);
@@ -167,7 +169,7 @@ class StudentController extends StudentAdminController {
 	 */
 	protected function portrait($file) {
 		$sql = 'SELECT zp FROM t_xs_zxs WHERE xh = ?';
-		$portrait = DB::getInstance()->getRow($sql, Session::get('username'));
+		$portrait = DB::getInstance()->getRow($sql, $this->session->get('username'));
 		$path     = PORTRAIT . DS;;
 		if (ENABLE == $portrait['zp']) {
 			return readfile($path . $file . '.jpg');

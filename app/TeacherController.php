@@ -24,17 +24,18 @@ class TeacherController extends TeacherAdminController {
 			if ($this->auth($username, $password)) {
 				$info = $this->getInfo($username);
 
-				Session::set('name', $info['xm']);
-				Session::set('college', $info['xy']);
-				Session::set('speciality', $info['zy']);
+				$this->session->put('name', $info['xm']);
+				$this->session->put('college', $info['xy']);
+				$this->session->put('speciality', $info['zy']);
 
-				Session::set('year', Configuration::get('CJ_WEB_ND'));
-				Session::set('term', Configuration::get('CJ_WEB_XQ'));
+				$this->session->put('year', Configuration::get('CJ_WEB_ND'));
+				$this->session->put('term', Configuration::get('CJ_WEB_XQ'));
 
-				Session::set('role', TEACHER);
+				$this->session->put('role', TEACHER);
+				$this->session->put('logged', true);
 
-				Session::set('scoreCourses', $this->scoreCourses($username));
-				Session::set('scoreTerms', $this->scoreTerms($username));
+				$this->session->put('scoreCourses', $this->scoreCourses($username));
+				$this->session->put('scoreTerms', $this->scoreTerms($username));
 
 				Message::add('success', '你已经成功登录系统');
 
@@ -63,8 +64,8 @@ class TeacherController extends TeacherAdminController {
 						$username    = $data[0]['jsgh'];
 						$currentTime = date('Y-m-d H:i:s');
 
-						Session::set('id', encrypt($username . $currentTime));
-						Session::set('username', $username);
+						$this->session->put('id', encrypt($username . $currentTime));
+						$this->session->put('username', $username);
 
 						return true;
 					}
@@ -80,7 +81,8 @@ class TeacherController extends TeacherAdminController {
 	 * @return NULL
 	 */
 	protected function logout() {
-		Session::destroy();
+		$this->session->put('logged', false);
+		$this->session->forget();
 
 		return redirect('teacher.login');
 	}
@@ -102,10 +104,10 @@ class TeacherController extends TeacherAdminController {
 				if (($new === $confirmed) && ($old !== $new)) {
 					$db = DB::getInstance();
 
-					$data = $db->searchRecord('t_pk_js', array('jsgh' => Session::get('username'), 'mm' => encrypt($old)), array('jsgh'));
+					$data = $db->searchRecord('t_pk_js', array('jsgh' => $this->session->get('username'), 'mm' => encrypt($old)), array('jsgh'));
 					if (is_array($data)) {
 						if (1 == count($data)) {
-							$db->updateRecord('t_pk_js', array('mm' => encrypt($new)), array('jsgh' => Session::get('username')));
+							$db->updateRecord('t_pk_js', array('mm' => encrypt($new)), array('jsgh' => $this->session->get('username')));
 
 							Message::add('success', '修改密码成功');
 							return $this->view->display('teacher.password');
@@ -138,7 +140,7 @@ class TeacherController extends TeacherAdminController {
 	 * @return array 教师详细信息
 	 */
 	protected function profile() {
-		$id = Session::get('username');
+		$id = $this->session->get('username');
 		if (is_numeric($id)) {
 			$sql  = 'SELECT * FROM v_pk_jsxx WHERE jsgh = ?';
 			$data = DB::getInstance()->getRow($sql, $id);
@@ -155,7 +157,7 @@ class TeacherController extends TeacherAdminController {
 	 */
 	protected function scoreCourses($id) {
 		$sql  = 'SELECT kcxh FROM v_cj_xscjlr WHERE jsgh = ? AND nd = ? AND xq = ? GROUP BY kcxh ORDER BY kcxh';
-		$data = DB::getInstance()->getAll($sql, array($id, Session::get('year'), Session::get('term')));
+		$data = DB::getInstance()->getAll($sql, array($id, $this->session->get('year'), $this->session->get('term')));
 
 		return $data;
 	}

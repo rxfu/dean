@@ -12,6 +12,12 @@ class Controller {
 	protected $view = null;
 
 	/**
+	 * 当前会话
+	 * @var Session
+	 */
+	protected $session = null;
+
+	/**
 	 * 前过滤器排除列表
 	 * @var array
 	 */
@@ -27,7 +33,10 @@ class Controller {
 	 * 控制器构造方法
 	 */
 	public function __construct() {
-		$this->view = new View();
+		$this->session = Session::getInstance(SESSION_KEY);
+		$this->session->start();
+
+		$this->view = new View($this->session);
 	}
 
 	/**

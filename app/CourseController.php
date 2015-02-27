@@ -63,9 +63,9 @@ class CourseController extends StudentAdminController {
 	 */
 	protected function isUnpaid() {
 		$sql  = 'SELECT xh FROM t_xk_xsqf WHERE xh = ?';
-		$data = DB::getInstance()->getRow($sql, Session::get('username'));
+		$data = DB::getInstance()->getRow($sql, $this->session->get('username'));
 
-		return strcasecmp($data['xh'], Session::get('username')) ? false : true;
+		return strcasecmp($data['xh'], $this->session->get('username')) ? false : true;
 	}
 
 	/**
@@ -147,7 +147,7 @@ class CourseController extends StudentAdminController {
 		$now = date('Y-m-d H:i:s');
 		if ($this->isLimitCourseTime()) {
 			$sql  = 'SELECT * FROM t_xk_sjxz WHERE xz = ? AND nj = ?';
-			$data = DB::getInstance()->getAll($sql, array(Session::get('system'), Session::get('grade')));
+			$data = DB::getInstance()->getAll($sql, array($this->session->get('system'), $this->session->get('grade')));
 
 			if (FALSE !== $data && !empty($data)) {
 				$allow = false;
@@ -178,7 +178,7 @@ class CourseController extends StudentAdminController {
 		$limitRatio  = COURSE_UNLIMITED;
 		if ($this->isLimitGeneral()) {
 			$sql  = 'SELECT * FROM t_xk_tsxz WHERE xz = ? AND nj = ?';
-			$data = DB::getInstance()->getAll($sql, array(Session::get('system'), Session::get('grade')));
+			$data = DB::getInstance()->getAll($sql, array($this->session->get('system'), $this->session->get('grade')));
 
 			if (FALSE !== $data && !empty($data)) {
 				$allow = false;
@@ -200,11 +200,11 @@ class CourseController extends StudentAdminController {
 		}
 
 		if (in_array($code, array($this->codes[BASIC]['code'], $this->codes[REQUIRED]['code'], $this->codes[ELECTIVE]['code']))) {
-			$grade      = Session::get('grade');
-			$speciality = Session::get('spno');
+			$grade      = $this->session->get('grade');
+			$speciality = $this->session->get('spno');
 		} else {
 			$sql  = 'SELECT DISTINCT nj FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zsjj = ?';
-			$data = DB::getInstance()->getAll($sql, array(Session::get('year'), Session::get('term'), Session::get('season')));
+			$data = DB::getInstance()->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('season')));
 			foreach ($data as $g) {
 				if (!isEmpty($g['nj'])) {
 					$grade[] = $g['nj'];
@@ -212,7 +212,7 @@ class CourseController extends StudentAdminController {
 			}
 
 			$sql  = 'SELECT DISTINCT zy FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zsjj = ?';
-			$data = DB::getInstance()->getAll($sql, array(Session::get('year'), Session::get('term'), Session::get('season')));
+			$data = DB::getInstance()->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('season')));
 			foreach ($data as $sp) {
 				if (!isEmpty($sp['zy'])) {
 					$speciality[] = $sp['zy'];
@@ -230,7 +230,7 @@ class CourseController extends StudentAdminController {
 			}
 		}
 
-		$param = "'" . implode("','", array(Session::get('season'), Session::get('username'), Session::get('year'), Session::get('term'), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality))) . "'";
+		$param = "'" . implode("','", array($this->session->get('season'), $this->session->get('username'), $this->session->get('year'), $this->session->get('term'), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality))) . "'";
 		$data  = DB::getInstance()->query('SELECT * FROM p_kxkcb_sel(' . $param . ', null, null)');
 
 		$courses = array();
@@ -248,7 +248,7 @@ class CourseController extends StudentAdminController {
 				// 限制通识素质课门数
 				if (COURSE_UNLIMITED < $limitCourse) {
 					$sql         = 'SELECT ms FROM v_xk_tsxztj WHERE nd = ? AND xq = ? AND xh = ?';
-					$courseCount = DB::getInstance()->getColumn($sql, array(Session::get('year'), Session::get('term'), Session::get('username')));
+					$courseCount = DB::getInstance()->getColumn($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('username')));
 
 					if ($limitCourse <= $courseCount) {
 						$course['zt'] = FORBIDDEN;
@@ -286,7 +286,7 @@ class CourseController extends StudentAdminController {
 		$now = date('Y-m-d H:i:s');
 		if ($this->isLimitCourseTime()) {
 			$sql  = 'SELECT * FROM t_xk_sjxz WHERE xz = ? AND nj = ?';
-			$data = DB::getInstance()->getAll($sql, array(Session::get('system'), Session::get('grade')));
+			$data = DB::getInstance()->getAll($sql, array($this->session->get('system'), $this->session->get('grade')));
 
 			if (FALSE !== $data && !empty($data)) {
 				$allow = false;
@@ -360,7 +360,7 @@ class CourseController extends StudentAdminController {
 			}
 
 			if (isset($grade) && isset($speciality) && isset($platform) && isset($property)) {
-				$param = "'" . implode("','", array(Session::get('season'), Session::get('username'), Session::get('year'), Session::get('term'), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality), $cno, $cname)) . "'";
+				$param = "'" . implode("','", array($this->session->get('season'), $this->session->get('username'), $this->session->get('year'), $this->session->get('term'), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality), $cno, $cname)) . "'";
 				$data  = DB::getInstance()->query('SELECT * FROM p_kxkcb_sel(' . $param . ')');
 
 				$courses = array();
@@ -397,7 +397,7 @@ class CourseController extends StudentAdminController {
 		$now = date('Y-m-d H:i:s');
 		if ($this->isLimitCourseTime()) {
 			$sql  = 'SELECT * FROM t_xk_sjxz WHERE xz = ? AND nj = ?';
-			$data = DB::getInstance()->getAll($sql, array(Session::get('system'), Session::get('grade')));
+			$data = DB::getInstance()->getAll($sql, array($this->session->get('system'), $this->session->get('grade')));
 
 			if (FALSE !== $data && !empty($data)) {
 				$allow = false;
@@ -429,7 +429,7 @@ class CourseController extends StudentAdminController {
 			$limitRatio  = COURSE_UNLIMITED;
 			if ($this->isLimitGeneral()) {
 				$sql  = 'SELECT * FROM t_xk_tsxz WHERE xz = ? AND nj = ?';
-				$data = DB::getInstance()->getAll($sql, array(Session::get('system'), Session::get('grade')));
+				$data = DB::getInstance()->getAll($sql, array($this->session->get('system'), $this->session->get('grade')));
 
 				if (FALSE !== $data && !empty($data)) {
 					$allow = false;
@@ -471,7 +471,7 @@ class CourseController extends StudentAdminController {
 					// 限制通识素质课门数
 					if (COURSE_UNLIMITED < $limitCourse) {
 						$sql         = 'SELECT ms FROM v_xk_tsxztj WHERE nd = ? AND xq = ? AND xh = ?';
-						$courseCount = DB::getInstance()->getColumn($sql, array(Session::get('year'), Session::get('term'), Session::get('username')));
+						$courseCount = DB::getInstance()->getColumn($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('username')));
 
 						if ($limitCourse <= $courseCount) {
 							redirect('course.forbidden');
@@ -480,21 +480,21 @@ class CourseController extends StudentAdminController {
 					}
 				}
 
-				$param = "'" . implode("','", array(Session::get('year'), Session::get('term'), Session::get('username'), $cno, Session::get('name'), Session::get('grade'), Session::get('spno'), Session::get('season'))) . "'";
+				$param = "'" . implode("','", array($this->session->get('year'), $this->session->get('term'), $this->session->get('username'), $cno, $this->session->get('name'), $this->session->get('grade'), $this->session->get('spno'), $this->session->get('season'))) . "'";
 
 				$selected = DB::getInstance()->query('SELECT p_xzkc_save(' . $param . ')');
 				if ($selected) {
-					Logger::write(array('xh' => Session::get('username'), 'kcxh' => $cno, 'czlx' => LOG_INSERT));
+					Logger::write(array('xh' => $this->session->get('username'), 'kcxh' => $cno, 'czlx' => LOG_INSERT));
 					echo 'success';
 				} else {
 					echo 'failed';
 				}
 			} else {
-				$param = "'" . implode("','", array(Session::get('year'), Session::get('term'), Session::get('username'), $cno)) . "'";
+				$param = "'" . implode("','", array($this->session->get('year'), $this->session->get('term'), $this->session->get('username'), $cno)) . "'";
 
 				$deleted = DB::getInstance()->query('SELECT p_scxk_del(' . $param . ')');
 				if ($deleted) {
-					Logger::write(array('xh' => Session::get('username'), 'kcxh' => $cno, 'czlx' => LOG_DELETE));
+					Logger::write(array('xh' => $this->session->get('username'), 'kcxh' => $cno, 'czlx' => LOG_DELETE));
 					echo 'success';
 				} else {
 					echo 'failed';
@@ -514,10 +514,10 @@ class CourseController extends StudentAdminController {
 		$collision = false;
 
 		$sql      = 'SELECT kcxh, ksz, jsz, zc, ksj, jsj FROM t_pk_kb WHERE nd = ? AND xq = ? AND kcxh = ?';
-		$currents = DB::getInstance()->getAll($sql, array(Session::get('year'), Session::get('term'), $course));
+		$currents = DB::getInstance()->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $course));
 
 		$sql      = 'SELECT kcxh, ksz, jsz, zc, ksj, jsj FROM v_xk_xskcb WHERE xh = ? AND nd = ? AND xq = ?';
-		$compares = DB::getInstance()->getAll($sql, array(Session::get('username'), Session::get('year'), Session::get('term')));
+		$compares = DB::getInstance()->getAll($sql, array($this->session->get('username'), $this->session->get('year'), $this->session->get('term')));
 
 		foreach ($currents as $current) {
 			foreach ($compares as $compare) {
@@ -544,7 +544,7 @@ class CourseController extends StudentAdminController {
 	 */
 	protected function full($course) {
 		$sql    = 'SELECT jhrs, rs FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND kcxh = ?';
-		$data   = DB::getInstance()->getRow($sql, array(Session::get('year'), Session::get('term'), $course));
+		$data   = DB::getInstance()->getRow($sql, array($this->session->get('year'), $this->session->get('term'), $course));
 		$status = 0 < $data['jhrs'] && $data['jhrs'] < $data['rs'];
 
 		echo json_encode(array('status' => $status));
@@ -571,7 +571,7 @@ class CourseController extends StudentAdminController {
 		$now = date('Y-m-d H:i:s');
 		if ($this->isLimitCourseTime()) {
 			$sql  = 'SELECT * FROM t_xk_sjxz WHERE xz = ? AND nj = ?';
-			$data = DB::getInstance()->getAll($sql, array(Session::get('system'), Session::get('grade')));
+			$data = DB::getInstance()->getAll($sql, array($this->session->get('system'), $this->session->get('grade')));
 
 			if (FALSE !== $data && !empty($data)) {
 				$allow = false;
@@ -606,34 +606,34 @@ class CourseController extends StudentAdminController {
 			} elseif (OTHERS == $type) {
 				$data['xklx'] = APPLY_OTHERS;
 			}
-			$data['xh']   = Session::get('username');
-			$data['xm']   = Session::get('name');
-			$data['nd']   = Session::get('year');
-			$data['xq']   = Session::get('term');
+			$data['xh']   = $this->session->get('username');
+			$data['xm']   = $this->session->get('name');
+			$data['nd']   = $this->session->get('year');
+			$data['xq']   = $this->session->get('term');
 			$data['kcxh'] = sanitize($cno);
 			$data['xksj'] = date('Y-m-d H:i:s');
 
 			$sql          = 'SELECT kch, pt, xz, kkxy FROM v_xk_kxkcxx WHERE kcxh = ? AND nd = ? AND xq = ?';
-			$course       = DB::getInstance()->getRow($sql, array($data['kcxh'], Session::get('year'), Session::get('term')));
+			$course       = DB::getInstance()->getRow($sql, array($data['kcxh'], $this->session->get('year'), $this->session->get('term')));
 			$data['kch']  = $course['kch'];
 			$data['pt']   = $course['pt'];
 			$data['xz']   = $course['xz'];
 			$data['kkxy'] = $course['kkxy'];
 			DB::getInstance()->insertRecord('t_xk_xksq', $data);
 
-			Logger::write(array('xh' => Session::get('username'), 'kcxh' => $data['kcxh'], 'czlx' => LOG_APPLY));
+			Logger::write(array('xh' => $this->session->get('username'), 'kcxh' => $data['kcxh'], 'czlx' => LOG_APPLY));
 
 			return redirect('course.process');
 		}
 
 		if (RETAKE == $type) {
 			$sql    = 'SELECT DISTINCT nd FROM t_xk_xkxx WHERE xh = ?';
-			$lyears = DB::getInstance()->getAll($sql, array(Session::get('username')));
+			$lyears = DB::getInstance()->getAll($sql, array($this->session->get('username')));
 
 			$lterms = Dictionary::getAll('xq');
 
 			$sql   = 'SELECT DISTINCT kcxh, kcmc FROM v_xk_xskcb WHERE xh = ? ORDER BY kcxh';
-			$lcnos = DB::getInstance()->getAll($sql, array(Session::get('username')));
+			$lcnos = DB::getInstance()->getAll($sql, array($this->session->get('username')));
 
 			return $this->view->display('course.apply', array('type' => $type, 'cno' => $cno, 'title' => $this->codes[$type]['name'], 'lyears' => $lyears, 'lterms' => $lterms, 'lcnos' => $lcnos));
 		}
@@ -645,7 +645,7 @@ class CourseController extends StudentAdminController {
 	 * @return array 课程申请列表
 	 */
 	protected function process() {
-		$data = DB::getInstance()->searchRecord('t_xk_xksq', array('xh' => Session::get('username')));
+		$data = DB::getInstance()->searchRecord('t_xk_xksq', array('xh' => $this->session->get('username')));
 		return $this->view->display('course.process', array('courses' => $data));
 	}
 

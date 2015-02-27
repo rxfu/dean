@@ -11,7 +11,7 @@ class PlanController extends StudentAdminController {
 	 * @return array         教学计划信息
 	 */
 	protected function plan() {
-		$data = DB::getInstance()->searchRecord('v_xk_jxjh', array('zy' => Session::get('spno'), 'nj' => Session::get('grade'), 'zsjj' => Session::get('season')));
+		$data = DB::getInstance()->searchRecord('v_xk_jxjh', array('zy' => $this->session->get('spno'), 'nj' => $this->session->get('grade'), 'zsjj' => $this->session->get('season')));
 
 		return $this->view->display('plan.plan', array('plans' => $data));
 	}
@@ -45,7 +45,7 @@ class PlanController extends StudentAdminController {
 			'KX' => 0,
 			'JX' => 0,
 		);
-		$requirements = DB::getInstance()->searchRecord('t_jx_byyq', array('zy' => Session::get('spno'), 'nj' => Session::get('grade'), 'zsjj' => Session::get('season'), 'byfa' => Session::get('plan')));
+		$requirements = DB::getInstance()->searchRecord('t_jx_byyq', array('zy' => $this->session->get('spno'), 'nj' => $this->session->get('grade'), 'zsjj' => $this->session->get('season'), 'byfa' => $this->session->get('plan')));
 
 		if (is_array($requirements)) {
 			foreach ($requirements as $requirement) {

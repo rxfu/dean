@@ -11,7 +11,7 @@ class ReportController extends StudentAdminController {
 	 * @return array     学生成绩
 	 */
 	protected function report() {
-		$data = DB::getInstance()->searchRecord('v_cj_xscj', array('xh' => Session::get('username')));
+		$data = DB::getInstance()->searchRecord('v_cj_xscj', array('xh' => $this->session->get('username')));
 
 		return $this->view->display('report.report', array('scores' => $data));
 	}
@@ -24,7 +24,7 @@ class ReportController extends StudentAdminController {
 	 */
 	protected function detail($cno) {
 		$sql  = 'SELECT * FROM v_cj_xsgccj WHERE kch = ? AND xh = ? AND tjzt = ? ORDER BY nd, xq';
-		$data = DB::getInstance()->getAll($sql, array($cno, Session::get('username'), DEAN_CONFIRMED));
+		$data = DB::getInstance()->getAll($sql, array($cno, $this->session->get('username'), DEAN_CONFIRMED));
 
 		$ratios = array();
 		$scores = array();
@@ -42,7 +42,7 @@ class ReportController extends StudentAdminController {
 	 */
 	protected function unconfirmed() {
 		$sql  = 'SELECT * FROM v_cj_xsgccj WHERE nd = ? AND xq = ? AND xh = ? AND tjzt = ? ORDER BY kcxh';
-		$data = DB::getInstance()->getAll($sql, array(Session::get('year'), Session::get('term'), Session::get('username'), COLLEGE_CONFIRMED));
+		$data = DB::getInstance()->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('username'), COLLEGE_CONFIRMED));
 
 		$ratios = array();
 		$scores = array();

@@ -12,10 +12,19 @@ class View {
 	protected $templateDirectory = null;
 
 	/**
+	 * 会话对象
+	 * @var object
+	 */
+	protected $session = null;
+
+	/**
 	 * 初始化视图模板路径
+	 * @param object $session 会话对象
 	 * @param string $templateDirectory 视图模板路径
 	 */
-	public function __construct($templateDirectory = NULL) {
+	public function __construct($session = null, $templateDirectory = null) {
+		$this->session = $session;
+
 		$templateDirectory       = is_null($templateDirectory) ? WEBROOT : $templateDirectory;
 		$this->templateDirectory = rtrim($templateDirectory, DS);
 	}
@@ -33,6 +42,7 @@ class View {
 			throw new RuntimeException('模板文件 ' . $templatePath . ' 不存在！');
 		}
 
+		$data[] = array('session' => $_SESSION);
 		extract($data);
 		ob_start();
 		require $templatePath;
@@ -51,7 +61,7 @@ class View {
 	public function display($template, array $data = array()) {
 		print $this->render('header', $data);
 		print $this->render($template, $data);
-		print $this->render('footer', $data);		
+		print $this->render('footer', $data);
 		exit(0);
 	}
 

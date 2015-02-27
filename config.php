@@ -19,6 +19,7 @@ define('PUBROOT', ROOT . DS . 'public');
 define('LOGROOT', ROOT . DS . 'log');
 define('STORAGE', ROOT . DS . 'storage');
 define('PORTRAIT', STORAGE . DS . 'portraits');
+define('SESSION', STORAGE . DS . 'sessions');
 
 /**
  * 系统参数配置
@@ -45,7 +46,7 @@ define('DB_NAME', 'dean');
 define('DB_USERNAME', 'jwxt');
 define('DB_PASSWORD', 'jwxt..');
 define('DB_CHARSET', 'UTF8');
-*/
+ */
 define('DB_PREFIX', 'pgsql');
 define('DB_HOST', '202.193.171.253');
 define('DB_PORT', '5432');
@@ -74,8 +75,10 @@ define('DEFAULT_METHOD', 'index');
 /**
  * 会话参数配置
  */
+define('SESSION_KEY', 'academic_manage_system');
+define('SESSION_NAME', 'AMS');
 define('SESSION_PREFIX', 'dean_');
-define('SESSION_EXPIRATION', 7200);
+define('SESSION_TTL', 120); // 单位：分钟
 
 /**
  * 日志操作类型配置
