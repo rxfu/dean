@@ -28,31 +28,54 @@ class DB {
 	private static $_engine = null;
 
 	/**
-	 * 覆盖__clone()方法，禁止克隆
+	 * 数据库连接参数
+	 * @var array
 	 */
-	private function __clone() {
+	private $_dsn = array();
+
+	/**
+	 * 数据库构造方法
+	 * @param string $engine   数据库引擎
+	 * @param string $host     数据库地址
+	 * @param string $port     数据库端口
+	 * @param string $dbname   数据库名称
+	 * @param string $username 数据库用户名
+	 * @param string $password 数据库密码
+	 * @param string $charset  数据库字符集
+	 */
+	public function __construct($engine, $host, $port, $dbname, $username, $password, $charset = 'utf8') {
+		$this->_dsn = array(
+			'engine'   => $engine,
+			'host'     => $host,
+			'port'     => $port,
+			'dbname'   => $dbname,
+			'username' => $username,
+			'password' => $password,
+			'charset'  => $charset,
+		);
+
+		$this->_connect();
 	}
 
 	/**
 	 * 析构方法
 	 */
 	public function __destruct() {
-
 		$this->_close();
 	}
 
 	/**
 	 * 连接数据库
 	 */
-	protected function init() {
+	private function _connect() {
 		try {
-			$dsn     = DB_PREFIX . ':host=' . DB_HOST . ';port=' . DB_PORT . ';dbname=' . DB_NAME;
+			$dsn     = $this->_dsn['engine'] . ':host=' . $this->_dsn['host'] . ';port=' . $this->_dsn['port'] . ';dbname=' . $this->_dsn['dbname'];
 			$options = array();
-			if (DB_PREFIX == 'mysql') {
-				$options += array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . strtolower(defined(DB_CHARSET) ? DB_CHARSET : 'gbk') . ';');
+			if ($this->_dsn['engine'] == 'mysql') {
+				$options += array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . strtolower($this->_dsn['charset']) . ';');
 			}
 
-			self::$_dbh = new PDO($dsn, DB_USERNAME, DB_PASSWORD, $options);
+			self::$_dbh = new PDO($dsn, $this->_dsn['username'], $this->_dsn['password'], $options);
 			self::$_dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
 			self::$_dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			self::$_dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
@@ -67,7 +90,6 @@ class DB {
 	 * 关闭数据库
 	 */
 	private function _close() {
-
 		self::$_dbh = null;
 	}
 

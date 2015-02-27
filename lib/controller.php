@@ -18,6 +18,18 @@ class Controller {
 	protected $session = null;
 
 	/**
+	 * 控制器对应模型类
+	 * @var Model
+	 */
+	protected $model = null;
+
+	/**
+	 * 数据库句柄
+	 * @var DB
+	 */
+	protected $db = null;
+
+	/**
 	 * 前过滤器排除列表
 	 * @var array
 	 */
@@ -85,6 +97,20 @@ class Controller {
 	 */
 	protected function after() {
 		// TODO:
+	}
+
+	/**
+	 * 加载模型类
+	 * @param  string $model 模型名称
+	 * @return void        
+	 */
+	public function loadModel($name) {
+		$modelPath = MODROOT . DS . $name . '.php';
+
+		if (file_exists($modelPath)) {
+			$model = $name . 'Model';
+			$this->model = new $model;
+		}
 	}
 
 }

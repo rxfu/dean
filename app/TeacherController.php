@@ -6,6 +6,14 @@
 class TeacherController extends TeacherAdminController {
 
 	/**
+	 * 仪表盘
+	 * @return void
+	 */
+	protected function dashboard() {
+		return $this->view->display('teacher.dashboard');
+	}
+
+	/**
 	 * 登录系统
 	 * @return NULL
 	 */
@@ -39,7 +47,7 @@ class TeacherController extends TeacherAdminController {
 
 				Message::add('success', '你已经成功登录系统');
 
-				return redirect('home.teacher');
+				return redirect('teacher.dashboard');
 			} else {
 				Message::add('danger', '登录失败，请检查用户名和密码是否正确');
 			}
@@ -56,7 +64,7 @@ class TeacherController extends TeacherAdminController {
 	 */
 	protected function auth($username, $password) {
 		if (is_string($username) && is_string($password)) {
-			$data = DB::getInstance()->searchRecord('t_pk_js', array('jsgh' => $username, 'mm' => encrypt($password)), array('jsgh', 'zt'));
+			$data = $this->db->searchRecord('t_pk_js', array('jsgh' => $username, 'mm' => encrypt($password)), array('jsgh', 'zt'));
 
 			if (is_array($data)) {
 				if (1 == count($data)) {
@@ -94,7 +102,7 @@ class TeacherController extends TeacherAdminController {
 	protected function password() {
 		if (isPost()) {
 			$_POST = sanitize($_POST);
-			
+
 			$old       = $_POST['oldPassword'];
 			$new       = $_POST['newPassword'];
 			$confirmed = $_POST['confirmedPassword'];
@@ -102,7 +110,7 @@ class TeacherController extends TeacherAdminController {
 			if (is_string($old) && is_string($new)) {
 
 				if (($new === $confirmed) && ($old !== $new)) {
-					$db = DB::getInstance();
+					$db = $this->db;
 
 					$data = $db->searchRecord('t_pk_js', array('jsgh' => $this->session->get('username'), 'mm' => encrypt($old)), array('jsgh'));
 					if (is_array($data)) {
@@ -129,7 +137,7 @@ class TeacherController extends TeacherAdminController {
 	protected function getInfo($id) {
 		if (is_numeric($id)) {
 			$sql  = 'SELECT * FROM v_pk_jsxx WHERE jsgh = ?';
-			$data = DB::getInstance()->getRow($sql, $id);
+			$data = $this->db->getRow($sql, $id);
 		}
 
 		return $data;
@@ -143,7 +151,7 @@ class TeacherController extends TeacherAdminController {
 		$id = $this->session->get('username');
 		if (is_numeric($id)) {
 			$sql  = 'SELECT * FROM v_pk_jsxx WHERE jsgh = ?';
-			$data = DB::getInstance()->getRow($sql, $id);
+			$data = $this->db->getRow($sql, $id);
 		}
 
 		return $this->view->display('teacher.profile', array('profile' => $data));
@@ -157,7 +165,7 @@ class TeacherController extends TeacherAdminController {
 	 */
 	protected function scoreCourses($id) {
 		$sql  = 'SELECT kcxh FROM v_cj_xscjlr WHERE jsgh = ? AND nd = ? AND xq = ? GROUP BY kcxh ORDER BY kcxh';
-		$data = DB::getInstance()->getAll($sql, array($id, $this->session->get('year'), $this->session->get('term')));
+		$data = $this->db->getAll($sql, array($id, $this->session->get('year'), $this->session->get('term')));
 
 		return $data;
 	}
@@ -170,7 +178,7 @@ class TeacherController extends TeacherAdminController {
 	 */
 	protected function scoreTerms($id) {
 		$sql  = 'SELECT nd, xq FROM v_cj_xsgccj WHERE jsgh = ? GROUP BY nd, xq ORDER BY nd DESC, xq DESC';
-		$data = DB::getInstance()->getAll($sql, $id);
+		$data = $this->db->getAll($sql, $id);
 
 		return $data;
 	}

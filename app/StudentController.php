@@ -6,6 +6,15 @@
 class StudentController extends StudentAdminController {
 
 	/**
+	 * 仪表盘
+	 * @return void
+	 */
+	protected function dashboard() {
+		$message = $this->db->getColumn('SELECT text FROM t_xt_message');
+		return $this->view->display('student.dashboard', array('message' => $message));
+	}
+
+	/**
 	 * 登录系统
 	 * @return NULL
 	 */
@@ -52,7 +61,7 @@ class StudentController extends StudentAdminController {
 
 				Message::add('success', '你已经成功登录系统');
 
-				return redirect('home.student');
+				return redirect('student.dashboard');
 			} else {
 				Message::add('danger', '登录失败，请检查用户名和密码是否正确');
 			}
@@ -69,7 +78,7 @@ class StudentController extends StudentAdminController {
 	 */
 	protected function auth($username, $password) {
 		if (is_string($username) && is_string($password)) {
-			$data = DB::getInstance()->searchRecord('t_xk_xsmm', array('xh' => $username, 'mm' => encrypt($password)), array('xh'));
+			$data = $this->db->searchRecord('t_xk_xsmm', array('xh' => $username, 'mm' => encrypt($password)), array('xh'));
 
 			if (is_array($data)) {
 				if (1 == count($data)) {
@@ -114,7 +123,7 @@ class StudentController extends StudentAdminController {
 			if (is_string($old) && is_string($new)) {
 
 				if (($new === $confirmed) && ($old !== $new)) {
-					$db = DB::getInstance();
+					$db = $this->db;
 
 					$data = $db->searchRecord('t_xk_xsmm', array('xh' => $this->session->get('username'), 'mm' => encrypt($old)), array('xh'));
 					if (is_array($data)) {
@@ -142,7 +151,7 @@ class StudentController extends StudentAdminController {
 	protected function getInfo($id) {
 		if (is_numeric($id) && isset($id{11}) && !isset($id{12})) {
 			$sql  = 'SELECT * FROM v_xk_xsjbxx WHERE xh = ?';
-			$data = DB::getInstance()->getRow($sql, $id);
+			$data = $this->db->getRow($sql, $id);
 		}
 
 		return $data;
@@ -156,7 +165,7 @@ class StudentController extends StudentAdminController {
 		$id = $this->session->get('username');
 		if (is_numeric($id) && isset($id{11}) && !isset($id{12})) {
 			$sql  = 'SELECT * FROM v_xk_xsxx WHERE xh = ?';
-			$data = DB::getInstance()->getRow($sql, $id);
+			$data = $this->db->getRow($sql, $id);
 		}
 
 		return $this->view->display('student.profile', array('profile' => $data));
@@ -169,7 +178,7 @@ class StudentController extends StudentAdminController {
 	 */
 	protected function portrait($file) {
 		$sql      = 'SELECT zp FROM t_xs_zxs WHERE xh = ?';
-		$portrait = DB::getInstance()->getRow($sql, $this->session->get('username'));
+		$portrait = $this->db->getRow($sql, $this->session->get('username'));
 		$path     = PORTRAIT . DS;
 		if (ENABLE == $portrait['zp']) {
 			return readfile($path . $file . '.jpg');
@@ -186,7 +195,7 @@ class StudentController extends StudentAdminController {
 	 */
 	protected function courseTerms($id) {
 		$sql  = 'SELECT nd, xq FROM t_xk_xkxx WHERE xh = ? GROUP BY nd, xq ORDER BY nd DESC, xq DESC';
-		$data = DB::getInstance()->getAll($sql, $id);
+		$data = $this->db->getAll($sql, $id);
 
 		return $data;
 	}
@@ -199,7 +208,7 @@ class StudentController extends StudentAdminController {
 	 */
 	protected function reportTerms($id) {
 		$sql  = 'SELECT nd, xq FROM t_cj_zxscj WHERE xh = ? GROUP BY nd, xq ORDER BY nd DESC, xq DESC';
-		$data = DB::getInstance()->getAll($sql, $id);
+		$data = $this->db->getAll($sql, $id);
 
 		return $data;
 	}

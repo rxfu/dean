@@ -15,6 +15,7 @@ define('VD', substr(strrchr(dirname(__FILE__), DS), 1));
 define('LIBROOT', ROOT . DS . 'lib');
 define('APPROOT', ROOT . DS . 'app');
 define('WEBROOT', ROOT . DS . 'web');
+define('MODROOT', ROOT . DS . 'model');
 define('PUBROOT', ROOT . DS . 'public');
 define('LOGROOT', ROOT . DS . 'log');
 define('STORAGE', ROOT . DS . 'storage');
@@ -47,13 +48,21 @@ define('DB_USERNAME', 'jwxt');
 define('DB_PASSWORD', 'jwxt..');
 define('DB_CHARSET', 'UTF8');
  */
-define('DB_PREFIX', 'pgsql');
-define('DB_HOST', '202.193.171.253');
-define('DB_PORT', '5432');
-define('DB_NAME', 'dean');
-define('DB_USERNAME', 'jwxt');
-define('DB_PASSWORD', 'jwxt..');
-define('DB_CHARSET', 'UTF8');
+define('DB_STU_ENGINE', 'pgsql');
+define('DB_STU_HOST', '202.193.171.253');
+define('DB_STU_PORT', '5432');
+define('DB_STU_DBNAME', 'dean');
+define('DB_STU_USERNAME', 'jwxt');
+define('DB_STU_PASSWORD', 'jwxt..');
+define('DB_STU_CHARSET', 'UTF8');
+
+define('DB_TCH_ENGINE', 'pgsql');
+define('DB_TCH_HOST', '202.193.171.253');
+define('DB_TCH_PORT', '5432');
+define('DB_TCH_DBNAME', 'dean');
+define('DB_TCH_USERNAME', 'jwxt');
+define('DB_TCH_PASSWORD', 'jwxt..');
+define('DB_TCH_CHARSET', 'UTF8');
 
 /**
  * SALT配置

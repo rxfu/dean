@@ -29,7 +29,7 @@
                                                 <td><?php echo Dictionary::get('xq', $course['xq']) ?></td>
                                                 <td><?php echo $course['kcxh'] ?></td>
                                                 <td><?php echo $course['ynd'] ?></td>
-                                                <td><?php echo Dictionary::get('xq', $course['yxq']) ?></td>
+                                                <td><?php echo isEmpty($course['yxq']) ? $course['yxq'] : Dictionary::get('xq', $course['yxq']) ?></td>
                                                 <td><?php echo $course['ykcxh'] ?></td>
                                                 <td><?php echo $course['shyj'] ?></td>
                                                 <td><?php switch ($course['sh']) {

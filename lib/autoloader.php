@@ -17,7 +17,12 @@ class Autoloader {
 		if (false !== $pos && 0 != $pos) {
 			$fileName = APPROOT . DS . $className . '.php';
 		} else {
-			$fileName = LIBROOT . DS . strtolower($className) . '.php';
+			$pos = strrpos($className, 'Model');
+			if (false !== $pos && 0 != $pos) {
+				$fileName = MODROOT . DS . $className . '.php';
+			} else {
+				$fileName = LIBROOT . DS . strtolower($className) . '.php';
+			}
 		}
 
 		if (file_exists($fileName)) {

@@ -26,13 +26,14 @@ class Route {
 		$method     = isset(self::$_routes[1]) && !isEmpty(self::$_routes[1]) ? self::$_routes[1] : DEFAULT_METHOD;
 		$args       = is_array(self::$_routes) && count(self::$_routes) > 2 ? array_slice(self::$_routes, 2) : array();
 
-		$controller = snakeToCamel($controller) . 'Controller';
-		if (!file_exists(APPROOT . DS . $controller . '.php')) {
-			trigger_error('类文件' . $controller . '.php 不存在');
+		$dispatcher = snakeToCamel($controller) . 'Controller';
+		if (!file_exists(APPROOT . DS . $dispatcher . '.php')) {
+			trigger_error('类文件' . $dispatcher . '.php 不存在');
 			Session::set('error', '非法路由');
 			return;
 		}
-		$dispatch = new $controller;
+		$dispatch = new $dispatcher;
+		$dispatch->loadModel($controller);
 
 		if (method_exists($dispatch, $method)) {
 			call_user_func_array(array($dispatch, $method), $args);
