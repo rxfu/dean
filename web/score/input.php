@@ -36,7 +36,7 @@
                                                 <?php foreach($ratios['mode'] as $key => $value): ?>
                                                     <td>
                                                         <?php if (UNCOMMITTED == $score['tjzt']): ?>
-                                                            <form class="gradeForm" method="post" action="<?php echo toLink('report.enter', $info['kcxh']) ?>" role="form" onsubmit="return false">
+                                                            <form class="gradeForm" method="post" action="<?php echo toLink('score.enter', $info['kcxh']) ?>" role="form" onsubmit="return false">
                                                                 <input type="text" name="grade<?php echo $key ?>" value="<?php echo $score['cj' . $key] ?>">
                                                             </form>
                                                         <?php elseif (COMMITTED == $score['tjzt']): ?>
