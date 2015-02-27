@@ -13,7 +13,7 @@ class PlanController extends StudentAdminController {
 	protected function plan() {
 		$data = DB::getInstance()->searchRecord('v_xk_jxjh', array('zy' => $this->session->get('spno'), 'nj' => $this->session->get('grade'), 'zsjj' => $this->session->get('season')));
 
-		return $this->view->display('plan.plan', array('plans' => $data));
+		return $this->view->display('plan.plan', array('plans' => $data, 'college' => $this->session->get('college'), 'grade' => $this->session->get('grade'), 'speciality' => $this->session->get('speciality')));
 	}
 
 	/**

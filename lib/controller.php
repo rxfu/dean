@@ -36,7 +36,7 @@ class Controller {
 		$this->session = Session::getInstance(SESSION_KEY);
 		$this->session->start();
 
-		$this->view = new View($this->session);
+		$this->view = new View();
 	}
 
 	/**

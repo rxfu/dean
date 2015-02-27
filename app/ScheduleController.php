@@ -17,7 +17,7 @@ class ScheduleController extends StudentAdminController {
 			$courses[$course['kcxh']][] = $course;
 		}
 
-		return $this->view->display('schedule.current', array('courses' => $courses));
+		return $this->view->display('schedule.current', array('courses' => $courses, 'name' => $this->session->get('name'), 'year' => $this->session->get('year'), 'term' => $this->session->get('term')));
 	}
 
 	/**
@@ -28,7 +28,7 @@ class ScheduleController extends StudentAdminController {
 		$sql  = 'SELECT DISTINCT kch, kcmc, kcywmc, pt, xz, xs, xf FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND nj = ? AND zyh = ?';
 		$data = DB::getInstance()->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('grade'), $this->session->get('spno')));
 
-		return $this->view->display('schedule.speciality', array('courses' => $data));
+		return $this->view->display('schedule.speciality', array('courses' => $data, 'name' => $this->session->get('name'), 'year' => $this->session->get('year'), 'term' => $this->session->get('term')));
 	}
 
 	/**
@@ -66,6 +66,7 @@ class ScheduleController extends StudentAdminController {
 				$courses[$i][$week] = null;
 			}
 		}
-		return $this->view->display('schedule.timetable', array('courses' => $courses));
+		
+		return $this->view->display('schedule.timetable', array('courses' => $courses, 'name' => $this->session->get('name'), 'year' => $this->session->get('year'), 'term' => $this->session->get('term')));
 	}
 }

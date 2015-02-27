@@ -1,8 +1,8 @@
                 <section class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header"><?php echo Session::get('name') ?>同学<?php echo Session::get('year') ?>年度<?php echo Dictionary::get('xq', Session::get('term')) ?>学期<?php echo $title ?>课程检索</h1>
+                        <h1 class="page-header"><?php echo $name ?>同学<?php echo $year ?>年度<?php echo Dictionary::get('xq', $term) ?>学期<?php echo $title ?>课程检索</h1>
                         <div class="alert alert-danger" role="alert">请输入课程序号或课程中文名称进行检索并申请<?php echo $title ?></div>
-                        <div id="campus" class="hidden sr-only"><?php echo Session::get('campus') ?></div>
+                        <div id="campus" class="hidden sr-only"><?php echo $campus ?></div>
                     </div>
                 </section>
 
@@ -29,14 +29,14 @@
                                 <div class="panel-body">
                                     <div role="tabpanel">
                                         <ul id="campus-tab" class="nav nav-tabs" role="tablist">
-                                            <?php foreach (array_keys($courses) as $campus): ?>
-                                                <?php $campusId = 'campus-' . $campus ?>
-                                                <li role="presentation"><a href="#<?php echo $campusId ?>" aria-controls="<?php echo $campusId ?>" role="tab" data-toggle="tab"><?php echo Dictionary::get('xqh', $campus) ?></a></li>
+                                            <?php foreach (array_keys($courses) as $cid): ?>
+                                                <?php $campusId = 'campus-' . $cid ?>
+                                                <li role="presentation"><a href="#<?php echo $campusId ?>" aria-controls="<?php echo $campusId ?>" role="tab" data-toggle="tab"><?php echo Dictionary::get('xqh', $cid) ?></a></li>
                                             <?php endforeach ?>
                                         </ul>
                                         <div class="tab-content">
-                                            <?php foreach (array_keys($courses) as $campus): ?>
-                                                <div id="campus-<?php echo $campus ?>" class="tab-pane fade<?php echo Session::get('campus') == $campus ? ' in active' : '' ?>" role="tabpanel">
+                                            <?php foreach (array_keys($courses) as $cid): ?>
+                                                <div id="campus-<?php echo $cid ?>" class="tab-pane fade<?php echo $cid == $campus ? ' in active' : '' ?>" role="tabpanel">
                                                     <div class="table-responsive tab-table">
                                                         <table class="table table-bordered table-striped table-hover course-table">
                                                             <thead>
@@ -59,7 +59,7 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <?php foreach ($courses[$campus] as $course): ?>
+                                                                <?php foreach ($courses[$cid] as $course): ?>
                                                                     <tr data-row="<?php echo $course[0]['kcxh'] ?>">
                                                                         <?php $rowspan = count($course) ?>
                                                                         <td rowspan="<?php echo $rowspan ?>" class="text-center" id="<?php echo $course[0]['kcxh'] ?>">

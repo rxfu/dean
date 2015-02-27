@@ -13,7 +13,7 @@ class ReportController extends StudentAdminController {
 	protected function report() {
 		$data = DB::getInstance()->searchRecord('v_cj_xscj', array('xh' => $this->session->get('username')));
 
-		return $this->view->display('report.report', array('scores' => $data));
+		return $this->view->display('report.report', array('scores' => $data, 'name' => $this->session->get('name')));
 	}
 
 	/**
@@ -33,7 +33,7 @@ class ReportController extends StudentAdminController {
 			$scores[$score['cjfs']]['courses'][] = $score;
 		}
 
-		return $this->view->display('report.detail', array('scores' => $scores, 'cname' => $data[0]['kcmc']));
+		return $this->view->display('report.detail', array('scores' => $scores, 'cname' => $data[0]['kcmc'], 'name' => $this->session->get('name')));
 	}
 
 	/**
@@ -50,7 +50,7 @@ class ReportController extends StudentAdminController {
 			$scores[$score['cjfs']]['ratios']    = $this->ratio($score['cjfs']);
 			$scores[$score['cjfs']]['courses'][] = $score;
 		}
-		return $this->view->display('report.unconfirmed', array('scores' => $scores));
+		return $this->view->display('report.unconfirmed', array('scores' => $scores, 'name' => $this->session->get('name'), 'year' => $this->session->get('year'), 'term' => $this->session->get('term')));
 	}
 
 	/**

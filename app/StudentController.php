@@ -106,7 +106,7 @@ class StudentController extends StudentAdminController {
 	protected function password() {
 		if (isPost()) {
 			$_POST = sanitize($_POST);
-			
+
 			$old       = $_POST['oldPassword'];
 			$new       = $_POST['newPassword'];
 			$confirmed = $_POST['confirmedPassword'];
@@ -168,9 +168,9 @@ class StudentController extends StudentAdminController {
 	 * @return integer       头像文件
 	 */
 	protected function portrait($file) {
-		$sql = 'SELECT zp FROM t_xs_zxs WHERE xh = ?';
+		$sql      = 'SELECT zp FROM t_xs_zxs WHERE xh = ?';
 		$portrait = DB::getInstance()->getRow($sql, $this->session->get('username'));
-		$path     = PORTRAIT . DS;;
+		$path     = PORTRAIT . DS;
 		if (ENABLE == $portrait['zp']) {
 			return readfile($path . $file . '.jpg');
 		} else {
@@ -209,7 +209,7 @@ class StudentController extends StudentAdminController {
 	 * @return void
 	 */
 	protected function unpaid() {
-		return $this->view->display('student.unpaid');
+		return $this->view->display('student.unpaid', array('name' => $this->session->get('name')));
 	}
 
 }

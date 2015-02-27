@@ -504,10 +504,10 @@ if (!function_exists('section')) {
 	/**
 	 * 包含PHP片段
 	 * @param  string $section PHP片段
-	 * @return NULL
+	 * @return mixed
 	 */
 	function section($section) {
-		$path = str_replace('.', '/', $section);
+		$path = strtr($section, '.', '/');
 		$path = WEBROOT . DS . $path . '.php';
 
 		include $path;

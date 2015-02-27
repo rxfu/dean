@@ -1,6 +1,6 @@
                 <section class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header"><?php echo Session::get('name') ?>同学<?php echo Session::get('year') ?>年度<?php echo Dictionary::get('xq', Session::get('term')) ?>学期课程申请进程</h1>
+                        <h1 class="page-header"><?php echo $session['name'] ?>同学<?php echo $session['year'] ?>年度<?php echo Dictionary::get('xq', $session['term']) ?>学期课程申请进程</h1>
                     </div>
                 </section>
 
@@ -26,10 +26,10 @@
                                             <?php foreach ($courses as $course): ?>
                                             <tr>
                                                 <td><?php echo $course['nd'] ?></td>
-                                                <td><?php echo $course['xq'] ?></td>
+                                                <td><?php echo Dictionary::get('xq', $course['xq']) ?></td>
                                                 <td><?php echo $course['kcxh'] ?></td>
                                                 <td><?php echo $course['ynd'] ?></td>
-                                                <td><?php echo $course['yxq'] ?></td>
+                                                <td><?php echo Dictionary::get('xq', $course['yxq']) ?></td>
                                                 <td><?php echo $course['ykcxh'] ?></td>
                                                 <td><?php echo $course['shyj'] ?></td>
                                                 <td><?php switch ($course['sh']) {

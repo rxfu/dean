@@ -8,7 +8,7 @@
         <div class="col-lg-12">
         	<div class="panel panel-default">
         		<div class="panel-body">
-        			<h4><?php echo Session::get('error') ?></h4>
+        			<h4><?php echo $error ?></h4>
         		</div>
         	</div>
         </div>

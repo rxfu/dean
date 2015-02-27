@@ -53,7 +53,7 @@ class CourseController extends StudentAdminController {
 	 * @return void
 	 */
 	protected function forbidden() {
-		return $this->view->display('course.forbidden');
+		return $this->view->display('course.forbidden', array('name' => $this->session->get('name')));
 	}
 
 	/**
@@ -264,7 +264,7 @@ class CourseController extends StudentAdminController {
 		}
 		krsort($courses);
 
-		return $this->view->display('course.course', array('courses' => $courses, 'title' => $this->codes[$type]['name'], 'type' => $type));
+		return $this->view->display('course.course', array('courses' => $courses, 'title' => $this->codes[$type]['name'], 'type' => $type, 'name' => $this->session->get('name'), 'year' => $this->session->get('year'), 'term' => $this->session->get('term'), 'campus' => $this->session->get('campus')));
 	}
 
 	/**
@@ -375,7 +375,7 @@ class CourseController extends StudentAdminController {
 			}
 		}
 
-		return $this->view->display('course.search', array('type' => $type, 'courses' => $courses, 'title' => $this->codes[$type]['name']));
+		return $this->view->display('course.search', array('type' => $type, 'courses' => $courses, 'title' => $this->codes[$type]['name'], 'name' => $this->session->get('name'), 'year' => $this->session->get('year'), 'term' => $this->session->get('term'), 'campus' => $this->session->get('campus')));
 	}
 
 	/**
@@ -635,9 +635,9 @@ class CourseController extends StudentAdminController {
 			$sql   = 'SELECT DISTINCT kcxh, kcmc FROM v_xk_xskcb WHERE xh = ? ORDER BY kcxh';
 			$lcnos = DB::getInstance()->getAll($sql, array($this->session->get('username')));
 
-			return $this->view->display('course.apply', array('type' => $type, 'cno' => $cno, 'title' => $this->codes[$type]['name'], 'lyears' => $lyears, 'lterms' => $lterms, 'lcnos' => $lcnos));
+			return $this->view->display('course.apply', array('type' => $type, 'cno' => $cno, 'title' => $this->codes[$type]['name'], 'lyears' => $lyears, 'lterms' => $lterms, 'lcnos' => $lcnos, 'name' => $this->session->get('name'), 'year' => $this->session->get('year'), 'term' => $this->session->get('term')));
 		}
-		return $this->view->display('course.apply', array('type' => $type, 'cno' => $cno, 'title' => $this->codes[$type]['name']));
+		return $this->view->display('course.apply', array('type' => $type, 'cno' => $cno, 'title' => $this->codes[$type]['name'], 'name' => $this->session->get('name'), 'year' => $this->session->get('year'), 'term' => $this->session->get('term')));
 	}
 
 	/**
@@ -646,7 +646,7 @@ class CourseController extends StudentAdminController {
 	 */
 	protected function process() {
 		$data = DB::getInstance()->searchRecord('t_xk_xksq', array('xh' => $this->session->get('username')));
-		return $this->view->display('course.process', array('courses' => $data));
+		return $this->view->display('course.process', array('courses' => $data, 'name' => $this->session->get('name'), 'year' => $this->session->get('year'), 'term' => $this->session->get('term')));
 	}
 
 }
