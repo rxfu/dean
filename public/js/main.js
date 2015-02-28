@@ -111,6 +111,7 @@ $(document).ready(function() {
 		$(this).tab('show');
 	});
 	$(':input[name^="grade"]').change(function() {
+		var input = $(this);
 		var form = $(this).closest('form');
 		var sno = $(this).closest('tr').attr('data-row');
 		var mode = $(this).attr('name');
@@ -122,20 +123,33 @@ $(document).ready(function() {
 				"mode": mode,
 				"score": $(this).val()
 			},
-			success: function(data) {
-				$('tr[data-row="' + sno + '"] > td[data-name="total"]').text(data);
+			success: function(response) {
+				input.wrap('<div class="has-success has-feedback"></div>').after('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
+				$('#total' + sno).text(response);
+			},
+			error: function(response) {
+				input.wrap('<div class="has-error has-feedback"></div>').after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
+				$('#total' + sno).text(response);
 			}
 		});
 	});
 	$('select[name^="status"]').change(function() {
+		var select = $(this);
 		var form = $(this).closest('form');
 		var sno = $(this).closest('tr').attr('data-row');
+
 		$.ajax({
 			type: "post",
 			url: form.prop("action"),
 			data: {
 				"sno": sno,
 				"status": $(this).val()
+			},
+			success: function(response) {
+				select.wrap('<div class="has-success has-feedback"></div>').after('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
+			},
+			error: function(xhr, status) {
+				select.wrap('<div class="has-error has-feedback"></div>').after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
 			}
 		});
 	});
