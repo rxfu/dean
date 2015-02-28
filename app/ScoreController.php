@@ -118,6 +118,27 @@ class ScoreController extends TeacherAdminController {
 		}
 	}
 
+	protected function status($cno) {
+		if ($this->isOpen()) {
+			if (isPost()) {
+				$_POST = sanitize($_POST);
+
+				$sno = $_POST['sno'];
+				$status = $_POST['status'];
+
+				// 更新WEB成绩表
+				$updated = $this->db->updateRecord('t_cj_web', array('kszt' => $status), array('nd' => $this->session->get('year'), 'xq' => $this->session->get('term'), 'xh' => $sno, 'kcxh' => $cno));
+				if (isAjax()) {
+					echo $updated;
+				} else {
+					return $updated;
+				}
+			}
+		} else {
+			redirect('score.forbidden');
+		}
+	}
+
 	/**
 	 * 确认成绩
 	 * @param  string $cno 课程序号

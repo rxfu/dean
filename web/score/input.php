@@ -31,21 +31,32 @@
                                         <tbody>
                                             <?php foreach ($scores as $score): ?>
                                             <tr data-row="<?php echo $score['xh'] ?>">
-                                                <td><?php echo $score['xh'] ?></td>
-                                                <td><?php echo $score['xm'] ?></td>
+                                                <td><p class="form-control-static"><?php echo $score['xh'] ?></p></td>
+                                                <td><p class="form-control-static"><?php echo $score['xm'] ?></p></td>
                                                 <?php foreach($ratios['mode'] as $key => $value): ?>
                                                     <td>
                                                         <?php if (UNCOMMITTED == $score['tjzt']): ?>
                                                             <form class="gradeForm" method="post" action="<?php echo toLink('score.enter', $info['kcxh']) ?>" role="form" onsubmit="return false">
-                                                                <input type="text" name="grade<?php echo $key ?>" value="<?php echo $score['cj' . $key] ?>">
+                                                                <input type="text" name="grade<?php echo $key ?>" value="<?php echo $score['cj' . $key] ?>" size="6" class="form-control">
                                                             </form>
                                                         <?php elseif (COMMITTED == $score['tjzt']): ?>
-                                                            <?php echo $score['cj' . $key] ?>
+                                                            <p class="form-control-static"><?php echo $score['cj' . $key] ?></p>
                                                         <?php endif; ?>
                                                     </td>
                                                 <?php endforeach; ?>
-                                                <td data-name="total"><?php echo $score['zpcj'] ?></td>
-                                                <td><?php echo $score['kszt'] ?></td>
+                                                <td data-name="total"><p class="form-control-static"><?php echo $score['zpcj'] ?></p></td>
+                                                <td>
+                                                    <?php if (NORMAL === $score['kszt'] || ABSENCE === $score['kszt']): ?>
+                                                        <form method="post" action="<?php echo toLink('score.status', $info['kcxh']) ?>" role="form">
+                                                            <select name="status<?php echo $score['xh'] ?>" id="status<?php echo $score['xh'] ?>" class="form-control">
+                                                                <option value="<?php echo NORMAL ?>"<?php echo NORMAL === $score['kszt'] ? ' selected="selected"' : '' ?>><?php echo NORMAL ?></option>
+                                                                <option value="<?php echo ABSENCE ?>"<?php echo ABSENCE === $score['kszt'] ? ' selected="selected"' : '' ?>><?php echo ABSENCE ?></option>
+                                                            </select>
+                                                        </form>
+                                                    <?php else: ?>
+                                                        <p class="form-control-static"><?php echo $score['kszt'] ?></p>
+                                                    <?php endif; ?>
+                                                </td>
                                             </tr>
                                             <?php endforeach; ?>
                                         </tbody>

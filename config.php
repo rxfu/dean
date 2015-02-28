@@ -48,6 +48,7 @@ define('DB_USERNAME', 'jwxt');
 define('DB_PASSWORD', 'jwxt..');
 define('DB_CHARSET', 'UTF8');
  */
+/*
 define('DB_STU_ENGINE', 'pgsql');
 define('DB_STU_HOST', '202.193.171.253');
 define('DB_STU_PORT', '5432');
@@ -63,23 +64,24 @@ define('DB_TCH_DBNAME', 'dean');
 define('DB_TCH_USERNAME', 'jwxt');
 define('DB_TCH_PASSWORD', 'jwxt..');
 define('DB_TCH_CHARSET', 'UTF8');
-/*
+*/
+
 define('DB_STU_ENGINE', 'pgsql');
 define('DB_STU_HOST', '202.193.171.253');
 define('DB_STU_PORT', '5432');
 define('DB_STU_DBNAME', 'dean');
-define('DB_STU_USERNAME', 't_web');
-define('DB_STU_PASSWORD', 't_web.0');
+define('DB_STU_USERNAME', 's_web');
+define('DB_STU_PASSWORD', 's_web.0');
 define('DB_STU_CHARSET', 'UTF8');
 
 define('DB_TCH_ENGINE', 'pgsql');
 define('DB_TCH_HOST', '202.193.171.253');
 define('DB_TCH_PORT', '5432');
 define('DB_TCH_DBNAME', 'dean');
-define('DB_TCH_USERNAME', 's_web');
-define('DB_TCH_PASSWORD', 's_web.0');
+define('DB_TCH_USERNAME', 't_web');
+define('DB_TCH_PASSWORD', 't_web.0');
 define('DB_TCH_CHARSET', 'UTF8');
-*/
+
 /**
  * SALT配置
  */
@@ -138,6 +140,8 @@ define('UNCOMMITTED', '0');
 define('COMMITTED', '1');
 define('COLLEGE_CONFIRMED', '1');
 define('DEAN_CONFIRMED', '2');
+define('NORMAL', '正常');
+define('ABSENCE', '缺考');
 
 /**
  * 用户角色代码

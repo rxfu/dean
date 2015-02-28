@@ -127,6 +127,18 @@ $(document).ready(function() {
 			}
 		});
 	});
+	$('select[name^="status"]').change(function() {
+		var form = $(this).closest('form');
+		var sno = $(this).closest('tr').attr('data-row');
+		$.ajax({
+			type: "post",
+			url: form.prop("action"),
+			data: {
+				"sno": sno,
+				"status": $(this).val()
+			}
+		});
+	});
 	$('#courseConfirm').on('show.bs.modal', function(e) {
 		var form = $(e.relatedTarget).closest('form');
 		$(this).find('.modal-footer #confirm').data('form', form);
