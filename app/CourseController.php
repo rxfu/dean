@@ -501,7 +501,7 @@ class CourseController extends StudentAdminController {
 				}
 			}
 
-			return redirect('course.course', $type);
+			return isset($type) ? redirect('course.course', $type) : redirect('course.current');
 		}
 	}
 
@@ -647,6 +647,21 @@ class CourseController extends StudentAdminController {
 	protected function process() {
 		$data = $this->db->searchRecord('t_xk_xksq', array('xh' => $this->session->get('username')));
 		return $this->view->display('course.process', array('courses' => $data, 'name' => $this->session->get('name'), 'year' => $this->session->get('year'), 'term' => $this->session->get('term')));
+	}
+
+	/**
+	 * 列出当前学生当前年度、学期可退选课程表
+	 * @return void
+	 */
+	protected function current() {
+		$data = $this->db->searchRecord('v_xk_xskcb', array('xh' => $this->session->get('username'), 'nd' => $this->session->get('year'), 'xq' => $this->session->get('term')));
+
+		$courses = array();
+		foreach ($data as $course) {
+			$courses[$course['kcxh']][] = $course;
+		}
+
+		return $this->view->display('course.current', array('courses' => $courses, 'name' => $this->session->get('name'), 'year' => $this->session->get('year'), 'term' => $this->session->get('term')));
 	}
 
 }

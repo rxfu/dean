@@ -226,9 +226,9 @@ $(document).ready(function() {
 	});
 
 	var campusId = '#campus-' + $('#campus').text();
-    if ($('#campus-tab a[href="' + campusId + '"]').length) {
-        $('#campus-tab a[href="' + campusId + '"]').tab('show');
-    } else {
-        $('#campus-tab a:first').tab('show');
-    }
+	if ($('#campus-tab a[href="' + campusId + '"]').length) {
+		$('#campus-tab a[href="' + campusId + '"]').tab('show');
+	} else {
+		$('#campus-tab a:first').tab('show');
+	}
 });

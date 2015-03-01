@@ -56,8 +56,7 @@ class StudentController extends StudentAdminController {
 				$this->session->put('role', STUDENT);
 				$this->session->put('logged', true);
 
-				$this->session->put('courseTerms', $this->courseTerms($username));
-				$this->session->put('reportTerms', $this->reportTerms($username));
+				$this->session->put('examTypes', $this->examTypes());
 
 				Message::add('success', '你已经成功登录系统');
 
@@ -219,6 +218,24 @@ class StudentController extends StudentAdminController {
 	 */
 	protected function unpaid() {
 		return $this->view->display('student.unpaid', array('name' => $this->session->get('name')));
+	}
+
+	/**
+	 * 列出当年考试类型
+	 * @return array 考试类型列表
+	 */
+	protected function examTypes() {
+		$sql = 'SELECT a.kslx, a.mc, b.mc AS ksdl FROM t_ks_kslx a LEFT JOIN t_ks_ksdl b ON a.ksdl = b.ksdl WHERE a.zt = ? ORDER BY b.ksdl, a.kslx';
+		$data = $this->db->getAll($sql, ENABLE);
+
+		$types = array();
+		if (is_array($data)) {
+			foreach ($data as $type) {
+				$types[$type['ksdl']]=$type;
+			}
+		}
+
+		return $types;
 	}
 
 }

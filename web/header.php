@@ -125,6 +125,9 @@
                                                 </li>
                                             <?php endif; ?>
                                             <li>
+                                                <a href="<?php echo toLink('course.current') ?>">可退选课程列表</a>
+                                            </li>
+                                            <li>
                                                 <a href="<?php echo toLink('course.process') ?>">课程申请进度</a>
                                             </li>
                                         </ul>
@@ -157,6 +160,16 @@
                                     <li>
                                         <a href="#"><i class="fa fa-tablet fa-fw"></i> 考试报名<span class="fa arrow"></span></a>
                                         <ul class="nav nav-second-level">
+                                            <?php foreach ($examTtypes as $category => $types): ?>
+                                                <li>
+                                                    <a href="#"><?php echo $category ?><span class="fa arrow"></span></a>
+                                                    <?php foreach ($types as $type): ?>
+                                                        <li>
+                                                            <a href="<?php echo toLink('exam.register', $type['kslx']) ?>"><?php echo $type['mc'] ?></a>
+                                                        </li>
+                                                    <?php endforeach; ?>>
+                                                </li>
+                                            <?php endforeach; ?>                                            
                                             <li>
                                                 <a href="<?php echo toLink('exam.cet') ?>">英语等级考试</a>
                                             </li>
