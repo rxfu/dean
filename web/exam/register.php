@@ -45,7 +45,7 @@
                                         <div class="col-md-4">
                                             <select name="campus" id="campus" class="form-control">
                                                 <?php foreach ($campuses as $campus): ?>
-                                                    <option value="<?php echo $campus['dm'] ?>"><?php echo $campus['mc'] ?></option>
+                                                    <option value="<?php echo $campus['dm'] ?>"<?php $campus['dm'] === $session['campus'] ? ' selected="selected"' : '' ?>><?php echo $campus['mc'] ?></option>
                                                 <?php endforeach; ?>
                                             </select>
                                         </div>
