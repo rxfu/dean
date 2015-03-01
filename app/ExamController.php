@@ -38,7 +38,10 @@ class ExamController extends StudentAdminController {
 	}
 
 	protected function listing() {
-		return $this->view->display('exam.listing');
+		$sql = 'SELECT * FROM t_ks_qtksbm WHERE xh = ? ORDER BY bmsj DESC';
+		$data = $this->db->getAll($sql, $this->session->get('username'));
+
+		return $this->view->display('exam.listing', array('exams' => $data));
 	}
 
 }
