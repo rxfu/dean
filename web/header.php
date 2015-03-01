@@ -301,6 +301,17 @@
                                         </ul>
                                     </li>
                                     <li>
+                                        <a href="#"><i class="fa fa-calendar fa-fw"></i> 课表管理<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level">
+                                            <li>
+                                                <a href="<?php echo toLink('curriculum.timetable') ?>">课程表</a>
+                                            </li>
+                                            <li>
+                                                <a href="<?php echo toLink('curriculum.current') ?>">当前课程列表</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
                                         <a href="#"><i class="fa fa-gear fa-fw"></i> 系统管理<span class="fa arrow"></span></a>
                                         <ul class="nav nav-second-level">
                                             <li>

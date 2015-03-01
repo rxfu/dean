@@ -18,6 +18,7 @@
                                                 <th class="active">原年度</th>
                                                 <th class="active">原学期</th>
                                                 <th class="active">原课程序号</th>
+                                                <th class="active">申请类型</th>
                                                 <th class="active">审核意见</th>
                                                 <th class="active">申请状态</th>
                                             </tr>
@@ -31,6 +32,17 @@
                                                 <td><?php echo $course['ynd'] ?></td>
                                                 <td><?php echo isEmpty($course['yxq']) ? $course['yxq'] : Dictionary::get('xq', $course['yxq']) ?></td>
                                                 <td><?php echo $course['ykcxh'] ?></td>
+                                                <td><?php switch ($course['xklx']) {
+                                                    case 0:
+                                                        echo '其他课程';
+                                                        break;
+                                                    case 1:
+                                                        echo '重修';
+                                                        break;
+                                                    default:
+                                                        echo '其他课程';
+                                                        break;
+                                                } ?></td>
                                                 <td><?php echo $course['shyj'] ?></td>
                                                 <td><?php switch ($course['sh']) {
                                                     case UNAUDITTED:

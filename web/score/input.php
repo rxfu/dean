@@ -49,7 +49,7 @@
                                                         <form method="post" action="<?php echo toLink('score.status', $info['kcxh']) ?>" role="form">
                                                             <select name="status<?php echo $score['xh'] ?>" id="status<?php echo $score['xh'] ?>" class="form-control">
                                                                 <?php foreach($statuses as $status): ?>
-                                                                    <option value="<?php echo $status['dm'] ?>"<?php echo $status['dm'] === $score['kszt'] ? ' selected="selected"' : '' ?>><?php echo $status['mc'] ?></option>
+                                                                    <option value="<?php echo $status['dm'] ?>"<?php echo $status['dm'] === $score['ksztdm'] ? ' selected="selected"' : '' ?>><?php echo $status['mc'] ?></option>
                                                                 <?php endforeach; ?>
                                                             </select>
                                                         </form>
