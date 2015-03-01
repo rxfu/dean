@@ -46,16 +46,13 @@
                                                     <?php endforeach; ?>
                                                     <td data-name="total"><p id="total<?php echo $score['xh'] ?>" class="form-control-static"><?php echo $score['zpcj'] ?></p></td>
                                                     <td>
-                                                        <?php if (NORMAL === $score['kszt'] || ABSENCE === $score['kszt']): ?>
-                                                            <form method="post" action="<?php echo toLink('score.status', $info['kcxh']) ?>" role="form">
-                                                                <select name="status<?php echo $score['xh'] ?>" id="status<?php echo $score['xh'] ?>" class="form-control">
-                                                                    <option value="<?php echo NORMAL ?>"<?php echo NORMAL === $score['kszt'] ? ' selected="selected"' : '' ?>><?php echo NORMAL ?></option>
-                                                                    <option value="<?php echo ABSENCE ?>"<?php echo ABSENCE === $score['kszt'] ? ' selected="selected"' : '' ?>><?php echo ABSENCE ?></option>
-                                                                </select>
-                                                            </form>
-                                                        <?php else: ?>
-                                                            <p class="form-control-static"><?php echo $score['kszt'] ?></p>
-                                                        <?php endif; ?>
+                                                        <form method="post" action="<?php echo toLink('score.status', $info['kcxh']) ?>" role="form">
+                                                            <select name="status<?php echo $score['xh'] ?>" id="status<?php echo $score['xh'] ?>" class="form-control">
+                                                                <?php foreach($statuses as $status): ?>
+                                                                    <option value="<?php echo $status['dm'] ?>"<?php echo $status['dm'] === $score['kszt'] ? ' selected="selected"' : '' ?>><?php echo $status['mc'] ?></option>
+                                                                <?php endforeach; ?>
+                                                            </select>
+                                                        </form>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>

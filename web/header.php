@@ -169,7 +169,10 @@
                                                         </li>
                                                     <?php endforeach; ?>>
                                                 </li>
-                                            <?php endforeach; ?>                                            
+                                            <?php endforeach; ?>
+                                            <li>
+                                                <a href="<?php echo toLink('exam.listing') ?>">历史报名信息</a>
+                                            </li>
                                             <li>
                                                 <a href="<?php echo toLink('exam.cet') ?>">英语等级考试</a>
                                             </li>

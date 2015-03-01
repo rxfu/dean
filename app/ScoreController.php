@@ -58,7 +58,10 @@ class ScoreController extends TeacherAdminController {
 			$this->session->put('mode', $data[0]['cjfs']);
 			$this->session->put('major_grade', max(array_keys($ratios['mode'])));
 
-			return $this->view->display('score.input', array('info' => $info, 'scores' => $data, 'ratios' => $ratios));
+			$sql = 'SELECT * FROM t_cj_kszt ORDER BY dm';
+			$statuses = $this->db->getAll($sql);
+
+			return $this->view->display('score.input', array('info' => $info, 'scores' => $data, 'ratios' => $ratios, 'statuses' => $statuses));
 		} else {
 			redirect('score.forbidden');
 		}
