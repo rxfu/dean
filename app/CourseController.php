@@ -149,8 +149,8 @@ class CourseController extends StudentAdminController {
 			$sql  = 'SELECT * FROM t_xk_sjxz WHERE xz = ? AND nj = ?';
 			$data = $this->db->getAll($sql, array($this->session->get('system'), $this->session->get('grade')));
 
+			$allow = false;
 			if (FALSE !== $data && !empty($data)) {
-				$allow = false;
 				foreach ($data as $limit) {
 					if ($now >= $limit['kssj'] && $now <= $limit['jssj']) {
 						$allow = true;
@@ -159,8 +159,8 @@ class CourseController extends StudentAdminController {
 				}
 			}
 
-			if (!$allow) {
-				redirect('course.forbidden');
+			if (!$allow) {var_dump($data);
+				//redirect('course.forbidden');
 				return;
 			}
 		}

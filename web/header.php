@@ -123,10 +123,10 @@
                                                 <li>
                                                     <a href="<?php echo toLink('course.search', RETAKE) ?>">重修课程</a>
                                                 </li>
+                                                <li>
+                                                    <a href="<?php echo toLink('course.current') ?>">可退选课程列表</a>
+                                                </li>
                                             <?php endif; ?>
-                                            <li>
-                                                <a href="<?php echo toLink('course.current') ?>">可退选课程列表</a>
-                                            </li>
                                             <li>
                                                 <a href="<?php echo toLink('course.process') ?>">课程申请进度</a>
                                             </li>
@@ -165,7 +165,7 @@
                                                     <a href="#"><?php echo $category ?><span class="fa arrow"></span></a>
                                                     <?php foreach ($types as $type): ?>
                                                         <li>
-                                                            <a href="<?php echo toLink('exam.register', $type['kslx']) ?>"><?php echo $type['mc'] ?></a>
+                                                            <a href="<?php echo toLink('exam.register', $type['kslx']) ?>"><?php echo $type['ksmc'] ?></a>
                                                         </li>
                                                     <?php endforeach; ?>>
                                                 </li>

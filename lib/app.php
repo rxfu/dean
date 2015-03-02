@@ -11,7 +11,7 @@ class App {
 	 * 程序版本号
 	 * @var string
 	 */
-	const VERSION = '1.3.0';
+	const VERSION = '1.4.0';
 
 	/**
 	 * 运行网站系统

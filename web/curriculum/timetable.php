@@ -33,9 +33,9 @@
                                                         <?php if (is_array($courses[$i][$j])): ?>
                                                             <td<?php echo 1 < ($courses[$i][$j][0]['jsj'] - $i) ? ' rowspan="' . $courses[$i][$j][0]['jsj'] - $i . '"' : '' ?>>
                                                                 <?php foreach ($courses[$i][$j] as $course): ?>
+                                                                    <?php echo $course['kcxh'] ?><br>
                                                                     <?php echo $course['kcmc'] ?><br>
                                                                     <?php echo $course['xqh'] ?>校区<?php echo $course['jsmc'] ?>教室<br>
-                                                                    <?php echo $course['jsxm'] ?><br>
                                                                     第 <?php echo $course['ksz'] ?>~<?php echo $course['jsz'] ?> 周
                                                                     <hr>
                                                                 <?php endforeach; ?>
@@ -59,9 +59,9 @@
                                                         <td>
                                                             <?php if (is_array($courses[$i][$j])): ?>
                                                                 <?php foreach ($courses[$i][$j] as $course): ?>
+                                                                    <?php echo $course['kcxh'] ?><br>
                                                                     <?php echo $course['kcmc'] ?><br>
                                                                     <?php echo $course['xqh'] ?>校区<?php echo $course['jsmc'] ?>教室<br>
-                                                                    <?php echo $course['jsxm'] ?><br>
                                                                     第 <?php echo $course['ksz'] ?>~<?php echo $course['jsz'] ?> 周
                                                                     <hr>
                                                                 <?php endforeach; ?>
@@ -83,9 +83,9 @@
                                                         <td>
                                                             <?php if (is_array($courses[$i][$j])): ?>
                                                                 <?php foreach ($courses[$i][$j] as $course): ?>
+                                                                    <?php echo $course['kcxh'] ?><br>
                                                                     <?php echo $course['kcmc'] ?><br>
                                                                     <?php echo $course['xqh'] ?>校区<?php echo $course['jsmc'] ?>教室<br>
-                                                                    <?php echo $course['jsxm'] ?><br>
                                                                     第 <?php echo $course['ksz'] ?>~<?php echo $course['jsz'] ?> 周
                                                                     <hr>
                                                                 <?php endforeach; ?>
