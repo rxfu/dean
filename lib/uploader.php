@@ -155,8 +155,13 @@ class Uploader {
 		$this->_file['filename'] = $this->_filename;
 		$this->_file['path']     = $this->_destination . DS . $this->_filename . $this->_file['extension'];
 
-		$status = move_uploaded_file($this->_tmpName, $this->_file['path']);
+		$status = $this->_file['error'];
+		if (0 < $status) {
+			$this->setError('上传文件失败');
+			return;
+		}
 
+		$status = move_uploaded_file($this->_tmpName, $this->_file['path']);
 		if (!$status) {
 			$this->setError('上传文件失败');
 			return;
