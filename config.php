@@ -64,7 +64,7 @@ define('DB_TCH_DBNAME', 'dean');
 define('DB_TCH_USERNAME', 'jwxt');
 define('DB_TCH_PASSWORD', 'jwxt..');
 define('DB_TCH_CHARSET', 'UTF8');
-*/
+ */
 
 define('DB_STU_ENGINE', 'pgsql');
 define('DB_STU_HOST', '202.193.171.253');
@@ -179,3 +179,13 @@ define('APPLY_RETAKE', '1');
  * 选课状态代码
  */
 define('COURSE_UNLIMITED', -1);
+
+/**
+ * 文件上传设置
+ */
+define('FILE_UPLOADS', 'on');
+define('MAX_INPUT_TIME', 90);
+define('MAX_EXECUTION_TIME', 180);
+define('POST_MAX_SIZE', '24'); // 单位：MB
+define('UPLOAD_MAX_FILESIZE', '20'); // 单位：MB
+define('MEMORY_LIMIT', '36'); // 单位：MB

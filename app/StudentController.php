@@ -40,6 +40,7 @@ class StudentController extends StudentAdminController {
 
 				$info = $this->getInfo($username);
 
+				$this->session->put('id', $info['sfzh']);
 				$this->session->put('name', $info['xm']);
 				$this->session->put('college', $info['xy']);
 				$this->session->put('speciality', $info['zy']);
@@ -172,15 +173,14 @@ class StudentController extends StudentAdminController {
 
 	/**
 	 * 获取当前学生头像
-	 * @param  string $file 头像文件名
 	 * @return integer       头像文件
 	 */
-	protected function portrait($file) {
-		$sql      = 'SELECT zp FROM t_xs_zxs WHERE xh = ?';
-		$portrait = $this->db->getRow($sql, $this->session->get('username'));
+	protected function portrait() {
+		$file     = $this->session->get('id');
 		$path     = PORTRAIT . DS;
-		if (ENABLE == $portrait['zp']) {
-			return readfile($path . $file . '.jpg');
+		$portrait = $path . $file . '.jpg';
+		if (file_exists($portrait)) {
+			return readfile($portrait);
 		} else {
 			return readfile($path . 'untitled.jpg');
 		}
@@ -188,10 +188,20 @@ class StudentController extends StudentAdminController {
 
 	/**
 	 * 上传当前学生头像
-	 * @return void 
+	 * @return void
 	 */
 	protected function upload() {
+		if (!isEmpty($_FILES['portrait'])) {
+			$uploader = new Upload(PORTRAIT);
+			$mimes    = array('image/jpg', 'image/jpeg', 'image/pjpeg');
 
+			$uploader->setFile($_FILES['portrait']);
+			$uploader->setAllowedMimeTypes($mimes);
+			$uploader->setMaxFileSize(UPLOAD_MAX_FILESIZE);
+			$uploader->setFilename($this->session->get('id'));
+
+			$uploader->upload();
+		}
 	}
 
 	/**
@@ -233,13 +243,13 @@ class StudentController extends StudentAdminController {
 	 * @return array 考试类型列表
 	 */
 	protected function examTypes() {
-		$sql = 'SELECT a.kslx, a.ksmc, b.ksdl, b.mc AS ksdlmc FROM t_cj_kslxdm a LEFT JOIN t_cj_ksdl b ON a.ksdl = b.ksdl WHERE a.zt = ? ORDER BY b.ksdl, a.kslx';
+		$sql  = 'SELECT a.kslx, a.ksmc, b.ksdl, b.mc AS ksdlmc FROM t_cj_kslxdm a LEFT JOIN t_cj_ksdl b ON a.ksdl = b.ksdl WHERE a.zt = ? ORDER BY b.ksdl, a.kslx';
 		$data = $this->db->getAll($sql, ENABLE);
 
 		$types = array();
 		if (is_array($data)) {
 			foreach ($data as $type) {
-				$types[$type['ksdl']][]=$type;
+				$types[$type['ksdl']][] = $type;
 			}
 		}
 

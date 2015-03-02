@@ -148,6 +148,18 @@ if (!function_exists('between')) {
 	}
 }
 
+if (!function_exists('byteToMb')) {
+
+	/**
+	 * byte单位转换为MB
+	 * @param  string $bytes 字节
+	 * @return string        转换后单位
+	 */
+	function byteToMb($bytes) {
+		return round(($bytes / 1048576), 2);
+	}
+}
+
 if (!function_exists('camelToSnake')) {
 
 	/**
