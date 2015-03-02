@@ -122,7 +122,7 @@ class Uploader {
 	 */
 	public function upload() {
 		if ($this->isValid()) {
-			$this->save();
+			$this->_save();
 		}
 
 		return $this->_file;
@@ -147,7 +147,7 @@ class Uploader {
 	 * 保存文件
 	 * @return void
 	 */
-	protected function save() {
+	protected function _save() {
 		if (isEmpty($this->_filename)) {
 			$this->_createNewFilename();
 		}
