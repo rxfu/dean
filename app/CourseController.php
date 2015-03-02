@@ -149,8 +149,9 @@ class CourseController extends StudentAdminController {
 			$sql  = 'SELECT * FROM t_xk_sjxz WHERE xz = ? AND nj = ?';
 			$data = $this->db->getAll($sql, array($this->session->get('system'), $this->session->get('grade')));
 
-			$allow = false;
+			$allow = true;
 			if (FALSE !== $data && !empty($data)) {
+				$allow = false;
 				foreach ($data as $limit) {
 					if ($now >= $limit['kssj'] && $now <= $limit['jssj']) {
 						$allow = true;
@@ -159,8 +160,8 @@ class CourseController extends StudentAdminController {
 				}
 			}
 
-			if (!$allow) {var_dump($data);
-				//redirect('course.forbidden');
+			if (!$allow) {
+				redirect('course.forbidden');
 				return;
 			}
 		}
@@ -288,6 +289,7 @@ class CourseController extends StudentAdminController {
 			$sql  = 'SELECT * FROM t_xk_sjxz WHERE xz = ? AND nj = ?';
 			$data = $this->db->getAll($sql, array($this->session->get('system'), $this->session->get('grade')));
 
+			$allow = true;
 			if (FALSE !== $data && !empty($data)) {
 				$allow = false;
 				foreach ($data as $limit) {
@@ -399,6 +401,7 @@ class CourseController extends StudentAdminController {
 			$sql  = 'SELECT * FROM t_xk_sjxz WHERE xz = ? AND nj = ?';
 			$data = $this->db->getAll($sql, array($this->session->get('system'), $this->session->get('grade')));
 
+			$allow = true;
 			if (FALSE !== $data && !empty($data)) {
 				$allow = false;
 				foreach ($data as $limit) {
@@ -573,6 +576,7 @@ class CourseController extends StudentAdminController {
 			$sql  = 'SELECT * FROM t_xk_sjxz WHERE xz = ? AND nj = ?';
 			$data = $this->db->getAll($sql, array($this->session->get('system'), $this->session->get('grade')));
 
+			$allow = true;
 			if (FALSE !== $data && !empty($data)) {
 				$allow = false;
 				foreach ($data as $limit) {
@@ -654,6 +658,38 @@ class CourseController extends StudentAdminController {
 	 * @return void
 	 */
 	protected function current() {
+		if (!$this->isOpen()) {
+			redirect('course.forbidden');
+			return;
+		}
+		if ($this->isUnpaid()) {
+			redirect('student.unpaid');
+			return;
+		}
+
+		// 是否限制选课时间
+		$now = date('Y-m-d H:i:s');
+		if ($this->isLimitCourseTime()) {
+			$sql  = 'SELECT * FROM t_xk_sjxz WHERE xz = ? AND nj = ?';
+			$data = $this->db->getAll($sql, array($this->session->get('system'), $this->session->get('grade')));
+
+			$allow = true;
+			if (FALSE !== $data && !empty($data)) {
+				$allow = false;
+				foreach ($data as $limit) {
+					if ($now >= $limit['kssj'] && $now <= $limit['jssj']) {
+						$allow = true;
+						break;
+					}
+				}
+			}
+
+			if (!$allow) {
+				redirect('course.forbidden');
+				return;
+			}
+		}
+
 		$data = $this->db->searchRecord('v_xk_xskcb', array('xh' => $this->session->get('username'), 'nd' => $this->session->get('year'), 'xq' => $this->session->get('term')));
 
 		$courses = array();

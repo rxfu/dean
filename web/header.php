@@ -160,30 +160,20 @@
                                     <li>
                                         <a href="#"><i class="fa fa-tablet fa-fw"></i> 考试报名<span class="fa arrow"></span></a>
                                         <ul class="nav nav-second-level">
-                                            <?php foreach ($examTtypes as $category => $types): ?>
+                                            <?php foreach ($session['examTypes'] as $types): ?>
                                                 <li>
-                                                    <a href="#"><?php echo $category ?><span class="fa arrow"></span></a>
-                                                    <?php foreach ($types as $type): ?>
-                                                        <li>
-                                                            <a href="<?php echo toLink('exam.register', $type['kslx']) ?>"><?php echo $type['ksmc'] ?></a>
-                                                        </li>
-                                                    <?php endforeach; ?>>
+                                                    <a href="#"><?php echo $types[0]['ksdlmc'] ?><span class="fa arrow"></span></a>
+                                                    <ul class="nav nav-third-level">
+                                                        <?php foreach ($types as $type): ?>
+                                                            <li>
+                                                                <a href="<?php echo toLink('exam.register', $type['kslx']) ?>"><?php echo $type['ksmc'] ?></a>
+                                                            </li>
+                                                        <?php endforeach; ?>
+                                                    </ul>
                                                 </li>
                                             <?php endforeach; ?>
                                             <li>
                                                 <a href="<?php echo toLink('exam.listing') ?>">历史报名信息</a>
-                                            </li>
-                                            <li>
-                                                <a href="<?php echo toLink('exam.cet') ?>">英语等级考试</a>
-                                            </li>
-                                            <li>
-                                                <a href="<?php echo toLink('exam.ncre') ?>">计算机等级考试</a>
-                                            </li>
-                                            <li>
-                                                <a href="<?php echo toLink('exam.psc') ?>">普通话水平测试</a>
-                                            </li>
-                                            <li>
-                                                <a href="<?php echo toLink('exam.tkt') ?>">教师职业能力测试</a>
                                             </li>
                                         </ul>
                                     </li>

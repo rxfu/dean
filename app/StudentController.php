@@ -225,13 +225,13 @@ class StudentController extends StudentAdminController {
 	 * @return array 考试类型列表
 	 */
 	protected function examTypes() {
-		$sql = 'SELECT a.kslx, a.ksmc, b.mc AS ksdl FROM t_cj_kslxdm a LEFT JOIN t_cj_ksdl b ON a.ksdl = b.ksdl WHERE a.zt = ? ORDER BY b.ksdl, a.kslx';
+		$sql = 'SELECT a.kslx, a.ksmc, b.ksdl, b.mc AS ksdlmc FROM t_cj_kslxdm a LEFT JOIN t_cj_ksdl b ON a.ksdl = b.ksdl WHERE a.zt = ? ORDER BY b.ksdl, a.kslx';
 		$data = $this->db->getAll($sql, ENABLE);
 
 		$types = array();
 		if (is_array($data)) {
 			foreach ($data as $type) {
-				$types[$type['ksdl']]=$type;
+				$types[$type['ksdl']][]=$type;
 			}
 		}
 

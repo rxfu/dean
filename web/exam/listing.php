@@ -22,7 +22,7 @@
                                             <?php foreach ($exams as $exam): ?>
                                             <tr>
                                                 <td><?php echo $exam['bmsj'] ?></td>
-                                                <td><?php echo $exam['kslx'] ?></td>
+                                                <td><?php echo $exam['ksmc'] ?></td>
                                                 <td><?php echo Dictionary::get('xqh', $exam['xq']) ?></td>
                                                 <td><?php echo $exam['kssj'] ?></td>
                                             </tr>
