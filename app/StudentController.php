@@ -192,7 +192,7 @@ class StudentController extends StudentAdminController {
 	 */
 	protected function upload() {
 		if (!isEmpty($_FILES['portrait'])) {
-			$uploader = new Upload(PORTRAIT);
+			$uploader = new Uploader(PORTRAIT);
 			$mimes    = array('image/jpg', 'image/jpeg', 'image/pjpeg');
 
 			$uploader->setFile($_FILES['portrait']);
