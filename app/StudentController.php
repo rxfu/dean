@@ -187,6 +187,14 @@ class StudentController extends StudentAdminController {
 	}
 
 	/**
+	 * 上传当前学生头像
+	 * @return void 
+	 */
+	protected function upload() {
+
+	}
+
+	/**
 	 * 根据学号列出学生具有课程的学期
 	 *
 	 * @param string  $id 学号

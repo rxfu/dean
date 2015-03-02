@@ -3,7 +3,7 @@
                         <h1 class="page-header">
                             <?php echo $info['kkxy'] ?><?php echo $info['nj'] ?>级<?php echo $info['zy'] ?>专业<?php echo $info['kcxh'] ?><?php echo $info['kcmc'] ?>成绩录入
                         </h1>
-                        <div class="alert alert-danger" role="alert">录入成绩自动提交，无需点击提交按钮</div>
+                        <div class="alert alert-danger" role="alert">注意：录入成绩自动提交，无需点击提交按钮。点击“<strong>成绩上报</strong>”后，<strong>成绩不可更改！</strong></div>
                     </div>
                 </section>
 
@@ -12,7 +12,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading clearfix">
                                 <div class="panel-title pull-left">成绩方式：<?php echo $ratios['name'] ?></div>
-                                <div class="pull-right"><button class="btn btn-primary" title="成绩确认" data-toggle="modal" data-target="#gradeConfirm">成绩确认</button></div>
+                                <div class="pull-right"><button class="btn btn-primary" title="成绩确认" data-toggle="modal" data-target="#gradeConfirm">成绩上报</button></div>
                             </div>
                             <div class="panel-body">
                                 <div class="table-responsive tab-table">

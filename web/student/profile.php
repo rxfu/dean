@@ -16,7 +16,16 @@
                                             <td><?php echo $profile['xh'] ?></td>
                                             <th class="active">姓名</th>
                                             <td><?php echo $profile['xm'] ?></td>
-                                            <td rowspan="10" width="240" height="320"><img src="<?php echo toLink('student.portrait', $profile['sfzh']) ?>" alt="用户头像" /></td>
+                                            <td rowspan="10" width="240" height="320">
+                                                <img src="<?php echo toLink('student.portrait', $profile['sfzh']) ?>" alt="用户头像" />
+                                                <form action="<?php echo toLink('student.uploade') ?>" method="post" enctype="multipart/form-data" role="form" class"form-control">
+                                                    <div class="form-group">
+                                                        <label for="portrait">上传照片:</label>
+                                                        <input type="file" name="portrait" id="portrait" class="form-control">&nbsp;&nbsp;
+                                                        <input type="submit" name="submit" value="提交">
+                                                    </form>
+                                                </form>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <th class="active">曾用名</th>

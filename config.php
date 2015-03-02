@@ -48,7 +48,7 @@ define('DB_USERNAME', 'jwxt');
 define('DB_PASSWORD', 'jwxt..');
 define('DB_CHARSET', 'UTF8');
  */
-
+/*
 define('DB_STU_ENGINE', 'pgsql');
 define('DB_STU_HOST', '202.193.171.253');
 define('DB_STU_PORT', '5432');
@@ -64,8 +64,8 @@ define('DB_TCH_DBNAME', 'dean');
 define('DB_TCH_USERNAME', 'jwxt');
 define('DB_TCH_PASSWORD', 'jwxt..');
 define('DB_TCH_CHARSET', 'UTF8');
+*/
 
-/*
 define('DB_STU_ENGINE', 'pgsql');
 define('DB_STU_HOST', '202.193.171.253');
 define('DB_STU_PORT', '5432');
@@ -81,7 +81,7 @@ define('DB_TCH_DBNAME', 'dean');
 define('DB_TCH_USERNAME', 't_web');
 define('DB_TCH_PASSWORD', 't_web.0');
 define('DB_TCH_CHARSET', 'UTF8');
-*/
+
 /**
  * SALT配置
  */
