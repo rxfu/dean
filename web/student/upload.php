@@ -8,30 +8,16 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-striped table-hover data-table">
-                                        <thead>
-                                            <tr>
-                                                <th class="active">报名时间</th>
-                                                <th class="active">考试类型</th>
-                                                <th class="active">所在校区</th>
-                                                <th class="active">考试时间</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach ($exams as $exam): ?>
-                                            <tr>
-                                                <td><?php echo $exam['bmsj'] ?></td>
-                                                <td><?php echo $exam['ksmc'] ?></td>
-                                                <td><?php echo Dictionary::get('xqh', $exam['xq']) ?></td>
-                                                <td><?php echo $exam['kssj'] ?></td>
-                                            </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
+                                <div class="row">
+                                    <form action="<?php echo toLink('student.uploade') ?>" method="post" enctype="multipart/form-data" role="form" class"form-control">
+                                        <div class="form-group">
+                                            <label for="portrait">上传照片:</label>
+                                            <input type="file" name="portrait" id="portrait" class="form-control">&nbsp;&nbsp;
+                                            <input type="submit" name="submit" value="提交">
+                                        </form>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
-                

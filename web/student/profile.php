@@ -18,13 +18,9 @@
                                             <td><?php echo $profile['xm'] ?></td>
                                             <td rowspan="10" width="240" height="320">
                                                 <img src="<?php echo toLink('student.portrait', $profile['sfzh']) ?>" alt="用户头像" />
-                                                <form action="<?php echo toLink('student.uploade') ?>" method="post" enctype="multipart/form-data" role="form" class"form-control">
-                                                    <div class="form-group">
-                                                        <label for="portrait">上传照片:</label>
-                                                        <input type="file" name="portrait" id="portrait" class="form-control">&nbsp;&nbsp;
-                                                        <input type="submit" name="submit" value="提交">
-                                                    </form>
-                                                </form>
+                                                <div class="text-center">
+                                                    <a href="<?php echo toLink('student.uploade') ?>" role="button" class="btn btn-default">上传照片</a>
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr>
