@@ -21,7 +21,10 @@ class StudentModel extends Model {
 	 * @return boolean      是新生为TRUE，否则为FALSE
 	 */
 	public function isFresh($sno) {
-		$now = date('Y-m-d');
+		$sql = 'SELECT count(*) FROM t_xs_zxs WHERE age(rxrq) < ? AND xh = ? ';
+		$count = $this->db->geColumn($sql, array('1 year', $sno));
+
+		return !isEmpty($data) && is_array($data);
 	}
 
 }
