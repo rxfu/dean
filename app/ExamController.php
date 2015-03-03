@@ -5,6 +5,16 @@
  */
 class ExamController extends StudentAdminController {
 
+	protected function before() {
+		$student = new StudentModel();
+
+		if (!$student->isUploadedPortrait($this->session->get('id'))) {
+			return redirect('student.upload');
+		}
+
+		parent::before();
+	}
+
 	/**
 	 * 学生考试报名
 	 * @param  string $type 考试类型

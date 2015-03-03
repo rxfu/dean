@@ -197,3 +197,9 @@ define('MAX_EXECUTION_TIME', 180);
 define('POST_MAX_SIZE', '24'); // 单位：MB
 define('UPLOAD_MAX_FILESIZE', '20'); // 单位：MB
 define('MEMORY_LIMIT', '36'); // 单位：MB
+
+/**
+ * 图片上传设置
+ */
+define('IMAGE_WIDTH', 240);
+define('IMAGE_HEIGHT', 320);

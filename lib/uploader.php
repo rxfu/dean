@@ -59,7 +59,7 @@ class Uploader {
 		ini_set('upload_max_filesize', UPLOAD_MAX_FILESIZE . 'M');
 		ini_set('memory_limit', MEMORY_LIMIT . 'M');
 
-		if (!$this->_setDesination($destination)) {
+		if (!$this->_setDestination($destination)) {
 			$this->setError('创建目标路径失败');
 		}
 	}
@@ -130,24 +130,24 @@ class Uploader {
 	 */
 	public function upload() {
 		if ($this->isValid()) {
-		if (isEmpty($this->_filename)) {
-			$this->createNewFilename();
-		}
+			if (isEmpty($this->_filename)) {
+				$this->createNewFilename();
+			}
 
-		$this->_file['filename'] = $this->_filename;
-		$this->_file['path']     = $this->_destination . DS . $this->_filename . $this->_file['extension'];
+			$this->_file['filename'] = $this->_filename;
+			$this->_file['path']     = $this->_destination . DS . $this->_filename . $this->_file['extension'];
 
-		$status = $this->_file['error'];
-		if (0 < $status) {
-			$this->setError('上传文件失败');
-			return;
-		}
+			$status = $this->_file['error'];
+			if (0 < $status) {
+				$this->setError('上传文件失败');
+				return;
+			}
 
-		$status = $this->save();
-		if (!$status) {
-			$this->setError('保存文件失败');
-			return;
-		}
+			$status = $this->save();
+			if (!$status) {
+				$this->setError('保存文件失败');
+				return;
+			}
 		}
 
 		return $this->_file;
@@ -159,7 +159,7 @@ class Uploader {
 	 */
 	public function isValid() {
 		if ($this->_isAllowedMimeTypes()) {
-			if ($this->_isMaxFileSize()) {
+			if ($this->_isAllowedFileSize()) {
 				return true;
 			}
 		}
@@ -185,7 +185,8 @@ class Uploader {
 		$this->_file = $file;
 
 		$this->_tmpName           = $file['tmp_name'];
-		$this->_file['extension'] = strtolower(end(explode('.', $this->_file['name'])));
+		$temp                     = explode('.', $this->_file['name']);
+		$this->_file['extension'] = strtolower(end($temp));
 	}
 
 	/**
@@ -227,7 +228,7 @@ class Uploader {
 	 */
 	private function _isAllowedMimeTypes() {
 		if (!isEmpty($this->_mimes)) {
-			if (!in_array($this->_file['mime'], $this->_mimes)) {
+			if (!in_array($this->_file['type'], $this->_mimes)) {
 				$this->setError('文件类型无效，请上传有效文件类型');
 				return false;
 			}

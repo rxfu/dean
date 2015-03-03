@@ -200,8 +200,16 @@ class StudentController extends StudentAdminController {
 				$uploader->setAllowedMimeTypes($mimes);
 				$uploader->setMaxFileSize(UPLOAD_MAX_FILESIZE);
 				$uploader->setFilename($this->session->get('id'));
+				$uploader->setWidth(IMAGE_WIDTH);
+				$uploader->setHeight(IMAGE_HEIGHT);
 
 				$uploader->upload();
+			}
+
+			if ($this->model->isUploadedPortrait($this->session->get('id'))) {
+				Message::add('success', '上传成功');
+			} else {
+				Message::add('danger', '上传失败');
 			}
 		}
 
