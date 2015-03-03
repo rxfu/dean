@@ -24,7 +24,7 @@ class TeacherAdminController extends Controller {
 		parent::before();
 
 		if (!$this->session->isValid() || TEACHER != $this->session->get('role')) {
-			redirect('teacher.login');
+			return redirect('teacher.login');
 		}
 	}
 

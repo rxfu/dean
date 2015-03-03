@@ -49,14 +49,6 @@ class CourseController extends StudentAdminController {
 	);
 
 	/**
-	 * 禁止学生选课
-	 * @return void
-	 */
-	protected function forbidden() {
-		return $this->view->display('course.forbidden', array('name' => $this->session->get('name')));
-	}
-
-	/**
 	 * 判断当前学生是否欠费
 	 *
 	 * @return boolean     欠费为TRUE，未欠费为FALSE
@@ -132,12 +124,12 @@ class CourseController extends StudentAdminController {
 	 */
 	protected function course($type) {
 		if (!$this->isOpen()) {
-			redirect('course.forbidden');
-			return;
+			$this->session->put('error', '现在未到选课时间，不允许选课');
+			return redirect('error.index');
 		}
 		if ($this->isUnpaid()) {
-			redirect('student.unpaid');
-			return;
+			$this->session->put('error', '请交清费用再进行选课');
+			return redirect('error.index');
 		}
 
 		list($property, $platform) = array_pad(str_split($this->codes[$type]['code']), 2, '');
@@ -161,16 +153,16 @@ class CourseController extends StudentAdminController {
 			}
 
 			if (!$allow) {
-				redirect('course.forbidden');
-				return;
+				$this->session->put('error', '现在未到选课时间，不允许选课');
+				return redirect('error.index');
 			}
 		}
 
 		// 是否允许选择通识素质课
 		if (!$this->isGeneralOpen()) {
 			if (in_array($code, array($this->codes[HUMANITY]['code'], $this->codes[NATURAL]['code'], $this->codes[ART]['code'], $this->codes[SPECIAL]['code']))) {
-				redirect('course.forbidden');
-				return;
+				$this->session->put('error', '现在未到通识素质课选课时间，不允许选课');
+				return redirect('error.index');
 			}
 		}
 
@@ -185,18 +177,17 @@ class CourseController extends StudentAdminController {
 				$allow = false;
 				foreach ($data as $limit) {
 					if ($now >= $limit['kssj'] && $now <= $limit['jssj']) {
-						$allow = true;
+						$allow       = true;
+						$limitCourse = $limit['ms'];
+						$limitRatio  = $limit['bl'] / 100;
 						break;
 					}
 				}
 
 				if (!$allow) {
-					redirect('course.forbidden');
-					return;
+					$this->session->put('error', '现在未到通识素质课选课时间，不允许选课');
+					return redirect('error.index');
 				}
-
-				$limitCourse = $data['ms'];
-				$limitRatio  = $data['bl'] / 100;
 			}
 		}
 
@@ -248,7 +239,7 @@ class CourseController extends StudentAdminController {
 
 				// 限制通识素质课门数
 				if (COURSE_UNLIMITED < $limitCourse) {
-					$sql         = 'SELECT ms FROM v_xk_tsxztj WHERE nd = ? AND xq = ? AND xh = ?';
+					$sql         = 'SELECT ms FROM v_xk_tssztj WHERE nd = ? AND xq = ? AND xh = ?';
 					$courseCount = $this->db->getColumn($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('username')));
 
 					if ($limitCourse <= $courseCount) {
@@ -275,12 +266,12 @@ class CourseController extends StudentAdminController {
 	 */
 	protected function search($type) {
 		if (!$this->isOpen()) {
-			redirect('course.forbidden');
-			return;
+			$this->session->put('error', '现在未到选课时间，不允许选课');
+			return redirect('error.index');
 		}
 		if ($this->isUnpaid()) {
-			redirect('student.unpaid');
-			return;
+			$this->session->put('error', '请交清费用再进行选课');
+			return redirect('error.index');
 		}
 
 		// 是否限制选课时间
@@ -301,15 +292,15 @@ class CourseController extends StudentAdminController {
 			}
 
 			if (!$allow) {
-				redirect('course.forbidden');
-				return;
+				$this->session->put('error', '现在未到选课时间，不允许选课');
+				return redirect('error.index');
 			}
 		}
 
 		// 是否允许选择其他课程
 		if (OTHERS == $type && !$this->isOthersOpen()) {
-			redirect('course.forbidden');
-			return;
+			$this->session->put('error', '现在未到其他课程选课时间，不允许选课');
+			return redirect('error.index');
 		}
 
 		$cno     = null;
@@ -387,12 +378,12 @@ class CourseController extends StudentAdminController {
 	 */
 	protected function select() {
 		if (!$this->isOpen()) {
-			redirect('course.forbidden');
-			return;
+			$this->session->put('error', '现在未到选课时间，不允许选课');
+			return redirect('error.index');
 		}
 		if ($this->isUnpaid()) {
-			redirect('student.unpaid');
-			return;
+			$this->session->put('error', '请交清费用再进行选课');
+			return redirect('error.index');
 		}
 
 		// 是否限制选课时间
@@ -413,8 +404,8 @@ class CourseController extends StudentAdminController {
 			}
 
 			if (!$allow) {
-				redirect('course.forbidden');
-				return;
+				$this->session->put('error', '现在未到选课时间，不允许选课');
+				return redirect('error.index');
 			}
 		}
 
@@ -422,8 +413,8 @@ class CourseController extends StudentAdminController {
 			// 是否允许选择通识素质课
 			if (!$this->isGeneralOpen()) {
 				if (in_array($this->codes[$type]['code'], array($this->codes[HUMANITY]['code'], $this->codes[NATURAL]['code'], $this->codes[ART]['code'], $this->codes[SPECIAL]['code']))) {
-					redirect('course.forbidden');
-					return;
+					$this->session->put('error', '现在未到通识素质课选课时间，不允许选课');
+					return redirect('error.index');
 				}
 			}
 
@@ -438,18 +429,17 @@ class CourseController extends StudentAdminController {
 					$allow = false;
 					foreach ($data as $limit) {
 						if ($now >= $limit['kssj'] && $now <= $limit['jssj']) {
-							$allow = true;
+							$allow       = true;
+							$limitCourse = $limit['ms'];
+							$limitRatio  = $limit['bl'] / 100;
 							break;
 						}
 					}
 
 					if (!$allow) {
-						redirect('course.forbidden');
-						return;
+						$this->session->put('error', '现在未到通识素质课选课时间，不允许选课');
+						return redirect('error.index');
 					}
-
-					$limitCourse = $data['ms'];
-					$limitRatio  = $data['bl'] / 100;
 				}
 			}
 
@@ -466,19 +456,19 @@ class CourseController extends StudentAdminController {
 						$course['jhrs'] = ceil($course['jhrs'] * $limitRatio);
 
 						if ($course['rs'] >= $course['jhrs']) {
-							redirect('course.forbidden');
-							return;
+							$this->session->put('error', '该门课程选课人数超限，不允许选课');
+							return redirect('error.index');
 						}
 					}
 
 					// 限制通识素质课门数
 					if (COURSE_UNLIMITED < $limitCourse) {
-						$sql         = 'SELECT ms FROM v_xk_tsxztj WHERE nd = ? AND xq = ? AND xh = ?';
+						$sql         = 'SELECT ms FROM v_xk_tssztj WHERE nd = ? AND xq = ? AND xh = ?';
 						$courseCount = $this->db->getColumn($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('username')));
 
 						if ($limitCourse <= $courseCount) {
-							redirect('course.forbidden');
-							return;
+							$this->session->put('error', '已选通识素质课已达限制门数，不允许选课');
+							return redirect('error.index');
 						}
 					}
 				}
@@ -562,12 +552,12 @@ class CourseController extends StudentAdminController {
 	 */
 	protected function apply($type, $cno) {
 		if (!$this->isOpen()) {
-			redirect('course.forbidden');
-			return;
+			$this->session->put('error', '现在未到选课时间，不允许选课');
+			return redirect('error.index');
 		}
 		if ($this->isUnpaid()) {
-			redirect('student.unpaid');
-			return;
+			$this->session->put('error', '请交清费用再进行选课');
+			return redirect('error.index');
 		}
 
 		// 是否限制选课时间
@@ -588,16 +578,16 @@ class CourseController extends StudentAdminController {
 			}
 
 			if (!$allow) {
-				redirect('course.forbidden');
-				return;
+				$this->session->put('error', '现在未到选课时间，不允许选课');
+				return redirect('error.index');
 			}
 		}
 
 		if (isPost()) {
 			// 是否允许选择其他课程
 			if (OTHERS == $type && !$this->isOthersOpen()) {
-				redirect('course.forbidden');
-				return;
+				$this->session->put('error', '现在未到其他课程选课时间，不允许选课');
+				return redirect('error.index');
 			}
 
 			$_POST = sanitize($_POST);
@@ -659,12 +649,12 @@ class CourseController extends StudentAdminController {
 	 */
 	protected function current() {
 		if (!$this->isOpen()) {
-			redirect('course.forbidden');
-			return;
+			$this->session->put('error', '现在未到选课时间，不允许选课');
+			return redirect('error.index');
 		}
 		if ($this->isUnpaid()) {
-			redirect('student.unpaid');
-			return;
+			$this->session->put('error', '请交清费用再进行选课');
+			return redirect('error.index');
 		}
 
 		// 是否限制选课时间
@@ -685,8 +675,8 @@ class CourseController extends StudentAdminController {
 			}
 
 			if (!$allow) {
-				redirect('course.forbidden');
-				return;
+				$this->session->put('error', '现在未到选课时间，不允许选课');
+				return redirect('error.index');
 			}
 		}
 

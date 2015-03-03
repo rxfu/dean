@@ -24,7 +24,7 @@ class StudentAdminController extends Controller {
 		parent::before();
 
 		if (!$this->session->isValid() || STUDENT != $this->session->get('role')) {
-			redirect('student.login');
+			return redirect('student.login');
 		}
 	}
 

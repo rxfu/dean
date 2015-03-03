@@ -10,7 +10,7 @@ class ErrorController extends Controller {
 	 * @return object
 	 */
 	protected function index() {
-		return $this->view->display('error.index');
+		return $this->view->display('error.index', array('error' => $this->session->get('error')));
 	}
 
 }
