@@ -203,3 +203,10 @@ define('MEMORY_LIMIT', '36'); // 单位：MB
  */
 define('IMAGE_WIDTH', 240);
 define('IMAGE_HEIGHT', 320);
+
+/**
+ * 考试报名状态代码
+ */
+define('EXAM_REGISTER', '1');
+define('EXAM_PASS', '2');
+define('EXAM_PAYMENT', '3');

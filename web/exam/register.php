@@ -12,15 +12,15 @@
                                 <form method="post" action="<?php echo toLink('exam.register', $type) ?>" class="form-horizontal">
                                     <div class="form-group">
                                         <label for="sno" class="col-md-2">学号</label>
-                                        <div class="col-md-4"><?php echo $profile['xh'] ?></div>
+                                        <div class="col-md-4"><?php echo $session['username'] ?></div>
                                     </div>
                                     <div class="form-group">
                                         <label for="sno" class="col-md-2">姓名</label>
-                                        <div class="col-md-4"><?php echo $profile['xm'] ?></div>
+                                        <div class="col-md-4"><?php echo $session['name'] ?></div>
                                     </div>
                                     <div class="form-group">
                                         <label for="sno" class="col-md-2">身份证号码</label>
-                                        <div class="col-md-4"><?php echo $profile['sfzh'] ?></div>
+                                        <div class="col-md-4"><?php echo $session['id'] ?></div>
                                     </div>
                                     <div class="form-group">
                                         <label for="sno" class="col-md-2">考试时间</label>

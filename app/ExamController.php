@@ -5,6 +5,10 @@
  */
 class ExamController extends StudentAdminController {
 
+	/**
+	 * 继承自基类before方法
+	 * @return NULL
+	 */
 	protected function before() {
 		$student = new StudentModel();
 
@@ -24,11 +28,12 @@ class ExamController extends StudentAdminController {
 		$sql  = 'SELECT * FROM t_cj_kslxdm WHERE kslx = ?';
 		$exam = $this->db->getRow($sql, $type);
 
-		$sql     = 'SELECT xh, xm, sfzh FROM v_xk_xsxx WHERE xh = ?';
-		$profile = $this->db->getRow($sql, $this->session->get('username'));
+		if ($this->model->isRegistered($this->session->get('username'), $type, $exam['kssj'])) {
+			return redirect('exam.listing');
+		}
 
 		$sql      = 'SELECT * FROM t_zd_xqh ORDER BY dm';
-		$campus   = $this->db->getAll($sql);
+		$campus   = Dictionary::getAll('xqh');
 		$campuses = array();
 		foreach ($campus as $c) {
 			if (!isEmpty($c)) {
@@ -53,7 +58,7 @@ class ExamController extends StudentAdminController {
 			return redirect('exam.listing');
 		}
 
-		return $this->view->display('exam.register', array('type' => $type, 'exam' => $exam, 'profile' => $profile, 'campuses' => $campuses, 'name' => $this->session->get('name'), 'year' => $this->session->get('year'), 'term' => $this->session->get('term')));
+		return $this->view->display('exam.register', array('type' => $type, 'exam' => $exam, 'campuses' => $campuses, 'name' => $this->session->get('name'), 'year' => $this->session->get('year'), 'term' => $this->session->get('term')));
 	}
 
 	protected function listing() {
