@@ -16,6 +16,6 @@ class ExamModel extends Model {
 		$sql        = 'SELECT clbz FROM t_ks_qtksbm WHERE xh = ? AND kslx = ? AND kssj = ?';
 		$registered = $this->db->getColumn($sql, array($sno, $type, $date));
 
-		return EXAM_PASS == $registered ? true : false;
+		return isEmpty($registered) ? false : true;
 	}
 }

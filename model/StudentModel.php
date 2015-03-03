@@ -15,4 +15,13 @@ class StudentModel extends Model {
 		return file_exists($path);
 	}
 
+	/**
+	 * 检测是否新生
+	 * @param  string  $sno 学号
+	 * @return boolean      是新生为TRUE，否则为FALSE
+	 */
+	public function isFresh($sno) {
+		$now = date('Y-m-d');
+	}
+
 }
