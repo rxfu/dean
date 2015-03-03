@@ -191,17 +191,21 @@ class StudentController extends StudentAdminController {
 	 * @return void
 	 */
 	protected function upload() {
-		if (!isEmpty($_FILES['portrait'])) {
-			$uploader = new Uploader(PORTRAIT);
-			$mimes    = array('image/jpg', 'image/jpeg', 'image/pjpeg');
+		if (isPost()) {
+			if (!isEmpty($_FILES['portrait'])) {
+				$uploader = new ImageUploader(PORTRAIT);
+				$mimes    = array('image/jpg', 'image/jpeg', 'image/pjpeg');
 
-			$uploader->setFile($_FILES['portrait']);
-			$uploader->setAllowedMimeTypes($mimes);
-			$uploader->setMaxFileSize(UPLOAD_MAX_FILESIZE);
-			$uploader->setFilename($this->session->get('id'));
+				$uploader->setFile($_FILES['portrait']);
+				$uploader->setAllowedMimeTypes($mimes);
+				$uploader->setMaxFileSize(UPLOAD_MAX_FILESIZE);
+				$uploader->setFilename($this->session->get('id'));
 
-			$uploader->upload();
+				$uploader->upload();
+			}
 		}
+
+		return $this->view->display('student.upload');
 	}
 
 	/**

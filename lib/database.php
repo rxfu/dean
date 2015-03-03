@@ -3,7 +3,7 @@
 /**
  * 数据库访问类，单例模式
  */
-class DB {
+class Database {
 
 	use Singleton;
 

@@ -25,7 +25,7 @@ final class Configuration {
 	 */
 	protected function init() {
 		self::$_table = 't_xt';
-		self::$_dbh   = DB::getInstance();
+		self::$_dbh   = Database::getInstance();
 	}
 
 	/**

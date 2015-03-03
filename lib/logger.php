@@ -25,7 +25,7 @@ class Logger {
 	 */
 	protected function init() {
 		self::$_table = 't_xk_log';
-		self::$_dbh  = DB::getInstance();
+		self::$_dbh  = Database::getInstance();
 	}
 
 	/**

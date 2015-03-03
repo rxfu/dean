@@ -11,7 +11,7 @@
                                 <form action="<?php echo toLink('student.upload') ?>" method="post" enctype="multipart/form-data" role="form" class"form-inline">
                                     <div class="form-group">
                                         <label for="portrait">上传照片:</label>
-                                        <input type="file" name="portrait" id="portrait" class="form-control">&nbsp;&nbsp;
+                                        <input type="file" name="portrait" id="portrait" class="form-control">
                                     </div>
                                     <button type="submit" name="submit" class="btn btn-primary">上传</button>
                                     </form>

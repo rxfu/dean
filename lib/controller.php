@@ -25,7 +25,7 @@ class Controller {
 
 	/**
 	 * 数据库句柄
-	 * @var DB
+	 * @var Database
 	 */
 	protected $db = null;
 

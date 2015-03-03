@@ -27,7 +27,7 @@ class Uploader {
 	 * 上传文件大小
 	 * @var integer
 	 */
-	private $_maxFileSize = UPLOAD_MAX_FILESIZE;
+	private $_maxFileSize = 0;
 
 	/**
 	 * MIME类型
@@ -68,7 +68,7 @@ class Uploader {
 	 * 设置目标路径
 	 * @param string $destination 目标路径
 	 */
-	protected function _setDestination($destination) {
+	private function _setDestination($destination) {
 		$this->_destination = $destination;
 
 		if (!$this->_isExistDestination()) {
@@ -80,7 +80,7 @@ class Uploader {
 	 * 创建目标路径
 	 * @return boolean 成功为TRUE，失败为FALSE
 	 */
-	protected function _createDestination() {
+	private function _createDestination() {
 		return mkdir($this->_destination, 750, true);
 	}
 
@@ -88,7 +88,7 @@ class Uploader {
 	 * 检测目标路径是否可写
 	 * @return boolean 可写为TRUE，不可写为FALSE
 	 */
-	protected function _isExistDestination() {
+	private function _isExistDestination() {
 		return is_writable($this->_destination);
 	}
 
@@ -98,6 +98,14 @@ class Uploader {
 	 */
 	public function setFilename($filename) {
 		$this->_filename = $filename;
+	}
+
+	/**
+	 * 获取新文件名
+	 * @return string 新文件名
+	 */
+	public function getFilename() {
+		return $this->_filename;
 	}
 
 	/**
@@ -122,7 +130,24 @@ class Uploader {
 	 */
 	public function upload() {
 		if ($this->isValid()) {
-			$this->_save();
+		if (isEmpty($this->_filename)) {
+			$this->createNewFilename();
+		}
+
+		$this->_file['filename'] = $this->_filename;
+		$this->_file['path']     = $this->_destination . DS . $this->_filename . $this->_file['extension'];
+
+		$status = $this->_file['error'];
+		if (0 < $status) {
+			$this->setError('上传文件失败');
+			return;
+		}
+
+		$status = $this->save();
+		if (!$status) {
+			$this->setError('保存文件失败');
+			return;
+		}
 		}
 
 		return $this->_file;
@@ -145,27 +170,10 @@ class Uploader {
 
 	/**
 	 * 保存文件
-	 * @return void
+	 * @return boolean 保存成功为TRUE，失败为FALSE
 	 */
-	protected function _save() {
-		if (isEmpty($this->_filename)) {
-			$this->_createNewFilename();
-		}
-
-		$this->_file['filename'] = $this->_filename;
-		$this->_file['path']     = $this->_destination . DS . $this->_filename . $this->_file['extension'];
-
-		$status = $this->_file['error'];
-		if (0 < $status) {
-			$this->setError('上传文件失败');
-			return;
-		}
-
-		$status = move_uploaded_file($this->_tmpName, $this->_file['path']);
-		if (!$status) {
-			$this->setError('上传文件失败');
-			return;
-		}
+	protected function save() {
+		return move_uploaded_file($this->_tmpName, $this->_file['path']);
 	}
 
 	/**
@@ -184,9 +192,17 @@ class Uploader {
 	 * 创建随机文件名
 	 * @return void
 	 */
-	protected function _createNewFilename() {
+	protected function createNewFilename() {
 		$filename = sha1(mt_rand(1, 9999) . $this->_destination . uniqid()) . time();
 		$this->setFilename($filename);
+	}
+
+	/**
+	 * 获取临时文件名
+	 * @return string 临时文件名
+	 */
+	protected function getTmpName() {
+		return $this->_tmpName;
 	}
 
 	/**
@@ -209,7 +225,7 @@ class Uploader {
 	 * 检测文件是否为有效文件类型
 	 * @return boolean 符合文件类型为TRUE，不符合为FALSE
 	 */
-	protected function _isAllowedMimeTypes() {
+	private function _isAllowedMimeTypes() {
 		if (!isEmpty($this->_mimes)) {
 			if (!in_array($this->_file['mime'], $this->_mimes)) {
 				$this->setError('文件类型无效，请上传有效文件类型');
@@ -224,7 +240,7 @@ class Uploader {
 	 * 检测文件是否超过大小限制
 	 * @return boolean 未超过大小为TRUE，超过为FALSE
 	 */
-	protected function _isAllowedFileSize() {
+	private function _isAllowedFileSize() {
 		if (!isEmpty($this->_maxFileSize)) {
 			$filesize = byteToMb($this->_file['size']);
 			if ($this->_maxFileSize <= $filesize) {

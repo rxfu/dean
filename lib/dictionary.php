@@ -25,7 +25,7 @@ final class Dictionary {
 	 */
 	protected function init() {
 		self::$_prefix = 't_zd_';
-		self::$_dbh    = DB::getInstance();
+		self::$_dbh    = Database::getInstance();
 	}
 
 	/**

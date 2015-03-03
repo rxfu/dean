@@ -21,7 +21,7 @@ class Autoloader {
 			if (false !== $pos && 0 != $pos) {
 				$fileName = MODROOT . DS . $className . '.php';
 			} else {
-				$fileName = LIBROOT . DS . strtolower($className) . '.php';
+				$fileName = LIBROOT . DS . camelToSnake($className) . '.php';
 			}
 		}
 

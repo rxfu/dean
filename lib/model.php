@@ -15,6 +15,6 @@ class Model {
 	 * 模型类控制方法
 	 */
 	public function __construct() {
-		$this->db = DB::getInstance();
+		$this->db = Database::getInstance();
 	}
 }

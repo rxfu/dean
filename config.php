@@ -39,49 +39,57 @@ define('DB_USERNAME', 'jwxt');
 define('DB_PASSWORD', 'jwxt..');
 define('DB_CHARSET', 'UTF8');
  */
+
+define('TEST_STU_ENGINE', 'pgsql');
+define('TEST_STU_HOST', '202.193.171.253');
+define('TEST_STU_PORT', '5432');
+define('TEST_STU_DBNAME', 'dean');
+define('TEST_STU_USERNAME', 'jwxt');
+define('TEST_STU_PASSWORD', 'jwxt..');
+define('TEST_STU_CHARSET', 'UTF8');
+
+define('TEST_TCH_ENGINE', 'pgsql');
+define('TEST_TCH_HOST', '202.193.171.253');
+define('TEST_TCH_PORT', '5432');
+define('TEST_TCH_DBNAME', 'dean');
+define('TEST_TCH_USERNAME', 'jwxt');
+define('TEST_TCH_PASSWORD', 'jwxt..');
+define('TEST_TCH_CHARSET', 'UTF8');
+ 
 /*
-define('DB_PREFIX', 'pgsql');
-define('DB_HOST', '202.193.171.253');
-define('DB_PORT', '5432');
-define('DB_NAME', 'dean');
-define('DB_USERNAME', 'jwxt');
-define('DB_PASSWORD', 'jwxt..');
-define('DB_CHARSET', 'UTF8');
- */
+define('TEST_STU_ENGINE', 'pgsql');
+define('TEST_STU_HOST', '202.193.171.253');
+define('TEST_STU_PORT', '5432');
+define('TEST_STU_DBNAME', 'dean');
+define('TEST_STU_USERNAME', 's_web');
+define('TEST_STU_PASSWORD', 's_web.0');
+define('TEST_STU_CHARSET', 'UTF8');
+
+define('TEST_TCH_ENGINE', 'pgsql');
+define('TEST_TCH_HOST', '202.193.171.253');
+define('TEST_TCH_PORT', '5432');
+define('TEST_TCH_DBNAME', 'dean');
+define('TEST_TCH_USERNAME', 't_web');
+define('TEST_TCH_PASSWORD', 't_web.0');
+define('TEST_TCH_CHARSET', 'UTF8');
+*/
 /*
 define('DB_STU_ENGINE', 'pgsql');
-define('DB_STU_HOST', '202.193.171.253');
-define('DB_STU_PORT', '5432');
-define('DB_STU_DBNAME', 'dean');
-define('DB_STU_USERNAME', 'jwxt');
-define('DB_STU_PASSWORD', 'jwxt..');
-define('DB_STU_CHARSET', 'UTF8');
-
-define('DB_TCH_ENGINE', 'pgsql');
-define('DB_TCH_HOST', '202.193.171.253');
-define('DB_TCH_PORT', '5432');
-define('DB_TCH_DBNAME', 'dean');
-define('DB_TCH_USERNAME', 'jwxt');
-define('DB_TCH_PASSWORD', 'jwxt..');
-define('DB_TCH_CHARSET', 'UTF8');
- */
-
-define('DB_STU_ENGINE', 'pgsql');
-define('DB_STU_HOST', '202.193.171.253');
+define('DB_STU_HOST', '202.193.162.26');
 define('DB_STU_PORT', '5432');
 define('DB_STU_DBNAME', 'dean');
 define('DB_STU_USERNAME', 's_web');
-define('DB_STU_PASSWORD', 's_web.0');
+define('DB_STU_PASSWORD', '58ECTFD');
 define('DB_STU_CHARSET', 'UTF8');
 
 define('DB_TCH_ENGINE', 'pgsql');
-define('DB_TCH_HOST', '202.193.171.253');
+define('DB_TCH_HOST', '202.193.162.26');
 define('DB_TCH_PORT', '5432');
 define('DB_TCH_DBNAME', 'dean');
 define('DB_TCH_USERNAME', 't_web');
-define('DB_TCH_PASSWORD', 't_web.0');
+define('DB_TCH_PASSWORD', 'TFD58EC');
 define('DB_TCH_CHARSET', 'UTF8');
-
+*/
 /**
  * SALT配置
  */

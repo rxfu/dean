@@ -17,7 +17,7 @@
                                             <th class="active">姓名</th>
                                             <td><?php echo $profile['xm'] ?></td>
                                             <td rowspan="10" width="240" height="320">
-                                                <img src="<?php echo toLink('student.portrait') ?>" alt="用户头像" />
+                                                <img src="<?php echo toLink('student.portrait') ?>" alt="用户头像" /><br><br>
                                                 <div class="text-center">
                                                     <a href="<?php echo toLink('student.upload') ?>" role="button" class="btn btn-default">上传照片</a>
                                                 </div>
