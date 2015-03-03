@@ -28,7 +28,7 @@ class ExamController extends StudentAdminController {
 		$sql  = 'SELECT * FROM t_cj_kslxdm WHERE kslx = ?';
 		$exam = $this->db->getRow($sql, $type);
 
-		if ($this->model->isRegistered($this->session->get('username'), $type, $exam['kssj'])) {
+		if ($this->model->isRegistered($this->session->get('username'), $type, $exam['sj'])) {
 			return redirect('exam.listing');
 		}
 

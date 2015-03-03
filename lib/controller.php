@@ -105,7 +105,7 @@ class Controller {
 	 * @return void        
 	 */
 	public function loadModel($name) {
-		$modelPath = MODROOT . DS . $name . '.php';
+		$modelPath = MODROOT . DS . $name . 'Model.php';
 
 		if (file_exists($modelPath)) {
 			$model = $name . 'Model';
