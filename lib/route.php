@@ -22,7 +22,7 @@ class Route {
 		$url           = filter_var($url, FILTER_SANITIZE_URL);
 		self::$_routes = explode('/', $url);
 
-		$controller = isset(self::$_routes[0]) && !isEmpty(self::$_routes[0]) ? self::$_routes[0] : Config::get('route.default_controler');
+		$controller = isset(self::$_routes[0]) && !isEmpty(self::$_routes[0]) ? self::$_routes[0] : Config::get('route.default_controller');
 		$method     = isset(self::$_routes[1]) && !isEmpty(self::$_routes[1]) ? self::$_routes[1] : Config::get('route.default_method');
 		$args       = is_array(self::$_routes) && count(self::$_routes) > 2 ? array_slice(self::$_routes, 2) : array();
 
@@ -31,9 +31,9 @@ class Route {
 			trigger_error('类文件' . $dispatcher . '.php 不存在');
 			return;
 		}
+
 		$dispatch = new $dispatcher;
 		$dispatch->loadModel($controller);
-
 		if (method_exists($dispatch, $method)) {
 			call_user_func_array(array($dispatch, $method), $args);
 		} else {

@@ -35,11 +35,11 @@
                                                     <td><p class="form-control-static"><?php echo $score['xm'] ?></p></td>
                                                     <?php foreach($ratios['mode'] as $key => $value): ?>
                                                         <td>
-                                                            <?php if (UNCOMMITTED == $score['tjzt']): ?>
+                                                            <?php if (Config::get('score.uncommitted') == $score['tjzt']): ?>
                                                                 <form method="post" action="<?php echo toLink('score.enter', $info['kcxh']) ?>" role="form" onsubmit="return false">
                                                                     <input type="text" name="grade<?php echo $key ?>" value="<?php echo $score['cj' . $key] ?>" size="6" class="form-control">
                                                                 </form>
-                                                            <?php elseif (COMMITTED == $score['tjzt']): ?>
+                                                            <?php elseif (Config::get('score.committed') == $score['tjzt']): ?>
                                                                 <p class="form-control-static"><?php echo $score['cj' . $key] ?></p>
                                                             <?php endif; ?>
                                                         </td>

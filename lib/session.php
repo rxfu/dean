@@ -31,7 +31,7 @@ class Session extends SessionHandler {
 	 * @param string $name   会话名称
 	 * @param array $cookie cookie数据
 	 */
-	public function __construct($key, $name = Config::get('session.name'), $cookie = []) {
+	public function __construct($key, $name = 'SESSION', $cookie = []) {
 		$this->key    = $key;
 		$this->name   = $name;
 		$this->cookie = $cookie;
@@ -122,7 +122,7 @@ class Session extends SessionHandler {
 	 * @param  integer $ttl 会话过期时间
 	 * @return boolean      过期为TRUE，否则为FALSE
 	 */
-	public function isExpired($ttl = Config::get('session.ttl')) {
+	public function isExpired($ttl = '30') {
 		$activity = isset($_SESSION['_last_activity']) ? $_SESSION['_last_activity'] : false;
 
 		if (false !== $activity && $ttl * 60 < time() - $activity) {
@@ -155,7 +155,7 @@ class Session extends SessionHandler {
 	 * @param  integer $ttl 会话过期时间
 	 * @return boolean      有效为TRUE，否则为FALSE
 	 */
-	public function isValid($ttl = Config::get('session.ttl')) {
+	public function isValid($ttl = '30') {
 		return !$this->isExpired($ttl) && $this->isFingerprint();
 	}
 

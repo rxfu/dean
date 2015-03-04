@@ -6,61 +6,6 @@
 class CourseController extends StudentAdminController {
 
 	/**
-	 * 课程平台性质对应代码表
-	 * @var array
-	 */
-	protected $codes = array(
-		Config::get('course.type.basic')    => array(
-			'code' => 'BT',
-			'name' => '公共',
-		),
-		Config::get('course.type.required') => array(
-			'code' => 'B',
-			'name' => '必修',
-		),
-		Config::get('course.type.elective') => array(
-			'code' => 'X',
-			'name' => '选修',
-		),
-		Config::get('course.type.humanity') => array(
-			'code' => 'WT',
-			'name' => '人文社科通识素质',
-		),
-		Config::get('course.type.natural')  => array(
-			'code' => 'IT',
-			'name' => '自然科学通识素质',
-		),
-		Config::get('course.type.art')      => array(
-			'code' => 'YT',
-			'name' => '艺术体育通识素质',
-		),
-		Config::get('course.type.special')  => array(
-			'code' => 'QT',
-			'name' => '其他专项通识素质',
-		),
-		Config::get('course.type.others')   => array(
-			'code' => 'OTHERS',
-			'name' => '其他课程',
-		),
-		Config::get('course.type.retake')   => array(
-			'code' => 'RETAKE',
-			'name' => '重修',
-		),
-	);
-
-	/**
-	 * 判断当前学生是否欠费
-	 *
-	 * @return boolean     欠费为TRUE，未欠费为FALSE
-	 */
-	protected function isUnpaid() {
-		$sql  = 'SELECT xh FROM t_xk_xsqf WHERE xh = ?';
-		$data = $this->db->getRow($sql, $this->session->get('username'));
-
-		return strcasecmp($data['xh'], $this->session->get('username')) ? false : true;
-	}
-
-	/**
 	 * 判断是否允许选课
 	 * @return boolean 允许为TRUE，禁止为FALSE
 	 */
@@ -125,11 +70,11 @@ class CourseController extends StudentAdminController {
 	protected function course($type) {
 		if (!$this->isOpen()) {
 			$this->session->put('error', '现在未到选课时间，不允许选课');
-			return redirect('error.index');
+			return redirect('error.error');
 		}
 		if ($this->isUnpaid()) {
 			$this->session->put('error', '请交清费用再进行选课');
-			return redirect('error.index');
+			return redirect('error.error');
 		}
 
 		list($property, $platform) = array_pad(str_split($this->codes[$type]['code']), 2, '');
@@ -154,7 +99,7 @@ class CourseController extends StudentAdminController {
 
 			if (!$allow) {
 				$this->session->put('error', '现在未到选课时间，不允许选课');
-				return redirect('error.index');
+				return redirect('error.error');
 			}
 		}
 
@@ -162,7 +107,7 @@ class CourseController extends StudentAdminController {
 		if (!$this->isGeneralOpen()) {
 			if (in_array($code, array($this->codes[Config::get('course.type.humanity')]['code'], $this->codes[Config::get('course.type.natural')]['code'], $this->codes[Config::get('course.type.art')]['code'], $this->codes[Config::get('course.type.special')]['code']))) {
 				$this->session->put('error', '现在未到通识素质课选课时间，不允许选课');
-				return redirect('error.index');
+				return redirect('error.error');
 			}
 		}
 
@@ -186,7 +131,7 @@ class CourseController extends StudentAdminController {
 
 				if (!$allow) {
 					$this->session->put('error', '现在未到通识素质课选课时间，不允许选课');
-					return redirect('error.index');
+					return redirect('error.error');
 				}
 			}
 		}
@@ -267,11 +212,11 @@ class CourseController extends StudentAdminController {
 	protected function search($type) {
 		if (!$this->isOpen()) {
 			$this->session->put('error', '现在未到选课时间，不允许选课');
-			return redirect('error.index');
+			return redirect('error.error');
 		}
 		if ($this->isUnpaid()) {
 			$this->session->put('error', '请交清费用再进行选课');
-			return redirect('error.index');
+			return redirect('error.error');
 		}
 
 		// 是否限制选课时间
@@ -293,14 +238,14 @@ class CourseController extends StudentAdminController {
 
 			if (!$allow) {
 				$this->session->put('error', '现在未到选课时间，不允许选课');
-				return redirect('error.index');
+				return redirect('error.error');
 			}
 		}
 
 		// 是否允许选择其他课程
 		if (Config::get('course.type.others') == $type && !$this->isOthersOpen()) {
 			$this->session->put('error', '现在未到其他课程选课时间，不允许选课');
-			return redirect('error.index');
+			return redirect('error.error');
 		}
 
 		$cno     = null;
@@ -379,11 +324,11 @@ class CourseController extends StudentAdminController {
 	protected function select() {
 		if (!$this->isOpen()) {
 			$this->session->put('error', '现在未到选课时间，不允许选课');
-			return redirect('error.index');
+			return redirect('error.error');
 		}
 		if ($this->isUnpaid()) {
 			$this->session->put('error', '请交清费用再进行选课');
-			return redirect('error.index');
+			return redirect('error.error');
 		}
 
 		// 是否限制选课时间
@@ -405,7 +350,7 @@ class CourseController extends StudentAdminController {
 
 			if (!$allow) {
 				$this->session->put('error', '现在未到选课时间，不允许选课');
-				return redirect('error.index');
+				return redirect('error.error');
 			}
 		}
 
@@ -414,7 +359,7 @@ class CourseController extends StudentAdminController {
 			if (!$this->isGeneralOpen()) {
 				if (in_array($this->codes[$type]['code'], array($this->codes[Config::get('course.type.humanity')]['code'], $this->codes[Config::get('course.type.natural')]['code'], $this->codes[Config::get('course.type.art')]['code'], $this->codes[Config::get('course.type.special')]['code']))) {
 					$this->session->put('error', '现在未到通识素质课选课时间，不允许选课');
-					return redirect('error.index');
+					return redirect('error.error');
 				}
 			}
 
@@ -438,7 +383,7 @@ class CourseController extends StudentAdminController {
 
 					if (!$allow) {
 						$this->session->put('error', '现在未到通识素质课选课时间，不允许选课');
-						return redirect('error.index');
+						return redirect('error.error');
 					}
 				}
 			}
@@ -457,7 +402,7 @@ class CourseController extends StudentAdminController {
 
 						if ($course['rs'] >= $course['jhrs']) {
 							$this->session->put('error', '该门课程选课人数超限，不允许选课');
-							return redirect('error.index');
+							return redirect('error.error');
 						}
 					}
 
@@ -468,7 +413,7 @@ class CourseController extends StudentAdminController {
 
 						if ($limitCourse <= $courseCount) {
 							$this->session->put('error', '已选通识素质课已达限制门数，不允许选课');
-							return redirect('error.index');
+							return redirect('error.error');
 						}
 					}
 				}
@@ -553,11 +498,11 @@ class CourseController extends StudentAdminController {
 	protected function apply($type, $cno) {
 		if (!$this->isOpen()) {
 			$this->session->put('error', '现在未到选课时间，不允许选课');
-			return redirect('error.index');
+			return redirect('error.error');
 		}
 		if ($this->isUnpaid()) {
 			$this->session->put('error', '请交清费用再进行选课');
-			return redirect('error.index');
+			return redirect('error.error');
 		}
 
 		// 是否限制选课时间
@@ -579,7 +524,7 @@ class CourseController extends StudentAdminController {
 
 			if (!$allow) {
 				$this->session->put('error', '现在未到选课时间，不允许选课');
-				return redirect('error.index');
+				return redirect('error.error');
 			}
 		}
 
@@ -587,7 +532,7 @@ class CourseController extends StudentAdminController {
 			// 是否允许选择其他课程
 			if (Config::get('course.type.others') == $type && !$this->isOthersOpen()) {
 				$this->session->put('error', '现在未到其他课程选课时间，不允许选课');
-				return redirect('error.index');
+				return redirect('error.error');
 			}
 
 			$_POST = sanitize($_POST);
@@ -650,11 +595,11 @@ class CourseController extends StudentAdminController {
 	protected function current() {
 		if (!$this->isOpen()) {
 			$this->session->put('error', '现在未到选课时间，不允许选课');
-			return redirect('error.index');
+			return redirect('error.error');
 		}
 		if ($this->isUnpaid()) {
 			$this->session->put('error', '请交清费用再进行选课');
-			return redirect('error.index');
+			return redirect('error.error');
 		}
 
 		// 是否限制选课时间
@@ -676,7 +621,7 @@ class CourseController extends StudentAdminController {
 
 			if (!$allow) {
 				$this->session->put('error', '现在未到选课时间，不允许选课');
-				return redirect('error.index');
+				return redirect('error.error');
 			}
 		}
 

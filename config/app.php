@@ -40,15 +40,42 @@ return array(
 	// 检索状态代码
 	'course'  => array(
 		'type'    => array(
-			'basic'    => 'bsc',
-			'required' => 'req',
-			'elective' => 'lct',
-			'humanity' => 'hs',
-			'natural'  => 'ns',
-			'art'      => 'as',
-			'special'  => 'os',
-			'others'   => 'others',
-			'retake'   => 'retake',
+			'basic'    => array(
+				'code' => 'BT',
+				'name' => '公共',
+			),
+			'required' => array(
+				'code' => 'B',
+				'name' => '必修',
+			),
+			'elective' => array(
+				'code' => 'X',
+				'name' => '选修',
+			),
+			'humanity' => array(
+				'code' => 'WT',
+				'name' => '人文社科通识素质',
+			),
+			'natural'  => array(
+				'code' => 'IT',
+				'name' => '自然科学通识素质',
+			),
+			'art'      => array(
+				'code' => 'YT',
+				'name' => '艺术体育通识素质',
+			),
+			'special'  => array(
+				'code' => 'QT',
+				'name' => '其他专项通识素质',
+			),
+			'others'   => array(
+				'code' => 'OTHERS',
+				'name' => '其他课程',
+			),
+			'retake'   => array(
+				'code' => 'RETAKE',
+				'name' => '重修',
+			),
 		),
 		'select'  => array(
 			'forbidden'  => '0',

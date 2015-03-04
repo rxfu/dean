@@ -88,7 +88,7 @@
                                         <ul class="nav nav-second-level">
                                             <?php if (ENABLE == Configuration::get('XK_KG')): ?>
                                                 <li>
-                                                    <a href="<?php echo toLink('course.course', Config::get('course.type.basic') ?>">公共课程</a>
+                                                    <a href="<?php echo toLink('course.course', Config::get('course.type.basic')) ?>">公共课程</a>
                                                 </li>
                                                 <li>
                                                     <a href="<?php echo toLink('course.course', Config::get('course.type.required')) ?>">必修课程</a>
@@ -104,7 +104,7 @@
                                                                 <a href="<?php echo toLink('course.course', Config::get('course.type.humanity')) ?>">人文社科</a>
                                                             </li>
                                                             <li>
-                                                                <a href="<?php echo toLink('course.course', Config::get('course.type.natural)') ?>">自然科学</a>
+                                                                <a href="<?php echo toLink('course.course', Config::get('course.type.natural')) ?>">自然科学</a>
                                                             </li>
                                                             <li>
                                                                 <a href="<?php echo toLink('course.course', Config::get('course.type.art')) ?>">艺术体育</a>
