@@ -35,23 +35,17 @@ class Database {
 
 	/**
 	 * 数据库构造方法
-	 * @param string $engine   数据库引擎
-	 * @param string $host     数据库地址
-	 * @param string $port     数据库端口
-	 * @param string $dbname   数据库名称
-	 * @param string $username 数据库用户名
-	 * @param string $password 数据库密码
-	 * @param string $charset  数据库字符集
+	 * @param array $dsn 数据库连接参数
 	 */
-	public function __construct($engine, $host, $port, $dbname, $username, $password, $charset = 'utf8') {
+	public function __construct($dsn) {
 		$this->_dsn = array(
-			'engine'   => $engine,
-			'host'     => $host,
-			'port'     => $port,
-			'dbname'   => $dbname,
-			'username' => $username,
-			'password' => $password,
-			'charset'  => $charset,
+			'engine'   => $dsn['engine'],
+			'host'     => $dsn['host'],
+			'port'     => $dsn['port'],
+			'dbname'   => $dsn['dbname'],
+			'username' => $dsn['username'],
+			'password' => $dsn['password'],
+			'charset'  => $dsn['charset'],
 		);
 
 		$this->_connect();

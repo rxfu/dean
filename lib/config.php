@@ -4,26 +4,20 @@
  * 配置类
  */
 final class Config {
-	
-	use Singleton;
 
-	/**
-	 * 配置文件路径列表
-	 * @var array
-	 */
-	private $_path = array();
+	use Singleton;
 
 	/**
 	 * 配置文件列表
 	 * @var array
 	 */
-	private $_file = array();
+	private static $_paths = array();
 
 	/**
 	 * 配置数据列表
 	 * @var array
 	 */
-	private $_cache = array();
+	public static $_cache = array();
 
 	/**
 	 * 加载配置文件
@@ -32,16 +26,26 @@ final class Config {
 	 */
 	public function __construct($paths = null) {
 		if (is_null($paths)) {
-			$this->_path[] = CFGROOT . DS;
-			$files = glob($this->_path.'*.php');
+			$paths = glob(CFGROOT . DS . '*.php');
+		}
 
-			foreach ($files as $file) {
-				$path = pathinfo($file);
-				$this->_file[] = $path['basename'];
+		$paths = is_string($paths) ? array($paths) : $paths;
+
+		foreach ($paths as $path) {
+			$info = pathinfo($path);
+			$ext  = strtolower($info['extension']);
+
+			if (isset($ext) && 'php' === $ext) {
+				if (file_exists($path)) {
+					self::$_paths[] = $path;
+				}
 			}
-		} else {
-			foreach ($paths as $path) {
-				
+		}
+
+		if (!empty(self::$_paths)) {
+			foreach (self::$_paths as $path) {
+				$config       = include $path;
+				self::$_cache = array_merge(self::$_cache, $config);
 			}
 		}
 	}
@@ -52,13 +56,13 @@ final class Config {
 	 * @param  string $default 配置默认值
 	 * @return mixed          获取到返回配置值，否则返回默认值
 	 */
-	public function get($key, $default = null) {
-		if (isset($this->_cache[$key])) {
-			return $this->_cache[$key];
+	public static function get($key, $default = null) {
+		if (isset(self::$_cache[$key])) {
+			return self::$_cache[$key];
 		}
 
 		$parsed = explode('.', $key);
-		$result = $this->_cache;
+		$result = self::$_cache;
 
 		while ($parsed) {
 			$next = array_shift($parsed);
@@ -78,9 +82,9 @@ final class Config {
 	 * @param string  $key   配置名称
 	 * @param boolean $value 配置值
 	 */
-	public function set($key, $value = false) {
+	public static function set($key, $value = false) {
 		$parsed = explode('.', $key);
-		$result = &$this->_cache;
+		$result = &self::$_cache;
 
 		while (1 < count($parsed)) {
 			$next = array_shift($parsed);
@@ -92,7 +96,7 @@ final class Config {
 			$result = &$result[$next];
 		}
 
-		$result[array_shift($parsed)] = $value;		
+		$result[array_shift($parsed)] = $value;
 	}
 
 }
