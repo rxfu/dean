@@ -12,6 +12,7 @@ define('VD', substr(strrchr(dirname(__FILE__), DS), 1));
 /**
  * 网站基本参数配置
  */
+define('CFGROOT', ROOT . DS . 'config');
 define('LIBROOT', ROOT . DS . 'lib');
 define('APPROOT', ROOT . DS . 'app');
 define('WEBROOT', ROOT . DS . 'web');
@@ -55,7 +56,7 @@ define('TEST_TCH_DBNAME', 'dean');
 define('TEST_TCH_USERNAME', 'jwxt');
 define('TEST_TCH_PASSWORD', 'jwxt..');
 define('TEST_TCH_CHARSET', 'UTF8');
- 
+
 /*
 define('TEST_STU_ENGINE', 'pgsql');
 define('TEST_STU_HOST', '202.193.171.253');
@@ -72,7 +73,7 @@ define('TEST_TCH_DBNAME', 'dean');
 define('TEST_TCH_USERNAME', 't_web');
 define('TEST_TCH_PASSWORD', 't_web.0');
 define('TEST_TCH_CHARSET', 'UTF8');
-*/
+ */
 /*
 define('DB_STU_ENGINE', 'pgsql');
 define('DB_STU_HOST', '202.193.162.26');
@@ -89,7 +90,7 @@ define('DB_TCH_DBNAME', 'dean');
 define('DB_TCH_USERNAME', 't_web');
 define('DB_TCH_PASSWORD', 'TFD58EC');
 define('DB_TCH_CHARSET', 'UTF8');
-*/
+ */
 /**
  * SALT配置
  */

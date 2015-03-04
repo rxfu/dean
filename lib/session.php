@@ -166,7 +166,6 @@ class Session extends SessionHandler {
 	 */
 	public function get($name) {
 		$parsed = explode('.', $name);
-
 		$result = $_SESSION;
 
 		while ($parsed) {
@@ -186,11 +185,9 @@ class Session extends SessionHandler {
 	 * 写入会话数据
 	 * @param  string $name   会话名称
 	 * @param  mixed $value 会话值
-	 * @return string 写入会话数据
 	 */
 	public function put($name, $value = false) {
 		$parsed = explode('.', $name);
-
 		$session = &$_SESSION;
 
 		while (1 < count($parsed)) {
