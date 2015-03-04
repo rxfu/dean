@@ -31,7 +31,7 @@ final class Configuration {
 	/**
 	 * 获取系统参数
 	 * @param  string $id 系统参数名
-	 * @return string|integer      系统参数值
+	 * @return string     系统参数值
 	 */
 	public static function get($id) {
 		$config = self::getInstance();
