@@ -22,6 +22,7 @@ return array(
 			'student' => 'student',
 			'teacher' => 'teacher',
 		),
+		'salt' => '+:sD>PjbsJ+3!&+TE@!J<:wj|*J6_KimvoHJ?HQ][vE)O/2S8F&<iz.-b#t2tW:|',
 	),
 
 	// 日志参数
@@ -38,7 +39,7 @@ return array(
 
 	// 检索状态代码
 	'course'  => array(
-		'type'      => array(
+		'type'    => array(
 			'basic'    => 'bsc',
 			'required' => 'req',
 			'elective' => 'lct',
@@ -49,17 +50,19 @@ return array(
 			'others'   => 'others',
 			'retake'   => 'retake',
 		),
-		'select'    => array(
+		'select'  => array(
 			'forbidden'  => '0',
 			'selectable' => '1',
 			'selected'   => '2',
 		),
-		'apply'     => array(
+		'apply'   => array(
 			'unauditted' => '0',
 			'passed'     => '1',
 			'refused'    => '2',
+			'others'     => '0',
+			'retake'     => '1',
 		),
-		'condition' => array(
+		'general' => array(
 			'unlimited' => -1,
 		),
 	),

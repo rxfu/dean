@@ -10,39 +10,39 @@ class CourseController extends StudentAdminController {
 	 * @var array
 	 */
 	protected $codes = array(
-		BASIC    => array(
+		Config::get('course.type.basic')    => array(
 			'code' => 'BT',
 			'name' => '公共',
 		),
-		REQUIRED => array(
+		Config::get('course.type.required') => array(
 			'code' => 'B',
 			'name' => '必修',
 		),
-		ELECTIVE => array(
+		Config::get('course.type.elective') => array(
 			'code' => 'X',
 			'name' => '选修',
 		),
-		HUMANITY => array(
+		Config::get('course.type.humanity') => array(
 			'code' => 'WT',
 			'name' => '人文社科通识素质',
 		),
-		NATURAL  => array(
+		Config::get('course.type.natural')  => array(
 			'code' => 'IT',
 			'name' => '自然科学通识素质',
 		),
-		ART      => array(
+		Config::get('course.type.art')      => array(
 			'code' => 'YT',
 			'name' => '艺术体育通识素质',
 		),
-		SPECIAL  => array(
+		Config::get('course.type.special')  => array(
 			'code' => 'QT',
 			'name' => '其他专项通识素质',
 		),
-		OTHERS   => array(
+		Config::get('course.type.others')   => array(
 			'code' => 'OTHERS',
 			'name' => '其他课程',
 		),
-		RETAKE   => array(
+		Config::get('course.type.retake')   => array(
 			'code' => 'RETAKE',
 			'name' => '重修',
 		),
@@ -160,15 +160,15 @@ class CourseController extends StudentAdminController {
 
 		// 是否允许选择通识素质课
 		if (!$this->isGeneralOpen()) {
-			if (in_array($code, array($this->codes[HUMANITY]['code'], $this->codes[NATURAL]['code'], $this->codes[ART]['code'], $this->codes[SPECIAL]['code']))) {
+			if (in_array($code, array($this->codes[Config::get('course.type.humanity')]['code'], $this->codes[Config::get('course.type.natural')]['code'], $this->codes[Config::get('course.type.art')]['code'], $this->codes[Config::get('course.type.special')]['code']))) {
 				$this->session->put('error', '现在未到通识素质课选课时间，不允许选课');
 				return redirect('error.index');
 			}
 		}
 
 		// 是否限制选择通识素质课
-		$limitCourse = COURSE_UNLIMITED;
-		$limitRatio  = COURSE_UNLIMITED;
+		$limitCourse = Config::get('course.general.unlimited');
+		$limitRatio  = Config::get('course.general.unlimited');
 		if ($this->isLimitGeneral()) {
 			$sql  = 'SELECT * FROM t_xk_tsxz WHERE xz = ? AND nj = ?';
 			$data = $this->db->getAll($sql, array($this->session->get('system'), $this->session->get('grade')));
@@ -191,7 +191,7 @@ class CourseController extends StudentAdminController {
 			}
 		}
 
-		if (in_array($code, array($this->codes[BASIC]['code'], $this->codes[REQUIRED]['code'], $this->codes[ELECTIVE]['code']))) {
+		if (in_array($code, array($this->codes[Config::get('course.type.basic')]['code'], $this->codes[Config::get('course.type.required')]['code'], $this->codes[Config::get('course.type.elective')]['code']))) {
 			$grade      = $this->session->get('grade');
 			$speciality = $this->session->get('spno');
 		} else {
@@ -227,23 +227,23 @@ class CourseController extends StudentAdminController {
 
 		$courses = array();
 		foreach ($data as $course) {
-			if (in_array($code, array($this->codes[HUMANITY]['code'], $this->codes[NATURAL]['code'], $this->codes[ART]['code'], $this->codes[SPECIAL]['code']))) {
+			if (in_array($code, array($this->codes[Config::get('course.type.humanity')]['code'], $this->codes[Config::get('course.type.natural')]['code'], $this->codes[Config::get('course.type.art')]['code'], $this->codes[Config::get('course.type.special')]['code']))) {
 				// 限制通识素质课选课人数
-				if (COURSE_UNLIMITED < $limitRatio) {
+				if (Config::get('course.general.unlimited') < $limitRatio) {
 					$course['jhrs'] = ceil($course['jhrs'] * $limitRatio);
 
 					if ($course['rs'] >= $course['jhrs']) {
-						$course['zt'] = FORBIDDEN;
+						$course['zt'] = Config::get('course.select.forbidden');
 					}
 				}
 
 				// 限制通识素质课门数
-				if (COURSE_UNLIMITED < $limitCourse) {
+				if (Config::get('course.general.unlimited') < $limitCourse) {
 					$sql         = 'SELECT ms FROM v_xk_tssztj WHERE nd = ? AND xq = ? AND xh = ?';
 					$courseCount = $this->db->getColumn($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('username')));
 
 					if ($limitCourse <= $courseCount) {
-						$course['zt'] = FORBIDDEN;
+						$course['zt'] = Config::get('course.select.forbidden');
 					}
 				}
 			}
@@ -298,7 +298,7 @@ class CourseController extends StudentAdminController {
 		}
 
 		// 是否允许选择其他课程
-		if (OTHERS == $type && !$this->isOthersOpen()) {
+		if (Config::get('course.type.others') == $type && !$this->isOthersOpen()) {
 			$this->session->put('error', '现在未到其他课程选课时间，不允许选课');
 			return redirect('error.index');
 		}
@@ -315,7 +315,7 @@ class CourseController extends StudentAdminController {
 			}
 
 			switch ($type) {
-				case OTHERS:
+				case Config::get('course.type.others'):
 					$grade      = '*';
 					$speciality = '*';
 
@@ -332,7 +332,7 @@ class CourseController extends StudentAdminController {
 							function ($pt) use ($xz) {
 								return $pt . $xz['dm'];
 							}
-							, $platform), array($this->codes[HUMANITY]['code'], $this->codes[NATURAL]['code'], $this->codes[ART]['code'], $this->codes[SPECIAL]['code'])))) {
+							, $platform), array($this->codes[Config::get('course.type.humanity')]['code'], $this->codes[Config::get('course.type.natural')]['code'], $this->codes[Config::get('course.type.art')]['code'], $this->codes[Config::get('course.type.special')]['code'])))) {
 							continue;
 						}
 
@@ -341,7 +341,7 @@ class CourseController extends StudentAdminController {
 
 					break;
 
-				case RETAKE:
+				case Config::get('course.type.retake'):
 					$grade      = '*';
 					$speciality = '*';
 					$platform   = '*';
@@ -412,15 +412,15 @@ class CourseController extends StudentAdminController {
 		if (isPost()) {
 			// 是否允许选择通识素质课
 			if (!$this->isGeneralOpen()) {
-				if (in_array($this->codes[$type]['code'], array($this->codes[HUMANITY]['code'], $this->codes[NATURAL]['code'], $this->codes[ART]['code'], $this->codes[SPECIAL]['code']))) {
+				if (in_array($this->codes[$type]['code'], array($this->codes[Config::get('course.type.humanity')]['code'], $this->codes[Config::get('course.type.natural')]['code'], $this->codes[Config::get('course.type.art')]['code'], $this->codes[Config::get('course.type.special')]['code']))) {
 					$this->session->put('error', '现在未到通识素质课选课时间，不允许选课');
 					return redirect('error.index');
 				}
 			}
 
 			// 是否限制选择通识素质课
-			$limitCourse = COURSE_UNLIMITED;
-			$limitRatio  = COURSE_UNLIMITED;
+			$limitCourse = Config::get('course.general.unlimited');
+			$limitRatio  = Config::get('course.general.unlimited');
 			if ($this->isLimitGeneral()) {
 				$sql  = 'SELECT * FROM t_xk_tsxz WHERE xz = ? AND nj = ?';
 				$data = $this->db->getAll($sql, array($this->session->get('system'), $this->session->get('grade')));
@@ -450,9 +450,9 @@ class CourseController extends StudentAdminController {
 			$type    = $_POST['type'];
 
 			if ('true' == $checked) {
-				if (in_array($this->codes[$type]['code'], array($this->codes[HUMANITY]['code'], $this->codes[NATURAL]['code'], $this->codes[ART]['code'], $this->codes[SPECIAL]['code']))) {
+				if (in_array($this->codes[$type]['code'], array($this->codes[Config::get('course.type.humanity')]['code'], $this->codes[Config::get('course.type.natural')]['code'], $this->codes[Config::get('course.type.art')]['code'], $this->codes[Config::get('course.type.special')]['code']))) {
 					// 限制通识素质课选课人数
-					if (COURSE_UNLIMITED < $limitRatio) {
+					if (Config::get('course.general.unlimited') < $limitRatio) {
 						$course['jhrs'] = ceil($course['jhrs'] * $limitRatio);
 
 						if ($course['rs'] >= $course['jhrs']) {
@@ -462,7 +462,7 @@ class CourseController extends StudentAdminController {
 					}
 
 					// 限制通识素质课门数
-					if (COURSE_UNLIMITED < $limitCourse) {
+					if (Config::get('course.general.unlimited') < $limitCourse) {
 						$sql         = 'SELECT ms FROM v_xk_tssztj WHERE nd = ? AND xq = ? AND xh = ?';
 						$courseCount = $this->db->getColumn($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('username')));
 
@@ -477,7 +477,7 @@ class CourseController extends StudentAdminController {
 
 				$selected = $this->db->query('SELECT p_xzkc_save(' . $param . ')');
 				if ($selected) {
-					Logger::write(array('xh' => $this->session->get('username'), 'kcxh' => $cno, 'czlx' => LOG_INSERT));
+					Logger::write(array('xh' => $this->session->get('username'), 'kcxh' => $cno, 'czlx' => Config::get('log.select')));
 					echo 'success';
 				} else {
 					echo 'failed';
@@ -487,7 +487,7 @@ class CourseController extends StudentAdminController {
 
 				$deleted = $this->db->query('SELECT p_scxk_del(' . $param . ')');
 				if ($deleted) {
-					Logger::write(array('xh' => $this->session->get('username'), 'kcxh' => $cno, 'czlx' => LOG_DELETE));
+					Logger::write(array('xh' => $this->session->get('username'), 'kcxh' => $cno, 'czlx' => Config::get('log.drop')));
 					echo 'success';
 				} else {
 					echo 'failed';
@@ -585,20 +585,20 @@ class CourseController extends StudentAdminController {
 
 		if (isPost()) {
 			// 是否允许选择其他课程
-			if (OTHERS == $type && !$this->isOthersOpen()) {
+			if (Config::get('course.type.others') == $type && !$this->isOthersOpen()) {
 				$this->session->put('error', '现在未到其他课程选课时间，不允许选课');
 				return redirect('error.index');
 			}
 
 			$_POST = sanitize($_POST);
 
-			if (RETAKE == $type) {
+			if (Config::get('course.type.retake') == $type) {
 				$data['ynd']   = $_POST['lyear'];
 				$data['yxq']   = $_POST['lterm'];
 				$data['ykcxh'] = $_POST['lcno'];
-				$data['xklx']  = APPLY_RETAKE;
-			} elseif (OTHERS == $type) {
-				$data['xklx'] = APPLY_OTHERS;
+				$data['xklx']  = Config::get('course.apply.retake');
+			} elseif (Config::get('course.type.others') == $type) {
+				$data['xklx'] = Config::get('course.apply.others');
 			}
 			$data['xh']   = $this->session->get('username');
 			$data['xm']   = $this->session->get('name');
@@ -615,12 +615,12 @@ class CourseController extends StudentAdminController {
 			$data['kkxy'] = $course['kkxy'];
 			$this->db->insertRecord('t_xk_xksq', $data);
 
-			Logger::write(array('xh' => $this->session->get('username'), 'kcxh' => $data['kcxh'], 'czlx' => LOG_APPLY));
+			Logger::write(array('xh' => $this->session->get('username'), 'kcxh' => $data['kcxh'], 'czlx' => Config::get('log.apply_course')));
 
 			return redirect('course.process');
 		}
 
-		if (RETAKE == $type) {
+		if (Config::get('course.type.retake') == $type) {
 			$sql    = 'SELECT DISTINCT nd FROM t_xk_xkxx WHERE xh = ?';
 			$lyears = $this->db->getAll($sql, array($this->session->get('username')));
 

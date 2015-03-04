@@ -55,4 +55,5 @@ class ImageUploader extends Uploader {
 
 		return $status;
 	}
+	
 }

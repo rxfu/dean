@@ -33,7 +33,7 @@
 
             <?php if (isset($session['logged']) && true == $session['logged']): ?>
                 <!-- 页面导航栏 -->
-                <?php if (STUDENT == $session['role']): ?>
+                <?php if (Config::get('user.role.student') == $session['role']): ?>
                     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom:0">
                         <div class="navbar-header">
                             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -88,40 +88,40 @@
                                         <ul class="nav nav-second-level">
                                             <?php if (ENABLE == Configuration::get('XK_KG')): ?>
                                                 <li>
-                                                    <a href="<?php echo toLink('course.course', BASIC) ?>">公共课程</a>
+                                                    <a href="<?php echo toLink('course.course', Config::get('course.type.basic') ?>">公共课程</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?php echo toLink('course.course', REQUIRED) ?>">必修课程</a>
+                                                    <a href="<?php echo toLink('course.course', Config::get('course.type.required')) ?>">必修课程</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?php echo toLink('course.course', ELECTIVE) ?>">选修课程</a>
+                                                    <a href="<?php echo toLink('course.course', Config::get('course.type.elective')) ?>">选修课程</a>
                                                 </li>
                                                 <?php if (ENABLE == Configuration::get('XK_TS')): ?>
                                                     <li>
                                                         <a href="#"> 通识素质课程<span class="fa arrow"></span></a>
                                                         <ul class="nav nav-third-level">
                                                             <li>
-                                                                <a href="<?php echo toLink('course.course', HUMANITY) ?>">人文社科</a>
+                                                                <a href="<?php echo toLink('course.course', Config::get('course.type.humanity')) ?>">人文社科</a>
                                                             </li>
                                                             <li>
-                                                                <a href="<?php echo toLink('course.course', NATURAL) ?>">自然科学</a>
+                                                                <a href="<?php echo toLink('course.course', Config::get('course.type.natural)') ?>">自然科学</a>
                                                             </li>
                                                             <li>
-                                                                <a href="<?php echo toLink('course.course', ART) ?>">艺术体育</a>
+                                                                <a href="<?php echo toLink('course.course', Config::get('course.type.art')) ?>">艺术体育</a>
                                                             </li>
                                                             <li>
-                                                                <a href="<?php echo toLink('course.course', SPECIAL) ?>">其他专项</a>
+                                                                <a href="<?php echo toLink('course.course', Config::get('course.type.special')) ?>">其他专项</a>
                                                             </li>
                                                         </ul>
                                                     </li>
                                                 <?php endif; ?>
                                                 <?php if (ENABLE == Configuration::get('XK_QT')): ?>
                                                     <li>
-                                                        <a href="<?php echo toLink('course.search', OTHERS) ?>">其他课程</a>
+                                                        <a href="<?php echo toLink('course.search', Config::get('course.type.others')) ?>">其他课程</a>
                                                     </li>
                                                 <?php endif; ?>
                                                 <li>
-                                                    <a href="<?php echo toLink('course.search', RETAKE) ?>">重修课程</a>
+                                                    <a href="<?php echo toLink('course.search', Config::get('course.type.retake')) ?>">重修课程</a>
                                                 </li>
                                                 <li>
                                                     <a href="<?php echo toLink('course.current') ?>">可退选课程列表</a>
@@ -228,7 +228,7 @@
                             </div>
                         </nav>
                     </nav>
-                <?php elseif (TEACHER == $session['role']): ?>
+                <?php elseif (Config::get('user.role.teacher') == $session['role']): ?>
                     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom:0">
                         <div class="navbar-header">
                             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">

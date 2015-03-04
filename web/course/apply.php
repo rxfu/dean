@@ -15,7 +15,7 @@
                                             <input type="text" class="form-control" id="cno" name="cno" value="<?php echo $cno ?>" disabled>
                                         </div>
                                     </div>
-                                    <?php if (RETAKE == $type): ?>
+                                    <?php if (Config::get('course.type.retake') == $type): ?>
                                         <div class="form-group">
                                             <label for="lyear" class="col-md-2">原年度</label>
                                             <div class="col-md-4">

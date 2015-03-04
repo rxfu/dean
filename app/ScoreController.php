@@ -93,7 +93,7 @@ class ScoreController extends TeacherAdminController {
 				$grades               = $this->db->getRow($sql, array($this->session->get('year'), $this->session->get('term'), $cno, $sno));
 				$grades['cj' . $mode] = $score;
 				$majorGrade           = $this->session->get('major_grade');
-				if (PASSLINE > $grades['cj' . $majorGrade]) {
+				if (Config::get('score.passline') > $grades['cj' . $majorGrade]) {
 					$total = $grades['cj' . $majorGrade];
 				} else {
 					$total = 0;
@@ -149,7 +149,7 @@ class ScoreController extends TeacherAdminController {
 	 */
 	protected function confirm($cno) {
 		if ($this->isOpen()) {
-			$this->db->updateRecord('t_cj_web', array('tjzt' => COMMITTED), array('nd' => $this->session->get('year'), 'xq' => $this->session->get('term'), 'kcxh' => $cno));
+			$this->db->updateRecord('t_cj_web', array('tjzt' => Config::get('score.committed')), array('nd' => $this->session->get('year'), 'xq' => $this->session->get('term'), 'kcxh' => $cno));
 			return redirect('score.input', $cno);
 		} else {
 			redirect('score.forbidden');

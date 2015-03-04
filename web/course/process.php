@@ -45,13 +45,13 @@
                                                 } ?></td>
                                                 <td><?php echo $course['shyj'] ?></td>
                                                 <td><?php switch ($course['sh']) {
-                                                    case UNAUDITTED:
+                                                    case Config::get('apply.unauditted'):
                                                         echo '待审核';
                                                         break;
-                                                    case PASSED:
+                                                    case Config::get('apply.passed'):
                                                         echo '审核已批准';
                                                         break;
-                                                    case REFUSED:
+                                                    case Config::get('apply.refused'):
                                                         echo '审核未批准';
                                                         break;
                                                     default:

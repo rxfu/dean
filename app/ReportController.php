@@ -24,7 +24,7 @@ class ReportController extends StudentAdminController {
 	 */
 	protected function detail($cno) {
 		$sql  = 'SELECT * FROM v_cj_xsgccj WHERE kch = ? AND xh = ? AND tjzt = ? ORDER BY nd, xq';
-		$data = $this->db->getAll($sql, array($cno, $this->session->get('username'), DEAN_CONFIRMED));
+		$data = $this->db->getAll($sql, array($cno, $this->session->get('username'), Config::get('score.dean_confirmed')));
 
 		$ratios = array();
 		$scores = array();
@@ -42,7 +42,7 @@ class ReportController extends StudentAdminController {
 	 */
 	protected function unconfirmed() {
 		$sql  = 'SELECT * FROM v_cj_xsgccj WHERE nd = ? AND xq = ? AND xh = ? AND tjzt = ? ORDER BY kcxh';
-		$data = $this->db->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('username'), COLLEGE_CONFIRMED));
+		$data = $this->db->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('username'), Config::get('score.college_confirmed')));
 
 		$ratios = array();
 		$scores = array();

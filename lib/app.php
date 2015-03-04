@@ -36,7 +36,7 @@ class App {
 	 * 设置调试状态下错误报告模式
 	 */
 	public function setReporting() {
-		if (Config::get('debug')) {
+		if (Config::get('setting.debug')) {
 			error_reporting(E_ALL);
 			ini_set('display_errors', 'On');
 		} else {
@@ -51,7 +51,7 @@ class App {
 	 * 设置会话参数
 	 */
 	public function setSession() {
-		$session = Session::getInstance(Config::get('key'));
+		$session = Session::getInstance(Config::get('session.key'));
 
 		ini_set('session.save_hanlder', 'files');
 		session_set_save_handler($session, true);

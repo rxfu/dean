@@ -5,7 +5,6 @@
                                 <h3 class="panel-title">学生入口</h3>
                             </div>
                             <div class="panel-body">
-                                <?php Message::display(); ?>
                                 <form id="loginForm" name="loginForm" action="<?php echo toLink('student.login') ?>" role="form" method="post" class="form-horizontal">
                                     <fieldset>
                                         <div class="form-group">

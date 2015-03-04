@@ -16,8 +16,8 @@ class Message {
 	 * @return void
 	 */
 	protected static function _init() {
-		if (!array_key_exists(SESSION_PREFIX . 'flash', $_SESSION)) {
-			$_SESSION[SESSION_PREFIX . 'flash'] = array();
+		if (!array_key_exists('flash', $_SESSION)) {
+			$_SESSION['flash'] = array();
 		}
 	}
 
@@ -28,7 +28,7 @@ class Message {
 	 * @return  boolean 成功为TRUE，失败为FALSE
 	 */
 	public static function add($type, $message) {
-		if (!isset($_SESSION[SESSION_PREFIX . 'flash'])) {
+		if (!isset($_SESSION['flash'])) {
 			self::_init();
 		}
 
@@ -42,10 +42,10 @@ class Message {
 		}
 
 		self::_init();
-		if (!array_key_exists($type, $_SESSION[SESSION_PREFIX . 'flash'])) {
-			$_SESSION[SESSION_PREFIX . 'flash'][$type] = array();
+		if (!array_key_exists($type, $_SESSION['flash'])) {
+			$_SESSION['flash'][$type] = array();
 		}
-		$_SESSION[SESSION_PREFIX . 'flash'][$type][] = $message;
+		$_SESSION['flash'][$type][] = $message;
 
 		return true;
 	}
@@ -62,12 +62,12 @@ class Message {
 			return;
 		}
 
-		if (!isset($_SESSION[SESSION_PREFIX . 'flash'])) {
+		if (!isset($_SESSION['flash'])) {
 			return false;
 		}
 
 		if (in_array($type, self::$_types)) {
-			foreach ($_SESSION[SESSION_PREFIX . 'flash'][$type] as $message) {
+			foreach ($_SESSION['flash'][$type] as $message) {
 				$data = '<div id="flash_' . $type . '" class="alert alert-dismissable alert-' . $type . '">';
 				$data .= '<button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
 				$data .= $message;
@@ -76,7 +76,7 @@ class Message {
 
 			self::clear($type);
 		} elseif ('all' === $type) {
-			foreach ($_SESSION[SESSION_PREFIX . 'flash'] as $type => $messages) {
+			foreach ($_SESSION['flash'] as $type => $messages) {
 				foreach ($messages as $message) {
 					$data = '<div id="flash_' . $type . '" class="alert alert-dismissable alert-' . $type . '">';
 					$data .= '<button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
@@ -103,14 +103,14 @@ class Message {
 	 * @return boolean       有消息内容则为TRUE，无消息内容则为FALSE
 	 */
 	public static function has($type = null) {
-		if (isset($_SESSION[SESSION_PREFIX . 'flash'])) {
+		if (isset($_SESSION['flash'])) {
 			if (!is_null($type) && is_string($type)) {
-				if (!empty($_SESSION[SESSION_PREFIX . 'flash'][$type])) {
-					return $_SESSION[SESSION_PREFIX . 'flash'][$type];
+				if (!empty($_SESSION['flash'][$type])) {
+					return $_SESSION['flash'][$type];
 				}
 			} else {
 				foreach (self::$_types as $type) {
-					if (!empty($_SESSION[SESSION_PREFIX . 'flash'])) {
+					if (!empty($_SESSION['flash'])) {
 						return true;
 					}
 				}
@@ -131,9 +131,9 @@ class Message {
 		}
 
 		if ('all' === $type) {
-			unset($_SESSION[SESSION_PREFIX . 'flash']);
+			unset($_SESSION['flash']);
 		} else {
-			unset($_SESSION[SESSION_PREFIX . 'flash'][$type]);
+			unset($_SESSION['flash'][$type]);
 		}
 
 		return true;

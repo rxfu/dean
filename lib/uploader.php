@@ -52,12 +52,12 @@ class Uploader {
 	 * @param string $destination 目标路径
 	 */
 	public function __construct($destination) {
-		ini_set('file_uploads', FILE_UPLOADS);
-		ini_set('max_input_time', MAX_INPUT_TIME);
-		ini_set('max_execution_time', MAX_EXECUTION_TIME);
-		ini_set('post_max_size', POST_MAX_SIZE . 'M');
-		ini_set('upload_max_filesize', UPLOAD_MAX_FILESIZE . 'M');
-		ini_set('memory_limit', MEMORY_LIMIT . 'M');
+		ini_set('file_uploads', Config::get('file.file_uploads'));
+		ini_set('max_input_time', Config::get('file.max_input_time'));
+		ini_set('max_execution_time', Config::get('file.max_execution_time'));
+		ini_set('post_max_size', Config::get('file.post_max_size') . 'M');
+		ini_set('upload_max_filesize', Config::get('file.upload_max_filesize') . 'M');
+		ini_set('memory_limit', Config::get('file.memory_limit') . 'M');
 
 		if (!$this->_setDestination($destination)) {
 			$this->setError('创建目标路径失败');

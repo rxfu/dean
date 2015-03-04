@@ -22,7 +22,7 @@ class StudentController extends StudentAdminController {
 		if ($this->session->get('logged')) {
 			$this->session->forget();
 		}
-		
+
 		if (isPost()) {
 			$_POST = sanitize($_POST);
 
@@ -40,7 +40,7 @@ class StudentController extends StudentAdminController {
 			}
 
 			if ($this->auth($username, $password)) {
-				Logger::write(array('xh' => $this->session->get('username'), 'czlx' => LOG_LOGIN));
+				Logger::write(array('xh' => $this->session->get('username'), 'czlx' => Config::get('log.login')));
 
 				$info = $this->getInfo($username);
 
@@ -58,7 +58,7 @@ class StudentController extends StudentAdminController {
 				$this->session->put('year', Configuration::get('XK_ND'));
 				$this->session->put('term', Configuration::get('XK_XQ'));
 
-				$this->session->put('role', STUDENT);
+				$this->session->put('role', Config::get('user.role.student'));
 				$this->session->put('logged', true);
 
 				$this->session->put('examTypes', $this->examTypes());
@@ -105,7 +105,7 @@ class StudentController extends StudentAdminController {
 	 * @return NULL
 	 */
 	protected function logout() {
-		Logger::write(array('xh' => $this->session->get('username'), 'czlx' => LOG_LOGOUT));
+		Logger::write(array('xh' => $this->session->get('username'), 'czlx' => Config::get('log.logout')));
 		$this->session->put('logged', false);
 		$this->session->forget();
 
@@ -133,7 +133,7 @@ class StudentController extends StudentAdminController {
 					if (is_array($data)) {
 						if (1 == count($data)) {
 							$db->updateRecord('t_xk_xsmm', array('mm' => encrypt($new)), array('xh' => $this->session->get('username')));
-							Logger::write(array('xh' => $this->session->get('username'), 'czlx' => LOG_CHGPWD));
+							Logger::write(array('xh' => $this->session->get('username'), 'czlx' => Config::get('log.change_password')));
 
 							Message::add('success', '修改密码成功');
 							return $this->view->display('student.password');
@@ -202,10 +202,10 @@ class StudentController extends StudentAdminController {
 
 				$uploader->setFile($_FILES['portrait']);
 				$uploader->setAllowedMimeTypes($mimes);
-				$uploader->setMaxFileSize(UPLOAD_MAX_FILESIZE);
+				$uploader->setMaxFileSize(Config::get('file.upload_max_filesize'));
 				$uploader->setFilename($this->session->get('id'));
-				$uploader->setWidth(IMAGE_WIDTH);
-				$uploader->setHeight(IMAGE_HEIGHT);
+				$uploader->setWidth(Config::get('image.width'));
+				$uploader->setHeight(Config::get('image.height'));
 
 				$uploader->upload();
 			}

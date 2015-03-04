@@ -45,7 +45,7 @@ class Controller {
 	 * 控制器构造方法
 	 */
 	public function __construct() {
-		$this->session = Session::getInstance(SESSION_KEY);
+		$this->session = Session::getInstance(Config::get('session.key'));
 		$this->session->start();
 
 		$this->view = new View();
