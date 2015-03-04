@@ -12,9 +12,10 @@ class Model {
 	protected $db = null;
 
 	/**
-	 * 模型类控制方法
+	 * 模型类构造方法
 	 */
 	public function __construct() {
 		$this->db = Database::getInstance();
 	}
+
 }

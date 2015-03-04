@@ -3,7 +3,7 @@
 /**
  * 考试模型类
  */
-class ExamModel extends Model {
+class ExamModel extends StudentAdminModel {
 
 	/**
 	 * 检测是否已经报名

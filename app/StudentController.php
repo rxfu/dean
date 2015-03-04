@@ -19,6 +19,10 @@ class StudentController extends StudentAdminController {
 	 * @return NULL
 	 */
 	protected function login() {
+		if ($this->session->get('logged')) {
+			$this->session->forget();
+		}
+		
 		if (isPost()) {
 			$_POST = sanitize($_POST);
 

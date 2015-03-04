@@ -3,7 +3,7 @@
 /**
  * 学生模型类
  */
-class StudentModel extends Model {
+class StudentModel extends StudentAdminModel {
 
 	/**
 	 * 判断学生是否已经上传照片
