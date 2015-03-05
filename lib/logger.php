@@ -8,44 +8,13 @@ class Logger {
 	use Singleton;
 
 	/**
-	 * 日志表
-	 * @var string
-	 */
-	private static $_table = null;
-
-	/**
-	 * 数据库连接唯一标识符
-	 * @var object
-	 */
-	private static $_dbh = null;
-
-	/**
-	 * 初始化日志表
-	 * @return void
-	 */
-	protected function init() {
-		self::$_table = 't_xk_log';
-		self::$_dbh  = Database::getInstance();
-	}
-
-	/**
 	 * 写入日志
 	 * @param  array $log 日志数据
 	 * @return void
 	 */
 	public static function write($log) {
-		if (isset($log) && is_array($log)) {
-			$logger = self::getInstance();
-
-			$data['ip']   = getClientIp();
-			$data['czsj'] = date('Y-m-d H:i:s');
-			$expected     = array('xh', 'kcxh', 'kcmc', 'czlx', 'bz');
-			foreach ($expected as $key) {
-				$data[$key] = isset($log[$key]) ? $log[$key] : null;
-			}
-
-			$logger::$_dbh->insertRecord(self::$_table, $data);
-		}
+		$logger = new LoggerModel();
+		$logger->write($log);
 	}
 
 	/**
@@ -54,11 +23,7 @@ class Logger {
 	 * @return array     日志数据
 	 */
 	public static function read($id) {
-		$data = null;
-		if (isset($id) && is_string($id)) {
-			$logger = self::getInstance();
-			$data   = $logger::$_dbh->searchRecord(self::$_table, array('xh' => $id));
-		}
-		return $data;
+		$logger = new LoggerModel();
+		return $logger->read($id);
 	}
 }
