@@ -17,7 +17,7 @@ final class Config {
 	 * 配置数据列表
 	 * @var array
 	 */
-	public static $_cache = array();
+	private static $_cache = array();
 
 	/**
 	 * 加载配置文件
