@@ -99,8 +99,8 @@ return array(
 		'passline'          => 60,
 		'uncommitted'       => '0',
 		'committed'         => '1',
-		'college_confirmed' => '1',
-		'dean_confirmed'    => '2',
+		'college_confirmed' => '2',
+		'dean_confirmed'    => '3',
 	),
 
 	// 考试报名状态代码

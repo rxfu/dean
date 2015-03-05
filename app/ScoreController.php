@@ -18,7 +18,7 @@ class ScoreController extends TeacherAdminController {
 	 * @return  void
 	 */
 	protected function forbidden() {
-		return $this->view->display('score.forbidden', array('name'=>$this->session->get('name')));
+		return $this->view->display('score.forbidden', array('name' => $this->session->get('name')));
 	}
 
 	/**
@@ -53,22 +53,27 @@ class ScoreController extends TeacherAdminController {
 
 			$sql    = 'SELECT * FROM v_cj_xscjlr WHERE nd = ? AND xq = ? AND kcxh = ? ORDER BY xh';
 			$data   = $this->db->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $cno));
-			$ratios = $this->ratio($data[0]['cjfs']);
+			foreach ($data as &$d) {
+				if (isEmpty($d['tjzt'])) {
+					$d['tjzt'] = Config::get('score.uncommitted');
+				}
+			}
 
+			$ratios = $this->ratio($data[0]['cjfs']);
 			$this->session->put('mode', $data[0]['cjfs']);
 			$this->session->put('major_grade', max(array_keys($ratios['mode'])));
 
-			$sql = 'SELECT * FROM t_cj_kszt ORDER BY dm';
+			$sql      = 'SELECT * FROM t_cj_kszt ORDER BY dm';
 			$statuses = $this->db->getAll($sql);
 
-			return $this->view->display('score.input', array('info' => $info, 'scores' => $data, 'ratios' => $ratios, 'statuses' => $statuses));
+			return $this->view->display('score.input', array('info' => $info, 'scores' => $data, 'ratios' => $ratios, 'report' => $data[0]['tjzt'], 'statuses' => $statuses));
 		} else {
-			redirect('score.forbidden');
+			return redirect('score.forbidden');
 		}
 	}
 
 	/**
-	 * 录入学生成绩，更新临时成绩表
+	 * 录入学生成绩，更新WEB成绩表
 	 * @param  string $cno 课程序号
 	 * @return boolean         成功返回TRUE，失败返回FALSE
 	 */
@@ -121,12 +126,17 @@ class ScoreController extends TeacherAdminController {
 		}
 	}
 
+	/**
+	 * 录入学生考试状态，更新WEB成绩表
+	 * @param  string $cno 课程序号
+	 * @return integer      成功返回影响行数，否则返回NULL
+	 */
 	protected function status($cno) {
 		if ($this->isOpen()) {
 			if (isPost()) {
 				$_POST = sanitize($_POST);
 
-				$sno = $_POST['sno'];
+				$sno    = $_POST['sno'];
 				$status = $_POST['status'];
 
 				// 更新WEB成绩表
@@ -152,7 +162,7 @@ class ScoreController extends TeacherAdminController {
 			$this->db->updateRecord('t_cj_web', array('tjzt' => Config::get('score.committed')), array('nd' => $this->session->get('year'), 'xq' => $this->session->get('term'), 'kcxh' => $cno));
 			return redirect('score.input', $cno);
 		} else {
-			redirect('score.forbidden');
+			return redirect('score.forbidden');
 		}
 	}
 

@@ -12,7 +12,11 @@
                         <div class="panel panel-default">
                             <div class="panel-heading clearfix">
                                 <div class="panel-title pull-left">成绩方式：<?php echo $ratios['name'] ?></div>
-                                <div class="pull-right"><button class="btn btn-primary" title="成绩确认" data-toggle="modal" data-target="#gradeConfirm">成绩上报</button></div>
+                                <?php if (Config::get('score.uncommitted') == $report): ?>
+                                    <div class="pull-right">
+                                        <button class="btn btn-primary" title="成绩上报" data-toggle="modal" data-target="#gradeConfirm">成绩上报</button>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                             <div class="panel-body">
                                 <div class="table-responsive tab-table">
@@ -39,7 +43,7 @@
                                                                 <form method="post" action="<?php echo toLink('score.enter', $info['kcxh']) ?>" role="form" onsubmit="return false">
                                                                     <input type="text" name="grade<?php echo $key ?>" value="<?php echo $score['cj' . $key] ?>" size="6" class="form-control">
                                                                 </form>
-                                                            <?php elseif (Config::get('score.committed') == $score['tjzt']): ?>
+                                                            <?php else: ?>
                                                                 <p class="form-control-static"><?php echo $score['cj' . $key] ?></p>
                                                             <?php endif; ?>
                                                         </td>
@@ -64,7 +68,20 @@
                     </div>
                 </section>
 
-                <?php section('grade_confirm') ?>
-                <p id="loading" style="display:none" class="form-control-static">
-                    <img id="loadingImage" src="<?php echo img('images/loading.gif') ?>" alt="加载中……">
-                </p>
+                <div class="modal fade" id="gradeConfirm" tabindex="-1" role="dialog" aria-labelledby="#gradeConfirmLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="gradeConfirmLabel">成绩确认</h4>
+                            </div>
+                        <div class="modal-body">
+                            <p>注意：请检查成绩是否已经录入完毕并且正确，成绩确认后将不可更改！</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel">取消</button>
+                            <a role="button" class="btn btn-primary" id="confirm" href="<?php echo toLink('score.confirm', $info['kcxh']) ?>">确定</a>
+                        </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->

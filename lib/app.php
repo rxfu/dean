@@ -11,7 +11,7 @@ class App {
 	 * 程序版本号
 	 * @var string
 	 */
-	const VERSION = '1.5.0';
+	const VERSION = '2.0.0';
 
 	/**
 	 * 配置文件对象
