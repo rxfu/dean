@@ -36,7 +36,7 @@
                             <li>
                                 <a href="#"><i class="fa fa-tasks fa-fw"></i> 成绩管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
-                                    <?php if (ENABLE == Configuration::get('CJ_WEB_KG')): ?>
+                                    <?php if (ENABLE == Setting::get('CJ_WEB_KG')): ?>
                                         <li>
                                             <a href="#"> 成绩录入<span class="fa arrow"></span></a>
                                             <ul class="nav nav-third-level">

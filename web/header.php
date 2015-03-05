@@ -86,7 +86,7 @@
                                     <li>
                                         <a href="#"><i class="fa fa-table fa-fw"></i> 选课管理<span class="fa arrow"></span></a>
                                         <ul class="nav nav-second-level">
-                                            <?php if (ENABLE == Configuration::get('XK_KG')): ?>
+                                            <?php if (ENABLE == Setting::get('XK_KG')): ?>
                                                 <li>
                                                     <a href="<?php echo toLink('course.course', Config::get('course.type.basic')) ?>">公共课程</a>
                                                 </li>
@@ -96,7 +96,7 @@
                                                 <li>
                                                     <a href="<?php echo toLink('course.course', Config::get('course.type.elective')) ?>">选修课程</a>
                                                 </li>
-                                                <?php if (ENABLE == Configuration::get('XK_TS')): ?>
+                                                <?php if (ENABLE == Setting::get('XK_TS')): ?>
                                                     <li>
                                                         <a href="#"> 通识素质课程<span class="fa arrow"></span></a>
                                                         <ul class="nav nav-third-level">
@@ -115,7 +115,7 @@
                                                         </ul>
                                                     </li>
                                                 <?php endif; ?>
-                                                <?php if (ENABLE == Configuration::get('XK_QT')): ?>
+                                                <?php if (ENABLE == Setting::get('XK_QT')): ?>
                                                     <li>
                                                         <a href="<?php echo toLink('course.search', Config::get('course.type.others')) ?>">其他课程</a>
                                                     </li>
@@ -266,7 +266,7 @@
                                     <li>
                                         <a href="#"><i class="fa fa-tasks fa-fw"></i> 成绩管理<span class="fa arrow"></span></a>
                                         <ul class="nav nav-second-level">
-                                            <?php if (ENABLE == Configuration::get('CJ_WEB_KG')): ?>
+                                            <?php if (ENABLE == Setting::get('CJ_WEB_KG')): ?>
                                                 <li>
                                                     <a href="#"> 成绩录入<span class="fa arrow"></span></a>
                                                     <ul class="nav nav-third-level">

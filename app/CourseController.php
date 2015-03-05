@@ -10,7 +10,7 @@ class CourseController extends StudentAdminController {
 	 * @return boolean 允许为TRUE，禁止为FALSE
 	 */
 	protected function isOpen() {
-		return ENABLE == Configuration::get('XK_KG') ? true : false;
+		return ENABLE == Setting::get('XK_KG') ? true : false;
 	}
 
 	/**
@@ -18,7 +18,7 @@ class CourseController extends StudentAdminController {
 	 * @return boolean 允许为TRUE，禁止为FALSE
 	 */
 	protected function isGeneralOpen() {
-		return ENABLE == Configuration::get('XK_TS') ? true : false;
+		return ENABLE == Setting::get('XK_TS') ? true : false;
 	}
 
 	/**
@@ -26,7 +26,7 @@ class CourseController extends StudentAdminController {
 	 * @return boolean 允许为TRUE，禁止为FALSE
 	 */
 	protected function isOthersOpen() {
-		return ENABLE == Configuration::get('XK_QT') ? true : false;
+		return ENABLE == Setting::get('XK_QT') ? true : false;
 	}
 
 	/**
@@ -34,7 +34,7 @@ class CourseController extends StudentAdminController {
 	 * @return string 学分限制，0为无限制
 	 */
 	protected function getLimitCredit() {
-		return Configuration::get('XK_XF');
+		return Setting::get('XK_XF');
 	}
 
 	/**
@@ -42,7 +42,7 @@ class CourseController extends StudentAdminController {
 	 * @return string 门数限制，0为无限制
 	 */
 	protected function getLimitCourse() {
-		return Configuration::get('XK_MS');
+		return Setting::get('XK_MS');
 	}
 
 	/**
@@ -50,7 +50,7 @@ class CourseController extends StudentAdminController {
 	 * @return boolean 限制为TRUE，未限制为FALSE
 	 */
 	protected function isLimitCourseTime() {
-		return Configuration::get('XK_SJXZ');
+		return Setting::get('XK_SJXZ');
 	}
 
 	/**
@@ -58,7 +58,7 @@ class CourseController extends StudentAdminController {
 	 * @return boolean 限制为TRUE，未限制为FALSE
 	 */
 	protected function isLimitGeneral() {
-		return Configuration::get('XK_TSXZ');
+		return Setting::get('XK_TSXZ');
 	}
 
 	/**

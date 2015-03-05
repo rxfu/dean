@@ -10,7 +10,7 @@ class ScoreController extends TeacherAdminController {
 	 * @return boolean 允许为TRUE，禁止为FALSE
 	 */
 	protected function isOpen() {
-		return ENABLE == Configuration::get('CJ_WEB_KG') ? true : false;
+		return ENABLE == Setting::get('CJ_WEB_KG') ? true : false;
 	}
 
 	/**

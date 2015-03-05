@@ -40,8 +40,8 @@ class TeacherController extends TeacherAdminController {
 				$this->session->put('college', $info['xy']);
 				$this->session->put('speciality', $info['zy']);
 
-				$this->session->put('year', Configuration::get('CJ_WEB_ND'));
-				$this->session->put('term', Configuration::get('CJ_WEB_XQ'));
+				$this->session->put('year', Setting::get('CJ_WEB_ND'));
+				$this->session->put('term', Setting::get('CJ_WEB_XQ'));
 
 				$this->session->put('role', Config::get('user.role.teacher'));
 				$this->session->put('logged', true);

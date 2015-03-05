@@ -55,8 +55,8 @@ class StudentController extends StudentAdminController {
 				$this->session->put('system', $info['xz']);
 				$this->session->put('campus', $info['xqh']);
 
-				$this->session->put('year', Configuration::get('XK_ND'));
-				$this->session->put('term', Configuration::get('XK_XQ'));
+				$this->session->put('year', Setting::get('XK_ND'));
+				$this->session->put('term', Setting::get('XK_XQ'));
 
 				$this->session->put('role', Config::get('user.role.student'));
 				$this->session->put('logged', true);
