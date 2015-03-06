@@ -70,4 +70,4 @@
                     </div>
                 </section>
 
-                <?php section('course_confirm') ?>
+                <?php include partial('course_confirm') ?>

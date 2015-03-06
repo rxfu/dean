@@ -36,31 +36,20 @@ class View {
 		$header = $this->templateDirectory . DS . 'header.php';
 		$footer = $this->templateDirectory . DS . 'footer.php';
 
-		$cache = new Cache();
-		if ($cache->isCached($templatePath)) {
-			$body = $cache->fetch($templatePath);
-		} else {
-			$data = $templatePath;
-			$body = $cache->store($templatePath, $data);
-		}
-		if (false === $body) {
-			throw new RuntimeException('视图文件不存在');
-		}
-
 		$data['session'] = isset($data['session']) ? $data['session'] : $_SESSION;
 		extract($data);
 		ob_start();
 		if (is_file($header)) {
 			require $header;
 		}
-		require $body;
+		require $templatePath;
 		if (is_file($footer)) {
 			require $footer;
 		}
 		$contents = ob_get_contents();
-		//ob_end_clean();
-		echo htmlentities($contents);
-		//return $contents;
+		ob_end_clean();
+
+		return $contents;
 	}
 
 	/**

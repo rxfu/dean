@@ -11,11 +11,11 @@
                 </div>                    
 
                 <ul class="nav navbar-top-links navbar-right">
-                    <li>欢迎<?php echo Session::get('college') ?><?php echo Session::get('name') ?>老师使用教师管理系统！</li>
+                    <li>欢迎<?php echo $session['college'] ?><?php echo $session['name'] ?>老师使用教师管理系统！</li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-user fa-fw"></i>
-                            <span><?php echo Session::get('name') ?></span>
+                            <span><?php echo $session['name'] ?></span>
                             <i class="fa fa-caret-down"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-user">
@@ -31,7 +31,7 @@
                     <div class="sidebar-nav navbar-collapse">
                         <ul id="side-menu" class="nav">
                             <li>
-                                <a href="<?php echo toLink('home.teacher') ?>"><i class="fa fa-dashboard fa-fw"></i> 综合管理系统</a>
+                                <a href="<?php echo toLink('teacher.dashboard') ?>"><i class="fa fa-dashboard fa-fw"></i> 综合管理系统</a>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-tasks fa-fw"></i> 成绩管理<span class="fa arrow"></span></a>
@@ -40,7 +40,7 @@
                                         <li>
                                             <a href="#"> 成绩录入<span class="fa arrow"></span></a>
                                             <ul class="nav nav-third-level">
-                                                <?php foreach(Session::get('scoreCourses') as $item): ?>
+                                                <?php foreach($session['scoreCourses'] as $item): ?>
                                                     <li>
                                                         <a href="<?php echo toLink('score.input', $item['kcxh']) ?>"><?php echo $item['kcxh'] ?></a>
                                                     </li>
@@ -51,13 +51,26 @@
                                     <li>
                                         <a href="#"> 成绩查询<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
-                                            <?php foreach(Session::get('scoreTerms') as $item): ?>
+                                            <?php foreach($session['scoreTerms'] as $item): ?>
                                                 <li>
                                                     <a href="<?php echo toLink('score.summary', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo Dictionary::get('xq', $item['xq']) ?>学期成绩单</a>
                                                 </li>
                                             <?php endforeach; ?>
                                         </ul>
                                     </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-calendar fa-fw"></i> 课表管理<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="<?php echo toLink('curriculum.timetable') ?>">当前课程表</a>
+                                    </li>
+                                    <?php foreach($session['courseTerms'] as $item): ?>
+                                        <li>
+                                            <a href="<?php echo toLink('curriculum.term', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo Dictionary::get('xq', $item['xq']) ?>学期课程列表</a>
+                                        </li>
+                                    <?php endforeach; ?>
                                 </ul>
                             </li>
                             <li>

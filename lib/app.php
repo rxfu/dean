@@ -24,10 +24,10 @@ class App {
 	 * @return NULL
 	 */
 	public function run() {
+		$this->_config = Config::getInstance();
+		
 		$this->setReporting();
 		set_error_handler('error', E_USER_ERROR);
-
-		$this->_config = Config::getInstance();
 
 		Route::dispatch();
 	}

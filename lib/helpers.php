@@ -464,6 +464,21 @@ if (!function_exists('parseType')) {
 	}
 }
 
+if (!function_exists('partial')) {
+
+	/**
+	 * 包含PHP片段
+	 * @param  string $section PHP片段
+	 * @return string PHP片段路径
+	 */
+	function partial($part) {
+		$path = strtr($part, '.', '/');
+		$path = WEBROOT . DS . $path . '.php';
+
+		return $path;
+	}
+}
+
 if (!function_exists('redirect')) {
 
 	/**
@@ -496,21 +511,6 @@ if (!function_exists('sanitize')) {
 	 */
 	function sanitize($value) {
 		return is_array($value) ? array_map('sanitize', $value) : trim(htmlentities(strip_tags($value)));
-	}
-}
-
-if (!function_exists('section')) {
-
-	/**
-	 * 包含PHP片段
-	 * @param  string $section PHP片段
-	 * @return mixed
-	 */
-	function section($section) {
-		$path = strtr($section, '.', '/');
-		$path = WEBROOT . DS . $path . '.php';
-
-		include $path;
 	}
 }
 

@@ -6,19 +6,19 @@
 class CurriculumController extends TeacherAdminController {
 
 	/**
-	 * 列出当前教师当前年度、学期课程表
+	 * 按年度、学期列出当前教师课程表
 	 * @return void
 	 */
-	protected function current() {
+	protected function term($year, $term) {
 		$sql  = 'SELECT * FROM v_pk_jskcb WHERE nd = ? AND xq = ? AND jsgh = ? ORDER BY kcxh, ksz, zc, ksj';
-		$data = $this->db->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('username')));
+		$data = $this->db->getAll($sql, array($year, $term, $this->session->get('username')));
 
 		$courses = array();
 		foreach ($data as $course) {
 			$courses[$course['kcxh']][] = $course;
 		}
 
-		return $this->view->display('curriculum.current', array('courses' => $courses, 'name' => $this->session->get('name'), 'year' => $this->session->get('year'), 'term' => $this->session->get('term')));
+		return $this->view->display('curriculum.term', array('courses' => $courses, 'year' => $year, 'term' => $term));
 	}
 
 	/**
@@ -56,7 +56,7 @@ class CurriculumController extends TeacherAdminController {
 			}
 		}
 
-		return $this->view->display('curriculum.timetable', array('courses' => $courses, 'name' => $this->session->get('name'), 'year' => $this->session->get('year'), 'term' => $this->session->get('term')));
+		return $this->view->display('curriculum.timetable', array('courses' => $courses));
 	}
 
 }

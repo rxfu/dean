@@ -48,6 +48,7 @@ class TeacherController extends TeacherAdminController {
 
 				$this->session->put('scoreCourses', $this->scoreCourses($username));
 				$this->session->put('scoreTerms', $this->scoreTerms($username));
+				$this->session->put('courseTerms', $this->courseTerms($username));
 
 				Message::add('success', '你已经成功登录系统');
 
@@ -175,13 +176,26 @@ class TeacherController extends TeacherAdminController {
 	}
 
 	/**
-	 * 根据教师工号列出教师授课的学期
+	 * 根据教师工号列出教师已录入成绩的学期
 	 *
 	 * @param string  $id 学号
 	 * @return array     学期数据
 	 */
 	protected function scoreTerms($id) {
 		$sql  = 'SELECT nd, xq FROM v_cj_xsgccj WHERE jsgh = ? GROUP BY nd, xq ORDER BY nd DESC, xq DESC';
+		$data = $this->db->getAll($sql, $id);
+
+		return $data;
+	}
+
+	/**
+	 * 根据教师工号列出教师授课的学期
+	 *
+	 * @param string  $id 学号
+	 * @return array     学期数据
+	 */
+	protected function courseTerms($id) {
+		$sql  = 'SELECT nd, xq FROM v_pk_jskcb WHERE jsgh = ? GROUP BY nd, xq ORDER BY nd DESC, xq DESC';
 		$data = $this->db->getAll($sql, $id);
 
 		return $data;

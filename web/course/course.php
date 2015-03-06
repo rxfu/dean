@@ -100,6 +100,6 @@
                     </div>
                 </section>
 
-                <?php section('course_confirm') ?>
-                <?php section('full_confirm') ?>
-                <?php section('clash_confirm') ?>
+                <?php include partial('course_confirm') ?>
+                <?php include partial('full_confirm') ?>
+                <?php include partial('clash_confirm') ?>

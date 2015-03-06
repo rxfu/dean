@@ -32,7 +32,7 @@
                     <div class="sidebar-nav navbar-collapse">
                         <ul id="side-menu" class="nav">
                             <li>
-                                <a href="<?php echo toLink('home.student') ?>"><i class="fa fa-dashboard fa-fw"></i> 综合管理系统</a>
+                                <a href="<?php echo toLink('student.dashboard') ?>"><i class="fa fa-dashboard fa-fw"></i> 综合管理系统</a>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> 教学计划<span class="fa arrow"></span></a>
@@ -53,40 +53,43 @@
                                 <ul class="nav nav-second-level">
                                     <?php if (ENABLE == Setting::get('XK_KG')): ?>
                                         <li>
-                                            <a href="<?php echo toLink('course.course', BASIC) ?>">公共课程</a>
+                                            <a href="<?php echo toLink('course.course', Config::get('course.type.basic')) ?>">公共课程</a>
                                         </li>
                                         <li>
-                                            <a href="<?php echo toLink('course.course', REQUIRED) ?>">必修课程</a>
+                                            <a href="<?php echo toLink('course.course', Config::get('course.type.required')) ?>">必修课程</a>
                                         </li>
                                         <li>
-                                            <a href="<?php echo toLink('course.course', ELECTIVE) ?>">选修课程</a>
+                                            <a href="<?php echo toLink('course.course', Config::get('course.type.elective')) ?>">选修课程</a>
                                         </li>
                                         <?php if (ENABLE == Setting::get('XK_TS')): ?>
                                             <li>
                                                 <a href="#"> 通识素质课程<span class="fa arrow"></span></a>
                                                 <ul class="nav nav-third-level">
                                                     <li>
-                                                        <a href="<?php echo toLink('course.course', HUMANITY) ?>">人文社科</a>
+                                                        <a href="<?php echo toLink('course.course', Config::get('course.type.humanity')) ?>">人文社科</a>
                                                     </li>
                                                     <li>
-                                                        <a href="<?php echo toLink('course.course', NATURAL) ?>">自然科学</a>
+                                                        <a href="<?php echo toLink('course.course', Config::get('course.type.natural')) ?>">自然科学</a>
                                                     </li>
                                                     <li>
-                                                        <a href="<?php echo toLink('course.course', ART) ?>">艺术体育</a>
+                                                        <a href="<?php echo toLink('course.course', Config::get('course.type.art')) ?>">艺术体育</a>
                                                     </li>
                                                     <li>
-                                                        <a href="<?php echo toLink('course.course', SPECIAL) ?>">其他专项</a>
+                                                        <a href="<?php echo toLink('course.course', Config::get('course.type.special')) ?>">其他专项</a>
                                                     </li>
                                                 </ul>
                                             </li>
                                         <?php endif; ?>
                                         <?php if (ENABLE == Setting::get('XK_QT')): ?>
                                             <li>
-                                                <a href="<?php echo toLink('course.search', OTHERS) ?>">其他课程</a>
+                                                <a href="<?php echo toLink('course.search', Config::get('course.type.others')) ?>">其他课程</a>
                                             </li>
                                         <?php endif; ?>
                                         <li>
-                                            <a href="<?php echo toLink('course.search', RETAKE) ?>">重修课程</a>
+                                            <a href="<?php echo toLink('course.search', Config::get('course.type.retake')) ?>">重修课程</a>
+                                        </li>
+                                        <li>
+                                            <a href="<?php echo toLink('course.current') ?>">可退选课程列表</a>
                                         </li>
                                     <?php endif; ?>
                                     <li>
@@ -122,17 +125,20 @@
                             <li>
                                 <a href="#"><i class="fa fa-tablet fa-fw"></i> 考试报名<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
+                                    <?php foreach ($session['examTypes'] as $types): ?>
+                                        <li>
+                                            <a href="#"><?php echo $types[0]['ksdlmc'] ?><span class="fa arrow"></span></a>
+                                            <ul class="nav nav-third-level">
+                                                <?php foreach ($types as $type): ?>
+                                                    <li>
+                                                        <a href="<?php echo toLink('exam.register', $type['kslx']) ?>"><?php echo $type['ksmc'] ?></a>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        </li>
+                                    <?php endforeach; ?>
                                     <li>
-                                        <a href="<?php echo toLink('exam.cet') ?>">英语等级考试</a>
-                                    </li>
-                                    <li>
-                                        <a href="<?php echo toLink('exam.ncre') ?>">计算机等级考试</a>
-                                    </li>
-                                    <li>
-                                        <a href="<?php echo toLink('exam.psc') ?>">普通话水平测试</a>
-                                    </li>
-                                    <li>
-                                        <a href="<?php echo toLink('exam.tkt') ?>">教师职业能力测试</a>
+                                        <a href="<?php echo toLink('exam.listing') ?>">历史报名信息</a>
                                     </li>
                                 </ul>
                             </li>
