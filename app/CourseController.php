@@ -6,59 +6,13 @@
 class CourseController extends StudentAdminController {
 
 	/**
-	 * 判断是否允许选课
-	 * @return boolean 允许为TRUE，禁止为FALSE
+	 * 学生模型对象
+	 * @var object
 	 */
-	protected function isOpen() {
-		return ENABLE == Setting::get('XK_KG') ? true : false;
-	}
+	private $_student;
 
-	/**
-	 * 判断是否允许选择通识素质课
-	 * @return boolean 允许为TRUE，禁止为FALSE
-	 */
-	protected function isGeneralOpen() {
-		return ENABLE == Setting::get('XK_TS') ? true : false;
-	}
-
-	/**
-	 * 判断是否允许选择其他课程
-	 * @return boolean 允许为TRUE，禁止为FALSE
-	 */
-	protected function isOthersOpen() {
-		return ENABLE == Setting::get('XK_QT') ? true : false;
-	}
-
-	/**
-	 * 获取选课学分限制
-	 * @return string 学分限制，0为无限制
-	 */
-	protected function getLimitCredit() {
-		return Setting::get('XK_XF');
-	}
-
-	/**
-	 * 获取选课门数限制
-	 * @return string 门数限制，0为无限制
-	 */
-	protected function getLimitCourse() {
-		return Setting::get('XK_MS');
-	}
-
-	/**
-	 * 判断是否限制选课时间
-	 * @return boolean 限制为TRUE，未限制为FALSE
-	 */
-	protected function isLimitCourseTime() {
-		return Setting::get('XK_SJXZ');
-	}
-
-	/**
-	 * 判断是否限制通识素质课选课
-	 * @return boolean 限制为TRUE，未限制为FALSE
-	 */
-	protected function isLimitGeneral() {
-		return Setting::get('XK_TSXZ');
+	public function __construct() {
+		$this->_student = new StudentModel();
 	}
 
 	/**
@@ -68,75 +22,44 @@ class CourseController extends StudentAdminController {
 	 * @return mixed       可选课程数据
 	 */
 	protected function course($type) {
-		if (!$this->isOpen()) {
-			$this->session->put('error', '现在未到选课时间，不允许选课');
+		$type = strtoupper($type);
+
+		if (!$this->model->isOpen()) {
+			$this->session->put('error', '现在未开放选课，不允许选课');
 			return redirect('error.error');
 		}
-		if ($this->isUnpaid()) {
+		if ($this->_student->isUnpaid()) {
 			$this->session->put('error', '请交清费用再进行选课');
 			return redirect('error.error');
 		}
 
-		list($property, $platform) = array_pad(str_split($this->codes[$type]['code']), 2, '');
-		$code                      = $property . $platform;
-
 		// 是否限制选课时间
-		$now = date('Y-m-d H:i:s');
-		if ($this->isLimitCourseTime()) {
-			$sql  = 'SELECT * FROM t_xk_sjxz WHERE xz = ? AND nj = ?';
-			$data = $this->db->getAll($sql, array($this->session->get('system'), $this->session->get('grade')));
+		$now   = date('Y-m-d H:i:s');
+		$allow = $this->model->isAllowedCourse($now, $this->session->get('grade'), $this->session->get('system'));
+		if (!$allow) {
+			$this->session->put('error', '现在未到选课时间，不允许选课');
+			return redirect('error.error');
+		}
 
-			$allow = true;
-			if (FALSE !== $data && !empty($data)) {
-				$allow = false;
-				foreach ($data as $limit) {
-					if ($now >= $limit['kssj'] && $now <= $limit['jssj']) {
-						$allow = true;
-						break;
-					}
-				}
+		// 是否通识素质课
+		if ($this->isGeneralCourse($type)) {
+			// 是否允许选择通识素质课
+			if (!$this->model->isGeneralOpen()) {
+				$this->session->put('error', '现在未开放通识素质课选课，不允许选课');
+				return redirect('error.error');
 			}
-
+			
+			// 是否限制选择通识素质课
+			$generalCount = 0;
+			$generalRatio = 0;
+			$allow = $this->model->isAllowedGeneralCourse($now, $this->session->get('grade'), $this->session->get('system'), $generalCount, $generalRatio);
 			if (!$allow) {
-				$this->session->put('error', '现在未到选课时间，不允许选课');
-				return redirect('error.error');
-			}
-		}
-
-		// 是否允许选择通识素质课
-		if (!$this->isGeneralOpen()) {
-			if (in_array($code, array($this->codes[Config::get('course.type.humanity')]['code'], $this->codes[Config::get('course.type.natural')]['code'], $this->codes[Config::get('course.type.art')]['code'], $this->codes[Config::get('course.type.special')]['code']))) {
-				$this->session->put('error', '现在未到通识素质课选课时间，不允许选课');
-				return redirect('error.error');
-			}
-		}
-
-		// 是否限制选择通识素质课
-		$limitCourse = Config::get('course.general.unlimited');
-		$limitRatio  = Config::get('course.general.unlimited');
-		if ($this->isLimitGeneral()) {
-			$sql  = 'SELECT * FROM t_xk_tsxz WHERE xz = ? AND nj = ?';
-			$data = $this->db->getAll($sql, array($this->session->get('system'), $this->session->get('grade')));
-
-			if (FALSE !== $data && !empty($data)) {
-				$allow = false;
-				foreach ($data as $limit) {
-					if ($now >= $limit['kssj'] && $now <= $limit['jssj']) {
-						$allow       = true;
-						$limitCourse = $limit['ms'];
-						$limitRatio  = $limit['bl'] / 100;
-						break;
-					}
-				}
-
-				if (!$allow) {
 					$this->session->put('error', '现在未到通识素质课选课时间，不允许选课');
 					return redirect('error.error');
 				}
-			}
 		}
 
-		if (in_array($code, array($this->codes[Config::get('course.type.basic')]['code'], $this->codes[Config::get('course.type.required')]['code'], $this->codes[Config::get('course.type.elective')]['code']))) {
+		if ($this->model->isSpecializedCourse($type)) {
 			$grade      = $this->session->get('grade');
 			$speciality = $this->session->get('spno');
 		} else {

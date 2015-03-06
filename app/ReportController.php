@@ -13,7 +13,7 @@ class ReportController extends StudentAdminController {
 	protected function report() {
 		$data = $this->db->searchRecord('v_cj_xscj', array('xh' => $this->session->get('username')));
 
-		return $this->view->display('report.report', array('scores' => $data, 'name' => $this->session->get('name')));
+		return $this->view->display('report.report', array('scores' => $data));
 	}
 
 	/**
@@ -23,9 +23,10 @@ class ReportController extends StudentAdminController {
 	 * @return array       学生成绩
 	 */
 	protected function detail($cno) {
-		$sql  = 'SELECT * FROM v_cj_xsgccj WHERE kch = ? AND xh = ? AND tjzt = ? ORDER BY nd, xq';
+		$sql  = 'SELECT * FROM v_cj_xsgccj WHERE kch = ? AND xh = ? AND tjzt = ? ORDER BY nd DESC, xq DESC';
 		$data = $this->db->getAll($sql, array($cno, $this->session->get('username'), Config::get('score.dean_confirmed')));
 
+		$cname = empty($data) ? '' : $data[0]['kcmc'];
 		$ratios = array();
 		$scores = array();
 		foreach ($data as $score) {
@@ -33,7 +34,7 @@ class ReportController extends StudentAdminController {
 			$scores[$score['cjfs']]['courses'][] = $score;
 		}
 
-		return $this->view->display('report.detail', array('scores' => $scores, 'cname' => $data[0]['kcmc'], 'name' => $this->session->get('name')));
+		return $this->view->display('report.detail', array('scores' => $scores, 'cname' => $cname));
 	}
 
 	/**
@@ -41,8 +42,8 @@ class ReportController extends StudentAdminController {
 	 * @return void
 	 */
 	protected function unconfirmed() {
-		$sql  = 'SELECT * FROM v_cj_xsgccj WHERE nd = ? AND xq = ? AND xh = ? AND tjzt = ? ORDER BY kcxh';
-		$data = $this->db->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('username'), Config::get('score.college_confirmed')));
+		$sql  = 'SELECT * FROM v_cj_xsgccj WHERE xh = ? AND tjzt < ? ORDER BY nd DESC, xq DESC, kcxh';
+		$data = $this->db->getAll($sql, array($this->session->get('username'), Config::get('score.dean_confirmed')));
 
 		$ratios = array();
 		$scores = array();

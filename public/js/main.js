@@ -224,6 +224,21 @@ $(document).ready(function() {
 	$('#courseConfirm').on('hidden.bs.modal', function(e) {
 		location.reload();
 	});
+	$('#confirmDialog').on('show.bs.modal', function(e) {
+		var button = $(e.relatedTarget);
+		var title = button.data('title');
+		var message = button.data('message');
+
+		var modal = $(this);
+		modal.find('.modal-title').text(title);
+		modal.find('.modal-body p').text(message);
+
+		var form = button.closest('form');
+		modal.find('.modal-footer #confirm').data('form', form);
+	});
+	$('#confirmDialog').find('.modal-footer #confirm').on('click', function(e) {
+		$(this).data('form').submit();
+	});
 
 	var campusId = '#campus-' + $('#campus').text();
 	if ($('#campus-tab a[href="' + campusId + '"]').length) {

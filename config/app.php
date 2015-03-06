@@ -41,40 +41,40 @@ return array(
 	'course'  => array(
 		'type'    => array(
 			'basic'    => array(
-				'code' => 'BT',
-				'name' => '公共',
+				'code' => 'bt',
+				'name' => '公共课程',
 			),
 			'required' => array(
-				'code' => 'B',
-				'name' => '必修',
+				'code' => 'b',
+				'name' => '必修课程',
 			),
 			'elective' => array(
-				'code' => 'X',
-				'name' => '选修',
+				'code' => 'x',
+				'name' => '选修课程',
 			),
 			'humanity' => array(
-				'code' => 'WT',
-				'name' => '人文社科通识素质',
+				'code' => 'wt',
+				'name' => '人文社科通识素质课程',
 			),
 			'natural'  => array(
-				'code' => 'IT',
-				'name' => '自然科学通识素质',
+				'code' => 'it',
+				'name' => '自然科学通识素质课程',
 			),
 			'art'      => array(
-				'code' => 'YT',
-				'name' => '艺术体育通识素质',
+				'code' => 'yt',
+				'name' => '艺术体育通识素质课程',
 			),
 			'special'  => array(
-				'code' => 'QT',
-				'name' => '其他专项通识素质',
+				'code' => 'qt',
+				'name' => '其他专项通识素质课程',
 			),
 			'others'   => array(
-				'code' => 'OTHERS',
+				'code' => 'others',
 				'name' => '其他课程',
 			),
 			'retake'   => array(
-				'code' => 'RETAKE',
-				'name' => '重修',
+				'code' => 'retake',
+				'name' => '重修课程',
 			),
 		),
 		'select'  => array(

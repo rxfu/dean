@@ -333,6 +333,18 @@ if (!function_exists('getDomain')) {
 	}
 }
 
+if (!function_exists('hasData')) {
+
+	/**
+	 * 判断PDO是否fetch到数据
+	 * @param  mixed  $data 数据
+	 * @return boolean       有数据为TRUE，没有为FALSE
+	 */
+	function hasData($data) {
+		return false !== $data && !empty($data);
+	}
+}
+
 if (!function_exists('img')) {
 
 	/**

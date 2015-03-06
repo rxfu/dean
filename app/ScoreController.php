@@ -51,8 +51,8 @@ class ScoreController extends TeacherAdminController {
 			$sql  = 'SELECT kcxh, kcmc, kkxy, nj, zy FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND kcxh = ?';
 			$info = $this->db->getRow($sql, array($this->session->get('year'), $this->session->get('term'), $cno));
 
-			$sql    = 'SELECT * FROM v_cj_xscjlr WHERE nd = ? AND xq = ? AND kcxh = ? ORDER BY xh';
-			$data   = $this->db->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $cno));
+			$sql  = 'SELECT * FROM v_cj_xscjlr WHERE nd = ? AND xq = ? AND kcxh = ? ORDER BY xh';
+			$data = $this->db->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $cno));
 			foreach ($data as &$d) {
 				if (isEmpty($d['tjzt'])) {
 					$d['tjzt'] = Config::get('score.uncommitted');
@@ -154,13 +154,17 @@ class ScoreController extends TeacherAdminController {
 
 	/**
 	 * 确认成绩
-	 * @param  string $cno 课程序号
 	 * @return boolean      确认成功为TRUE，否则为FALSE
 	 */
-	protected function confirm($cno) {
+	protected function confirm() {
 		if ($this->isOpen()) {
-			$this->db->updateRecord('t_cj_web', array('tjzt' => Config::get('score.committed')), array('nd' => $this->session->get('year'), 'xq' => $this->session->get('term'), 'kcxh' => $cno));
-			return redirect('score.input', $cno);
+			if (isPost()) {
+				$_POST = sanitize($_POST);
+				$cno   = $_POST['cno'];
+
+				$this->db->updateRecord('t_cj_web', array('tjzt' => Config::get('score.committed')), array('nd' => $this->session->get('year'), 'xq' => $this->session->get('term'), 'kcxh' => $cno));
+				return redirect('score.input', $cno);
+			}
 		} else {
 			return redirect('score.forbidden');
 		}

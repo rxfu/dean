@@ -53,40 +53,40 @@
                                 <ul class="nav nav-second-level">
                                     <?php if (ENABLE == Setting::get('XK_KG')): ?>
                                         <li>
-                                            <a href="<?php echo Route::to('course.course', Config::get('course.type.basic')) ?>">公共课程</a>
+                                            <a href="<?php echo Route::to('course.course', Config::get('course.type.basic.code')) ?>"><?php echo Config::get('course.type.basic.name') ?></a>
                                         </li>
                                         <li>
-                                            <a href="<?php echo Route::to('course.course', Config::get('course.type.required')) ?>">必修课程</a>
+                                            <a href="<?php echo Route::to('course.course', Config::get('course.type.required.code')) ?>"><?php echo Config::get('course.type.required.name') ?></a>
                                         </li>
                                         <li>
-                                            <a href="<?php echo Route::to('course.course', Config::get('course.type.elective')) ?>">选修课程</a>
+                                            <a href="<?php echo Route::to('course.course', Config::get('course.type.elective.code')) ?>"><?php echo Config::get('course.type.elective.name') ?></a>
                                         </li>
                                         <?php if (ENABLE == Setting::get('XK_TS')): ?>
                                             <li>
                                                 <a href="#"> 通识素质课程<span class="fa arrow"></span></a>
                                                 <ul class="nav nav-third-level">
                                                     <li>
-                                                        <a href="<?php echo Route::to('course.course', Config::get('course.type.humanity')) ?>">人文社科</a>
+                                                        <a href="<?php echo Route::to('course.course', Config::get('course.type.humanity.code')) ?>"><?php echo Config::get('course.type.humanity.name') ?></a>
                                                     </li>
                                                     <li>
-                                                        <a href="<?php echo Route::to('course.course', Config::get('course.type.natural')) ?>">自然科学</a>
+                                                        <a href="<?php echo Route::to('course.course', Config::get('course.type.natural.code')) ?>"><?php echo Config::get('course.type.natural.name') ?></a>
                                                     </li>
                                                     <li>
-                                                        <a href="<?php echo Route::to('course.course', Config::get('course.type.art')) ?>">艺术体育</a>
+                                                        <a href="<?php echo Route::to('course.course', Config::get('course.type.art.code')) ?>"><?php echo Config::get('course.type.art.name') ?></a>
                                                     </li>
                                                     <li>
-                                                        <a href="<?php echo Route::to('course.course', Config::get('course.type.special')) ?>">其他专项</a>
+                                                        <a href="<?php echo Route::to('course.course', Config::get('course.type.special.code')) ?>"><?php echo Config::get('course.type.special.name') ?></a>
                                                     </li>
                                                 </ul>
                                             </li>
                                         <?php endif; ?>
                                         <?php if (ENABLE == Setting::get('XK_QT')): ?>
                                             <li>
-                                                <a href="<?php echo Route::to('course.search', Config::get('course.type.others')) ?>">其他课程</a>
+                                                <a href="<?php echo Route::to('course.search', Config::get('course.type.others.code')) ?>"><?php echo Config::get('course.type.others.name') ?></a>
                                             </li>
                                         <?php endif; ?>
                                         <li>
-                                            <a href="<?php echo Route::to('course.search', Config::get('course.type.retake')) ?>">重修课程</a>
+                                            <a href="<?php echo Route::to('course.search', Config::get('course.type.retake.code')) ?>"><?php echo Config::get('course.type.retake.name') ?></a>
                                         </li>
                                         <li>
                                             <a href="<?php echo Route::to('course.current') ?>">可退选课程列表</a>

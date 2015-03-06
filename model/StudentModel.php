@@ -11,10 +11,10 @@ class StudentModel extends StudentAdminModel {
 	 * @return boolean     欠费为TRUE，未欠费为FALSE
 	 */
 	protected function isUnpaid() {
-		$sql  = 'SELECT COUNT(*) FROM t_xk_xsqf WHERE xh = ?';
-		$has = $this->db->getColumn($sql, $this->session->get('username'));
+		$sql   = 'SELECT COUNT(*) FROM t_xk_xsqf WHERE xh = ?';
+		$count = $this->db->getColumn($sql, $this->session->get('username'));
 
-		return 0 < $has;
+		return 0 < $count;
 	}
 
 	/**
@@ -33,10 +33,10 @@ class StudentModel extends StudentAdminModel {
 	 * @return boolean      是新生为TRUE，否则为FALSE
 	 */
 	public function isFresh($sno) {
-		$sql = 'SELECT count(*) FROM t_xs_zxs WHERE age(rxrq) < ? AND xh = ? ';
+		$sql   = 'SELECT COUNT(*) FROM t_xs_zxs WHERE age(rxrq) < ? AND xh = ? ';
 		$count = $this->db->geColumn($sql, array('1 year', $sno));
 
-		return !isEmpty($data) && is_array($data);
+		return hasData($count) && 0 < $count;
 	}
 
 }
