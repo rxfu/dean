@@ -19,10 +19,10 @@
                             <i class="fa fa-caret-down"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-user">
-                            <li><a href="<?php echo toLink('teacher.profile') ?>"><i class="fa fa-user fa-fw"></i> 个人资料</a></li>
-                            <li><a href="<?php echo toLink('teacher.password') ?>"><i class="fa fa-unlock fa-fw"></i> 修改密码</a></li>
+                            <li><a href="<?php echo Route::to('teacher.profile') ?>"><i class="fa fa-user fa-fw"></i> 个人资料</a></li>
+                            <li><a href="<?php echo Route::to('teacher.password') ?>"><i class="fa fa-unlock fa-fw"></i> 修改密码</a></li>
                             <li class="divider"></li>
-                            <li><a href="<?php echo toLink('teacher.logout') ?>"><i class="fa fa-sign-out fa-fw"></i> 登出</a></li>
+                            <li><a href="<?php echo Route::to('teacher.logout') ?>"><i class="fa fa-sign-out fa-fw"></i> 登出</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -31,7 +31,7 @@
                     <div class="sidebar-nav navbar-collapse">
                         <ul id="side-menu" class="nav">
                             <li>
-                                <a href="<?php echo toLink('teacher.dashboard') ?>"><i class="fa fa-dashboard fa-fw"></i> 综合管理系统</a>
+                                <a href="<?php echo Route::to('teacher.dashboard') ?>"><i class="fa fa-dashboard fa-fw"></i> 综合管理系统</a>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-tasks fa-fw"></i> 成绩管理<span class="fa arrow"></span></a>
@@ -42,7 +42,7 @@
                                             <ul class="nav nav-third-level">
                                                 <?php foreach($session['scoreCourses'] as $item): ?>
                                                     <li>
-                                                        <a href="<?php echo toLink('score.input', $item['kcxh']) ?>"><?php echo $item['kcxh'] ?></a>
+                                                        <a href="<?php echo Route::to('score.input', $item['kcxh']) ?>"><?php echo $item['kcxh'] ?></a>
                                                     </li>
                                                 <?php endforeach; ?>
                                             </ul>
@@ -53,7 +53,7 @@
                                         <ul class="nav nav-third-level">
                                             <?php foreach($session['scoreTerms'] as $item): ?>
                                                 <li>
-                                                    <a href="<?php echo toLink('score.summary', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo Dictionary::get('xq', $item['xq']) ?>学期成绩单</a>
+                                                    <a href="<?php echo Route::to('score.summary', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo Dictionary::get('xq', $item['xq']) ?>学期成绩单</a>
                                                 </li>
                                             <?php endforeach; ?>
                                         </ul>
@@ -64,11 +64,11 @@
                                 <a href="#"><i class="fa fa-calendar fa-fw"></i> 课表管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="<?php echo toLink('curriculum.timetable') ?>">当前课程表</a>
+                                        <a href="<?php echo Route::to('curriculum.timetable') ?>">当前课程表</a>
                                     </li>
                                     <?php foreach($session['courseTerms'] as $item): ?>
                                         <li>
-                                            <a href="<?php echo toLink('curriculum.term', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo Dictionary::get('xq', $item['xq']) ?>学期课程列表</a>
+                                            <a href="<?php echo Route::to('curriculum.term', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo Dictionary::get('xq', $item['xq']) ?>学期课程列表</a>
                                         </li>
                                     <?php endforeach; ?>
                                 </ul>
@@ -77,15 +77,15 @@
                                 <a href="#"><i class="fa fa-gear fa-fw"></i> 系统管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="<?php echo toLink('teacher.profile') ?>">个人资料</a>
+                                        <a href="<?php echo Route::to('teacher.profile') ?>">个人资料</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('teacher.password') ?>">修改密码</a>
+                                        <a href="<?php echo Route::to('teacher.password') ?>">修改密码</a>
                                     </li>
                                 </ul>
                             </li>
                             <li>
-                                <a href="<?php echo toLink('teacher.logout') ?>"><i class="fa fa-sign-out fa-fw"></i> 登出</a>
+                                <a href="<?php echo Route::to('teacher.logout') ?>"><i class="fa fa-sign-out fa-fw"></i> 登出</a>
                             </li>
                         </ul>
                     </div>

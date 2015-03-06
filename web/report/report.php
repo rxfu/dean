@@ -29,7 +29,7 @@
                                         <tbody>
                                             <?php foreach ($scores as $score): ?>
                                             <tr>
-                                                <td><a href="<?php echo toLink('report.detail', $score['kch']) ?>"><?php echo $score['kch'] ?></a></td>
+                                                <td><a href="<?php echo Route::to('report.detail', $score['kch']) ?>"><?php echo $score['kch'] ?></a></td>
                                                 <td><?php echo $score['kcmc'] ?></td>
                                                 <td><?php echo $score['kcywmc'] ?></td>
                                                 <td><?php echo $score['cj'] ?></td>

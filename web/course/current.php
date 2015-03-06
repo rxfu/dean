@@ -28,7 +28,7 @@
                                                 <tr data-name="<?php echo $course[0]['kcxh'] ?>">
                                                     <?php $rowspan = count($course) ?>
                                                     <td rowspan="<?php echo $rowspan ?>" class="text-center">
-                                                        <form method="post" action="<?php echo toLink('course.select') ?>" role="form">
+                                                        <form method="post" action="<?php echo Route::to('course.select') ?>" role="form">
                                                             <div class="checkbox">
                                                                 <label>
                                                                     <input type="checkbox" name="checkbox" value="<?php echo $course[0]['kcxh'] ?>" title="退选" data-toggle="modal" data-target="#courseConfirm" data-whatever="<?php echo $course[0]['kcmc'] . '(' . $course[0]['kcxh'] . ')' ?>" checked>

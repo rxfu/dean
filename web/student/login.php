@@ -5,7 +5,7 @@
                                 <h3 class="panel-title">学生入口</h3>
                             </div>
                             <div class="panel-body">
-                                <form id="loginForm" name="loginForm" action="<?php echo toLink('student.login') ?>" role="form" method="post" class="form-horizontal">
+                                <form id="loginForm" name="loginForm" action="<?php echo Route::to('student.login') ?>" role="form" method="post" class="form-horizontal">
                                     <fieldset>
                                         <div class="form-group">
                                             <label for="username" class="col-md-3 control-label">用户名</label>

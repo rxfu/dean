@@ -9,7 +9,7 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <form method="post" action="<?php echo toLink('exam.register', $type) ?>" class="form-horizontal">
+                                <form method="post" action="<?php echo Route::to('exam.register', $type) ?>" class="form-horizontal">
                                     <div class="form-group">
                                         <label for="sno" class="col-md-2">学号</label>
                                         <div class="col-md-4"><?php echo $session['username'] ?></div>

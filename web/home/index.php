@@ -19,7 +19,7 @@
                                 </div>
                             </div>
 
-                            <a href="<?php echo toLink('student.login') ?>">
+                            <a href="<?php echo Route::to('student.login') ?>">
                                 <div class="panel-footer">
                                     <span class="pull-left">进入系统</span>
                                     <span class="pull-right">
@@ -43,7 +43,7 @@
                                 </div>
                             </div>
                             
-                            <a href="<?php echo toLink('teacher.login') ?>">
+                            <a href="<?php echo Route::to('teacher.login') ?>">
                                 <div class="panel-footer">
                                     <span class="pull-left">进入系统</span>
                                     <span class="pull-right">

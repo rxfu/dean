@@ -12,6 +12,36 @@ class Route {
 	private static $_routes = null;
 
 	/**
+	 * 生成路由信息地址
+	 * @return string 路由信息地址，生成失败为NULL
+	 */
+	public static function to() {
+		if (0 == func_num_args()) {
+			return '/';
+		}
+
+		if (1 <= func_num_args()) {
+			$args  = func_get_args();
+			$route = array_shift($args);
+			$route = str_replace('.', '/', $route);
+
+			$param = '';
+			if (!empty($args)) {
+				foreach ($args as $index => $value) {
+					if (is_array($args[$index])) {
+						$args[$index] = implode('/', $args[$index]);
+					}
+				}
+				$param = '/' . implode('/', $args);
+			}
+
+			return getBaseUrl() . $route . $param;
+		}
+
+		return null;
+	}
+
+	/**
 	 * 分发路由信息
 	 * @return void
 	 */

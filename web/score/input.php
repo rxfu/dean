@@ -40,7 +40,7 @@
                                                     <?php foreach($ratios['mode'] as $key => $value): ?>
                                                         <td>
                                                             <?php if (Config::get('score.uncommitted') == $score['tjzt']): ?>
-                                                                <form method="post" action="<?php echo toLink('score.enter', $info['kcxh']) ?>" role="form" onsubmit="return false">
+                                                                <form method="post" action="<?php echo Route::to('score.enter', $info['kcxh']) ?>" role="form" onsubmit="return false">
                                                                     <input type="text" name="grade<?php echo $key ?>" value="<?php echo $score['cj' . $key] ?>" size="6" class="form-control">
                                                                 </form>
                                                             <?php else: ?>
@@ -50,13 +50,17 @@
                                                     <?php endforeach; ?>
                                                     <td data-name="total"><p id="total<?php echo $score['xh'] ?>" class="form-control-static"><?php echo $score['zpcj'] ?></p></td>
                                                     <td>
-                                                        <form method="post" action="<?php echo toLink('score.status', $info['kcxh']) ?>" role="form">
-                                                            <select name="status<?php echo $score['xh'] ?>" id="status<?php echo $score['xh'] ?>" class="form-control">
-                                                                <?php foreach($statuses as $status): ?>
-                                                                    <option value="<?php echo $status['dm'] ?>"<?php echo $status['dm'] === $score['ksztdm'] ? ' selected="selected"' : '' ?>><?php echo $status['mc'] ?></option>
-                                                                <?php endforeach; ?>
-                                                            </select>
-                                                        </form>
+                                                        <?php if (Config::get('score.uncommitted') == $score['tjzt']): ?>
+                                                            <form method="post" action="<?php echo Route::to('score.status', $info['kcxh']) ?>" role="form">
+                                                                <select name="status<?php echo $score['xh'] ?>" id="status<?php echo $score['xh'] ?>" class="form-control">
+                                                                    <?php foreach($statuses as $status): ?>
+                                                                        <option value="<?php echo $status['dm'] ?>"<?php echo $status['dm'] === $score['ksztdm'] ? ' selected="selected"' : '' ?>><?php echo $status['mc'] ?></option>
+                                                                    <?php endforeach; ?>
+                                                                </select>
+                                                            </form>
+                                                        <?php else: ?>
+                                                            <p class="form-control-static"><?php echo $score['kszt'] ?></p>
+                                                        <?php endif; ?>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
@@ -68,6 +72,7 @@
                     </div>
                 </section>
 
+                <?php include partial('confirm_dialog') ?>
                 <div class="modal fade" id="gradeConfirm" tabindex="-1" role="dialog" aria-labelledby="#gradeConfirmLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -80,7 +85,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel">取消</button>
-                            <a role="button" class="btn btn-primary" id="confirm" href="<?php echo toLink('score.confirm', $info['kcxh']) ?>">确定</a>
+                            <a role="button" class="btn btn-primary" id="confirm" href="<?php echo Route::to('score.confirm', $info['kcxh']) ?>">确定</a>
                         </div>
                         </div><!-- /.modal-content -->
                     </div><!-- /.modal-dialog -->

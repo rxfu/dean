@@ -19,10 +19,10 @@
                             <i class="fa fa-caret-down"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-user">
-                            <li><a href="<?php echo toLink('student.profile') ?>"><i class="fa fa-user fa-fw"></i> 个人资料</a></li>
-                            <li><a href="<?php echo toLink('student.password') ?>"><i class="fa fa-unlock fa-fw"></i> 修改密码</a></li>
+                            <li><a href="<?php echo Route::to('student.profile') ?>"><i class="fa fa-user fa-fw"></i> 个人资料</a></li>
+                            <li><a href="<?php echo Route::to('student.password') ?>"><i class="fa fa-unlock fa-fw"></i> 修改密码</a></li>
                             <li class="divider"></li>
-                            <li><a href="<?php echo toLink('student.logout') ?>"><i class="fa fa-sign-out fa-fw"></i> 登出</a></li>
+                            <li><a href="<?php echo Route::to('student.logout') ?>"><i class="fa fa-sign-out fa-fw"></i> 登出</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -32,19 +32,19 @@
                     <div class="sidebar-nav navbar-collapse">
                         <ul id="side-menu" class="nav">
                             <li>
-                                <a href="<?php echo toLink('student.dashboard') ?>"><i class="fa fa-dashboard fa-fw"></i> 综合管理系统</a>
+                                <a href="<?php echo Route::to('student.dashboard') ?>"><i class="fa fa-dashboard fa-fw"></i> 综合管理系统</a>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> 教学计划<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="<?php echo toLink('plan.course') ?>">课程信息</a>
+                                        <a href="<?php echo Route::to('plan.course') ?>">课程信息</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('plan.plan') ?>">教学计划</a>
+                                        <a href="<?php echo Route::to('plan.plan') ?>">教学计划</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('plan.graduation') ?>">毕业要求</a>
+                                        <a href="<?php echo Route::to('plan.graduation') ?>">毕业要求</a>
                                     </li>
                                 </ul>
                             </li>
@@ -53,47 +53,47 @@
                                 <ul class="nav nav-second-level">
                                     <?php if (ENABLE == Setting::get('XK_KG')): ?>
                                         <li>
-                                            <a href="<?php echo toLink('course.course', Config::get('course.type.basic')) ?>">公共课程</a>
+                                            <a href="<?php echo Route::to('course.course', Config::get('course.type.basic')) ?>">公共课程</a>
                                         </li>
                                         <li>
-                                            <a href="<?php echo toLink('course.course', Config::get('course.type.required')) ?>">必修课程</a>
+                                            <a href="<?php echo Route::to('course.course', Config::get('course.type.required')) ?>">必修课程</a>
                                         </li>
                                         <li>
-                                            <a href="<?php echo toLink('course.course', Config::get('course.type.elective')) ?>">选修课程</a>
+                                            <a href="<?php echo Route::to('course.course', Config::get('course.type.elective')) ?>">选修课程</a>
                                         </li>
                                         <?php if (ENABLE == Setting::get('XK_TS')): ?>
                                             <li>
                                                 <a href="#"> 通识素质课程<span class="fa arrow"></span></a>
                                                 <ul class="nav nav-third-level">
                                                     <li>
-                                                        <a href="<?php echo toLink('course.course', Config::get('course.type.humanity')) ?>">人文社科</a>
+                                                        <a href="<?php echo Route::to('course.course', Config::get('course.type.humanity')) ?>">人文社科</a>
                                                     </li>
                                                     <li>
-                                                        <a href="<?php echo toLink('course.course', Config::get('course.type.natural')) ?>">自然科学</a>
+                                                        <a href="<?php echo Route::to('course.course', Config::get('course.type.natural')) ?>">自然科学</a>
                                                     </li>
                                                     <li>
-                                                        <a href="<?php echo toLink('course.course', Config::get('course.type.art')) ?>">艺术体育</a>
+                                                        <a href="<?php echo Route::to('course.course', Config::get('course.type.art')) ?>">艺术体育</a>
                                                     </li>
                                                     <li>
-                                                        <a href="<?php echo toLink('course.course', Config::get('course.type.special')) ?>">其他专项</a>
+                                                        <a href="<?php echo Route::to('course.course', Config::get('course.type.special')) ?>">其他专项</a>
                                                     </li>
                                                 </ul>
                                             </li>
                                         <?php endif; ?>
                                         <?php if (ENABLE == Setting::get('XK_QT')): ?>
                                             <li>
-                                                <a href="<?php echo toLink('course.search', Config::get('course.type.others')) ?>">其他课程</a>
+                                                <a href="<?php echo Route::to('course.search', Config::get('course.type.others')) ?>">其他课程</a>
                                             </li>
                                         <?php endif; ?>
                                         <li>
-                                            <a href="<?php echo toLink('course.search', Config::get('course.type.retake')) ?>">重修课程</a>
+                                            <a href="<?php echo Route::to('course.search', Config::get('course.type.retake')) ?>">重修课程</a>
                                         </li>
                                         <li>
-                                            <a href="<?php echo toLink('course.current') ?>">可退选课程列表</a>
+                                            <a href="<?php echo Route::to('course.current') ?>">可退选课程列表</a>
                                         </li>
                                     <?php endif; ?>
                                     <li>
-                                        <a href="<?php echo toLink('course.process') ?>">课程申请进度</a>
+                                        <a href="<?php echo Route::to('course.process') ?>">课程申请进度</a>
                                     </li>
                                 </ul>
                             </li>
@@ -101,13 +101,13 @@
                                 <a href="#"><i class="fa fa-calendar fa-fw"></i> 课表管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="<?php echo toLink('schedule.timetable') ?>">课程表</a>
+                                        <a href="<?php echo Route::to('schedule.timetable') ?>">课程表</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('schedule.current') ?>">已选课程列表</a>
+                                        <a href="<?php echo Route::to('schedule.current') ?>">已选课程列表</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('schedule.speciality') ?>">本学期专业课程表</a>
+                                        <a href="<?php echo Route::to('schedule.speciality') ?>">本学期专业课程表</a>
                                     </li>
                                 </ul>
                             </li>
@@ -115,10 +115,10 @@
                                 <a href="#"><i class="fa fa-tasks fa-fw"></i> 成绩管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="<?php echo toLink('report.unconfirmed') ?>">待确认成绩单</a>
+                                        <a href="<?php echo Route::to('report.unconfirmed') ?>">待确认成绩单</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('report.report') ?>">综合成绩单</a>
+                                        <a href="<?php echo Route::to('report.report') ?>">综合成绩单</a>
                                     </li>
                                 </ul>
                             </li>
@@ -131,14 +131,14 @@
                                             <ul class="nav nav-third-level">
                                                 <?php foreach ($types as $type): ?>
                                                     <li>
-                                                        <a href="<?php echo toLink('exam.register', $type['kslx']) ?>"><?php echo $type['ksmc'] ?></a>
+                                                        <a href="<?php echo Route::to('exam.register', $type['kslx']) ?>"><?php echo $type['ksmc'] ?></a>
                                                     </li>
                                                 <?php endforeach; ?>
                                             </ul>
                                         </li>
                                     <?php endforeach; ?>
                                     <li>
-                                        <a href="<?php echo toLink('exam.listing') ?>">历史报名信息</a>
+                                        <a href="<?php echo Route::to('exam.listing') ?>">历史报名信息</a>
                                     </li>
                                 </ul>
                             </li>
@@ -173,21 +173,21 @@
                                 <a href="#"><i class="fa fa-gear fa-fw"></i> 系统管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="<?php echo toLink('student.profile') ?>">个人资料</a>
+                                        <a href="<?php echo Route::to('student.profile') ?>">个人资料</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('system.log') ?>">选课日志</a>
+                                        <a href="<?php echo Route::to('system.log') ?>">选课日志</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('system.message') ?>">系统消息</a>
+                                        <a href="<?php echo Route::to('system.message') ?>">系统消息</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo toLink('student.password') ?>">修改密码</a>
+                                        <a href="<?php echo Route::to('student.password') ?>">修改密码</a>
                                     </li>
                                 </ul>
                             </li>
                             <li>
-                                <a href="<?php echo toLink('student.logout') ?>"><i class="fa fa-sign-out fa-fw"></i> 登出</a>
+                                <a href="<?php echo Route::to('student.logout') ?>"><i class="fa fa-sign-out fa-fw"></i> 登出</a>
                             </li>
                         </ul>
                     </div>

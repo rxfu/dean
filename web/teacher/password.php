@@ -8,7 +8,7 @@
                     <div class="col-lg-6">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <form id="passwordForm" name="passwordForm" action="<?php echo toLink('teacher.password') ?>" role="form" method="post" class="form-horizontal">
+                                <form id="passwordForm" name="passwordForm" action="<?php echo Route::to('teacher.password') ?>" role="form" method="post" class="form-horizontal">
                                     <fieldset>
                                         <div class="form-group">
                                             <label for="oldPassword" class="col-md-3 control-label">旧密码</label>

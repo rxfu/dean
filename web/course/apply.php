@@ -8,7 +8,7 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <form method="post" action="<?php echo toLink('course.apply', $type, $cno) ?>" class="form-horizontal">
+                                <form method="post" action="<?php echo Route::to('course.apply', $type, $cno) ?>" class="form-horizontal">
                                     <div class="form-group">
                                         <label for="cno" class="col-md-2">课程序号</label>
                                         <div class="col-md-4">

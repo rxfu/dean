@@ -10,7 +10,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel">取消</button>
-                            <a role="button" class="btn btn-primary" id="confirm" href="<?php echo toLink('score.confirm', $info['kcxh']) ?>">确定</a>
+                            <a role="button" class="btn btn-primary" id="confirm" href="<?php echo Route::to('score.confirm', $info['kcxh']) ?>">确定</a>
                         </div>
                         </div><!-- /.modal-content -->
                     </div><!-- /.modal-dialog -->

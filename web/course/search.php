@@ -8,7 +8,7 @@
 
                 <section class="row">
                     <div class="col-md-6 col-md-offset-3">
-                        <form method="post" action="<?php echo toLink('course.search', $type) ?>" role="form">
+                        <form method="post" action="<?php echo Route::to('course.search', $type) ?>" role="form">
                             <div class="input-group">
                                 <div class="form-group">
                                     <label class="sr-only" for="keyword">课程检索</label>
@@ -63,7 +63,7 @@
                                                                     <tr data-row="<?php echo $course[0]['kcxh'] ?>">
                                                                         <?php $rowspan = count($course) ?>
                                                                         <td rowspan="<?php echo $rowspan ?>" class="text-center" id="<?php echo $course[0]['kcxh'] ?>">
-                                                                            <a class="btn btn-primary" href="<?php echo toLink('course.apply', $type, $course[0]['kcxh']) ?>" title="申请修读" role="button">申请修读</a>
+                                                                            <a class="btn btn-primary" href="<?php echo Route::to('course.apply', $type, $course[0]['kcxh']) ?>" title="申请修读" role="button">申请修读</a>
                                                                         </td>
                                                                         <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kcxh'] ?></td>
                                                                         <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kcmc'] ?></td>

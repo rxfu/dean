@@ -488,14 +488,10 @@ if (!function_exists('redirect')) {
 	 * @return void
 	 */
 	function redirect($url, $params = null) {
-		$url = strtr($url, '.', '/') . '/';
-
-		if (isEmpty($params)) {
-			header('Location: ' . getBaseUrl() . $url);
-		} elseif (is_array($params)) {
-			header('Location: ' . getBaseUrl() . $url . implode('/', $params));
-		} elseif (is_string($params)) {
-			header('Location: ' . getBaseUrl() . $url . $params);
+		if (empty($params)) {
+			header('Location:' . Route::to($url));
+		} else {
+			header('Location:' . Route::to($url, $params));
 		}
 
 		exit(0);
@@ -526,39 +522,6 @@ if (!function_exists('snakeToCamel')) {
 		$text = ucwords($text);
 
 		return str_replace(' ', '', $text);
-	}
-}
-
-if (!function_exists('toLink')) {
-
-	/**
-	 * 生成路由信息地址
-	 * @return string 路由信息地址，生成失败为NULL
-	 */
-	function toLink() {
-		if (0 == func_num_args()) {
-			return '/';
-		}
-
-		if (1 <= func_num_args()) {
-			$args  = func_get_args();
-			$route = array_shift($args);
-			$route = str_replace('.', '/', $route);
-
-			$param = '';
-			if (!empty($args)) {
-				foreach ($args as $index => $value) {
-					if (is_array($args[$index])) {
-						$args[$index] = implode('/', $args[$index]);
-					}
-				}
-				$param = '/' . implode('/', $args);
-			}
-
-			return getBaseUrl() . $route . $param;
-		}
-
-		return NULL;
 	}
 }
 

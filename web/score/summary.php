@@ -17,7 +17,7 @@
                                     </div>
                                 </div>
 
-                                <a href="<?php echo toLink('score.score', $year, $term, $course['kcxh']) ?>">
+                                <a href="<?php echo Route::to('score.score', $year, $term, $course['kcxh']) ?>">
                                     <div class="panel-footer">
                                         <span class="pull-left">查询成绩</span>
                                         <span class="pull-right">
