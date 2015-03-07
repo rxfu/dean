@@ -18,10 +18,14 @@ return array(
 
 	// 用户参数
 	'user'    => array(
+
+		// 角色
 		'role' => array(
 			'student' => 'student',
 			'teacher' => 'teacher',
 		),
+
+		// 加密salt
 		'salt' => '+:sD>PjbsJ+3!&+TE@!J<:wj|*J6_KimvoHJ?HQ][vE)O/2S8F&<iz.-b#t2tW:|',
 	),
 
@@ -39,6 +43,8 @@ return array(
 
 	// 检索状态代码
 	'course'  => array(
+
+		// 课程类型
 		'type'    => array(
 			'basic'    => array(
 				'code' => 'bt',
@@ -77,11 +83,15 @@ return array(
 				'name' => '重修课程',
 			),
 		),
+
+		// 可选状态
 		'select'  => array(
 			'forbidden'  => '0',
-			'selectable' => '1',
-			'selected'   => '2',
+			'selected'   => '1',
+			'selectable' => '2',
 		),
+
+		// 神情状态
 		'apply'   => array(
 			'unauditted' => '0',
 			'passed'     => '1',
@@ -89,6 +99,8 @@ return array(
 			'others'     => '0',
 			'retake'     => '1',
 		),
+
+		// 通识素质课
 		'general' => array(
 			'unlimited' => -1,
 		),

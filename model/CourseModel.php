@@ -123,16 +123,82 @@ class CourseModel extends StudentAdminModel {
 	}
 
 	/**
+	 * 判断是否有已经选择的课程
+	 * @param  string  $sno  学号
+	 * @param  string  $cnos 12位课程序号数组
+	 * @return mixed       有返回已选课程数组，没有返回FALSE
+	 */
+	public function hasSelected($sno, $year, $term, $cnos) {
+		$sql  = 'SELECT kcxh FROM t_xk_xkxx WHERE nd = ? AND xq = ? AND xh = ? AND kcxh = ANY(' . array_to_pg($cnos) . ')';
+		$data = $this->db->getAll($sql, array($year, $term, $sno));
+
+		return hasData($data) ? array_column($data, 'kcxh') : false;
+	}
+
+	/**
+	 * 判断课程是否有考试成绩
+	 * @param  string  $sno  学号
+	 * @param  array  $cnos 8位课程号数组
+	 * @return mixed       返回具有成绩的课程号，没有返回FALSE
+	 */
+	public function hasScore($sno, $cnos) {
+		$sql = 'SELECT kch FROM t_cj_zxscj WHERE xh = ? kch = ANY('.array_to_pg($cnos).')';
+		$data=$this->db->getAll($sql, array($sno));
+
+		return hasData($data)?array_column($data,'kch'):false;
+	}
+
+	/**
 	 * 判断是否有未修读的前修课程
 	 * @param  string  $sno  学号
-	 * @param  array  $cnos 课程号数组
-	 * @return boolean       有未修读的前修课返回array，没有返回FALSE
+	 * @param  array  $cnos 8位课程号数组
+	 * @return mixed       有返回未修读的前修课数组，没有返回FALSE
 	 */
 	public function hasPrevious($sno, $cnos) {
 		$sql  = 'SELECT b.kch2 FROM t_cj_zxscj a JOIN t_jx_kc_qxgx b ON a.xf <= 0 AND a.xh = ? AND a.kch = b.kch AND b.gx = ? AND b.kch2 = ANY(' . array_to_pg($cnos) . ')';
 		$data = $this->db->getAll($sql, array($sno, '>'));
 
 		return hasData($data) ? array_column($data, 'kch2') : false;
+	}
+
+	/**
+	 * 列出可选课程
+	 * @param  string $year       年度
+	 * @param  string $term       学期
+	 * @param  string $season     招生季节 
+	 * @param  string $grade      年级
+	 * @param  string $speciality 专业
+	 * @param  string $platform   平台
+	 * @param  string $property   性质
+	 * @return array             可选课程数组，没有返回空数组
+	 */
+	public function list($year,$term,$season,$grade = null,$speciality = null, $platform = null, $property = null) {
+		$sql = 'SELECT * FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zsjj = ?';
+		$params = array($year,$term,$season);
+		if (is_null($grade)) {
+			$sql.=' AND nj = ?';
+			$params[]=$grade;
+		}
+		if (is_null($speciality)) {
+			$sql.=' AND zy = ?';
+			$params[]=$speciality;
+		}
+		if (is_null($platform)) {
+			$sql.=' AND pt = ?';
+			$params[]=$platform;
+		}
+		if (is_null($property)) {
+			$sql.=' AND xz = ?';
+			$params[]=$property;
+		}
+		$data = $this->db->getAll($sql, $params);
+
+		$courses = array();
+		if (hasData($data)) {
+
+		}
+
+		return $courses;
 	}
 
 }
