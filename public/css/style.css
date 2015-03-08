@@ -27,3 +27,9 @@ body {
 .tab-table {
 	padding-top: 2%;
 }
+#loading {
+	text-align: center;
+}
+article {
+	display: none;
+}

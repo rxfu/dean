@@ -142,10 +142,10 @@ class CourseModel extends StudentAdminModel {
 	 * @return mixed       返回具有成绩的课程号，没有返回FALSE
 	 */
 	public function hasScore($sno, $cnos) {
-		$sql = 'SELECT kch FROM t_cj_zxscj WHERE xh = ? kch = ANY('.array_to_pg($cnos).')';
-		$data=$this->db->getAll($sql, array($sno));
+		$sql  = 'SELECT kch FROM t_cj_zxscj WHERE xh = ? kch = ANY(' . array_to_pg($cnos) . ')';
+		$data = $this->db->getAll($sql, array($sno));
 
-		return hasData($data)?array_column($data,'kch'):false;
+		return hasData($data) ? array_column($data, 'kch') : false;
 	}
 
 	/**
@@ -165,37 +165,38 @@ class CourseModel extends StudentAdminModel {
 	 * 列出可选课程
 	 * @param  string $year       年度
 	 * @param  string $term       学期
-	 * @param  string $season     招生季节 
+	 * @param  string $season     招生季节
 	 * @param  string $grade      年级
 	 * @param  string $speciality 专业
 	 * @param  string $platform   平台
 	 * @param  string $property   性质
 	 * @return array             可选课程数组，没有返回空数组
 	 */
-	public function list($year,$term,$season,$grade = null,$speciality = null, $platform = null, $property = null) {
-		$sql = 'SELECT * FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zsjj = ?';
-		$params = array($year,$term,$season);
+	public function listCourse($year, $term, $season, $grade = null, $speciality = null, $platform = null, $property = null) {
+		$sql    = 'SELECT * FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zsjj = ?';
+		$params = array($year, $term, $season);
 		if (is_null($grade)) {
-			$sql.=' AND nj = ?';
-			$params[]=$grade;
+			$sql .= ' AND nj = ?';
+			$params[] = $grade;
 		}
 		if (is_null($speciality)) {
-			$sql.=' AND zy = ?';
-			$params[]=$speciality;
+			$sql .= ' AND zy = ?';
+			$params[] = $speciality;
 		}
 		if (is_null($platform)) {
-			$sql.=' AND pt = ?';
-			$params[]=$platform;
+			$sql .= ' AND pt = ?';
+			$params[] = $platform;
 		}
 		if (is_null($property)) {
-			$sql.=' AND xz = ?';
-			$params[]=$property;
+			$sql .= ' AND xz = ?';
+			$params[] = $property;
 		}
 		$data = $this->db->getAll($sql, $params);
 
 		$courses = array();
 		if (hasData($data)) {
-
+			$cnos = array_column($data);
+			$deleted = $this->hasScore($this->session->get('username'), $cnos);
 		}
 
 		return $courses;

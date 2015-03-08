@@ -27,6 +27,7 @@
     </head>
 
     <body>
+
         <div id="wrapper">
             <!-- 页面头部Logo -->
             <header role="banner"></header>
@@ -37,6 +38,7 @@
                 <?php elseif (Config::get('user.role.teacher') == $session['role']): ?>
                     <?php include partial('teacher.navigation') ?>
                 <?php endif; ?>
+
                 <!-- 页面主体 -->
                 <main id="page-wrapper">
             <?php else: ?>
@@ -52,3 +54,11 @@
                     </div>
                 </section>
             <?php endif; ?>
+
+            <!-- 数据加载 -->
+            <div id="loading">
+                <img src="<?php echo img('images/loading.gif') ?>" alt="加载中">
+                <p>加载中……请稍后</p>
+            </div>
+
+            <article>

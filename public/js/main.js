@@ -9,6 +9,9 @@
 	};
 })(jQuery);
 $(document).ready(function() {
+	$('#loading').hide();
+	$('article').show();
+
 	$('a[href="' + $(location).attr('href') + '"]').parents('ul.nav').not('ul#side-menu').addClass('collapse in');
 	$('#loginForm')
 		.formValidation({

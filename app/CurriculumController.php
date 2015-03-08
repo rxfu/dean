@@ -7,6 +7,8 @@ class CurriculumController extends TeacherAdminController {
 
 	/**
 	 * 按年度、学期列出当前教师课程表
+	 * @param  string $year 年度
+	 * @param  string $term 学期
 	 * @return void
 	 */
 	protected function term($year, $term) {
@@ -25,9 +27,9 @@ class CurriculumController extends TeacherAdminController {
 	 * 列出当前教师课程表
 	 * @return array 教师课程表
 	 */
-	protected function timetable() {
+	protected function timetable($year, $term) {
 		$sql  = 'SELECT * FROM v_pk_jskcb WHERE nd = ? AND xq = ? AND jsgh = ? ORDER BY ksj, zc';
-		$data = $this->db->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('username')));
+		$data = $this->db->getAll($sql, array($year, $term, $this->session->get('username')));
 
 		$courses = array_fill(1, 12, array_fill(1, 7, '&nbsp;'));
 		foreach ($data as $course) {
