@@ -24,7 +24,7 @@ class TeacherAdminController extends Controller {
 	protected function before() {
 		parent::before();
 
-		if (!$this->session->isValid() || Config::get('user.role.teacher') != $this->session->get('role')) {
+		if (!$this->session->isValid(Config::get('session.ttl')) || Config::get('user.role.teacher') != $this->session->get('role')) {
 			return redirect('teacher.login');
 		}
 	}

@@ -56,9 +56,9 @@
             <?php endif; ?>
 
             <!-- 数据加载 -->
-            <div id="loading">
+            <!--div id="loading">
                 <img src="<?php echo img('images/loading.gif') ?>" alt="加载中">
                 <p>加载中……请稍后</p>
-            </div>
+            </div-->
 
             <article>

@@ -11,7 +11,12 @@ class CourseController extends StudentAdminController {
 	 */
 	private $_student;
 
+	/**
+	 * 继承自基类构造函数
+	 */
 	public function __construct() {
+		parent::__construct();
+
 		$this->_student = new StudentModel();
 	}
 
@@ -22,13 +27,11 @@ class CourseController extends StudentAdminController {
 	 * @return mixed       可选课程数据
 	 */
 	protected function course($type) {
-		$type = strtoupper($type);
-
 		if (!$this->model->isOpen()) {
 			$this->session->put('error', '现在未开放选课，不允许选课');
 			return redirect('error.error');
 		}
-		if ($this->_student->isUnpaid()) {
+		if ($this->_student->isUnpaid($this->session->get('username'))) {
 			$this->session->put('error', '请交清费用再进行选课');
 			return redirect('error.error');
 		}
@@ -42,89 +45,85 @@ class CourseController extends StudentAdminController {
 		}
 
 		// 是否通识素质课
-		if ($this->isGeneralCourse($type)) {
+		if ($this->model->isGeneralCourse($type)) {
 			// 是否允许选择通识素质课
 			if (!$this->model->isGeneralOpen()) {
 				$this->session->put('error', '现在未开放通识素质课选课，不允许选课');
 				return redirect('error.error');
 			}
-			
+
 			// 是否限制选择通识素质课
-			$generalCount = 0;
-			$generalRatio = 0;
-			$allow = $this->model->isAllowedGeneralCourse($now, $this->session->get('grade'), $this->session->get('system'), $generalCount, $generalRatio);
+			$generalCount = Config::get('course.general.unlimited');
+			$generalRatio = Config::get('course.general.unlimited');
+			$allow        = $this->model->isAllowedGeneralCourse($now, $this->session->get('grade'), $this->session->get('system'), $generalCount, $generalRatio);
 			if (!$allow) {
-					$this->session->put('error', '现在未到通识素质课选课时间，不允许选课');
-					return redirect('error.error');
-				}
+				$this->session->put('error', '现在未到通识素质课选课时间，不允许选课');
+				return redirect('error.error');
+			}
 		}
 
+		list($property, $platform) = array_pad(str_split($type), 2, '');
 		if ($this->model->isSpecializedCourse($type)) {
-			$grade      = $this->session->get('grade');
-			$speciality = $this->session->get('spno');
-		} else {
-			$sql  = 'SELECT DISTINCT nj FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zsjj = ?';
-			$data = $this->db->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('season')));
-			foreach ($data as $g) {
-				if (!isEmpty($g['nj'])) {
-					$grade[] = $g['nj'];
-				}
+			if (isEmpty($platform) && 'b' == $property) {
+				$platforms = Dictionary::getAll('pt');
+				$platforms = array_column($platforms, 'dm');
+				$platform  = array_values(array_diff($platforms, array('', 'T')));
 			}
 
-			$sql  = 'SELECT DISTINCT zy FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zsjj = ?';
-			$data = $this->db->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('season')));
-			foreach ($data as $sp) {
-				if (!isEmpty($sp['zy'])) {
-					$speciality[] = $sp['zy'];
-				}
+			$courses = $this->model->listCourse(
+				$this->session->get('year'),
+				$this->session->get('term'),
+				$this->session->get('season'),
+				$this->session->get('username'),
+				$platform,
+				$property,
+				$this->session->get('grade'),
+				$this->session->get('spno'));
+		} elseif ($this->model->isGeneralCourse($type)) {
+			$courses = $this->model->listCourse(
+				$this->session->get('year'),
+				$this->session->get('term'),
+				$this->session->get('season'),
+				$this->session->get('username'),
+				$platform,
+				$property);
+
+			if ($this->model->isMoreThanCourseCount(
+				$this->session->get('year'),
+				$this->session->get('term'),
+				$this->session->get('username'),
+				$generalCount)) {
+				array_walk($courses, function (&$course) {
+					$course['zt'] = Config::get('course.select.selectable') == $course['zt'] ? Config::get('course.select.forbidden') : $course['zt'];
+				});
+			} elseif (Config::get('course.general.unlimited') < $generalRatio) {
+				array_walk($courses, function (&$course) use ($generalRatio) {
+					if (ceil($course['jhrs'] * $generalRatio) <= $course['rs']) {
+						$course['zt'] = Config::get('course.select.selectable') == $course['zt'] ? Config::get('course.select.forbidden') : $course['zt'];
+					}
+				});
 			}
 		}
 
-		if (isEmpty($platform)) {
-			$data = $this->db->getAll('SELECT dm FROM t_zd_pt');
-			foreach ($data as $pt) {
-				if (isEmpty($pt['dm']) || in_array($property . $pt['dm'], array_column($this->codes, 'code'))) {
-					continue;
-				}
-				$platform[] = $pt['dm'];
-			}
-		}
-
-		$param = "'" . implode("','", array($this->session->get('season'), $this->session->get('username'), $this->session->get('year'), $this->session->get('term'), array_to_pg($platform), array_to_pg($property), array_to_pg($grade), array_to_pg($speciality))) . "'";
-		$data  = $this->db->query('SELECT * FROM p_kxkcb_sel(' . $param . ', null, null)');
-
-		$courses = array();
-		foreach ($data as $course) {
-			if (in_array($code, array($this->codes[Config::get('course.type.humanity')]['code'], $this->codes[Config::get('course.type.natural')]['code'], $this->codes[Config::get('course.type.art')]['code'], $this->codes[Config::get('course.type.special')]['code']))) {
-				// 限制通识素质课选课人数
-				if (Config::get('course.general.unlimited') < $limitRatio) {
-					$course['jhrs'] = ceil($course['jhrs'] * $limitRatio);
-
-					if ($course['rs'] >= $course['jhrs']) {
-						$course['zt'] = Config::get('course.select.forbidden');
-					}
-				}
-
-				// 限制通识素质课门数
-				if (Config::get('course.general.unlimited') < $limitCourse) {
-					$sql         = 'SELECT ms FROM v_xk_tssztj WHERE nd = ? AND xq = ? AND xh = ?';
-					$courseCount = $this->db->getColumn($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('username')));
-
-					if ($limitCourse <= $courseCount) {
-						$course['zt'] = Config::get('course.select.forbidden');
-					}
-				}
-			}
-
+		$coursesByCampus = array();
+		foreach ($courses as $course) {
 			if (isEmpty($course['xqh'])) {
-				$courses['unknown'][$course['kcxh']][] = $course;
+				$coursesByCampus['unknown'][$course['kcxh']][] = $course;
 			} else {
-				$courses[$course['xqh']][$course['kcxh']][] = $course;
+				$coursesByCampus[$course['xqh']][$course['kcxh']][] = $course;
 			}
 		}
-		krsort($courses);
+		krsort($coursesByCampus);
 
-		return $this->view->display('course.course', array('courses' => $courses, 'title' => $this->codes[$type]['name'], 'type' => $type, 'name' => $this->session->get('name'), 'year' => $this->session->get('year'), 'term' => $this->session->get('term'), 'campus' => $this->session->get('campus')));
+		$title = '未知';
+		foreach (Config::get('course.type') as $item) {
+			if ($item['code'] == $type) {
+				$title = $item['name'];
+				break;
+			}
+		}
+
+		return $this->view->display('course.course', array('courses' => $coursesByCampus, 'title' => $title, 'type' => $type));
 	}
 
 	/**
@@ -137,7 +136,7 @@ class CourseController extends StudentAdminController {
 			$this->session->put('error', '现在未到选课时间，不允许选课');
 			return redirect('error.error');
 		}
-		if ($this->isUnpaid()) {
+		if ($this->isUnpaid($this->session->get('username'))) {
 			$this->session->put('error', '请交清费用再进行选课');
 			return redirect('error.error');
 		}
@@ -249,7 +248,7 @@ class CourseController extends StudentAdminController {
 			$this->session->put('error', '现在未到选课时间，不允许选课');
 			return redirect('error.error');
 		}
-		if ($this->isUnpaid()) {
+		if ($this->isUnpaid($this->session->get('username'))) {
 			$this->session->put('error', '请交清费用再进行选课');
 			return redirect('error.error');
 		}
@@ -423,7 +422,7 @@ class CourseController extends StudentAdminController {
 			$this->session->put('error', '现在未到选课时间，不允许选课');
 			return redirect('error.error');
 		}
-		if ($this->isUnpaid()) {
+		if ($this->isUnpaid($this->session->get('username'))) {
 			$this->session->put('error', '请交清费用再进行选课');
 			return redirect('error.error');
 		}
@@ -520,7 +519,7 @@ class CourseController extends StudentAdminController {
 			$this->session->put('error', '现在未到选课时间，不允许选课');
 			return redirect('error.error');
 		}
-		if ($this->isUnpaid()) {
+		if ($this->isUnpaid($this->session->get('username'))) {
 			$this->session->put('error', '请交清费用再进行选课');
 			return redirect('error.error');
 		}

@@ -122,7 +122,7 @@ class Session extends SessionHandler {
 	 * @param  integer $ttl 会话过期时间
 	 * @return boolean      过期为TRUE，否则为FALSE
 	 */
-	public function isExpired($ttl = '30') {
+	public function isExpired($ttl = 30) {
 		$activity = isset($_SESSION['_last_activity']) ? $_SESSION['_last_activity'] : false;
 
 		if (false !== $activity && $ttl * 60 < time() - $activity) {
@@ -155,7 +155,7 @@ class Session extends SessionHandler {
 	 * @param  integer $ttl 会话过期时间
 	 * @return boolean      有效为TRUE，否则为FALSE
 	 */
-	public function isValid($ttl = '30') {
+	public function isValid($ttl = 30) {
 		return !$this->isExpired($ttl) && $this->isFingerprint();
 	}
 

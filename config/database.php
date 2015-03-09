@@ -66,7 +66,7 @@ return array(
 		'prod'    => array(
 			'student' => array(
 				'engine'   => 'pgsql',
-				'host'     => '202.193.171.253',
+				'host'     => '202.193.162.26',
 				'port'     => '5432',
 				'dbname'   => 'dean',
 				'username' => 's_web',
@@ -75,7 +75,7 @@ return array(
 			),
 			'teacher' => array(
 				'engine'   => 'pgsql',
-				'host'     => '202.193.171.253',
+				'host'     => '202.193.162.26',
 				'port'     => '5432',
 				'dbname'   => 'dean',
 				'username' => 't_web',

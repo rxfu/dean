@@ -89,7 +89,7 @@ class CourseModel extends StudentAdminModel {
 			$sql  = 'SELECT kssj, jssj FROM t_xk_sjxz WHERE nj = ? AND xz = ?';
 			$data = $this->db->getRow($sql, array($this->session->get('grade'), $this->session->get('system')));
 
-			if (hasData($data)) {
+			if (has($data)) {
 				$allow = ($time >= $data['kssj']) && ($time <= $data['jssj']);
 			}
 		}
@@ -112,7 +112,7 @@ class CourseModel extends StudentAdminModel {
 			$sql  = 'SELECT * FROM t_xk_tsxz WHERE nj = ? AND xz = ?';
 			$data = $this->db->getRow($sql, array($this->session->get('grade'), $this->session->get('system')));
 
-			if (hasData($data)) {
+			if (has($data)) {
 				$allow = ($time >= $data['kssj']) && ($time <= $data['jssj']);
 				$count = $data['ms'];
 				$ratio = $data['bl'] / 100;
@@ -129,10 +129,10 @@ class CourseModel extends StudentAdminModel {
 	 * @return mixed       有返回已选课程数组，没有返回FALSE
 	 */
 	public function hasSelected($sno, $year, $term, $cnos) {
-		$sql  = 'SELECT kcxh FROM t_xk_xkxx WHERE nd = ? AND xq = ? AND xh = ? AND kcxh = ANY(' . array_to_pg($cnos) . ')';
-		$data = $this->db->getAll($sql, array($year, $term, $sno));
+		$sql  = 'SELECT kcxh FROM t_xk_xkxx WHERE nd = ? AND xq = ? AND xh = ? AND kcxh = ANY(?)';
+		$data = $this->db->getAll($sql, array($year, $term, $sno, array_to_pg($cnos)));
 
-		return hasData($data) ? array_column($data, 'kcxh') : false;
+		return has($data) ? array_column($data, 'kcxh') : false;
 	}
 
 	/**
@@ -142,10 +142,10 @@ class CourseModel extends StudentAdminModel {
 	 * @return mixed       返回具有成绩的课程号，没有返回FALSE
 	 */
 	public function hasScore($sno, $cnos) {
-		$sql  = 'SELECT kch FROM t_cj_zxscj WHERE xh = ? kch = ANY(' . array_to_pg($cnos) . ')';
-		$data = $this->db->getAll($sql, array($sno));
+		$sql  = 'SELECT kch FROM t_cj_zxscj WHERE xh = ? AND kch = ANY(?)';
+		$data = $this->db->getAll($sql, array($sno, array_to_pg($cnos)));
 
-		return hasData($data) ? array_column($data, 'kch') : false;
+		return has($data) ? array_column($data, 'kch') : false;
 	}
 
 	/**
@@ -155,10 +155,10 @@ class CourseModel extends StudentAdminModel {
 	 * @return mixed       有返回未修读的前修课数组，没有返回FALSE
 	 */
 	public function hasPrevious($sno, $cnos) {
-		$sql  = 'SELECT b.kch2 FROM t_cj_zxscj a JOIN t_jx_kc_qxgx b ON a.xf <= 0 AND a.xh = ? AND a.kch = b.kch AND b.gx = ? AND b.kch2 = ANY(' . array_to_pg($cnos) . ')';
-		$data = $this->db->getAll($sql, array($sno, '>'));
+		$sql  = 'SELECT b.kch2 FROM t_cj_zxscj a JOIN t_jx_kc_qxgx b ON a.xf <= 0 AND a.xh = ? AND a.kch = b.kch AND b.gx = ? AND b.kch2 = ANY(?)';
+		$data = $this->db->getAll($sql, array($sno, '>', array_to_pg($cnos)));
 
-		return hasData($data) ? array_column($data, 'kch2') : false;
+		return has($data) ? array_column($data, 'kch2') : false;
 	}
 
 	/**
@@ -166,40 +166,96 @@ class CourseModel extends StudentAdminModel {
 	 * @param  string $year       年度
 	 * @param  string $term       学期
 	 * @param  string $season     招生季节
-	 * @param  string $grade      年级
-	 * @param  string $speciality 专业
+	 * @param  string $sno     	  学号
 	 * @param  string $platform   平台
 	 * @param  string $property   性质
+	 * @param  string $grade      年级
+	 * @param  string $speciality 专业
 	 * @return array             可选课程数组，没有返回空数组
 	 */
-	public function listCourse($year, $term, $season, $grade = null, $speciality = null, $platform = null, $property = null) {
+	public function listCourse($year, $term, $season, $sno, $platform = null, $property = null, $grade = null, $speciality = null) {
 		$sql    = 'SELECT * FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zsjj = ?';
 		$params = array($year, $term, $season);
-		if (is_null($grade)) {
+		if (!isEmpty($grade)) {
 			$sql .= ' AND nj = ?';
 			$params[] = $grade;
 		}
-		if (is_null($speciality)) {
+		if (!isEmpty($speciality)) {
 			$sql .= ' AND zy = ?';
 			$params[] = $speciality;
 		}
-		if (is_null($platform)) {
-			$sql .= ' AND pt = ?';
-			$params[] = $platform;
+		if (!isEmpty($platform)) {
+			if (is_array($platform)) {
+				$sql .= ' AND pt = ANY(?)';
+				array_walk($platform, function (&$pf) {
+					$pf = strtoupper($pf);
+				});
+				$params[] = array_to_pg($platform);
+			} else {
+				$sql .= ' AND pt = ?';
+				$params[] = strtoupper($platform);
+			}
 		}
-		if (is_null($property)) {
+		if (!isEmpty($property)) {
 			$sql .= ' AND xz = ?';
-			$params[] = $property;
+			$params[] = strtoupper($property);
 		}
-		$data = $this->db->getAll($sql, $params);
 
-		$courses = array();
-		if (hasData($data)) {
-			$cnos = array_column($data);
-			$deleted = $this->hasScore($this->session->get('username'), $cnos);
+		$courses = $this->db->getAll($sql, $params);
+		if (has($courses)) {
+			// 检测已修读课程，已修读则从选课列表中删除
+			$cnos   = array_column($courses, 'kch');
+			$delete = $this->hasScore($sno, $cnos);
+			if (has($delete)) {
+				foreach ($courses as &$course) {
+					if (in_array($course['kch'], $delete)) {
+						unset($course);
+					}
+				}
+				$courses = array_values($courses);
+			}
+			array_walk($courses, function (&$course) {
+				$course['zt'] = Config::get('course.select.selectable');
+			});
+
+			$forbidden = $this->hasPrevious($sno, array_column($courses, 'kch'));
+			$selected  = $this->hasSelected($sno, $year, $term, array_column($courses, 'kcxh'));
+			if (has($forbidden) || has($selected)) {
+				$modifyStatus = function (&$course) use ($forbidden, $selected) {
+					if (has($forbidden) && in_array($course['kch'], $forbidden)) {
+						$course['zt'] = Config::get('course.select.forbidden');
+					}
+					if ($course['jhrs'] <= $course['rs']) {
+						$course['zt'] = Config::get('course.select.forbidden');
+					}
+					if (has($selected) && in_array($course['kcxh'], $selected)) {
+						$course['zt'] = Config::get('course.select.selected');
+					}
+				};
+				array_walk($courses, $modifyStatus);
+			}
 		}
 
 		return $courses;
+	}
+
+	/**
+	 * 判断通识素质课选课门数是否超过门数限制
+	 * @param  string  $year 年度
+	 * @param  string  $term 学期
+	 * @param  string  $sno  学号
+	 * @param  string  $limit  限制门数
+	 * @return boolean       超过限制为TRUE，否则为FALSE
+	 */
+	public function isMoreThanCourseCount($year, $term, $sno, $limit) {
+		if (0 > $limit) {
+			return false;
+		}
+
+		$sql  = 'SELECT ms FROM v_xk_tssztj WHERE nd = ? AND xq = ? AND xh = ?';
+		$data = $this->db->getColumn($sql, array($year, $term, $sno));
+
+		return has($data) ? ($limit <= $data) : false;
 	}
 
 }

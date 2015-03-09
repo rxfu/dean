@@ -7,12 +7,12 @@ class StudentModel extends StudentAdminModel {
 
 	/**
 	 * 判断当前学生是否欠费
-	 *
+	 * @param  string $sno 学号
 	 * @return boolean     欠费为TRUE，未欠费为FALSE
 	 */
-	protected function isUnpaid() {
+	public function isUnpaid($sno) {
 		$sql   = 'SELECT COUNT(*) FROM t_xk_xsqf WHERE xh = ?';
-		$count = $this->db->getColumn($sql, $this->session->get('username'));
+		$count = $this->db->getColumn($sql, $sno);
 
 		return 0 < $count;
 	}

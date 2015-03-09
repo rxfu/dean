@@ -1,7 +1,7 @@
                 <section class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header"><?php echo $name ?>同学<?php echo $year ?>年度<?php echo Dictionary::get('xq', $term) ?>学期<?php echo $title ?>课程选课表</h1>
-                        <div id="campus" class="hidden sr-only"><?php echo $campus ?></div>
+                        <h1 class="page-header"><?php echo $session['name'] ?>同学<?php echo $session['year'] ?>年度<?php echo Dictionary::get('xq', $session['term']) ?>学期<?php echo $title ?>课程选课表</h1>
+                        <div id="campus" class="hidden sr-only"><?php echo $session['campus'] ?></div>
                     </div>
                 </section>
 
@@ -21,7 +21,7 @@
                                         </ul>
                                         <div class="tab-content">
                                             <?php foreach (array_keys($courses) as $cid): ?>
-                                                <div id="campus-<?php echo $cid ?>" class="tab-pane fade<?php echo $cid == $campus ? ' in active' : '' ?>" role="tabpanel">
+                                                <div id="campus-<?php echo $cid ?>" class="tab-pane fade<?php echo $cid == $session['campus'] ? ' in active' : '' ?>" role="tabpanel">
                                                     <div class="table-responsive tab-table">
                                                         <table class="table table-bordered table-striped table-hover course-table">
                                                             <thead>
@@ -51,7 +51,7 @@
                                                                             <form method="post" action="<?php echo Route::to('course.select') ?>" role="form">
                                                                                 <div class="checkbox">
                                                                                     <label>
-                                                                                        <input type="checkbox" name="checkbox" value="<?php echo $course[0]['kcxh'] ?>" title="选课" data-toggle="modal" data-target="#courseConfirm" data-whatever="<?php echo $course[0]['kcmc'] . '(' . $course[0]['kcxh'] . ')' ?>"<?php echo Config::get('course.select.forbidden') === $course[0]['zt'] ? ' disabled' : (Config::get('couse.select.selected') === $course[0]['zt'] ? ' checked' : '') ?>>
+                                                                                        <input type="checkbox" name="checkbox" value="<?php echo $course[0]['kcxh'] ?>" title="选课" data-toggle="modal" data-target="#courseConfirm" data-whatever="<?php echo $course[0]['kcmc'] . '(' . $course[0]['kcxh'] . ')' ?>"<?php echo Config::get('course.select.forbidden') === $course[0]['zt'] ? ' disabled' : (Config::get('course.select.selected') === $course[0]['zt'] ? ' checked' : '') ?>>
                                                                                         <input type="hidden" name="checked" value="<?php echo Config::get('course.select.selected') === $course[0]['zt'] ? 'true' : 'false' ?>">
                                                                                         <input type="hidden" name="course" value="<?php echo $course[0]['kcxh'] ?>">
                                                                                         <input type="hidden" name="type" value="<?php echo $type ?>">
