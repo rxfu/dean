@@ -218,22 +218,20 @@ class CourseModel extends StudentAdminModel {
 				$course['zt'] = Config::get('course.select.selectable');
 			});
 
-			$forbidden = $this->hasPrevious($sno, array_column($courses, 'kch'));
-			$selected  = $this->hasSelected($sno, $year, $term, array_column($courses, 'kcxh'));
-			if (has($forbidden) || has($selected)) {
-				$modifyStatus = function (&$course) use ($forbidden, $selected) {
-					if (has($forbidden) && in_array($course['kch'], $forbidden)) {
-						$course['zt'] = Config::get('course.select.forbidden');
-					}
-					if ($course['jhrs'] <= $course['rs']) {
-						$course['zt'] = Config::get('course.select.forbidden');
-					}
-					if (has($selected) && in_array($course['kcxh'], $selected)) {
-						$course['zt'] = Config::get('course.select.selected');
-					}
-				};
-				array_walk($courses, $modifyStatus);
-			}
+			$forbidden    = $this->hasPrevious($sno, array_column($courses, 'kch'));
+			$selected     = $this->hasSelected($sno, $year, $term, array_column($courses, 'kcxh'));
+			$modifyStatus = function (&$course) use ($forbidden, $selected) {
+				if (has($forbidden) && in_array($course['kch'], $forbidden)) {
+					$course['zt'] = Config::get('course.select.forbidden');
+				}
+				if ($course['jhrs'] <= $course['rs']) {
+					$course['zt'] = Config::get('course.select.forbidden');
+				}
+				if (has($selected) && in_array($course['kcxh'], $selected)) {
+					$course['zt'] = Config::get('course.select.selected');
+				}
+			};
+			array_walk($courses, $modifyStatus);
 		}
 
 		return $courses;
