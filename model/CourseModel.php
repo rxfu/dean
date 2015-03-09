@@ -12,10 +12,10 @@ class CourseModel extends StudentAdminModel {
 	 */
 	public function isGeneralCourse($type) {
 		$codes = array_column(array(
-			Config::get('course.type.humanity'),
-			Config::get('course.type.natural'),
-			Config::get('course.type.art'),
-			Config::get('course.type.special'),
+			Config::get('course.type.hs'),
+			Config::get('course.type.ns'),
+			Config::get('course.type.as'),
+			Config::get('course.type.os'),
 		), 'code');
 
 		return in_array($type, $codes);
@@ -28,9 +28,9 @@ class CourseModel extends StudentAdminModel {
 	 */
 	public function isSpecializedCourse($type) {
 		$codes = array_column(array(
-			Config::get('course.type.basic'),
-			Config::get('course.type.required'),
-			Config::get('course.type.elective'),
+			Config::get('course.type.bsc'),
+			Config::get('course.type.req'),
+			Config::get('course.type.lct'),
 		), 'code');
 
 		return in_array($type, $codes);
@@ -245,7 +245,7 @@ class CourseModel extends StudentAdminModel {
 	 * @param  string  $limit  限制门数
 	 * @return boolean       超过限制为TRUE，否则为FALSE
 	 */
-	public function isMoreThanCourseCount($year, $term, $sno, $limit) {
+	public function isExceedCourseLimit($year, $term, $sno, $limit) {
 		if (0 > $limit) {
 			return false;
 		}

@@ -27,6 +27,9 @@ class CourseController extends StudentAdminController {
 	 * @return mixed       可选课程数据
 	 */
 	protected function course($type) {
+		$title = Config::get('course.type.' . $type . '.name');
+		$type  = Config::get('course.type.' . $type . '.code');
+
 		if (!$this->model->isOpen()) {
 			$this->session->put('error', '现在未开放选课，不允许选课');
 			return redirect('error.error');
@@ -88,7 +91,7 @@ class CourseController extends StudentAdminController {
 				$platform,
 				$property);
 
-			if ($this->model->isMoreThanCourseCount(
+			if ($this->model->isExceedCourseLimit(
 				$this->session->get('year'),
 				$this->session->get('term'),
 				$this->session->get('username'),
@@ -114,14 +117,6 @@ class CourseController extends StudentAdminController {
 			}
 		}
 		krsort($coursesByCampus);
-
-		$title = '未知';
-		foreach (Config::get('course.type') as $item) {
-			if ($item['code'] == $type) {
-				$title = $item['name'];
-				break;
-			}
-		}
 
 		return $this->view->display('course.course', array('courses' => $coursesByCampus, 'title' => $title, 'type' => $type));
 	}
