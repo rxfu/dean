@@ -28,29 +28,29 @@ class ExamController extends StudentAdminController {
 		$exam = $this->model->getExamInfo($type);
 
 		if ($this->model->isRegistered($this->session->get('username'), $type, $exam['sj'])) {
-			$this->session->put('error', $exam['ksmc'] . '考试已经报名，请不要重复报名');
+			Message::add('danger', $exam['ksmc'] . '考试已经报名，请不要重复报名');
 			return redirect('exam.listing');
 		}
 
 		if (DISABLE == $this->model->isAllowedRegister($type, $this->session->get('spno'), $this->session->get('college'))) {
-			$this->session->put('error', $exam['ksmc'] . '考试不允许' . $this->session->get('speciality') . '专业学生报名');
+			Message::add('danger', $exam['ksmc'] . '考试不允许' . $this->session->get('speciality') . '专业学生报名');
 			return redirect('exam.listing');
 		}
 
 		if (Config::get('exam.type.cet3') == $exam['kslx']) {
 			if ($this->model->isRegistered($this->session->get('username'), Config::get('exam.type.cet4'), $exam['sj'])) {
-				$this->session->put('error', '已经报名本次CET4考试，CET4和英语应用能力B级不能同时报名');
+				Message::add('danger', '已经报名本次CET4考试，CET4和英语应用能力B级不能同时报名');
 				return redirect('exam.listing');
 			}
 		} elseif (Config::get('exam.type.cet4') == $exam['kslx']) {
 			if ($this->model->isRegistered($this->session->get('username'), Config::get('exam.type.cet3'), $exam['sj'])) {
-				$this->session->put('error', '已经报名本次英语应用能力B级考试，英语应用能力B级CET4不能同时报名');
+				Message::add('danger', '已经报名本次英语应用能力B级考试，英语应用能力B级CET4不能同时报名');
 				return redirect('exam.listing');
 			}
 
 			if (!$this->model->isAllowedCET4AndCET6()) {
 				if ($this->model->isRegistered($this->session->get('username'), Config::get('exam.type.cet6'), $exam['sj'])) {
-					$this->session->put('error', '已经报名本次CET6考试，CET6和CET4不能同时报名');
+					Message::add('danger', '已经报名本次CET6考试，CET6和CET4不能同时报名');
 					return redirect('exam.listing');
 				}
 			}
@@ -58,20 +58,20 @@ class ExamController extends StudentAdminController {
 			if (!$this->model->isAllowedFreshRegisterCET4()) {
 				$student = new StudentModel();
 				if ($student->isFresh($this->session->get('username') && !$student->isUndergraduate($this->session->get('username')))) {
-					$this->session->put('error', '不允许新生报考CET4');
+					Message::add('danger', '不允许新生报考CET4');
 					return redirect('exam.listing');
 				}
 			}
 		} elseif (Config::get('exam.type.cet6') == $exam['kslx']) {
 			if (!$this->model->isAllowedCET4AndCET6()) {
 				if ($this->model->isRegistered($this->session->get('username'), Config::get('exam.type.cet4'), $exam['sj'])) {
-					$this->session->put('error', '已经报名本次CET4考试，CET4和CET6不能同时报名');
+					Message::add('danger', '已经报名本次CET4考试，CET4和CET6不能同时报名');
 					return redirect('exam.listing');
 				}
 			}
 
 			if (!$this->model->isPassed($this->session->get('username'), Config::get('exam.type.cet4'))) {
-				$this->session->put('error', 'CET4成绩不达标，不能参加CET6考试');
+				Message::add('danger', 'CET4成绩不达标，不能参加CET6考试');
 				return redirect('exam.listing');
 			}
 		}

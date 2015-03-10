@@ -40,9 +40,9 @@ class ExamModel extends StudentAdminModel {
 	 */
 	public function isAllowedRegister($type, $speciality, $college) {
 		$sql    = 'SELECT zt FROM t_ks_bmzyxz WHERE kslx = ? AND zy = ? AND xy = ?';
-		$status = $this->db->getColumn($sql, array($type, $specility, $college));
+		$status = $this->db->getColumn($sql, array($type, $speciality, $college));
 
-		return has($status) ? $status : (DISABLE == $status ? DISABLE : ENABLE);
+		return has($status) ? $status : (DISABLE === $status ? DISABLE : ENABLE);
 	}
 
 	/**
@@ -55,7 +55,7 @@ class ExamModel extends StudentAdminModel {
 		$sql    = 'SELECT c_cj FROM t_cj_qtkscj WHERE c_xh = ? AND c_kslx = ?';
 		$scores = $this->db->getAll($sql, array($sno, $type));
 
-		$sql      = 'SELECT jgx FROM t_cj_kslxdm WHERE c_kslx = ?';
+		$sql      = 'SELECT jgx FROM t_cj_kslxdm WHERE kslx = ?';
 		$passline = $this->db->getColumn($sql, array($type));
 
 		$passed = false;
