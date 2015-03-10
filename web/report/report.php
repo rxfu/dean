@@ -14,6 +14,8 @@
                                     <table class="table table-bordered table-striped table-hover data-table">
                                         <thead>
                                             <tr>
+                                                <th class="active">年度</th>
+                                                <th class="active">学期</th>
                                                 <th class="active">课程代码</th>
                                                 <th class="active">课程名称</th>
                                                 <th class="active">课程英文名称</th>
@@ -29,6 +31,8 @@
                                         <tbody>
                                             <?php foreach ($scores as $score): ?>
                                             <tr>
+                                                <td><?php echo $score['nd'] ?></td>
+                                                <td><?php echo Dictionary::get('xq', $score['xq']) ?></td>
                                                 <td><a href="<?php echo Route::to('report.detail', $score['kch']) ?>"><?php echo $score['kch'] ?></a></td>
                                                 <td><?php echo $score['kcmc'] ?></td>
                                                 <td><?php echo $score['kcywmc'] ?></td>

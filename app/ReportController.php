@@ -11,9 +11,8 @@ class ReportController extends StudentAdminController {
 	 * @return array     学生成绩
 	 */
 	protected function report() {
-		$data = $this->db->searchRecord('v_cj_xscj', array('xh' => $this->session->get('username')));
-
-		return $this->view->display('report.report', array('scores' => $data));
+		$scores = $this->model->getReport($this->session->get('username'));
+		return $this->view->display('report.report', array('scores' => $scores));
 	}
 
 	/**
@@ -23,18 +22,15 @@ class ReportController extends StudentAdminController {
 	 * @return array       学生成绩
 	 */
 	protected function detail($cno) {
-		$sql  = 'SELECT * FROM v_cj_xsgccj WHERE kch = ? AND xh = ? AND tjzt = ? ORDER BY nd DESC, xq DESC';
-		$data = $this->db->getAll($sql, array($cno, $this->session->get('username'), Config::get('score.dean_confirmed')));
-
-		$cname = empty($data) ? '' : $data[0]['kcmc'];
-		$ratios = array();
-		$scores = array();
-		foreach ($data as $score) {
-			$scores[$score['cjfs']]['ratios']    = $this->ratio($score['cjfs']);
-			$scores[$score['cjfs']]['courses'][] = $score;
+		$scores         = $this->model->getDetail($this->session->get('username'), $cno);
+		$cname          = is_array($scores) ? $scores[0]['kcmc'] : '';
+		$scoresByGrades = array();
+		foreach ($scores as $score) {
+			$scoresByGrades[$score['cjfs']]['ratios']    = $this->model->getRatio($score['cjfs']);
+			$scoresByGrades[$score['cjfs']]['courses'][] = $score;
 		}
 
-		return $this->view->display('report.detail', array('scores' => $scores, 'cname' => $cname));
+		return $this->view->display('report.detail', array('scores' => $scoresByGrades, 'cname' => $cname));
 	}
 
 	/**
@@ -42,36 +38,28 @@ class ReportController extends StudentAdminController {
 	 * @return void
 	 */
 	protected function unconfirmed() {
-		$sql  = 'SELECT * FROM v_cj_xsgccj WHERE xh = ? AND tjzt < ? ORDER BY nd DESC, xq DESC, kcxh';
-		$data = $this->db->getAll($sql, array($this->session->get('username'), Config::get('score.dean_confirmed')));
-
-		$ratios = array();
-		$scores = array();
-		foreach ($data as $score) {
-			$scores[$score['cjfs']]['ratios']    = $this->ratio($score['cjfs']);
-			$scores[$score['cjfs']]['courses'][] = $score;
+		$scores         = $this->model->getUnconfirmed($this->session->get('username'));
+		$scoresByGrades = array();
+		foreach ($scores as $score) {
+			$scoresByGrades[$score['cjfs']]['ratios']    = $this->model->getRatio($score['cjfs']);
+			$scoresByGrades[$score['cjfs']]['courses'][] = $score;
 		}
-		return $this->view->display('report.unconfirmed', array('scores' => $scores, 'name' => $this->session->get('name'), 'year' => $this->session->get('year'), 'term' => $this->session->get('term')));
+
+		return $this->view->display('report.unconfirmed', array('scores' => $scoresByGrades));
 	}
 
 	/**
-	 * 获取成绩方式对应的组合
-	 * @param  string $grade 成绩方式代码
-	 * @return array      成绩方式组合，没有返回FALSE
+	 * 列出当前学生国家考试成绩单
+	 * @return void
 	 */
-	protected function ratio($grade) {
-		$modes = $this->db->searchRecord('t_jx_cjfs', array('fs' => $grade));
-		if (is_array($modes)) {
-			$ratios = array();
-			foreach ($modes as $mode) {
-				$ratios['name']              = $mode['khmc'];
-				$ratios['mode'][$mode['id']] = array('idm' => $mode['idm'], 'bl' => $mode['bl'] / $mode['mf']);
-			}
-
-			return $ratios;
+	protected function exam() {
+		$scores       = $this->model->getExamReport($this->session->get('username'));
+		$scoresByType = array();
+		foreach ($scores as $score) {
+			$scoresByType[$score['c_kslx']][] = $score;
 		}
 
-		return false;
+		return $this->view->display('report.exam', array('scores' => $scoresByType));
 	}
 
 }
