@@ -259,52 +259,6 @@ class CourseController extends StudentAdminController {
 	}
 
 	/**
-	 * 选课时间冲突检测
-	 * @param  string $course 课程序号
-	 * @return mixed 冲突为冲突课程序号数组，否则为FALSE
-	 */
-	protected function clash($course) {
-		$collision = false;
-
-		$sql      = 'SELECT kcxh, ksz, jsz, zc, ksj, jsj FROM t_pk_kb WHERE nd = ? AND xq = ? AND kcxh = ?';
-		$currents = $this->db->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $course));
-
-		$sql      = 'SELECT kcxh, ksz, jsz, zc, ksj, jsj FROM v_xk_xskcb WHERE xh = ? AND nd = ? AND xq = ?';
-		$compares = $this->db->getAll($sql, array($this->session->get('username'), $this->session->get('year'), $this->session->get('term')));
-
-		foreach ($currents as $current) {
-			foreach ($compares as $compare) {
-				if ($compare['zc'] == $current['zc']) {
-					if (between($current['ksj'], $compare['ksj'], $compare['jsj'])) {
-						if (between($current['ksz'], $compare['ksz'], $compare['jsz'])) {
-							$collision[] = $compare['kcxh'];
-						}
-					}
-				}
-			}
-		}
-
-		$status = $collision;
-
-		echo json_encode(array('status' => $status));
-		return $status;
-	}
-
-	/**
-	 * 判断是否选课人数已满
-	 * @param  string $course 课程序号
-	 * @return boolean         人数已满为TRUE，未满为FALSE
-	 */
-	protected function full($course) {
-		$sql    = 'SELECT jhrs, rs FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND kcxh = ?';
-		$data   = $this->db->getRow($sql, array($this->session->get('year'), $this->session->get('term'), $course));
-		$status = 0 < $data['jhrs'] && $data['jhrs'] < $data['rs'];
-
-		echo json_encode(array('status' => $status));
-		return $status;
-	}
-
-	/**
 	 * 选课申请
 	 * @param string $type 课程类型
 	 * @param string $cno 课程序号

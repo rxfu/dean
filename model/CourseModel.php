@@ -244,14 +244,14 @@ class CourseModel extends StudentAdminModel {
 			$cnos   = array_column($courses, 'kch');
 			$delete = $this->hasScore($sno, $cnos);
 			if (has($delete)) {
-				foreach ($courses as &$course) {
-					if (in_array($course['kch'], $delete)) {
-						unset($course);
-					}
-				}
-				$courses = array_values($courses);
+			foreach ($courses as &$course) {
+			if (in_array($course['kch'], $delete)) {
+			unset($course);
 			}
-			*/
+			}
+			$courses = array_values($courses);
+			}
+			 */
 			array_walk($courses, function (&$course) {
 				$course['zt'] = Config::get('course.select.selectable');
 			});
@@ -423,15 +423,59 @@ class CourseModel extends StudentAdminModel {
 	 * @return array      返回可重修课程列表
 	 */
 	public function getRetakableCourse($sno) {
-		$sql  = 'SELECT DISTINCT nd FROM t_xk_xkxx WHERE xh = ?';
+		$sql             = 'SELECT DISTINCT nd FROM t_xk_xkxx WHERE xh = ?';
 		$course['years'] = $this->db->getAll($sql, array($sno));
 
 		$course['terms'] = Dictionary::getAll('xq');
 
-		$sql = 'SELECT kcxh, kcmc FROM v_xk_xskcb WHERE xh = ? ORDER BY kcxh';
+		$sql            = 'SELECT kcxh, kcmc FROM v_xk_xskcb WHERE xh = ? ORDER BY kcxh';
 		$course['cnos'] = $this->db->getAll($sql, $sno);
 
 		return $course;
+	}
+
+	/**
+	 * 检测选课时间是否冲突
+	 * @param  string  $year 年度
+	 * @param  string  $term 学期
+	 * @param  string  $sno  学号
+	 * @param  string  $cno  12位课程序号
+	 * @return mixed       冲突返回冲突的课程序号，否则返回FALSE
+	 */
+	public function isClash($year, $term, $sno, $cno) {
+		$sql      = 'SELECT kcxh, ksz, jsz, zc, ksj, jsj FROM t_pk_kb WHERE nd = ? AND xq = ? AND kcxh = ?';
+		$currents = $this->db->getAll($sql, array($year, $term, $cno));
+		$compares = $this->getTimetable($year, $term, $sno);
+
+		if (has($currents) && has($compares)) {
+			foreach ($currents as $current) {
+				foreach ($compares as $compare) {
+					if ($compare['zc'] == $current['zc']) {
+						if (between($current['ksj'], $compare['ksj'], $compare['jsj'])) {
+							if (between($current['ksz'], $compare['ksz'], $compare['jsz'])) {
+								$collision[] = $compare['kcxh'];
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return isset($collision) && is_array($collision) ? $collision : false;
+	}
+
+	/**
+	 * 检测所选课程是否人数已满
+	 * @param  string  $year 年度
+	 * @param  string  $term 学期
+	 * @param  string  $cno  课程序号
+	 * @return boolean       人数已满为TRUE，否则为FALSE
+	 */
+	public function isFull($year, $term, $cno) {
+		$sql  = 'SELECT jhrs, rs FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND kcxh = ?';
+		$data = $this->db->getRow($sql, array($year, $term, $cno));
+
+		return has($data) ? ($data['jhrs'] <= $data['rs']) : false;
 	}
 
 }
