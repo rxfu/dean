@@ -28,15 +28,39 @@ class StudentModel extends StudentAdminModel {
 	}
 
 	/**
+	 * 检测是否在校生
+	 * @param  string  $sno 学号
+	 * @return boolean      是在校生为TRUE，否则为FALSE
+	 */
+	public function isStudent($sno) {
+		$sql   = 'SELECT COUNT(*) FROM t_xs_zxs WHERE xh = ? AND zjzt = ?';
+		$count = $this->db->getColumn($sql, array($sno, Config::get('user.status')));
+
+		return has($count) && 0 < $count;
+	}
+
+	/**
 	 * 检测是否新生
 	 * @param  string  $sno 学号
 	 * @return boolean      是新生为TRUE，否则为FALSE
 	 */
 	public function isFresh($sno) {
-		$sql   = 'SELECT COUNT(*) FROM t_xs_zxs WHERE age(rxrq) < ? AND xh = ? ';
-		$count = $this->db->geColumn($sql, array('1 year', $sno));
+		$sql   = 'SELECT COUNT(*) FROM t_xs_zxs WHERE xh = ? AND zjzt = ? AND age(rxrq) < ?';
+		$count = $this->db->getColumn($sql, array($sno, Config::get('user.status'), '1 year'));
 
-		return hasData($count) && 0 < $count;
+		return has($count) && 0 < $count;
+	}
+
+	/**
+	 * 检测是否专升本学生
+	 * @param  string  $sno 学号
+	 * @return boolean      是专升本学生为TRUE，否则为FALSE
+	 */
+	public function isUndergraduate($sno) {
+		$sql   = 'SELECT COUNT(*) FROM t_xz_zxs WHERE xh = ? AND zjzt = ? AND xz = ?';
+		$count = $this->db->getColumn($sql, array($sno, Config::get('user.status'), '2'));
+
+		return has($count) && 0 < $count;
 	}
 
 }

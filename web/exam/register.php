@@ -1,6 +1,6 @@
                 <section class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header"><?php echo $name ?>同学<?php echo $year ?>年度<?php echo Dictionary::get('xq', $term) ?>学期<?php echo $exam['ksmc'] ?>考试报名表</h1>
+                        <h1 class="page-header"><?php echo $session['name'] ?>同学<?php echo $session['year'] ?>年度<?php echo Dictionary::get('xq', $session['term']) ?>学期<?php echo $exam['ksmc'] ?>考试报名表</h1>
                         <div class="alert alert-danger" role="alert">请认真核准自己的报名信息</div>
                     </div>
                 </section>
@@ -34,8 +34,8 @@
                                         <label for="cno" class="col-md-2">所在校区</label>
                                         <div class="col-md-4">
                                             <select name="campus" id="campus" class="form-control">
-                                                <?php foreach ($campuses as $campus): ?>
-                                                    <option value="<?php echo $campus['dm'] ?>"<?php echo $campus['dm'] === $session['campus'] ? ' selected="selected"' : '' ?>><?php echo $campus['mc'] ?></option>
+                                                <?php foreach ($campuses as $campusId => $campus): ?>
+                                                    <option value="<?php echo $campusId ?>"<?php echo $campusId == $session['campus'] ? ' selected="selected"' : '' ?>><?php echo $campus ?></option>
                                                 <?php endforeach; ?>
                                             </select>
                                         </div>

@@ -19,14 +19,17 @@ return array(
 	// 用户参数
 	'user'    => array(
 
+		// 学籍状态
+		'status' => '01',
+
 		// 角色
-		'role' => array(
+		'role'   => array(
 			'student' => 'student',
 			'teacher' => 'teacher',
 		),
 
 		// 加密salt
-		'salt' => '+:sD>PjbsJ+3!&+TE@!J<:wj|*J6_KimvoHJ?HQ][vE)O/2S8F&<iz.-b#t2tW:|',
+		'salt'   => '+:sD>PjbsJ+3!&+TE@!J<:wj|*J6_KimvoHJ?HQ][vE)O/2S8F&<iz.-b#t2tW:|',
 	),
 
 	// 日志参数
@@ -115,11 +118,22 @@ return array(
 		'dean_confirmed'    => '3',
 	),
 
-	// 考试报名状态代码
+	// 考试报名代码
 	'exam'    => array(
-		'register' => '1',
-		'passed'   => '2',
-		'payment'  => '3',
+
+		// 考试类型代码
+		'type'   => array(
+			'cet3' => '03',
+			'cet4' => '04',
+			'cet6' => '06',
+		),
+
+		// 考试状态代码
+		'status' => array(
+			'register' => '1',
+			'passed'   => '2',
+			'payment'  => '3',
+		),
 	),
 
 	// 文件上传参数

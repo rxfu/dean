@@ -360,7 +360,6 @@ class CourseModel extends StudentAdminModel {
 	 * @return boolean        成功返回TRUE，否则返回FALSE
 	 */
 	public function apply($year, $term, $sno, $name, $cno, $type, $lyear = null, $lterm = null, $lcno = null) {
-		$data         = array();
 		$data['nd']   = $year;
 		$data['xq']   = $term;
 		$data['xh']   = $sno;
