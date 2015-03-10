@@ -20,7 +20,7 @@
                                     <strong>上传说明：</strong>请各位同学上传本人蓝底证件照，高宽比为4:3，大小不得超过2MB。如需修改个人照片请持本人身份证、学生证到教务处进行重传照片。
                                 </p>
                                 <div>
-                                    <img src="<?php echo Route::to('student.portrait') ?>" alt="用户头像" />
+                                    <img src="<?php echo Route::to('student.portrait') ?>" alt="<?php echo $session['name'] ?>" />
                                 </div>
                             </div>
                         </div>
