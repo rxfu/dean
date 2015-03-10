@@ -240,6 +240,7 @@ class CourseModel extends StudentAdminModel {
 		$courses = $this->db->getAll($sql, $params);
 		if (has($courses)) {
 			// 检测已修读课程，已修读则从选课列表中删除
+			/*
 			$cnos   = array_column($courses, 'kch');
 			$delete = $this->hasScore($sno, $cnos);
 			if (has($delete)) {
@@ -250,6 +251,7 @@ class CourseModel extends StudentAdminModel {
 				}
 				$courses = array_values($courses);
 			}
+			*/
 			array_walk($courses, function (&$course) {
 				$course['zt'] = Config::get('course.select.selectable');
 			});
