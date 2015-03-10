@@ -395,7 +395,7 @@ class CourseModel extends StudentAdminModel {
 	 * @param  string $year 年度
 	 * @param  string $term 学期
 	 * @param  string $sno  学号
-	 * @return boolean       有课程表则返回课程表，否则返回FALSE
+	 * @return mixed       有课程表则返回课程表，否则返回FALSE
 	 */
 	public function getTimetable($year, $term, $sno) {
 		$sql  = 'SELECT * FROM v_xk_xskcb WHERE nd = ? AND xq = ? AND xh = ?';
@@ -414,6 +414,23 @@ class CourseModel extends StudentAdminModel {
 		$data = $this->db->getAll($sql, array($sno));
 
 		return has($data) ? $data : false;
+	}
+
+	/**
+	 * 获取学生可重修课程列表
+	 * @param  string $sno 学号
+	 * @return array      返回可重修课程列表
+	 */
+	public function getRetakableCourse($sno) {
+		$sql  = 'SELECT DISTINCT nd FROM t_xk_xkxx WHERE xh = ?';
+		$course['years'] = $this->db->getAll($sql, array($sno));
+
+		$course['terms'] = Dictionary::getAll('xq');
+
+		$sql = 'SELECT kcxh, kcmc FROM v_xk_xskcb WHERE xh = ? ORDER BY kcxh';
+		$course['cnos'] = $this->db->getAll($sql, $sno);
+
+		return $course;
 	}
 
 }

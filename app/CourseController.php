@@ -351,17 +351,12 @@ var_dump($_POST);
 			return redirect('course.process');
 		}
 
-		if (Config::get('course.type.retake') == $type) {
-			$sql    = 'SELECT DISTINCT nd FROM t_xk_xkxx WHERE xh = ?';
-			$lyears = $this->db->getAll($sql, array($this->session->get('username')));
+		if ($this->model->isRetakeCourse($code)) {
+			$course = $this->model->getRetakableCourse($this->session->get('username'));
 
-			$lterms = Dictionary::getAll('xq');
-
-			$sql   = 'SELECT DISTINCT kcxh, kcmc FROM v_xk_xskcb WHERE xh = ? ORDER BY kcxh';
-			$lcnos = $this->db->getAll($sql, array($this->session->get('username')));
-
-			return $this->view->display('course.apply', array('type' => $type, 'cno' => $cno, 'title' => $this->codes[$type]['name'], 'lyears' => $lyears, 'lterms' => $lterms, 'lcnos' => $lcnos, 'name' => $this->session->get('name'), 'year' => $this->session->get('year'), 'term' => $this->session->get('term')));
+			return $this->view->display('course.apply', array('type' => $type, 'cno' => $cno, 'title' => $title, 'lyears' => $course['years'], 'lterms' => $course['terms'], 'lcnos' => $course['cnos']));
 		}
+
 		return $this->view->display('course.apply', array('type' => $type, 'cno' => $cno, 'title' => $title));
 	}
 
