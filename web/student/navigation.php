@@ -53,29 +53,29 @@
                                 <ul class="nav nav-second-level">
                                     <?php if (ENABLE == Setting::get('XK_KG')): ?>
                                         <li>
-                                            <a href="<?php echo Route::to('course.course', 'bsc') ?>"><?php echo Config::get('course.type.bsc.name') ?></a>
+                                            <a href="<?php echo Route::to('course.listing', 'bsc') ?>"><?php echo Config::get('course.type.bsc.name') ?></a>
                                         </li>
                                         <li>
-                                            <a href="<?php echo Route::to('course.course', 'req') ?>"><?php echo Config::get('course.type.req.name') ?></a>
+                                            <a href="<?php echo Route::to('course.listing', 'req') ?>"><?php echo Config::get('course.type.req.name') ?></a>
                                         </li>
                                         <li>
-                                            <a href="<?php echo Route::to('course.course', 'lct') ?>"><?php echo Config::get('course.type.lct.name') ?></a>
+                                            <a href="<?php echo Route::to('course.listing', 'lct') ?>"><?php echo Config::get('course.type.lct.name') ?></a>
                                         </li>
                                         <?php if (ENABLE == Setting::get('XK_TS')): ?>
                                             <li>
                                                 <a href="#"> 通识素质课程<span class="fa arrow"></span></a>
                                                 <ul class="nav nav-third-level">
                                                     <li>
-                                                        <a href="<?php echo Route::to('course.course', 'hs') ?>"><?php echo Config::get('course.type.hs.name') ?></a>
+                                                        <a href="<?php echo Route::to('course.listing', 'hs') ?>"><?php echo Config::get('course.type.hs.name') ?></a>
                                                     </li>
                                                     <li>
-                                                        <a href="<?php echo Route::to('course.course', 'ns') ?>"><?php echo Config::get('course.type.ns.name') ?></a>
+                                                        <a href="<?php echo Route::to('course.listing', 'ns') ?>"><?php echo Config::get('course.type.ns.name') ?></a>
                                                     </li>
                                                     <li>
-                                                        <a href="<?php echo Route::to('course.course', 'as') ?>"><?php echo Config::get('course.type.as.name') ?></a>
+                                                        <a href="<?php echo Route::to('course.listing', 'as') ?>"><?php echo Config::get('course.type.as.name') ?></a>
                                                     </li>
                                                     <li>
-                                                        <a href="<?php echo Route::to('course.course', 'os') ?>"><?php echo Config::get('course.type.os.name') ?></a>
+                                                        <a href="<?php echo Route::to('course.listing', 'os') ?>"><?php echo Config::get('course.type.os.name') ?></a>
                                                     </li>
                                                 </ul>
                                             </li>
@@ -125,13 +125,13 @@
                             <li>
                                 <a href="#"><i class="fa fa-tablet fa-fw"></i> 考试报名<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
-                                    <?php foreach ($session['examTypes'] as $types): ?>
+                                    <?php foreach ($session['examTypes'] as $examTypes): ?>
                                         <li>
-                                            <a href="#"><?php echo $types[0]['ksdlmc'] ?><span class="fa arrow"></span></a>
+                                            <a href="#"><?php echo $examTypes[0]['ksdlmc'] ?><span class="fa arrow"></span></a>
                                             <ul class="nav nav-third-level">
-                                                <?php foreach ($types as $type): ?>
+                                                <?php foreach ($examTypes as $examType): ?>
                                                     <li>
-                                                        <a href="<?php echo Route::to('exam.register', $type['kslx']) ?>"><?php echo $type['ksmc'] ?></a>
+                                                        <a href="<?php echo Route::to('exam.register', $examType['kslx']) ?>"><?php echo $examType['ksmc'] ?></a>
                                                     </li>
                                                 <?php endforeach; ?>
                                             </ul>

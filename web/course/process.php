@@ -21,6 +21,7 @@
                                                 <th class="active">申请类型</th>
                                                 <th class="active">审核意见</th>
                                                 <th class="active">申请状态</th>
+                                                <th class="active">申请时间</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -58,6 +59,7 @@
                                                         echo '待审核';
                                                         break;
                                                 } ?></td>
+                                                <td><?php echo $course['xksj'] ?></td>
                                             </tr>
                                             <?php endforeach; ?>
                                         </tbody>

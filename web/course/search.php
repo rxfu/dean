@@ -1,8 +1,8 @@
                 <section class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header"><?php echo $name ?>同学<?php echo $year ?>年度<?php echo Dictionary::get('xq', $term) ?>学期<?php echo $title ?>课程检索</h1>
+                        <h1 class="page-header"><?php echo $session['name'] ?>同学<?php echo $session['year'] ?>年度<?php echo Dictionary::get('xq', $session['term']) ?>学期<?php echo $title ?>检索</h1>
                         <div class="alert alert-danger" role="alert">请输入课程序号或课程中文名称进行检索并申请<?php echo $title ?></div>
-                        <div id="campus" class="hidden sr-only"><?php echo $campus ?></div>
+                        <div id="campus" class="hidden sr-only"><?php echo $session['campus'] ?></div>
                     </div>
                 </section>
 
@@ -36,7 +36,7 @@
                                         </ul>
                                         <div class="tab-content">
                                             <?php foreach (array_keys($courses) as $cid): ?>
-                                                <div id="campus-<?php echo $cid ?>" class="tab-pane fade<?php echo $cid == $campus ? ' in active' : '' ?>" role="tabpanel">
+                                                <div id="campus-<?php echo $cid ?>" class="tab-pane fade<?php echo $cid == $session['campus'] ? ' in active' : '' ?>" role="tabpanel">
                                                     <div class="table-responsive tab-table">
                                                         <table class="table table-bordered table-striped table-hover course-table">
                                                             <thead>

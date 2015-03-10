@@ -37,6 +37,24 @@ class CourseModel extends StudentAdminModel {
 	}
 
 	/**
+	 * 判断是否其他课程
+	 * @param  string  $type 课程类型
+	 * @return boolean       是其他课程为TRUE，否则为FALSE
+	 */
+	public function isOtherCourse($type) {
+		return Config::get('course.type.others.code') === $type;
+	}
+
+	/**
+	 * 判断是否重修课程
+	 * @param  string  $type 课程类型
+	 * @return boolean       是重修课程为TRUE，否则为FALSE
+	 */
+	public function isRetakeCourse($type) {
+		return Config::get('course.type.retake.code') === $type;
+	}
+
+	/**
 	 * 判断是否允许选课
 	 * @return boolean 允许为TRUE，禁止为FALSE
 	 */
@@ -171,9 +189,11 @@ class CourseModel extends StudentAdminModel {
 	 * @param  string $property   性质
 	 * @param  string $grade      年级
 	 * @param  string $speciality 专业
+	 * @param  string $cno      课程号
+	 * @param  string $cname 课程名称
 	 * @return array             可选课程数组，没有返回空数组
 	 */
-	public function listCourse($year, $term, $season, $sno, $platform = null, $property = null, $grade = null, $speciality = null) {
+	public function listCourse($year, $term, $season, $sno, $platform = null, $property = null, $grade = null, $speciality = null, $cno = null, $cname = null) {
 		$sql    = 'SELECT * FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND zsjj = ?';
 		$params = array($year, $term, $season);
 		if (!isEmpty($grade)) {
@@ -197,8 +217,24 @@ class CourseModel extends StudentAdminModel {
 			}
 		}
 		if (!isEmpty($property)) {
-			$sql .= ' AND xz = ?';
-			$params[] = strtoupper($property);
+			if (is_array($property)) {
+				if (in_array('exclude', $property)) {
+					$sql .= " AND xz <> ANY(?)";
+					array_walk($property, function (&$pp) {
+						$pp = strtoupper($pp);
+					});
+					$params[] = array_to_pg($property);
+				}
+			} else {
+				$sql .= ' AND xz = ?';
+				$params[] = strtoupper($property);
+			}
+		}
+		if (!isEmpty($cno)) {
+			$sql .= ' AND kcxh LIKE \'%' . $cno . '%\'';
+		}
+		if (!isEmpty($cname)) {
+			$sql .= ' AND kcmc LIKE \'%' . $cname . '%\'';
 		}
 
 		$courses = $this->db->getAll($sql, $params);
@@ -254,6 +290,130 @@ class CourseModel extends StudentAdminModel {
 		$data = $this->db->getColumn($sql, array($year, $term, $sno));
 
 		return has($data) ? ($limit <= $data) : false;
+	}
+
+	/**
+	 * 选择课程
+	 * @param  string $year       年度
+	 * @param  string $term       学期
+	 * @param  string $season     招生季节
+	 * @param  string $sno        学号
+	 * @param  string $name       姓名
+	 * @param  string $grade      年级
+	 * @param  string $speciality 专业
+	 * @param  string $cno        12位课程序号
+	 * @return boolean             成功返回TRUE，否则返回FALSE
+	 */
+	public function select($year, $term, $season, $sno, $name, $grade, $speciality, $cno) {
+		$param    = "'" . implode("', '", array($year, $term, $sno, $cno, $name, $grade, $speciality, $season)) . "'";
+		$selected = $this->db->query('SELECT p_xzkc_save(' . $param . ')');
+		if ($selected) {
+			$sql   = 'SELECT COUNT(*) FROM t_xk_xkxx WHERE nd = ? AND xq = ? AND xh = ? AND kcxh = ?';
+			$count = $this->db->getColumn($sql, array($year, $term, $sno, $cno));
+
+			if (has($count) && 0 < $count) {
+				Logger::write(array('xh' => $sno, 'kcxh' => $cno, 'czlx' => Config::get('log.select')));
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * 退选课程
+	 * @param  string $year 年度
+	 * @param  string $term 学期
+	 * @param  string $sno  学号
+	 * @param  string $cno  12位课程号
+	 * @return boolean       成功返回TRUE，否则返回FALSE
+	 */
+	public function drop($year, $term, $sno, $cno) {
+		$param   = "'" . implode("', '", array($year, $term, $sno, $cno)) . "'";
+		$deleted = $this->db->query('SELECT p_scxk_del(' . $param . ')');
+		if ($deleted) {
+			$sql   = 'SELECT COUNT(*) FROM t_xk_xkxx WHERE nd = ? AND xq = ? AND xh = ? AND kcxh = ?';
+			$count = $this->db->getColumn($sql, array($year, $term, $sno, $cno));
+
+			if (0 == $count) {
+				Logger::write(array('xh' => $sno, 'kcxh' => $cno, 'czlx' => Config::get('log.drop')));
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * 申请课程
+	 * @param  string $year  年度
+	 * @param  string $term  学期
+	 * @param  string $sno   学号
+	 * @param  string $name  姓名
+	 * @param  string $cno   12位课程序号
+	 * @param  string $type  选课类型
+	 * @param  string $lyear 原年度
+	 * @param  string $lterm 原学期
+	 * @param  string $lcno  12位原课程序号
+	 * @return boolean        成功返回TRUE，否则返回FALSE
+	 */
+	public function apply($year, $term, $sno, $name, $cno, $type, $lyear = null, $lterm = null, $lcno = null) {
+		$data         = array();
+		$data['nd']   = $year;
+		$data['xq']   = $term;
+		$data['xh']   = $sno;
+		$data['xm']   = $name;
+		$data['kcxh'] = $cno;
+		$data['xksj'] = date('Y-m-d H:i:s');
+		$data['xklx'] = $type;
+
+		$sql    = 'SELECT kch, pt, xz, kkxy FROM v_xk_kxkcxx WHERE kcxh = ? AND nd = ? AND xq = ?';
+		$course = $this->db->getRow($sql, array($cno, $year, $term));
+		if (has($course)) {
+			$data['kch']  = $course['kch'];
+			$data['pt']   = $course['pt'];
+			$data['xz']   = $course['xz'];
+			$data['kkxy'] = $course['kkxy'];
+		}
+
+		if (Config::get('course.apply.retake') == $type) {
+			$data['ynd']   = $lyear;
+			$data['yxq']   = $lterm;
+			$data['ykcxh'] = $lcno;
+		}
+		$inserted = $this->db->insertRecord('t_xk_xksq', $data);
+		if (has($inserted)) {
+			Logger::write(array('xh' => $sno, 'kcxh' => $cno, 'czlx' => Config::get('log.apply_course')));
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * 获取学生课程表
+	 * @param  string $year 年度
+	 * @param  string $term 学期
+	 * @param  string $sno  学号
+	 * @return boolean       有课程表则返回课程表，否则返回FALSE
+	 */
+	public function getTimetable($year, $term, $sno) {
+		$sql  = 'SELECT * FROM v_xk_xskcb WHERE nd = ? AND xq = ? AND xh = ?';
+		$data = $this->db->getAll($sql, array($year, $term, $sno));
+
+		return has($data) ? $data : false;
+	}
+
+	/**
+	 * 获取学生选课申请表
+	 * @param  string $sno 学号
+	 * @return boolean      有申请表返回TRUE，否则返回FALSE
+	 */
+	public function getApplications($sno) {
+		$sql  = 'SELECT * FROM t_xk_xksq WHERE xh = ? ORDER BY xksj DESC';
+		$data = $this->db->getAll($sql, array($sno));
+
+		return has($data) ? $data : false;
 	}
 
 }
