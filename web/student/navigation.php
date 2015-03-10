@@ -120,6 +120,9 @@
                                     <li>
                                         <a href="<?php echo Route::to('report.report') ?>">综合成绩单</a>
                                     </li>
+                                    <li>
+                                        <a href="<?php echo Route::to('report.exam') ?>">国家考试成绩单</a>
+                                    </li>
                                 </ul>
                             </li>
                             <li>
