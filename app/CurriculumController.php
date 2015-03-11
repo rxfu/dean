@@ -6,41 +6,45 @@
 class CurriculumController extends TeacherAdminController {
 
 	/**
-	 * 按年度、学期列出当前教师课程表
-	 * @param  string $year 年度
-	 * @param  string $term 学期
+	 * 列出当前教师课程表
 	 * @return void
 	 */
-	protected function term($year, $term) {
-		$sql  = 'SELECT * FROM v_pk_jskcb WHERE nd = ? AND xq = ? AND jsgh = ? ORDER BY kcxh, ksz, zc, ksj';
-		$data = $this->db->getAll($sql, array($year, $term, $this->session->get('username')));
+	protected function listing() {
+		$courses = $this->model->listCourses($this->session->get('username'));
 
-		$courses = array();
-		foreach ($data as $course) {
-			$courses[$course['kcxh']][] = $course;
+		$coursesByTerm = array();
+		foreach ($courses as $course) {
+			$coursesByTerm[$course['nd'] . $course['xq']][$course['kcxh']][] = $course;
 		}
+		krsort($coursesByTerm);
 
-		return $this->view->display('curriculum.term', array('courses' => $courses, 'year' => $year, 'term' => $term));
+		return $this->view->display('curriculum.listing', array('courses' => $coursesByTerm));
 	}
 
 	/**
 	 * 列出当前教师课程表
 	 * @return array 教师课程表
 	 */
-	protected function timetable($year, $term) {
-		$sql  = 'SELECT * FROM v_pk_jskcb WHERE nd = ? AND xq = ? AND jsgh = ? ORDER BY ksj, zc';
-		$data = $this->db->getAll($sql, array($year, $term, $this->session->get('username')));
+	protected function timetable() {
+		$courses = $this->model->listCourses($this->session->get('username'));
+		$years   = array_values(array_unique(array_column($courses, 'nd')));
+		$terms   = array_values(array_unique(array_column($courses, 'xq')));
 
-		$courses = array_fill(1, 12, array_fill(1, 7, '&nbsp;'));
-		foreach ($data as $course) {
+		foreach ($years as $year) {
+			foreach ($terms as $term) {
+				$coursesByClass[$year . $term] = array_fill(1, 12, array_fill(1, 7, '&nbsp;'));
+			}
+		}
+
+		foreach ($courses as $course) {
 			$begClass = $course['ksj'];
 			$endClass = $course['jsj'];
 			$week     = $course['zc'];
 
-			if ('&nbsp;' == $courses[$begClass][$week]) {
-				$courses[$begClass][$week] = array();
+			if ('&nbsp;' == $coursesByClass[$course['nd'] . $course['xq']][$begClass][$week]) {
+				$coursesByClass[$course['nd'] . $course['xq']][$begClass][$week] = array();
 			}
-			$courses[$begClass][$week][] = array(
+			$coursesByClass[$course['nd'] . $course['xq']][$begClass][$week][] = array(
 				'kcxh'   => $course['kcxh'],
 				'kcmc'   => $course['kcmc'],
 				'kcywmc' => $course['kcywmc'],
@@ -54,11 +58,12 @@ class CurriculumController extends TeacherAdminController {
 			);
 
 			for ($i = $begClass + 1; $i < $endClass - $begClass; ++$i) {
-				$courses[$i][$week] = null;
+				$coursesByClass[$course['nd'] . $course['xq']][$i][$week] = null;
 			}
 		}
+		krsort($coursesByClass);
 
-		return $this->view->display('curriculum.timetable', array('courses' => $courses));
+		return $this->view->display('curriculum.timetable', array('courses' => $coursesByClass));
 	}
 
 }

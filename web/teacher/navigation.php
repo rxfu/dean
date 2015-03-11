@@ -64,24 +64,10 @@
                                 <a href="#"><i class="fa fa-calendar fa-fw"></i> 课表管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="#"> 课程表<span class="fa arrow"></span></a>
-                                        <ul class="nav nav-third-level">
-                                            <?php foreach($session['courseTerms'] as $item): ?>
-                                                <li>
-                                                    <a href="<?php echo Route::to('curriculum.timetable', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo Dictionary::get('xq', $item['xq']) ?>学期</a>
-                                                </li>
-                                            <?php endforeach; ?>
-                                        </ul>
+                                        <a href="<?php echo Route::to('curriculum.timetable') ?>">课程表</a>
                                     </li>
                                     <li>
-                                        <a href="#"> 课程列表<span class="fa arrow"></span></a>
-                                        <ul class="nav nav-third-level">
-                                            <?php foreach($session['courseTerms'] as $item): ?>
-                                                <li>
-                                                    <a href="<?php echo Route::to('curriculum.term', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo Dictionary::get('xq', $item['xq']) ?>学期</a>
-                                                </li>
-                                            <?php endforeach; ?>
-                                        </ul>
+                                        <a href="<?php echo Route::to('curriculum.listing') ?>">课程列表</a>
                                     </li>
                                 </ul>
                             </li>

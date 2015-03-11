@@ -13,6 +13,7 @@ $(document).ready(function() {
 	$('article').show();
 
 	$('a[href="' + $(location).attr('href') + '"]').parents('ul.nav').not('ul#side-menu').addClass('collapse in');
+	$('#accordion .panel-collapse:first').collapse('show');
 	$('#loginForm')
 		.formValidation({
 			framework: 'bootstrap',
