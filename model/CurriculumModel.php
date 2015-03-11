@@ -25,8 +25,8 @@ class CurriculumModel extends TeacherAdminModel {
 	 * @param  string $cno  12位课程序号
 	 * @return mixed       成功返回教师所上课程学生列表，否则返回FALSE
 	 */
-	public function listStudent($year, $term, $tno, $cno) {
-		$sql  = 'SELECT * FROM v_xk_xskcb WHERE nd = ? AND xq = ? AND jsgh = ? AND kcxh = ? ORDER BY xh';
+	public function listStudents($year, $term, $tno, $cno) {
+		$sql  = 'SELECT DISTINCT a.xh, b.xm, a.kcxh, a.kcmc FROM v_xk_xskcb a INNER JOIN t_xs_zxs b ON b.xh = a.xh INNER JOIN t_pk_jxrw c ON c.nd = a.nd AND c.xq = a.xq AND c.kcxh = a.kcxh WHERE a.nd = ? AND a.xq = ? AND c.jsgh = ? AND a.kcxh = ? ORDER BY a.xh';
 		$data = $this->db->getAll($sql, array($year, $term, $tno, $cno));
 
 		return has($data) ? $data : false;

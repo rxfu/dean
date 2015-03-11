@@ -31,6 +31,7 @@
                                                             <th class="active">所在校区</th>
                                                             <th class="active">上课时间</th>
                                                             <th class="active">上课教室</th>
+                                                            <th class="active">学生名单</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -46,6 +47,7 @@
                                                                                 第 <?php echo $item[0]['ksj'] ?>
                                                                                 <?php echo $item[0]['jsj'] <= $item[0]['ksj'] ? '' : '~' . $item[0]['jsj'] ?> 节</td>
                                                                 <td><?php echo $item[0]['jsmc'] ?>教室</td>
+                                                                <td rowspan="<?php echo $rowspan ?>"><a href="<?php echo Route::to('curriculum.student', $item[0]['nd'], $item[0]['xq'], $item[0]['kcxh']) ?>">查看</a></td>
                                                             </tr>                                            
                                                             <?php for($i = 1; $i < $rowspan; ++$i): ?>
                                                                 <tr>
@@ -56,6 +58,7 @@
                                                                                     第 <?php echo $item[$i]['ksj'] ?>
                                                                                     <?php echo $item[$i]['jsj'] <= $item[$i]['ksj'] ? '' : '~' . $item[$i]['jsj'] ?> 节</td>
                                                                     <td><?php echo $item[$i]['jsmc'] ?>教室</td>
+                                                                    <td style="display: none"></td>
                                                                 </tr>
                                                             <?php endfor; ?>
                                                         <?php endforeach; ?>
