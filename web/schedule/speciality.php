@@ -1,6 +1,6 @@
                 <section class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header"><?php echo $name ?>同学<?php echo $year ?>年度<?php echo Dictionary::get('xq', $term) ?>学期专业课程表</h1>
+                        <h1 class="page-header"><?php echo $session['name'] ?>同学<?php echo $session['year'] ?>年度<?php echo Dictionary::get('xq', $session['term']) ?>学期专业课程表</h1>
                     </div>
                 </section>
 

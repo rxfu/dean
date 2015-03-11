@@ -10,14 +10,13 @@ class ScheduleController extends StudentAdminController {
 	 * @return void
 	 */
 	protected function current() {
-		$data = $this->db->searchRecord('v_xk_xskcb', array('xh' => $this->session->get('username'), 'nd' => $this->session->get('year'), 'xq' => $this->session->get('term')));
-		
-		$courses = array();
-		foreach ($data as $course) {
-			$courses[$course['kcxh']][] = $course;
+		$courses = $this->model->getTimetable($this->session->get('year'), $this->session->get('term'), $this->session->get('username'));
+		foreach ($courses as $course) {
+			$coursesByNumber[$course['kcxh']][] = $course;
 		}
+		ksort($coursesByNumber);
 
-		return $this->view->display('schedule.current', array('courses' => $courses, 'name' => $this->session->get('name'), 'year' => $this->session->get('year'), 'term' => $this->session->get('term')));
+		return $this->view->display('schedule.current', array('courses' => $coursesByNumber));
 	}
 
 	/**
@@ -25,10 +24,9 @@ class ScheduleController extends StudentAdminController {
 	 * @return void
 	 */
 	protected function speciality() {
-		$sql  = 'SELECT DISTINCT kch, kcmc, kcywmc, pt, xz, xs, xf FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND nj = ? AND zyh = ?';
-		$data = $this->db->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('grade'), $this->session->get('spno')));
+		$courses = $this->model->getSpecialCourses($this->session->get('year'), $this->session->get('term'), $this->session->get('grade'), $this->session->get('spno'));
 
-		return $this->view->display('schedule.speciality', array('courses' => $data, 'name' => $this->session->get('name'), 'year' => $this->session->get('year'), 'term' => $this->session->get('term')));
+		return $this->view->display('schedule.speciality', array('courses' => $courses));
 	}
 
 	/**
@@ -36,19 +34,18 @@ class ScheduleController extends StudentAdminController {
 	 * @return array 学生课程表
 	 */
 	protected function timetable() {
-		$sql  = 'SELECT * FROM v_xk_xskcb WHERE nd = ? AND xq = ? AND xh = ? ORDER BY ksj, zc';
-		$data = $this->db->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $this->session->get('username')));
+		$courses = $this->model->getTimetable($this->session->get('year'), $this->session->get('term'), $this->session->get('username'));
 
-		$courses = array_fill(1, 12, array_fill(1, 7, '&nbsp;'));
-		foreach ($data as $course) {
+		$coursesByClass = array_fill(1, 12, array_fill(1, 7, '&nbsp;'));
+		foreach ($courses as $course) {
 			$begClass = $course['ksj'];
 			$endClass = $course['jsj'];
 			$week     = $course['zc'];
 
-			if ('&nbsp;' == $courses[$begClass][$week]) {
-				$courses[$begClass][$week] = array();
+			if ('&nbsp;' == $coursesByClass[$begClass][$week]) {
+				$coursesByClass[$begClass][$week] = array();
 			}
-			$courses[$begClass][$week][] = array(
+			$coursesByClass[$begClass][$week][] = array(
 				'kcxh'   => $course['kcxh'],
 				'kcmc'   => $course['kcmc'],
 				'kcywmc' => $course['kcywmc'],
@@ -63,10 +60,10 @@ class ScheduleController extends StudentAdminController {
 			);
 
 			for ($i = $begClass + 1; $i < $endClass - $begClass; ++$i) {
-				$courses[$i][$week] = null;
+				$coursesByClass[$i][$week] = null;
 			}
 		}
 		
-		return $this->view->display('schedule.timetable', array('courses' => $courses, 'name' => $this->session->get('name'), 'year' => $this->session->get('year'), 'term' => $this->session->get('term')));
+		return $this->view->display('schedule.timetable', array('courses' => $coursesByClass));
 	}
 }
