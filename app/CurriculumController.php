@@ -66,4 +66,17 @@ class CurriculumController extends TeacherAdminController {
 		return $this->view->display('curriculum.timetable', array('courses' => $coursesByClass));
 	}
 
+	/**
+	 * 列出所上课程的学生
+	 * @param  string $year 年度
+	 * @param  string $term 学期
+	 * @param  string $cno 课程序号
+	 * @return void
+	 */
+	protected function student($year, $term, $cno) {
+		$students = $this->model->listStudents($year, $term, $this->session->get('username'), $cno);
+
+		return $this->view->display('curriculum.student', array('students' => $students,'year'=>$year,'term'=>$term));
+	}
+
 }
