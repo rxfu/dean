@@ -122,4 +122,5 @@ class ExamModel extends StudentAdminModel {
 
 		return has($data) ? $data : false;
 	}
+	
 }

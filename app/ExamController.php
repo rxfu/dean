@@ -27,10 +27,7 @@ class ExamController extends StudentAdminController {
 	protected function register($type) {
 		$exam = $this->model->getExamInfo($type);
 
-		if ($this->model->isRegistered($this->session->get('username'), $type, $exam['sj'])) {
-			Message::add('danger', $exam['ksmc'] . '考试已经报名，请不要重复报名');
-			return redirect('exam.listing');
-		}
+		$registered = $this->model->isRegistered($this->session->get('username'), $type, $exam['sj']);
 
 		if (DISABLE == $this->model->isAllowedRegister($type, $this->session->get('spno'), $this->session->get('college'))) {
 			Message::add('danger', $exam['ksmc'] . '考试不允许' . $this->session->get('speciality') . '专业学生报名');
@@ -94,7 +91,7 @@ class ExamController extends StudentAdminController {
 		}
 		ksort($campuses);
 
-		return $this->view->display('exam.register', array('type' => $type, 'exam' => $exam, 'campuses' => $campuses));
+		return $this->view->display('exam.register', array('type' => $type, 'exam' => $exam, 'campuses' => $campuses, 'registered' => $registered));
 	}
 
 	/**
