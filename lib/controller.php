@@ -102,13 +102,13 @@ class Controller {
 	/**
 	 * 加载模型类
 	 * @param  string $model 模型名称
-	 * @return void        
+	 * @return void
 	 */
 	public function loadModel($name) {
 		$modelPath = MODROOT . DS . $name . 'Model.php';
 
 		if (file_exists($modelPath)) {
-			$model = $name . 'Model';
+			$model       = $name . 'Model';
 			$this->model = new $model;
 		}
 	}

@@ -3,7 +3,7 @@
 /**
  * 教师课程表模型类
  */
-class CurriculumModel extends Model {
+class CurriculumModel extends TeacherAdminModel {
 
 	/**
 	 * 获取教师上课课程列表
