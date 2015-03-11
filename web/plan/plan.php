@@ -7,7 +7,7 @@
                 <section class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
-                            <div class="panel-heading"><?php echo $college ?><?php echo $grade ?>级<?php echo $speciality ?>专业课程设置计划总表</div>
+                            <div class="panel-heading"><?php echo $session['college'] ?><?php echo $session['grade'] ?>级<?php echo $session['speciality'] ?>专业课程设置计划总表</div>
                             <div class="panel-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-striped table-hover data-table">
