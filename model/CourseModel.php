@@ -253,7 +253,7 @@ class CourseModel extends StudentAdminModel {
 		}
 		if (!isEmpty($property)) {
 			if ('others' == $property) {
-				$sql .= " AND (pt = 'T' AND xz <> 'W') OR (pt = 'T' AND xz <> 'I') OR (pt = 'T' AND xz <> 'Y') OR (pt = 'T' AND xz <> 'Q')";
+				$sql .= " AND CASE WHEN pt = 'T' THEN xz <> 'W' AND xz <> 'I' AND xz <> 'Y' AND xz <> 'Q' ELSE true END";
 			} else {
 				$sql .= ' AND xz = ?';
 				$params[] = strtoupper($property);
