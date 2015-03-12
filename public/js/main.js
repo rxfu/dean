@@ -229,6 +229,7 @@ $(document).ready(function() {
 	$('#courseConfirm').on('hidden.bs.modal', function(e) {
 		location.reload();
 	});
+	/*
 	$('#confirmDialog').on('show.bs.modal', function(e) {
 		var button = $(e.relatedTarget);
 		var title = button.data('title');
@@ -244,7 +245,7 @@ $(document).ready(function() {
 	$('#confirmDialog').find('.modal-footer #confirm').on('click', function(e) {
 		$(this).data('form').submit();
 	});
-
+*/
 	var campusId = '#campus-' + $('#campus').text();
 	if ($('#campus-tab a[href="' + campusId + '"]').length) {
 		$('#campus-tab a[href="' + campusId + '"]').tab('show');
@@ -253,4 +254,6 @@ $(document).ready(function() {
 	}
 
 	$('#speciality').chained('#college');
+
+	$('#confirmDialog').modal('show');
 });

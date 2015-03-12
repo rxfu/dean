@@ -86,3 +86,5 @@
                         </div>
                     </div>
                 </section>
+
+                <?php include partial('confirm_dialog') ?>
