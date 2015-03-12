@@ -44,7 +44,7 @@
                                                         <td>
                                                             <?php if (Config::get('score.uncommitted') == $student['tjzt']): ?>
                                                                 <form method="post" action="<?php echo Route::to('score.enter', $info['kcxh']) ?>" role="form" onsubmit="return false">
-                                                                    <input type="text" name="grade<?php echo $key ?>" value="<?php echo $student['cj' . $key] ?>" size="6" class="form-control">
+                                                                    <input type="text" name="score<?php echo $key ?>" value="<?php echo $student['cj' . $key] ?>" size="6" class="form-control">
                                                                 </form>
                                                             <?php else: ?>
                                                                 <p class="form-control-static"><?php echo $student['cj' . $key] ?></p>

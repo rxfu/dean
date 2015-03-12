@@ -6,18 +6,18 @@
 return array(
 
 	// 系统参数
-	'setting' => array(
+	'setting'    => array(
 		'debug' => true,
 	),
 
 	// 默认路由
-	'route'   => array(
+	'route'      => array(
 		'default_controller' => 'home',
 		'default_method'     => 'index',
 	),
 
 	// 用户参数
-	'user'    => array(
+	'user'       => array(
 
 		// 学籍状态
 		'status' => '01',
@@ -33,7 +33,7 @@ return array(
 	),
 
 	// 日志参数
-	'log'     => array(
+	'log'        => array(
 		'select'          => 'INSERT',
 		'update'          => 'UPDATE',
 		'drop'            => 'DELETE',
@@ -45,7 +45,7 @@ return array(
 	),
 
 	// 检索状态代码
-	'course'  => array(
+	'course'     => array(
 
 		// 课程类型
 		'type'    => array(
@@ -110,7 +110,7 @@ return array(
 	),
 
 	// 成绩状态代码
-	'score'   => array(
+	'score'      => array(
 		'passline'          => 60,
 		'uncommitted'       => '0',
 		'committed'         => '1',
@@ -119,7 +119,7 @@ return array(
 	),
 
 	// 考试报名代码
-	'exam'    => array(
+	'exam'       => array(
 
 		// 考试类型代码
 		'type'   => array(
@@ -137,7 +137,7 @@ return array(
 	),
 
 	// 文件上传参数
-	'file'    => array(
+	'file'       => array(
 		'file_uploads'        => 'on',
 		'max_input_time'      => 90,
 		'max_execution_time'  => 180,
@@ -147,8 +147,15 @@ return array(
 	),
 
 	// 图片参数
-	'image'   => array(
+	'image'      => array(
 		'width'  => 240,
 		'height' => 320,
+	),
+
+	'department' => array(
+		'college'      => '1',
+		'manager'      => '2',
+		'organization' => '3',
+		'industry'     => '4',
 	),
 );

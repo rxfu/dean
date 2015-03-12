@@ -20,6 +20,7 @@
         <?php echo js('js/bootstrap-typeahead.js') ?>
         <?php echo js('js/jquery.placeholder.js') ?>
         <?php echo js('js/jquery.stacktable.js') ?>
+        <?php echo js('js/jquery.chained.min.js') ?>
         <?php echo js('js/plugins/metisMenu/jquery.metisMenu.js') ?>
         <?php echo js('js/plugins/dataTables/jquery.dataTables.min.js') ?>
         <?php echo js('js/plugins/dataTables/dataTables.bootstrap.js') ?>

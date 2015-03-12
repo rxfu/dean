@@ -7,7 +7,7 @@
                 </section>
 
                 <section class="row">
-                    <div class="col-md-6 col-md-offset-3">
+                    <div class="col-md-8 col-md-offset-2">
                         <form method="post" action="<?php echo Route::to('course.search', $type) ?>" role="form">
                             <div class="input-group">
                                 <div class="form-group">
@@ -17,6 +17,35 @@
                                 <span class="input-group-btn">
                                     <button class="btn btn-primary" type="submit">Go!</button>
                                 </span>
+                            </div>
+                            <div class="voffset-top">
+                                <div class="col-sm-3">
+                                    <label for="grade">年度</label>
+                                    <select name="grade" id="grade" class="form-control">
+                                        <option value="*">==全部==</option>
+                                        <?php foreach ($grades as $grade): ?>
+                                            <option value="<?php echo $grade['nj'] ?>"><?php echo $grade['nj'] ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="college">学院</label>
+                                    <select name="college" id="college" class="form-control">
+                                        <option value="*">==全部==</option>
+                                        <?php foreach ($colleges as $college): ?>
+                                            <option value="<?php echo $college['dw'] ?>"><?php echo $college['mc'] ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="col-sm-5">
+                                    <label for="speciality">专业</label>
+                                    <select name="speciality" id="speciality" class="form-control">
+                                        <option value="*" class='*'>==全部==</option>
+                                        <?php foreach ($specialities as $speciality): ?>
+                                            <option value="<?php echo $speciality['zy'] ?>" class="<?php echo $speciality['xy'] ?>"><?php echo $speciality['mc'] ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
                             </div>
                         </form>
                     </div>

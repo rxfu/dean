@@ -151,11 +151,17 @@ class CourseController extends StudentAdminController {
 			}
 		}
 
+		$grades          = $this->model->getGrades($this->session->get('year'), $this->session->get('term'));
+		$colleges        = $this->model->getColleges();
+		$specialities    = $this->model->getSpecialities();
 		$coursesByCampus = array();
 		if (isPost()) {
-			$keyword = $_POST['keyword'];
-			$cno     = null;
-			$cname   = null;
+			$_POST      = sanitize($_POST);
+			$keyword    = $_POST['keyword'];
+			$grade      = '*' == $_POST['grade'] ? null : $_POST['grade'];
+			$speciality = '*' == $_POST['speciality'] ? null : $_POST['speciality'];
+			$cno        = null;
+			$cname      = null;
 			if (isAlphaNumber($keyword)) {
 				$cno = strtoupper($keyword);
 			} else {
@@ -164,7 +170,7 @@ class CourseController extends StudentAdminController {
 
 			$property = null;
 			if ($this->model->isOtherCourse($code)) {
-				$property = array('exclude', 'W', 'I', 'Y', 'Q');
+				$property = 'others';
 			}
 
 			$courses = $this->model->listCourse(
@@ -172,7 +178,7 @@ class CourseController extends StudentAdminController {
 				$this->session->get('term'),
 				$this->session->get('season'),
 				$this->session->get('username'),
-				null, $property, null, null, $cno, $cname);
+				null, $property, $grade, $speciality, $cno, $cname);
 
 			foreach ($courses as $course) {
 				if (isEmpty($course['xqh'])) {
@@ -184,7 +190,7 @@ class CourseController extends StudentAdminController {
 			krsort($coursesByCampus);
 		}
 
-		return $this->view->display('course.search', array('courses' => $coursesByCampus, 'title' => $title, 'type' => $type));
+		return $this->view->display('course.search', array('courses' => $coursesByCampus, 'title' => $title, 'type' => $type, 'grades' => $grades, 'colleges' => $colleges, 'specialities' => $specialities));
 	}
 
 	/**
@@ -272,7 +278,7 @@ class CourseController extends StudentAdminController {
 
 		if (isPost()) {
 			$_POST = sanitize($_POST);
-var_dump($_POST);
+
 			if ($this->model->isOtherCourse($code)) {
 				// 是否允许选择其他课程
 				if (!$this->model->isOthersOpen()) {

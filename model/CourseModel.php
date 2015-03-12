@@ -95,6 +95,41 @@ class CourseModel extends StudentAdminModel {
 	}
 
 	/**
+	 * 获取年度、学期对应的年级
+	 * @param  string $year 年度
+	 * @param  string $term 学期
+	 * @return mixed       成功返回年级列表，否则返回FALSE
+	 */
+	public function getGrades($year, $term) {
+		$sql  = 'SELECT DISTINCT nj FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND nj <> \'\' ORDER BY nj';
+		$data = $this->db->getAll($sql, array($year, $term));
+
+		return has($data) ? $data : false;
+	}
+
+	/**
+	 * 获取学院信息
+	 * @return mixed  成功返回学院信息，否则返回FALSE
+	 */
+	public function getColleges() {
+		$sql  = 'SELECT dw, mc FROM t_xt_department WHERE lx = ? AND zt = ? ORDER BY dw';
+		$data = $this->db->getAll($sql, array(Config::get('department.college'), ENABLE));
+
+		return has($data) ? $data : false;
+	}
+
+	/**
+	 * 获取专业信息
+	 * @return mixed 成功返回专业信息，否则返回FALSE
+	 */
+	public function getSpecialities() {
+		$sql  = 'SELECT zy, mc, xy FROM t_jx_zy WHERE zt = ? ORDER BY zy';
+		$data = $this->db->getAll($sql, array(ENABLE));
+
+		return has($data) ? $data : false;
+	}
+
+	/**
 	 * 判断是否允许选课
 	 * @param  string $time   当前时间
 	 * @param  string $grade  年级
@@ -217,14 +252,8 @@ class CourseModel extends StudentAdminModel {
 			}
 		}
 		if (!isEmpty($property)) {
-			if (is_array($property)) {
-				if (in_array('exclude', $property)) {
-					$sql .= " AND xz <> ANY(?)";
-					array_walk($property, function (&$pp) {
-						$pp = strtoupper($pp);
-					});
-					$params[] = array_to_pg($property);
-				}
+			if ('others' == $property) {
+				$sql .= " AND (pt = 'T' AND xz <> 'W') OR (pt = 'T' AND xz <> 'I') OR (pt = 'T' AND xz <> 'Y') OR (pt = 'T' AND xz <> 'Q')";
 			} else {
 				$sql .= ' AND xz = ?';
 				$params[] = strtoupper($property);

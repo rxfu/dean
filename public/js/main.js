@@ -115,7 +115,7 @@ $(document).ready(function() {
 		e.preventDefault();
 		$(this).tab('show');
 	});
-	$(':input[name^="grade"]').change(function() {
+	$(':input[name^="score"]').change(function() {
 		var input = $(this);
 		var form = $(this).closest('form');
 		var sno = $(this).closest('tr').attr('data-row');
@@ -251,4 +251,6 @@ $(document).ready(function() {
 	} else {
 		$('#campus-tab a:first').tab('show');
 	}
+
+	$('#speciality').chained('#college');
 });

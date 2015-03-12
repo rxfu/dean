@@ -41,3 +41,6 @@ article {
 .accordion-opened .accordion-toggle:after {
 	content: "\f054";
 }
+.voffset-top {
+	margin-top: 10px;
+}
