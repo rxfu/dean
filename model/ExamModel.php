@@ -35,14 +35,13 @@ class ExamModel extends StudentAdminModel {
 	 * 检测是否限制报名
 	 * @param  string  $type       考试类型
 	 * @param  string  $speciality 专业
-	 * @param  string  $college    学院
 	 * @return boolean             允许报名为ENABLE，禁止报名为DISABLE
 	 */
-	public function isAllowedRegister($type, $speciality, $college) {
-		$sql    = 'SELECT zt FROM t_ks_bmzyxz WHERE kslx = ? AND zy = ? AND xy = ?';
-		$status = $this->db->getColumn($sql, array($type, $speciality, $college));
+	public function isAllowedRegister($type, $speciality) {
+		$sql    = 'SELECT zt FROM t_ks_bmzyxz WHERE kslx = ? AND zy = ?';
+		$status = $this->db->getColumn($sql, array($type, $speciality));
 
-		return has($status) ? $status : (DISABLE === $status ? DISABLE : ENABLE);
+		return has($status) ? $status : DISABLE;
 	}
 
 	/**
@@ -121,6 +120,31 @@ class ExamModel extends StudentAdminModel {
 		$data = $this->db->getAll($sql, $sno);
 
 		return has($data) ? $data : false;
+	}
+
+	/**
+	 * 获取考试类型
+	 * @param  string $speciality 专业号
+	 * @return array             成功返回考试类型列表，否则返回空数组
+	 */
+	public function getTypes($speciality) {
+		$sql  = 'SELECT a.kslx, a.ksmc, b.ksdl, b.mc AS ksdlmc FROM t_cj_kslxdm a LEFT JOIN t_cj_ksdl b ON a.ksdl = b.ksdl WHERE a.zt = ? ORDER BY b.ksdl, a.kslx';
+		$data = $this->db->getAll($sql, ENABLE);
+
+		$types = array();
+		if (has($data) && is_array($data)) {
+			foreach ($data as $type) {
+				if (Config::get('exam.type.cet3') == $type['kslx']) {
+					if (DISABLE == $this->isAllowedRegister($type, $speciality)) {
+						continue;
+					}
+				}
+
+				$types[$type['ksdl']][] = $type;
+			}
+		}
+
+		return $types;
 	}
 	
 }

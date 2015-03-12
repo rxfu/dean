@@ -29,12 +29,12 @@ class ExamController extends StudentAdminController {
 
 		$isRegistered = $this->model->isRegistered($this->session->get('username'), $type, $exam['sj']);
 
-		if (DISABLE == $this->model->isAllowedRegister($type, $this->session->get('spno'), $this->session->get('college'))) {
-			Message::add('danger', $exam['ksmc'] . '考试不允许' . $this->session->get('speciality') . '专业学生报名');
-			return redirect('exam.listing');
-		}
-
 		if (Config::get('exam.type.cet3') == $exam['kslx']) {
+			if (DISABLE == $this->model->isAllowedRegister($type, $this->session->get('spno'))) {
+				Message::add('danger', $exam['ksmc'] . '考试不允许' . $this->session->get('speciality') . '专业学生报名');
+				return redirect('exam.listing');
+			}
+
 			if ($this->model->isRegistered($this->session->get('username'), Config::get('exam.type.cet4'), $exam['sj'])) {
 				Message::add('danger', '已经报名本次CET4考试，CET4和英语应用能力B级不能同时报名');
 				return redirect('exam.listing');
@@ -64,6 +64,13 @@ class ExamController extends StudentAdminController {
 					return redirect('exam.listing');
 				}
 			}
+
+			if (ENABLE == $this->model->isAllowedRegister($type, $this->session->get('spno'))) {
+				if (!$this->model->isPassed($this->session->get('username'), Config::get('exam.type.cet3'))) {
+					Message::add('danger', '英语应用能力B级成绩不达标，不能参加CET4考试');
+					return redirect('exam.listing');
+				}
+			}
 		} elseif (Config::get('exam.type.cet6') == $exam['kslx']) {
 			if ($this->model->isRegistered($this->session->get('username'), Config::get('exam.type.cet3'), $exam['sj'])) {
 				Message::add('danger', '已经报名本次英语应用能力B级考试，英语应用能力B级和CET6不能同时报名');
@@ -73,6 +80,13 @@ class ExamController extends StudentAdminController {
 			if (!$this->model->isAllowedCET4AndCET6()) {
 				if ($this->model->isRegistered($this->session->get('username'), Config::get('exam.type.cet4'), $exam['sj'])) {
 					Message::add('danger', '已经报名本次CET4考试，CET4和CET6不能同时报名');
+					return redirect('exam.listing');
+				}
+			}
+
+			if (ENABLE == $this->model->isAllowedRegister($type, $this->session->get('spno'))) {
+				if (!$this->model->isPassed($this->session->get('username'), Config::get('exam.type.cet3'))) {
+					Message::add('danger', '英语应用能力B级成绩不达标，不能参加CET6考试');
 					return redirect('exam.listing');
 				}
 			}

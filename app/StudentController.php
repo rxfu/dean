@@ -61,7 +61,8 @@ class StudentController extends StudentAdminController {
 				$this->session->put('role', Config::get('user.role.student'));
 				$this->session->put('logged', true);
 
-				$this->session->put('examTypes', $this->examTypes());
+				$exam = new ExamModel();
+				$this->session->put('examTypes', $exam->getTypes($info['spno']));
 
 				Message::add('success', '你已经成功登录系统');
 
