@@ -47,7 +47,9 @@
                                                                                 第 <?php echo $item[0]['ksj'] ?>
                                                                                 <?php echo $item[0]['jsj'] <= $item[0]['ksj'] ? '' : '~' . $item[0]['jsj'] ?> 节</td>
                                                                 <td><?php echo $item[0]['jsmc'] ?>教室</td>
-                                                                <td rowspan="<?php echo $rowspan ?>"><a href="<?php echo Route::to('curriculum.student', $item[0]['nd'], $item[0]['xq'], $item[0]['kcxh']) ?>">查看</a></td>
+                                                                <td rowspan="<?php echo $rowspan ?>">
+                                                                    <a href="<?php echo Route::to('curriculum.student', $item[0]['nd'], $item[0]['xq'], $item[0]['kcxh']) ?>" title="查看学生名单" role="button" class="btn btn-primary">查看</a>
+                                                                </td>
                                                             </tr>                                            
                                                             <?php for($i = 1; $i < $rowspan; ++$i): ?>
                                                                 <tr>
