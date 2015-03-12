@@ -36,33 +36,33 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($scores as $score): ?>
-                                                <tr data-row="<?php echo $score['xh'] ?>">
-                                                    <td><p class="form-control-static"><?php echo $score['xh'] ?></p></td>
-                                                    <td><p class="form-control-static"><?php echo $score['xm'] ?></p></td>
+                                            <?php foreach ($students as $student): ?>
+                                                <tr data-row="<?php echo $student['xh'] ?>">
+                                                    <td><p class="form-control-static"><?php echo $student['xh'] ?></p></td>
+                                                    <td><p class="form-control-static"><?php echo $student['xm'] ?></p></td>
                                                     <?php foreach($ratios['mode'] as $key => $value): ?>
                                                         <td>
-                                                            <?php if (Config::get('score.uncommitted') == $score['tjzt']): ?>
+                                                            <?php if (Config::get('score.uncommitted') == $student['tjzt']): ?>
                                                                 <form method="post" action="<?php echo Route::to('score.enter', $info['kcxh']) ?>" role="form" onsubmit="return false">
-                                                                    <input type="text" name="grade<?php echo $key ?>" value="<?php echo $score['cj' . $key] ?>" size="6" class="form-control">
+                                                                    <input type="text" name="grade<?php echo $key ?>" value="<?php echo $student['cj' . $key] ?>" size="6" class="form-control">
                                                                 </form>
                                                             <?php else: ?>
-                                                                <p class="form-control-static"><?php echo $score['cj' . $key] ?></p>
+                                                                <p class="form-control-static"><?php echo $student['cj' . $key] ?></p>
                                                             <?php endif; ?>
                                                         </td>
                                                     <?php endforeach; ?>
-                                                    <td data-name="total"><p id="total<?php echo $score['xh'] ?>" class="form-control-static"><?php echo $score['zpcj'] ?></p></td>
+                                                    <td data-name="total"><p id="total<?php echo $student['xh'] ?>" class="form-control-static"><?php echo $student['zpcj'] ?></p></td>
                                                     <td>
-                                                        <?php if (Config::get('score.uncommitted') == $score['tjzt']): ?>
+                                                        <?php if (Config::get('score.uncommitted') == $student['tjzt']): ?>
                                                             <form method="post" action="<?php echo Route::to('score.status', $info['kcxh']) ?>" role="form">
-                                                                <select name="status<?php echo $score['xh'] ?>" id="status<?php echo $score['xh'] ?>" class="form-control">
+                                                                <select name="status<?php echo $student['xh'] ?>" id="status<?php echo $student['xh'] ?>" class="form-control">
                                                                     <?php foreach($statuses as $status): ?>
-                                                                        <option value="<?php echo $status['dm'] ?>"<?php echo $status['dm'] === $score['ksztdm'] ? ' selected="selected"' : '' ?>><?php echo $status['mc'] ?></option>
+                                                                        <option value="<?php echo $status['dm'] ?>"<?php echo $status['dm'] === $student['ksztdm'] ? ' selected="selected"' : '' ?>><?php echo $status['mc'] ?></option>
                                                                     <?php endforeach; ?>
                                                                 </select>
                                                             </form>
                                                         <?php else: ?>
-                                                            <p class="form-control-static"><?php echo $score['kszt'] ?></p>
+                                                            <p class="form-control-static"><?php echo $student['kszt'] ?></p>
                                                         <?php endif; ?>
                                                     </td>
                                                 </tr>

@@ -6,39 +6,11 @@
 class ScoreController extends TeacherAdminController {
 
 	/**
-	 * 判断是否允许录入成绩
-	 * @return boolean 允许为TRUE，禁止为FALSE
-	 */
-	protected function isOpen() {
-		return ENABLE == Setting::get('CJ_WEB_KG') ? true : false;
-	}
-
-	/**
 	 * 禁止录入成绩
 	 * @return  void
 	 */
 	protected function forbidden() {
-		return $this->view->display('score.forbidden', array('name' => $this->session->get('name')));
-	}
-
-	/**
-	 * 获取成绩方式对应的组合
-	 * @param  string $grade 成绩方式代码
-	 * @return array      成绩方式组合，没有返回FALSE
-	 */
-	protected function ratio($grade) {
-		$modes = $this->db->searchRecord('t_jx_cjfs', array('fs' => $grade));
-		if (is_array($modes)) {
-			$ratios = array();
-			foreach ($modes as $mode) {
-				$ratios['name']              = $mode['khmc'];
-				$ratios['mode'][$mode['id']] = array('idm' => $mode['idm'], 'bl' => $mode['bl'] / $mode['mf']);
-			}
-
-			return $ratios;
-		}
-
-		return false;
+		return $this->view->display('score.forbidden');
 	}
 
 	/**
@@ -47,26 +19,22 @@ class ScoreController extends TeacherAdminController {
 	 * @return array          学生成绩
 	 */
 	protected function input($cno) {
-		if ($this->isOpen()) {
-			$sql  = 'SELECT kcxh, kcmc, kkxy, nj, zy FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND kcxh = ?';
-			$info = $this->db->getRow($sql, array($this->session->get('year'), $this->session->get('term'), $cno));
-
-			$sql  = 'SELECT * FROM v_cj_xscjlr WHERE nd = ? AND xq = ? AND kcxh = ? ORDER BY xh';
-			$data = $this->db->getAll($sql, array($this->session->get('year'), $this->session->get('term'), $cno));
-			foreach ($data as &$d) {
-				if (isEmpty($d['tjzt'])) {
-					$d['tjzt'] = Config::get('score.uncommitted');
+		if ($this->model->isOpen()) {
+			$info     = $this->model->getCourse($this->session->get('year'), $this->session->get('term'), $cno);
+			$students = $this->model->getStudents($this->session->get('year'), $this->session->get('term'), $cno);
+			foreach ($students as &$student) {
+				if (isEmpty($student['tjzt'])) {
+					$student['tjzt'] = Config::get('score.uncommitted');
 				}
 			}
 
-			$ratios = $this->ratio($data[0]['cjfs']);
-			$this->session->put('mode', $data[0]['cjfs']);
+			$ratios = $this->model->getRatio($students[0]['cjfs']);
+			$this->session->put('mode', $students[0]['cjfs']);
 			$this->session->put('major_grade', max(array_keys($ratios['mode'])));
 
-			$sql      = 'SELECT * FROM t_cj_kszt ORDER BY dm';
-			$statuses = $this->db->getAll($sql);
+			$statuses = $this->model->getStatuses();
 
-			return $this->view->display('score.input', array('info' => $info, 'scores' => $data, 'ratios' => $ratios, 'report' => $data[0]['tjzt'], 'statuses' => $statuses));
+			return $this->view->display('score.input', array('info' => $info, 'students' => $students, 'ratios' => $ratios, 'report' => $students[0]['tjzt'], 'statuses' => $statuses));
 		} else {
 			return redirect('score.forbidden');
 		}
@@ -78,7 +46,7 @@ class ScoreController extends TeacherAdminController {
 	 * @return boolean         成功返回TRUE，失败返回FALSE
 	 */
 	protected function enter($cno) {
-		if ($this->isOpen()) {
+		if ($this->model->isOpen()) {
 			if (isPost()) {
 				$_POST = sanitize($_POST);
 
@@ -86,16 +54,10 @@ class ScoreController extends TeacherAdminController {
 				$mode  = substr($_POST['mode'], 5);
 				$score = $_POST['score'];
 
-				$ratios = $this->ratio($this->session->get('mode'));
-				$fields = array();
-				foreach (array_keys($ratios['mode']) as $key) {
-					$fields[] = 'cj' . $key;
-				}
-				$field = empty($fields) ? '*' : array_to_field($fields);
+				$ratios = $this->model->getRatio($this->session->get('mode'));
 
 				// 计算总评成绩
-				$sql                  = 'SELECT ' . $field . ' FROM t_cj_web WHERE nd = ? AND xq = ? AND kcxh = ? AND xh = ?';
-				$grades               = $this->db->getRow($sql, array($this->session->get('year'), $this->session->get('term'), $cno, $sno));
+				$grades               = $this->model->getScore($this->session->get('year'), $this->session->get('term'), $sno, $cno);
 				$grades['cj' . $mode] = $score;
 				$majorGrade           = $this->session->get('major_grade');
 				if (Config::get('score.passline') > $grades['cj' . $majorGrade]) {
@@ -109,17 +71,12 @@ class ScoreController extends TeacherAdminController {
 				}
 
 				// 更新WEB成绩表
-				$updated = $this->db->updateRecord('t_cj_web', array('cj' . $mode => $score, 'zpcj' => $total), array('nd' => $this->session->get('year'), 'xq' => $this->session->get('term'), 'xh' => $sno, 'kcxh' => $cno));
-				if ($updated) {
-					$data  = $this->db->searchRecord('t_cj_web', array('nd' => $this->session->get('year'), 'xq' => $this->session->get('term'), 'kcxh' => $cno, 'xh' => $sno), array('zpcj'));
-					$total = $data[0]['zpcj'];
-				}
-
+				$total = $this->model->enterScore($this->session->get('year'), $this->session->get('term'), $sno, $cno, $mode, $score, $total);
 				if (isAjax()) {
-					echo $updated ? $total : 'failed';
+					echo $total ? $total : 'failed';
 				}
 
-				return $updated;
+				return $total;
 			}
 		} else {
 			redirect('score.forbidden');
@@ -132,7 +89,7 @@ class ScoreController extends TeacherAdminController {
 	 * @return integer      成功返回影响行数，否则返回NULL
 	 */
 	protected function status($cno) {
-		if ($this->isOpen()) {
+		if ($this->model->isOpen()) {
 			if (isPost()) {
 				$_POST = sanitize($_POST);
 
@@ -140,12 +97,7 @@ class ScoreController extends TeacherAdminController {
 				$status = $_POST['status'];
 
 				// 更新WEB成绩表
-				$updated = $this->db->updateRecord('t_cj_web', array('kszt' => $status), array('nd' => $this->session->get('year'), 'xq' => $this->session->get('term'), 'xh' => $sno, 'kcxh' => $cno));
-				if (isAjax()) {
-					echo $updated;
-				} else {
-					return $updated;
-				}
+				$updated = $this->model->modifyStatus($this->session->get('year'), $this->session->get('term'), $sno, $cno, $status);
 			}
 		} else {
 			redirect('score.forbidden');
@@ -157,12 +109,12 @@ class ScoreController extends TeacherAdminController {
 	 * @return boolean      确认成功为TRUE，否则为FALSE
 	 */
 	protected function confirm() {
-		if ($this->isOpen()) {
+		if ($this->model->isOpen()) {
 			if (isPost()) {
 				$_POST = sanitize($_POST);
 				$cno   = $_POST['cno'];
 
-				$this->db->updateRecord('t_cj_web', array('tjzt' => Config::get('score.committed')), array('nd' => $this->session->get('year'), 'xq' => $this->session->get('term'), 'kcxh' => $cno));
+				$this->model->confirmScore($this->session->get('year'), $this->session->get('term'), $cno);
 				return redirect('score.input', $cno);
 			}
 		} else {
@@ -177,10 +129,9 @@ class ScoreController extends TeacherAdminController {
 	 * @return array       成绩单列表
 	 */
 	protected function summary($year, $term) {
-		$sql  = 'SELECT DISTINCT kcxh, kcmc FROM v_cj_xsgccj WHERE nd = ? AND xq = ? AND jsgh = ? ORDER BY kcxh';
-		$data = $this->db->getAll($sql, array($year, $term, $this->session->get('username')));
+		$courses = $this->model->listCourses($year, $term, $this->session->get('username'));
 
-		return $this->view->display('score.summary', array('courses' => $data, 'year' => $year, 'term' => $term));
+		return $this->view->display('score.summary', array('courses' => $courses, 'year' => $year, 'term' => $term));
 	}
 
 	/**
@@ -191,13 +142,11 @@ class ScoreController extends TeacherAdminController {
 	 * @return array         成绩列表
 	 */
 	protected function score($year, $term, $cno) {
-		$sql  = 'SELECT kcxh, kcmc, kkxy, nj, zy FROM v_pk_kczyxx WHERE nd = ? AND xq = ? AND kcxh = ?';
-		$info = $this->db->getRow($sql, array($year, $term, $cno));
+		$info   = $this->model->getCourse($year, $term, $cno);
+		$scores = $this->model->getReport($year, $term, $cno);
+		$ratios = is_array($scores) ? $this->model->getRatio($scores[0]['cjfs']) : array();
 
-		$sql    = 'SELECT * FROM v_cj_xsgccj WHERE nd = ? AND xq = ? AND kcxh = ? ORDER BY xh';
-		$data   = $this->db->getAll($sql, array($year, $term, $cno));
-		$ratios = is_array($data) ? $this->ratio($data[0]['cjfs']) : array();
-		return $this->view->display('score.score', array('info' => $info, 'scores' => $data, 'ratios' => $ratios));
+		return $this->view->display('score.score', array('info' => $info, 'scores' => $scores, 'ratios' => $ratios));
 	}
 
 }

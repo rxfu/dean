@@ -11,7 +11,8 @@ class ReportModel extends StudentAdminModel {
 	 * @return mixed        获取成功返回成绩方式，否则返回FALSE
 	 */
 	public function getRatio($grade) {
-		$modes = $this->db->searchRecord('t_jx_cjfs', array('fs' => $grade));
+		$sql   = 'SELECT * FROM t_xj_cjfs WHERE fs = ?';
+		$modes = $this->db->getAll($sql, array($grade));
 		if (is_array($modes)) {
 			$ratios = array();
 			foreach ($modes as $mode) {
