@@ -27,7 +27,7 @@ class ExamController extends StudentAdminController {
 	protected function register($type) {
 		$exam = $this->model->getExamInfo($type);
 
-		$registered = $this->model->isRegistered($this->session->get('username'), $type, $exam['sj']);
+		$isRegistered = $this->model->isRegistered($this->session->get('username'), $type, $exam['sj']);
 
 		if (DISABLE == $this->model->isAllowedRegister($type, $this->session->get('spno'), $this->session->get('college'))) {
 			Message::add('danger', $exam['ksmc'] . '考试不允许' . $this->session->get('speciality') . '专业学生报名');
@@ -39,9 +39,14 @@ class ExamController extends StudentAdminController {
 				Message::add('danger', '已经报名本次CET4考试，CET4和英语应用能力B级不能同时报名');
 				return redirect('exam.listing');
 			}
+
+			if ($this->model->isRegistered($this->session->get('username'), Config::get('exam.type.cet6'), $exam['sj'])) {
+				Message::add('danger', '已经报名本次CET6考试，CET6和英语应用能力B级不能同时报名');
+				return redirect('exam.listing');
+			}
 		} elseif (Config::get('exam.type.cet4') == $exam['kslx']) {
 			if ($this->model->isRegistered($this->session->get('username'), Config::get('exam.type.cet3'), $exam['sj'])) {
-				Message::add('danger', '已经报名本次英语应用能力B级考试，英语应用能力B级CET4不能同时报名');
+				Message::add('danger', '已经报名本次英语应用能力B级考试，英语应用能力B级和CET4不能同时报名');
 				return redirect('exam.listing');
 			}
 
@@ -60,6 +65,11 @@ class ExamController extends StudentAdminController {
 				}
 			}
 		} elseif (Config::get('exam.type.cet6') == $exam['kslx']) {
+			if ($this->model->isRegistered($this->session->get('username'), Config::get('exam.type.cet3'), $exam['sj'])) {
+				Message::add('danger', '已经报名本次英语应用能力B级考试，英语应用能力B级和CET6不能同时报名');
+				return redirect('exam.listing');
+			}
+
 			if (!$this->model->isAllowedCET4AndCET6()) {
 				if ($this->model->isRegistered($this->session->get('username'), Config::get('exam.type.cet4'), $exam['sj'])) {
 					Message::add('danger', '已经报名本次CET4考试，CET4和CET6不能同时报名');
@@ -79,7 +89,7 @@ class ExamController extends StudentAdminController {
 
 			$this->model->register($this->session->get('username'), $type, $campus, $exam['sj']);
 
-			return redirect('exam.listing');
+			return redirect('exam.register');
 		}
 
 		$campus   = Dictionary::getAll('xqh');
@@ -91,7 +101,7 @@ class ExamController extends StudentAdminController {
 		}
 		ksort($campuses);
 
-		return $this->view->display('exam.register', array('type' => $type, 'exam' => $exam, 'campuses' => $campuses, 'registered' => $registered));
+		return $this->view->display('exam.register', array('type' => $type, 'exam' => $exam, 'campuses' => $campuses, 'isRegistered' => $isRegistered));
 	}
 
 	/**

@@ -22,13 +22,13 @@ class ExamModel extends StudentAdminModel {
 	 * @param  string  $sno  学号
 	 * @param  string  $type 考试类型
 	 * @param  string  $date 考试时间
-	 * @return boolean       已经报名为TRUE，未报名为FALSE
+	 * @return boolean       已经报名返回校区号，未报名为FALSE
 	 */
 	public function isRegistered($sno, $type, $date) {
-		$sql  = 'SELECT COUNT(*) FROM t_ks_qtksbm WHERE xh = ? AND kslx = ? AND kssj = ?';
+		$sql  = 'SELECT xq FROM t_ks_qtksbm WHERE xh = ? AND kslx = ? AND kssj = ?';
 		$data = $this->db->getColumn($sql, array($sno, $type, $date));
 
-		return has($data) ? true : false;
+		return has($data) ? $data : false;
 	}
 
 	/**
