@@ -124,10 +124,11 @@ class ExamModel extends StudentAdminModel {
 
 	/**
 	 * 获取考试类型
+	 * @param  string $sno 学号
 	 * @param  string $speciality 专业号
 	 * @return array             成功返回考试类型列表，否则返回空数组
 	 */
-	public function getTypes($speciality) {
+	public function getTypes($sno, $speciality) {
 		$sql  = 'SELECT a.kslx, a.ksmc, b.ksdl, b.mc AS ksdlmc FROM t_cj_kslxdm a LEFT JOIN t_cj_ksdl b ON a.ksdl = b.ksdl WHERE a.zt = ? ORDER BY b.ksdl, a.kslx';
 		$data = $this->db->getAll($sql, ENABLE);
 
@@ -140,11 +141,38 @@ class ExamModel extends StudentAdminModel {
 					}
 				}
 
+				if (Config::get('exam.type.cet4') == $type['kslx']) {
+					if (ENABLE == $this->isAllowedRegister($type, $speciality)) {
+						if (!$this->isPassed($sno, Config::get('exam.type.cet3'))) {
+							continue;
+						}
+					}
+
+					if (!$this->isAllowedFreshRegisterCET4()) {
+						$student = new StudentModel();
+						if ($student->isFresh($sno && !$student->isUndergraduate($sno))) {
+							continue;
+						}
+					}
+				}
+
+				if (Config::get('exam.type.cet6') == $type['kslx']) {
+					if (ENABLE == $this->isAllowedRegister($type, $speciality)) {
+						if (!$this->isPassed($sno, Config::get('exam.type.cet3'))) {
+							continue;
+						}
+					}
+
+					if (!$this->isPassed($sno, Config::get('exam.type.cet4'))) {
+						continue;
+					}
+				}
+
 				$types[$type['ksdl']][] = $type;
 			}
 		}
 
 		return $types;
 	}
-	
+
 }

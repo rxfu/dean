@@ -39,7 +39,7 @@
                                                 </div>
                                             </div>
                                         <?php else: ?>
-                                            <form method="post" action="<?php echo Route::to('exam.register', $type) ?>" class="form-horizontal">
+                                            <form method="post" action="<?php echo Route::to('exam.register', $exam['kslx']) ?>" class="form-horizontal">
                                                 <div class="form-group">
                                                     <label for="sno" class="col-md-4">学号</label>
                                                     <div class="col-md-8"><?php echo $session['username'] ?></div>
@@ -87,4 +87,29 @@
                     </div>
                 </section>
 
-                <?php include partial('confirm_dialog') ?>
+                <div class="modal fade" id="tipsModal" tabindex="-1" role="dialog" aria-labelledby="#tipsModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="tipsModalLabel">报名提示</h4>
+                            </div>
+                        <div class="modal-body">
+                            <p>
+                                <?php if ($isUploaded): ?>
+                                    请核对考生个人信息无误并<strong>确认</strong>本人照片为符合要求的<strong>蓝底免冠</strong>证件照，方能进行考试报名。若因照片不符合要求而引起的考生无法参加考试等情况，由考生自行负责。
+                                <?php else: ?>
+                                    请上传图像要求为高320（像素）*宽240（像素）的<strong>蓝底免冠</strong>证件照，要求jpg格式，方能进行考试报名。若因照片不符合要求而引起的考生无法参加考试等情况，由考生自行负责。
+                                <?php endif; ?>
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <?php if ($isUploaded): ?>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" id="cancel">确定</button>
+                            <?php else: ?>
+                                <a href="<?php echo Route::to('student.uploade') ?>" role="button" class="btn btn-primary" id="confirm">确定</a>
+                            <?php endif; ?>
+                        </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->

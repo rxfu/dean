@@ -62,7 +62,7 @@ class StudentController extends StudentAdminController {
 				$this->session->put('logged', true);
 
 				$exam = new ExamModel();
-				$this->session->put('examTypes', $exam->getTypes($info['spno']));
+				$this->session->put('examTypes', $exam->getTypes($username, $info['zyh']));
 
 				Message::add('success', '你已经成功登录系统');
 

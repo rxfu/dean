@@ -255,5 +255,5 @@ $(document).ready(function() {
 
 	$('#speciality').chained('#college');
 
-	$('#confirmDialog').modal('show');
+	$('#tipsModal').modal('show');
 });
