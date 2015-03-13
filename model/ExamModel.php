@@ -32,6 +32,18 @@ class ExamModel extends StudentAdminModel {
 	}
 
 	/**
+	 * 检测是否有已经确认的报名信息
+	 * @param  string  $sno 学号
+	 * @return boolean      有则返回TRUE，否则返回FALSE
+	 */
+	public function hasConfirmed($sno) {
+		$sql  = 'SELECT COUNT(*) FROM t_ks_qtksbm a INNER JOIN t_cj_kslxdm b ON b.kslx = a.kslx AND b.nd = a.nd WHERE a.xh = ? AND a.clbz = ? AND b.zt = ?';
+		$data = $this->db->getColumn($sql, array($sno, Config::get('exam.passed'), ENABLE));
+
+		return has($data) && 0 < $data;
+	}
+
+	/**
 	 * 检测是否限制报名
 	 * @param  string  $type       考试类型
 	 * @param  string  $speciality 专业

@@ -141,9 +141,11 @@ class StudentController extends StudentAdminController {
 	 * @return array 学生详细信息
 	 */
 	protected function profile() {
-		$profile = $this->model->getProfile($this->session->get('username'));
+		$profile   = $this->model->getProfile($this->session->get('username'));
+		$exam      = new ExamModel();
+		$confirmed = $exam->hasConfirmed($this->session->get('username'));
 
-		return $this->view->display('student.profile', array('profile' => $profile));
+		return $this->view->display('student.profile', array('profile' => $profile, 'confirmed' => $confirmed));
 	}
 
 	/**
