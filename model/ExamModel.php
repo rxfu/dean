@@ -21,12 +21,12 @@ class ExamModel extends StudentAdminModel {
 	 * 检测是否已经报名
 	 * @param  string  $sno  学号
 	 * @param  string  $type 考试类型
-	 * @param  string  $date 考试时间
+	 * @param  string  $year 年度
 	 * @return boolean       已经报名返回校区号，未报名为FALSE
 	 */
-	public function isRegistered($sno, $type, $date) {
-		$sql  = 'SELECT xq FROM t_ks_qtksbm WHERE xh = ? AND kslx = ? AND kssj = ?';
-		$data = $this->db->getColumn($sql, array($sno, $type, $date));
+	public function isRegistered($sno, $type, $year) {
+		$sql  = 'SELECT xq FROM t_ks_qtksbm WHERE xh = ? AND kslx = ? AND nd = ?';
+		$data = $this->db->getColumn($sql, array($sno, $type, $year));
 
 		return has($data) ? $data : false;
 	}
@@ -90,9 +90,10 @@ class ExamModel extends StudentAdminModel {
 	 * @param  string $type   考试类型
 	 * @param  string $campus 校区号
 	 * @param  string $date   考试时间
+	 * @param  string $year   考试年度
 	 * @return boolean         报名成功为TRUE，否则为FALSE
 	 */
-	public function register($sno, $type, $campus, $date) {
+	public function register($sno, $type, $campus, $date, $year) {
 		$data['xh']   = $sno;
 		$data['xq']   = $campus;
 		$data['kslx'] = $type;
@@ -100,6 +101,7 @@ class ExamModel extends StudentAdminModel {
 		$data['kssj'] = $date;
 		$data['clbz'] = Config::get('exam.status.register');
 		$data['bmsj'] = date('Y-m-d H:i:s');
+		$data['nd']   = $year;
 
 		$inserted = $this->db->insertRecord('t_ks_qtksbm', $data);
 		if (has($inserted)) {

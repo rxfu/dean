@@ -12,6 +12,8 @@ class PlanController extends StudentAdminController {
 	 */
 	protected function plan() {
 		$plan = $this->model->getPlan($this->session->get('grade'), $this->session->get('spno'), $this->session->get('season'));
+		$plan = is_array($plan) ? $plan : array();
+
 		return $this->view->display('plan.plan', array('plans' => $plan));
 	}
 
@@ -22,6 +24,7 @@ class PlanController extends StudentAdminController {
 	 */
 	protected function course() {
 		$courses = $this->model->getCourses();
+		$courses = is_array($courses) ? $courses : array();
 
 		return $this->view->display('plan.course', array('courses' => $courses));
 	}
@@ -50,6 +53,8 @@ class PlanController extends StudentAdminController {
 			foreach ($requirements as $requirement) {
 				$data[$requirement['pt'] . $requirement['xz']] = $requirement['xf'];
 			}
+		} else {
+			$data = array();
 		}
 
 		return $this->view->display('plan.graduation', array('require' => $data));

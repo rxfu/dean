@@ -40,11 +40,12 @@ class ReportController extends StudentAdminController {
 	protected function unconfirmed() {
 		$scores         = $this->model->getUnconfirmed($this->session->get('username'));
 		$scoresByGrades = array();
-		foreach ($scores as $score) {
-			$scoresByGrades[$score['cjfs']]['ratios']    = $this->model->getRatio($score['cjfs']);
-			$scoresByGrades[$score['cjfs']]['courses'][] = $score;
+		if ($scores) {
+			foreach ($scores as $score) {
+				$scoresByGrades[$score['cjfs']]['ratios']    = $this->model->getRatio($score['cjfs']);
+				$scoresByGrades[$score['cjfs']]['courses'][] = $score;
+			}
 		}
-
 		return $this->view->display('report.unconfirmed', array('scores' => $scoresByGrades));
 	}
 
@@ -55,8 +56,10 @@ class ReportController extends StudentAdminController {
 	protected function exam() {
 		$scores       = $this->model->getExamReport($this->session->get('username'));
 		$scoresByType = array();
-		foreach ($scores as $score) {
-			$scoresByType[$score['c_kslx']][] = $score;
+		if ($scores) {
+			foreach ($scores as $score) {
+				$scoresByType[$score['c_kslx']][] = $score;
+			}
 		}
 
 		return $this->view->display('report.exam', array('scores' => $scoresByType));
