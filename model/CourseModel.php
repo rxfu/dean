@@ -336,6 +336,13 @@ class CourseModel extends StudentAdminModel {
 	 * @return boolean             成功返回TRUE，否则返回FALSE
 	 */
 	public function select($year, $term, $season, $sno, $name, $grade, $speciality, $cno) {
+		$sql = 'SELECT COUNT(*) FROM t_xk_tj WHERE kcxh = ?';
+		$count = $this->db->getColumn($sql, $cno);
+		if (0 >= $count) {
+			$sql = 'INSERT INTO t_xk_tj (kxch, rs) SELECT kcxh, COUNT(xh) FROM t_xk_xkxx WHERE nd = ? AND xq = ? AND kcxh = ?';
+			$inserted = $this->db->insert($sql, array($year,$term,$cno));
+		}
+
 		$param    = "'" . implode("', '", array($year, $term, $sno, $cno, $name, $grade, $speciality, $season)) . "'";
 		$selected = $this->db->query('SELECT p_xzkc_save(' . $param . ')');
 		if ($selected) {
