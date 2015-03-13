@@ -21,7 +21,7 @@ class TeacherController extends TeacherAdminController {
 		if ($this->session->get('logged')) {
 			$this->session->forget();
 		}
-		
+
 		if (isPost()) {
 			$_POST = sanitize($_POST);
 
@@ -34,7 +34,7 @@ class TeacherController extends TeacherAdminController {
 			}
 
 			if ($this->auth($username, $password)) {
-				$info = $this->getInfo($username);
+				$info = $this->model->getProfile($username);
 
 				$this->session->put('name', $info['xm']);
 				$this->session->put('college', $info['xy']);
@@ -68,20 +68,12 @@ class TeacherController extends TeacherAdminController {
 	 */
 	protected function auth($username, $password) {
 		if (is_string($username) && is_string($password)) {
-			$data = $this->db->searchRecord('t_pk_js', array('jsgh' => $username, 'mm' => encrypt($password)), array('jsgh', 'zt'));
+			$success = $this->model->validate($username, $password);
 
-			if (is_array($data)) {
-				if (1 == count($data)) {
-					if (ENABLE == $data[0]['zt']) {
-						$username    = $data[0]['jsgh'];
-						$currentTime = date('Y-m-d H:i:s');
+			if ($success) {
+				$this->session->put('username', $username);
 
-						$this->session->put('id', encrypt($username . $currentTime));
-						$this->session->put('username', $username);
-
-						return true;
-					}
-				}
+				return true;
 			}
 		}
 
@@ -116,11 +108,10 @@ class TeacherController extends TeacherAdminController {
 				if (($new === $confirmed) && ($old !== $new)) {
 					$db = $this->db;
 
-					$data = $db->searchRecord('t_pk_js', array('jsgh' => $this->session->get('username'), 'mm' => encrypt($old)), array('jsgh'));
-					if (is_array($data)) {
-						if (1 == count($data)) {
-							$db->updateRecord('t_pk_js', array('mm' => encrypt($new)), array('jsgh' => $this->session->get('username')));
-
+					$data    = $db->searchRecord('t_pk_js', array('jsgh' => $this->session->get('username'), 'mm' => encrypt($old)), array('jsgh'));
+					$success = $this->model->validate($username, $old);
+					if ($success) {
+						if ($this->model->changePassword($this->session->get('username'), $new)) {
 							Message::add('success', '修改密码成功');
 							return $this->view->display('teacher.password');
 						}
@@ -134,31 +125,13 @@ class TeacherController extends TeacherAdminController {
 	}
 
 	/**
-	 * 根据教师工号获取教师基本信息
-	 * @param  string $id 教师工号
-	 * @return array     教师基本信息
-	 */
-	protected function getInfo($id) {
-		if (is_numeric($id)) {
-			$sql  = 'SELECT * FROM v_pk_jsxx WHERE jsgh = ?';
-			$data = $this->db->getRow($sql, $id);
-		}
-
-		return $data;
-	}
-
-	/**
 	 * 获取当前教师详细信息
 	 * @return array 教师详细信息
 	 */
 	protected function profile() {
-		$id = $this->session->get('username');
-		if (is_numeric($id)) {
-			$sql  = 'SELECT * FROM v_pk_jsxx WHERE jsgh = ?';
-			$data = $this->db->getRow($sql, $id);
-		}
+		$profile = $this->model->getProfile($this->session->get('username'));
 
-		return $this->view->display('teacher.profile', array('profile' => $data));
+		return $this->view->display('teacher.profile', array('profile' => $profile));
 	}
 
 	/**

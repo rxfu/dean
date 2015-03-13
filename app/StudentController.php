@@ -42,7 +42,7 @@ class StudentController extends StudentAdminController {
 			if ($this->auth($username, $password)) {
 				Logger::write(array('xh' => $this->session->get('username'), 'czlx' => Config::get('log.login')));
 
-				$info = $this->getInfo($username);
+				$info = $this->model->getInfo($username);
 
 				$this->session->put('id', $info['sfzh']);
 				$this->session->put('name', $info['xm']);
@@ -83,18 +83,12 @@ class StudentController extends StudentAdminController {
 	 */
 	protected function auth($username, $password) {
 		if (is_string($username) && is_string($password)) {
-			$data = $this->db->searchRecord('t_xk_xsmm', array('xh' => $username, 'mm' => encrypt($password)), array('xh'));
+			$success = $this->model->validate($username, $password);
 
-			if (is_array($data)) {
-				if (1 == count($data)) {
-					$username    = $data[0]['xh'];
-					$currentTime = date('Y-m-d H:i:s');
+			if ($success) {
+				$this->session->put('username', $username);
 
-					$this->session->put('id', encrypt($username . $currentTime));
-					$this->session->put('username', $username);
-
-					return true;
-				}
+				return true;
 			}
 		}
 
@@ -126,16 +120,10 @@ class StudentController extends StudentAdminController {
 			$confirmed = $_POST['confirmedPassword'];
 
 			if (is_string($old) && is_string($new)) {
-
 				if (($new === $confirmed) && ($old !== $new)) {
-					$db = $this->db;
-
-					$data = $db->searchRecord('t_xk_xsmm', array('xh' => $this->session->get('username'), 'mm' => encrypt($old)), array('xh'));
-					if (is_array($data)) {
-						if (1 == count($data)) {
-							$db->updateRecord('t_xk_xsmm', array('mm' => encrypt($new)), array('xh' => $this->session->get('username')));
-							Logger::write(array('xh' => $this->session->get('username'), 'czlx' => Config::get('log.change_password')));
-
+					$success = $this->model->validate($this->session->get('username'), $old);
+					if ($success) {
+						if ($this->model->changePassword($this->session->get('username'), $new)) {
 							Message::add('success', '修改密码成功');
 							return $this->view->display('student.password');
 						}
@@ -149,31 +137,13 @@ class StudentController extends StudentAdminController {
 	}
 
 	/**
-	 * 根据学号获取学生基本信息
-	 * @param  string $id 学号
-	 * @return array     学生基本信息
-	 */
-	protected function getInfo($id) {
-		if (is_numeric($id) && isset($id{11}) && !isset($id{12})) {
-			$sql  = 'SELECT * FROM v_xk_xsjbxx WHERE xh = ?';
-			$data = $this->db->getRow($sql, $id);
-		}
-
-		return $data;
-	}
-
-	/**
 	 * 获取当前学生详细信息
 	 * @return array 学生详细信息
 	 */
 	protected function profile() {
-		$id = $this->session->get('username');
-		if (is_numeric($id) && isset($id{11}) && !isset($id{12})) {
-			$sql  = 'SELECT * FROM v_xk_xsxx WHERE xh = ?';
-			$data = $this->db->getRow($sql, $id);
-		}
+		$profile = $this->model->getProfile($this->session->get('username'));
 
-		return $this->view->display('student.profile', array('profile' => $data));
+		return $this->view->display('student.profile', array('profile' => $profile));
 	}
 
 	/**
@@ -222,55 +192,11 @@ class StudentController extends StudentAdminController {
 	}
 
 	/**
-	 * 根据学号列出学生具有课程的学期
-	 *
-	 * @param string  $id 学号
-	 * @return array     年度学期数组
-	 */
-	protected function courseTerms($id) {
-		$sql  = 'SELECT nd, xq FROM t_xk_xkxx WHERE xh = ? GROUP BY nd, xq ORDER BY nd DESC, xq DESC';
-		$data = $this->db->getAll($sql, $id);
-
-		return $data;
-	}
-
-	/**
-	 * 根据学号列出学生具有成绩的学期
-	 *
-	 * @param string  $id 学号
-	 * @return array     年度学期数组
-	 */
-	protected function reportTerms($id) {
-		$sql  = 'SELECT nd, xq FROM t_cj_zxscj WHERE xh = ? GROUP BY nd, xq ORDER BY nd DESC, xq DESC';
-		$data = $this->db->getAll($sql, $id);
-
-		return $data;
-	}
-
-	/**
 	 * 学生欠费提示
 	 * @return void
 	 */
 	protected function unpaid() {
 		return $this->view->display('student.unpaid', array('name' => $this->session->get('name')));
-	}
-
-	/**
-	 * 列出当年考试类型
-	 * @return array 考试类型列表
-	 */
-	protected function examTypes() {
-		$sql  = 'SELECT a.kslx, a.ksmc, b.ksdl, b.mc AS ksdlmc FROM t_cj_kslxdm a LEFT JOIN t_cj_ksdl b ON a.ksdl = b.ksdl WHERE a.zt = ? ORDER BY b.ksdl, a.kslx';
-		$data = $this->db->getAll($sql, ENABLE);
-
-		$types = array();
-		if (is_array($data)) {
-			foreach ($data as $type) {
-				$types[$type['ksdl']][] = $type;
-			}
-		}
-
-		return $types;
 	}
 
 }
