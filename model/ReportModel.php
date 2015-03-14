@@ -46,7 +46,7 @@ class ReportModel extends StudentAdminModel {
 	 */
 	public function getDetail($sno, $cno) {
 		$sql  = 'SELECT * FROM v_cj_xsgccj WHERE xh = ? AND kch = ? AND tjzt = ? ORDER BY nd DESC, xq DESC';
-		$data = $this->db->getAll($sql, array($sno, $cno, Config::get('score.dean_confirmed')));
+		$data = $this->db->getAll($sql, array($sno, $cno, Config::get('score.submit.dean_confirmed')));
 
 		return has($data) ? $data : false;
 	}
@@ -58,7 +58,7 @@ class ReportModel extends StudentAdminModel {
 	 */
 	public function getUnconfirmed($sno) {
 		$sql  = 'SELECT * FROM v_cj_xsgccj WHERE xh = ? AND tjzt < ? ORDER BY nd DESC, xq DESC, kcxh';
-		$data = $this->db->getAll($sql, array($sno, Config::get('score.dean_confirmed')));
+		$data = $this->db->getAll($sql, array($sno, Config::get('score.submit.dean_confirmed')));
 
 		return has($data) ? $data : false;
 	}
