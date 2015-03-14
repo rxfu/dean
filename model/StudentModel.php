@@ -18,6 +18,14 @@ class StudentModel extends StudentAdminModel {
 	}
 
 	/**
+	 * 检测是否允许照片上传
+	 * @return boolean 允许上传为TRUE，否则为FALSE
+	 */
+	public function isAllowedUploadPortrait() {
+		return ENABLE == Setting::get('KS_ZPSC') ? true : false;
+	}
+
+	/**
 	 * 判断学生是否已经上传照片
 	 * @param  string $file 文件名
 	 * @return boolean 已经上传为TRUE，否则为FALSE
@@ -116,6 +124,18 @@ class StudentModel extends StudentAdminModel {
 		}
 
 		return false;
+	}
+
+	/**
+	 * 设置照片上传成功状态
+	 * @param  string $sno 学号
+	 * @return boolean      成功返回TRUE，否则返回FALSE
+	 */
+	public function setUploadedSuccess($sno) {
+		$sql     = 'UPDATE t_xk_xsmm SET zpzt = ? WHERE xh = ?';
+		$updated = $this->db->update($sql, array(Config::get('user.portrait.uploaded'), $sno));
+
+		return $updated ? true : false;
 	}
 
 }

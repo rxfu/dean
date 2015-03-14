@@ -19,17 +19,25 @@ return array(
 	// 用户参数
 	'user'       => array(
 
+		// 照片状态
+		'portrait' => array(
+			'none'     => '0',
+			'uploaded' => '1',
+			'passed'   => '2',
+			'refused'  => '3',
+		),
+
 		// 学籍状态
-		'status' => '01',
+		'status'   => '01',
 
 		// 角色
-		'role'   => array(
+		'role'     => array(
 			'student' => 'student',
 			'teacher' => 'teacher',
 		),
 
 		// 加密salt
-		'salt'   => '+:sD>PjbsJ+3!&+TE@!J<:wj|*J6_KimvoHJ?HQ][vE)O/2S8F&<iz.-b#t2tW:|',
+		'salt'     => '+:sD>PjbsJ+3!&+TE@!J<:wj|*J6_KimvoHJ?HQ][vE)O/2S8F&<iz.-b#t2tW:|',
 	),
 
 	// 日志参数

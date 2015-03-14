@@ -18,7 +18,7 @@
                                             <td><?php echo $profile['xm'] ?></td>
                                             <td rowspan="10" width="240" height="320">
                                                 <img src="<?php echo Route::to('student.portrait') ?>" alt="<?php echo $session['name'] ?>" /><br><br>
-                                                <?php if (!$confirmed): ?>
+                                                <?php if ($allow): ?>
                                                     <div class="text-center">
                                                         <a href="<?php echo Route::to('student.upload') ?>" role="button" class="btn btn-default">上传照片</a>
                                                     </div>

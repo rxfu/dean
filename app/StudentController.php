@@ -141,11 +141,10 @@ class StudentController extends StudentAdminController {
 	 * @return array 学生详细信息
 	 */
 	protected function profile() {
-		$profile   = $this->model->getProfile($this->session->get('username'));
-		$exam      = new ExamModel();
-		$confirmed = $exam->hasConfirmed($this->session->get('username'));
+		$profile = $this->model->getProfile($this->session->get('username'));
+		$allow   = $this->model->isAllowedUploadePortrait();
 
-		return $this->view->display('student.profile', array('profile' => $profile, 'confirmed' => $confirmed));
+		return $this->view->display('student.profile', array('profile' => $profile, 'allow' => $allow));
 	}
 
 	/**
@@ -168,6 +167,11 @@ class StudentController extends StudentAdminController {
 	 * @return void
 	 */
 	protected function upload() {
+		if (!$this->model->isAllowedUploadePortrait()) {
+			Message::add('danger', '现在不允许上传照片');
+			return redirect('error.error');
+		}
+		
 		if (isPost()) {
 			if (!isEmpty($_FILES['portrait'])) {
 				$uploader = new ImageUploader(PORTRAIT);
@@ -184,6 +188,7 @@ class StudentController extends StudentAdminController {
 			}
 
 			if ($this->model->isUploadedPortrait($this->session->get('id'))) {
+				$this->model->setUploadedSuccess($this->session->get('username'));
 				Message::add('success', '上传成功');
 			} else {
 				Message::add('danger', '上传失败');
