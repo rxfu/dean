@@ -149,19 +149,7 @@ class ExamModel extends StudentAdminModel {
 		$types = array();
 		if (has($data) && is_array($data)) {
 			foreach ($data as $type) {
-				if (Config::get('exam.type.cet3') == $type['kslx']) {
-					if (DISABLE == $this->isAllowedRegister($type, $speciality)) {
-						continue;
-					}
-				}
-
 				if (Config::get('exam.type.cet4') == $type['kslx']) {
-					if (ENABLE == $this->isAllowedRegister($type, $speciality)) {
-						if (!$this->isPassed($sno, Config::get('exam.type.cet3'))) {
-							continue;
-						}
-					}
-
 					if (!$this->isAllowedFreshRegisterCET4()) {
 						$student = new StudentModel();
 						if ($student->isFresh($sno && !$student->isUndergraduate($sno))) {
@@ -171,12 +159,6 @@ class ExamModel extends StudentAdminModel {
 				}
 
 				if (Config::get('exam.type.cet6') == $type['kslx']) {
-					if (ENABLE == $this->isAllowedRegister($type, $speciality)) {
-						if (!$this->isPassed($sno, Config::get('exam.type.cet3'))) {
-							continue;
-						}
-					}
-
 					if (!$this->isPassed($sno, Config::get('exam.type.cet4'))) {
 						continue;
 					}
