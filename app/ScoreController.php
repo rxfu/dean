@@ -24,7 +24,7 @@ class ScoreController extends TeacherAdminController {
 			$students = $this->model->getStudents($this->session->get('year'), $this->session->get('term'), $cno);
 			foreach ($students as &$student) {
 				if (isEmpty($student['tjzt'])) {
-					$student['tjzt'] = Config::get('score.uncommitted');
+					$student['tjzt'] = Config::get('score.submit.uncommitted');
 				}
 			}
 

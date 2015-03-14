@@ -164,7 +164,7 @@ class ScoreModel extends TeacherAdminModel {
 	 */
 	public function confirmScore($year, $term, $cno) {
 		$sql       = 'UPDATE t_cj_web SET tjzt = ? WHERE nd = ? AND xq = ? AND kcxh = ?';
-		$confirmed = $this->db->update($sql, array(Config::get('score.committed'), $year, $term, $cno));
+		$confirmed = $this->db->update($sql, array(Config::get('score.submit.committed'), $year, $term, $cno));
 
 		return $confirmed ? true : false;
 	}

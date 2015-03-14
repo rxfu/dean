@@ -109,13 +109,22 @@ return array(
 		),
 	),
 
-	// 成绩状态代码
+	// 成绩代码
 	'score'      => array(
-		'passline'          => 60,
-		'uncommitted'       => '0',
-		'committed'         => '1',
-		'college_confirmed' => '2',
-		'dean_confirmed'    => '3',
+		'passline' => 60,
+
+		// 提交状态
+		'submit'   => array(
+			'uncommitted'       => '0', // 未提交
+			'committed'         => '1', // 教师已提交
+			'college_confirmed' => '2', // 学院已确认
+			'dean_confirmed'    => '3', // 教务处已确认
+		),
+
+		// 考试状态
+		'exam'     => array(
+			'deferral' => '1', // 缓考
+		),
 	),
 
 	// 考试报名代码

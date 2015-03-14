@@ -12,7 +12,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading clearfix">
                                 <div class="panel-title pull-left">成绩方式：<?php echo $ratios['name'] ?></div>
-                                <?php if (Config::get('score.uncommitted') == $report): ?>
+                                <?php if (Config::get('score.submit.uncommitted') == $report): ?>
                                     <div class="pull-right">
                                         <form method="post" action="<?php echo Route::to('score.confirm') ?>" role="form">
                                             <button type="button" class="btn btn-primary" title="成绩上报" data-toggle="modal" data-target="#confirmDialog" data-title="成绩上报" data-message="注意：请检查成绩是否已经录入完毕并且正确，成绩确认后将不可更改！">成绩上报</button>
@@ -42,7 +42,7 @@
                                                     <td><p class="form-control-static"><?php echo $student['xm'] ?></p></td>
                                                     <?php foreach($ratios['mode'] as $key => $value): ?>
                                                         <td>
-                                                            <?php if (Config::get('score.uncommitted') == $student['tjzt']): ?>
+                                                            <?php if (Config::get('score.submit.uncommitted') == $student['tjzt']): ?>
                                                                 <form method="post" action="<?php echo Route::to('score.enter', $info['kcxh']) ?>" role="form" onsubmit="return false">
                                                                     <input type="text" name="score<?php echo $key ?>" value="<?php echo $student['cj' . $key] ?>" size="6" class="form-control">
                                                                 </form>
@@ -53,7 +53,7 @@
                                                     <?php endforeach; ?>
                                                     <td data-name="total"><p id="total<?php echo $student['xh'] ?>" class="form-control-static"><?php echo $student['zpcj'] ?></p></td>
                                                     <td>
-                                                        <?php if (Config::get('score.uncommitted') == $student['tjzt']): ?>
+                                                        <?php if (Config::get('score.submit.uncommitted') == $student['tjzt'] && Config::get('score.exam.deferral') != $student['ksztdm']): ?>
                                                             <form method="post" action="<?php echo Route::to('score.status', $info['kcxh']) ?>" role="form">
                                                                 <select name="status<?php echo $student['xh'] ?>" id="status<?php echo $student['xh'] ?>" class="form-control">
                                                                     <?php foreach($statuses as $status): ?>
