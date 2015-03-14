@@ -346,4 +346,34 @@ class CourseController extends StudentAdminController {
 		return $this->view->display('course.current', array('courses' => $coursesByNumber));
 	}
 
+	/**
+	 * 选课时间冲突检测
+	 * @param  string $cno 课程序号
+	 * @return mixed 冲突为冲突课程序号数组，否则为FALSE
+	 */
+	protected function clash($cno) {
+		$status = $this->model->isClash(
+			$this->session->get('year'),
+			$this->session->get('term'),
+			$this->session->get('username'),
+			$cno);
+
+		echo json_encode(array('status' => $status));
+		return $status;
+	}
+
+	/**
+	 * 判断是否选课人数已满
+	 * @param  string $course 课程序号
+	 * @return boolean         人数已满为TRUE，未满为FALSE
+	 */
+	protected function full($course) {
+		$status = $this->model->isFull($this->session->get('year'),
+			$this->session->get('term'),
+			$cno);
+
+		echo json_encode(array('status' => $status));
+		return $status;
+	}
+
 }
