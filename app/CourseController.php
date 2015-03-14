@@ -364,10 +364,10 @@ class CourseController extends StudentAdminController {
 
 	/**
 	 * 判断是否选课人数已满
-	 * @param  string $course 课程序号
+	 * @param  string $cno 课程序号
 	 * @return boolean         人数已满为TRUE，未满为FALSE
 	 */
-	protected function full($course) {
+	protected function full($cno) {
 		$status = $this->model->isFull($this->session->get('year'),
 			$this->session->get('term'),
 			$cno);
