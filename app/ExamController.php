@@ -26,6 +26,19 @@ class ExamController extends StudentAdminController {
 				Message::add('danger', '已经报名本次CET6考试，CET6和英语应用能力B级不能同时报名');
 				return redirect('exam.listing');
 			}
+		} elseif (in_array($exam['kslx'], array(Config::get('exam.type.cet4'), Config::get('exam.type.cjt4'), Config::get('exam.type.cft4')))) {
+			if (Config::get('exam.type.cet4') != $exam['kslx'] && $this->model->isRegistered($this->session->get('username'), Config::get('exam.type.cet4'), $exam['nd'])) {
+				Message::add('danger', '已经报名本次CET4考试，' . $exam['ksmc'] . '和CET4不能同时报名');
+				return redirect('exam.listing');
+			}
+			if (Config::get('exam.type.cjt4') != $exam['kslx'] && $this->model->isRegistered($this->session->get('username'), Config::get('exam.type.cjt4'), $exam['nd'])) {
+				Message::add('danger', '已经报名本次CJT4考试，' . $exam['ksmc'] . '和CJT4不能同时报名');
+				return redirect('exam.listing');
+			}
+			if (Config::get('exam.type.cft4') != $exam['kslx'] && $this->model->isRegistered($this->session->get('username'), Config::get('exam.type.cft4'), $exam['nd'])) {
+				Message::add('danger', '已经报名本次CFT4考试，' . $exam['ksmc'] . '和CFT4不能同时报名');
+				return redirect('exam.listing');
+			}
 		} elseif (Config::get('exam.type.cet4') == $exam['kslx']) {
 			if ($this->model->isRegistered($this->session->get('username'), Config::get('exam.type.cet3'), $exam['nd'])) {
 				Message::add('danger', '已经报名本次英语应用能力B级考试，英语应用能力B级和CET4不能同时报名');

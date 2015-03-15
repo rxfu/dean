@@ -7,12 +7,7 @@
     <section class="row">
         <div class="col-lg-12">
         	<div class="panel panel-default">
-        		<div class="panel-body">
-                    <ol>
-                        <li><?php echo $message ?></li>
-                        <li>考试报名时间：</li>
-                    </ol>
-        		</div>
+        		<div class="panel-body"><?php echo $message ?></div>
         	</div>
         </div>
     </section>
