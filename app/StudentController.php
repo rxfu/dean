@@ -142,7 +142,7 @@ class StudentController extends StudentAdminController {
 	 */
 	protected function profile() {
 		$profile = $this->model->getProfile($this->session->get('username'));
-		$allow   = $this->model->isAllowedUploadePortrait();
+		$allow   = $this->model->isAllowedUploadPortrait();
 
 		return $this->view->display('student.profile', array('profile' => $profile, 'allow' => $allow));
 	}
