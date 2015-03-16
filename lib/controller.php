@@ -24,12 +24,6 @@ class Controller {
 	protected $model = null;
 
 	/**
-	 * 数据库句柄
-	 * @var Database
-	 */
-	protected $db = null;
-
-	/**
 	 * 前过滤器排除列表
 	 * @var array
 	 */

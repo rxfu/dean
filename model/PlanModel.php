@@ -16,7 +16,7 @@ class PlanModel extends StudentAdminModel {
 		$sql  = 'SELECT * FROM v_xk_jxjh WHERE nj = ? AND zy = ? AND zsjj = ?';
 		$data = $this->db->getAll($sql, array($grade, $speciality, $season));
 
-		return has($data) ? $data : false;
+		return has($data) ? $data : array();
 	}
 
 	/**
@@ -27,7 +27,7 @@ class PlanModel extends StudentAdminModel {
 		$sql  = 'SELECT * FROM t_jx_kc_xx';
 		$data = $this->db->getAll($sql);
 
-		return has($data) ? $data : false;
+		return has($data) ? $data : array();
 	}
 
 	/**

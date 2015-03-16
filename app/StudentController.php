@@ -10,7 +10,9 @@ class StudentController extends StudentAdminController {
 	 * @return void
 	 */
 	protected function dashboard() {
-		$message = $this->db->getColumn('SELECT text FROM t_xt_message');
+		$system  = new SystemModel();
+		$message = $system->getSystemMessage();
+
 		return $this->view->display('student.dashboard', array('message' => $message));
 	}
 
@@ -171,7 +173,7 @@ class StudentController extends StudentAdminController {
 			Message::add('danger', '现在不允许上传照片');
 			return redirect('error.error');
 		}
-		
+
 		if (isPost()) {
 			if (!isEmpty($_FILES['portrait'])) {
 				$uploader = new ImageUploader(PORTRAIT);

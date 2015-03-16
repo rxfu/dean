@@ -336,11 +336,11 @@ class CourseModel extends StudentAdminModel {
 	 * @return boolean             成功返回TRUE，否则返回FALSE
 	 */
 	public function select($year, $term, $season, $sno, $name, $grade, $speciality, $cno) {
-		$sql = 'SELECT COUNT(*) FROM t_xk_tj WHERE kcxh = ?';
+		$sql   = 'SELECT COUNT(*) FROM t_xk_tj WHERE kcxh = ?';
 		$count = $this->db->getColumn($sql, $cno);
 		if (0 >= $count) {
-			$sql = 'INSERT INTO t_xk_tj (kxch, rs) SELECT kcxh, COUNT(xh) FROM t_xk_xkxx WHERE nd = ? AND xq = ? AND kcxh = ?';
-			$inserted = $this->db->insert($sql, array($year,$term,$cno));
+			$sql      = 'INSERT INTO t_xk_tj (kxch, rs) SELECT kcxh, COUNT(xh) FROM t_xk_xkxx WHERE nd = ? AND xq = ? AND kcxh = ?';
+			$inserted = $this->db->insert($sql, array($year, $term, $cno));
 		}
 
 		$param    = "'" . implode("', '", array($year, $term, $sno, $cno, $name, $grade, $speciality, $season)) . "'";
@@ -428,6 +428,26 @@ class CourseModel extends StudentAdminModel {
 	}
 
 	/**
+	 * 撤销选课申请
+	 * @param  string $year 年度
+	 * @param  string $term 学期
+	 * @param  string $sno  学号
+	 * @param  string $cno  12位课程序号
+	 * @return boolean       成功为TRUE，否则为FALSE
+	 */
+	public function revoke($year, $term, $sno, $cno) {
+		$sql     = 'DELETE FROM t_xk_xksq WHERE nd = ? AND xq = ? AND xh = ? AND kcxh = ?';
+		$deleted = $this->db->delete($sql, array($year, $term, $sno, $cno));
+
+		if (has($deleted)) {
+			Logger::write(array('xh' => $sno, 'kcxh' => $cno, 'czlx' => Config::get('log.revoke_course')));
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * 获取学生课程表
 	 * @param  string $year 年度
 	 * @param  string $term 学期
@@ -444,13 +464,13 @@ class CourseModel extends StudentAdminModel {
 	/**
 	 * 获取学生选课申请表
 	 * @param  string $sno 学号
-	 * @return boolean      有申请表返回TRUE，否则返回FALSE
+	 * @return boolean      有申请表返回TRUE，否则返回空数组
 	 */
 	public function getApplications($sno) {
 		$sql  = 'SELECT * FROM t_xk_xksq WHERE xh = ? ORDER BY xksj DESC';
 		$data = $this->db->getAll($sql, array($sno));
 
-		return has($data) ? $data : false;
+		return has($data) ? $data : array();
 	}
 
 	/**

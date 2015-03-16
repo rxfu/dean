@@ -12,6 +12,7 @@
                                     <table class="table table-bordered table-striped table-hover data-table">
                                         <thead>
                                             <tr>
+                                                <th class="active">申请时间</th>
                                                 <th class="active">年度</th>
                                                 <th class="active">学期</th>
                                                 <th class="active">课程序号</th>
@@ -21,12 +22,12 @@
                                                 <th class="active">申请类型</th>
                                                 <th class="active">审核意见</th>
                                                 <th class="active">申请状态</th>
-                                                <th class="active">申请时间</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php foreach ($courses as $course): ?>
                                             <tr>
+                                                <td><?php echo $course['xksj'] ?></td>
                                                 <td><?php echo $course['nd'] ?></td>
                                                 <td><?php echo Dictionary::get('xq', $course['xq']) ?></td>
                                                 <td><?php echo $course['kcxh'] ?></td>
@@ -45,21 +46,18 @@
                                                         break;
                                                 } ?></td>
                                                 <td><?php echo $course['shyj'] ?></td>
-                                                <td><?php switch ($course['sh']) {
-                                                    case Config::get('apply.unauditted'):
-                                                        echo '待审核';
-                                                        break;
-                                                    case Config::get('apply.passed'):
-                                                        echo '审核已批准';
-                                                        break;
-                                                    case Config::get('apply.refused'):
-                                                        echo '审核未批准';
-                                                        break;
-                                                    default:
-                                                        echo '待审核';
-                                                        break;
-                                                } ?></td>
-                                                <td><?php echo $course['xksj'] ?></td>
+                                                <td>
+                                                    <?php if (Config::get('course.apply.passed') == $course['sh']): ?>
+                                                        已批准
+                                                    <?php elseif (Config::get('course.apply.refused') == $course['sh']): ?>
+                                                        已拒绝
+                                                    <?php elseif (Config::get('course.apply.unauditted') == $course['sh']): ?>
+                                                        <form method="post" name="revoke" action="<?php echo Route::to('course.revoke') ?>" role="form">
+                                                            <input type="hidden" name="cno" value="<?php echo $course['kcxh'] ?>">
+                                                            <button type="button" class="btn btn-primary" title="撤销申请" data-toggle="modal" data-target="#confirmDialog" data-title="撤销选课申请" data-message="你确定要撤销<?php echo $course['kcxh'] ?>课程的选课申请？">撤销申请</button>
+                                                        </form>
+                                                    <?php endif; ?>
+                                                </td>
                                             </tr>
                                             <?php endforeach; ?>
                                         </tbody>
@@ -69,3 +67,5 @@
                         </div>
                     </div>
                 </section>
+
+                <?php include partial('confirm_dialog') ?>

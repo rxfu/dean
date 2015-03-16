@@ -25,8 +25,21 @@ class ExamModel extends StudentAdminModel {
 	 * @return boolean       已经报名返回校区号，未报名为FALSE
 	 */
 	public function isRegistered($sno, $type, $year) {
-		$sql  = 'SELECT xq FROM t_ks_qtksbm WHERE xh = ? AND kslx = ? AND nd = ?';
-		$data = $this->db->getColumn($sql, array($sno, $type, $year));
+		$sql  = 'SELECT xq FROM t_ks_qtksbm WHERE nd = ? AND xh = ? AND kslx = ?';
+		$data = $this->db->getColumn($sql, array($year, $sno, $type));
+
+		return has($data) ? $data : false;
+	}
+
+	/**
+	 * 检测是否已经报名英语等级考试
+	 * @param  string  $sno  学号
+	 * @param  string  $year 年度
+	 * @return boolean       已经报名返回考试名称，未报名则返回FALSE
+	 */
+	public function isRegisteredCET($sno, $year) {
+		$sql  = 'SELECT b.ksmc FROM t_ks_qtksbm a LEFT JOIN t_cj_kslxdm b ON b.kslx = a.kslx WHERE a.nd = ? AND a.xh = ? AND b.ksdl = ?';
+		$data = $this->db->getColumn($sql, array($year, $sno, Config::get('exam.type.cet')));
 
 		return has($data) ? $data : false;
 	}
@@ -127,13 +140,13 @@ class ExamModel extends StudentAdminModel {
 	/**
 	 * 列出报名信息
 	 * @param  string $sno 学号
-	 * @return mixed      成功返回报名信息列表，否则返回FALSE
+	 * @return mixed      成功返回报名信息列表，否则返回空数组
 	 */
 	public function listRegister($sno) {
 		$sql  = 'SELECT b.ksmc, a.xq, a.kssj, a.bmsj FROM t_ks_qtksbm a LEFT JOIN t_cj_kslxdm b ON b.kslx = a.kslx WHERE xh = ? ORDER BY a.bmsj DESC';
 		$data = $this->db->getAll($sql, $sno);
 
-		return has($data) ? $data : false;
+		return has($data) ? $data : array();
 	}
 
 	/**

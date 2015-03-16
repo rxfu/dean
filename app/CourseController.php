@@ -321,6 +321,24 @@ class CourseController extends StudentAdminController {
 	}
 
 	/**
+	 * 撤销选课申请
+	 * @return void
+	 */
+	protected function revoke() {
+		if (isPost()) {
+			$_POST = sanitize($_POST);
+			$cno   = $_POST['cno'];
+
+			$this->model->revoke($this->session->get('year'),
+				$this->session->get('term'),
+				$this->session->get('username'),
+				$cno);
+		}
+
+		return redirect('course.process');
+	}
+
+	/**
 	 * 列出当前学生的课程申请列表
 	 * @return array 课程申请列表
 	 */

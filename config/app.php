@@ -50,6 +50,7 @@ return array(
 		'change_password' => 'CHGPWD',
 		'register'        => 'REGIST',
 		'apply_course'    => 'APPLY',
+		'revoke_course'   => 'REVOKE',
 	),
 
 	// 检索状态代码
@@ -102,7 +103,7 @@ return array(
 			'selectable' => '2',
 		),
 
-		// 神情状态
+		// 申请状态
 		'apply'   => array(
 			'unauditted' => '0',
 			'passed'     => '1',
@@ -140,9 +141,12 @@ return array(
 
 		// 考试类型代码
 		'type'   => array(
+			'cet'  => '1',
 			'cet3' => '03',
 			'cet4' => '04',
 			'cet6' => '06',
+			'crt4' => '12',
+			'cgt4' => '17',
 			'cjt4' => '22',
 			'cft4' => '23',
 		),
