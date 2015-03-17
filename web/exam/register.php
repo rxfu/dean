@@ -11,72 +11,53 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <?php if ($registered): ?>
-                                            <div class="form-horizontal">
-                                                <div class="form-group">
-                                                    <label for="sno" class="col-md-4">学号</label>
-                                                    <div class="col-md-8"><?php echo $session['username'] ?></div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="sno" class="col-md-4">姓名</label>
-                                                    <div class="col-md-8"><?php echo $session['name'] ?></div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="sno" class="col-md-4">身份证号码</label>
-                                                    <div class="col-md-8"><?php echo $session['id'] ?></div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="sno" class="col-md-4">考试时间</label>
-                                                    <div class="col-md-8"><?php echo $exam['sj'] ?></div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="sno" class="col-md-4">报考类别</label>
-                                                    <div class="col-md-8"><?php echo $exam['ksmc'] ?></div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="cno" class="col-md-4">所在校区</label>
-                                                    <div class="col-md-8"><?php echo Dictionary::get('xqh', $registered) ?></div>
-                                                </div>
+                                        <div class="form-horizontal">
+                                            <div class="form-group">
+                                                <label for="sno" class="col-md-4">学号</label>
+                                                <div class="col-md-8"><?php echo $session['username'] ?></div>
                                             </div>
-                                        <?php else: ?>
-                                            <form method="post" action="<?php echo Route::to('exam.register', $exam['kslx']) ?>" class="form-horizontal">
-                                                <div class="form-group">
-                                                    <label for="sno" class="col-md-4">学号</label>
-                                                    <div class="col-md-8"><?php echo $session['username'] ?></div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="sno" class="col-md-4">姓名</label>
-                                                    <div class="col-md-8"><?php echo $session['name'] ?></div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="sno" class="col-md-4">身份证号码</label>
-                                                    <div class="col-md-8"><?php echo $session['id'] ?></div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="sno" class="col-md-4">考试时间</label>
-                                                    <div class="col-md-8"><?php echo $exam['sj'] ?></div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="sno" class="col-md-4">报考类别</label>
-                                                    <div class="col-md-8"><?php echo $exam['ksmc'] ?></div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="cno" class="col-md-4">所在校区</label>
-                                                    <div class="col-md-8">
-                                                        <select name="campus" id="campus" class="form-control">
-                                                            <?php foreach ($campuses as $campusId => $campus): ?>
-                                                                <option value="<?php echo $campusId ?>"<?php echo $campusId == $session['campus'] ? ' selected="selected"' : '' ?>><?php echo $campus ?></option>
-                                                            <?php endforeach; ?>
-                                                        </select>
+                                            <div class="form-group">
+                                                <label for="sno" class="col-md-4">姓名</label>
+                                                <div class="col-md-8"><?php echo $session['name'] ?></div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="sno" class="col-md-4">身份证号码</label>
+                                                <div class="col-md-8"><?php echo $session['id'] ?></div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="sno" class="col-md-4">考试时间</label>
+                                                <div class="col-md-8"><?php echo $exam['sj'] ?></div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="sno" class="col-md-4">报考类别</label>
+                                                <div class="col-md-8"><?php echo $exam['ksmc'] ?></div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="cno" class="col-md-4">所在校区</label>
+                                                <div class="col-md-8"><?php echo Dictionary::get('xqh', $session['campus']) ?></div>
+                                            </div>
+                                            <?php if ($registered): ?>
+                                                <?php if (Config::get('exam.status.register') == $confirmed): ?>
+                                                    <form method="post" action="<?php echo Route::to('exam.cancel') ?>" class="form-horizontal">
+                                                        <input type="hidden" name="type" id="type" value="<?php echo $exam['kslx'] ?>">
+                                                        <div class="form-group">
+                                                            <div class="col-md-8 col-md-offset-4">
+                                                                <button type="submit" class="btn btn-primary">取消报名</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                <?php endif; ?>
+                                            <?php else: ?>
+                                                <form method="post" action="<?php echo Route::to('exam.register', $exam['kslx']) ?>" class="form-horizontal">
+                                                    <input type="hidden" name="type" id="type" value="<?php echo $exam['kslx'] ?>">
+                                                    <div class="form-group">
+                                                        <div class="col-md-8 col-md-offset-4">
+                                                            <button type="submit" class="btn btn-primary">报名</button>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-8 col-md-offset-4">
-                                                        <button type="submit" class="btn btn-primary">报名</button>
-                                                    </div>
-                                                </div> 
-                                            </form>
-                                        <?php endif; ?>
+                                                </form>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
                                     <div class="col-md-4">
                                         <img src="<?php echo Route::to('student.portrait') ?>" alt="<?php echo $session['name'] ?>">

@@ -54,4 +54,30 @@ class TeacherModel extends TeacherAdminModel {
 		return $updated ? true : false;
 	}
 
+	/**
+	 * 获取可录入成绩的课程列表
+	 * @param  string $year 年度
+	 * @param  string $term 学期
+	 * @param  string $tno  教师工号
+	 * @return mixed       成功返回课程列表，否则返回空数组
+	 */
+	public function getCourses($year, $term, $tno) {
+		$sql  = 'SELECT kcxh FROM v_cj_xscjlr WHERE jsgh = ? AND nd = ? AND xq = ? GROUP BY kcxh ORDER BY kcxh';
+		$data = $this->db->getAll($sql, array($tno, $year, $term));
+
+		return has($data) ? $data : array();
+	}
+
+	/**
+	 * 获取具有成绩的学期
+	 * @param  string $tno 教师工号
+	 * @return mixed      成功返回学期列表，否则返回空数组
+	 */
+	public function getTerms($tno) {
+		$sql  = 'SELECT nd, xq FROM v_cj_xsgccj WHERE jsgh = ? GROUP BY nd, xq ORDER BY nd DESC, xq DESC';
+		$data = $this->db->getAll($sql, $tno);
+
+		return has($data) ? $data : array();
+	}
+
 }

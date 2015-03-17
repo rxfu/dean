@@ -49,6 +49,7 @@ return array(
 		'logout'          => 'LOGOUT',
 		'change_password' => 'CHGPWD',
 		'register'        => 'REGIST',
+		'cancel'          => 'CANCEL',
 		'apply_course'    => 'APPLY',
 		'revoke_course'   => 'REVOKE',
 	),
@@ -154,7 +155,7 @@ return array(
 		// 考试状态代码
 		'status' => array(
 			'register' => '1',
-			'passed'   => '2',
+			'confirmed'   => '2',
 			'payment'  => '3',
 		),
 	),

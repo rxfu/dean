@@ -468,8 +468,12 @@ if (!function_exists('parseType')) {
 				return '退课';
 			case 'REGIST':
 				return '考试报名';
+			case 'CANCEL':
+				return '取消报名';
 			case 'APPLY':
-				return '重修申请';
+				return '选课申请';
+			case 'REVOKE':
+				return '撤销申请';
 			default:
 				return '未知类型';
 		}

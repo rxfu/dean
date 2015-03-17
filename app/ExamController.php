@@ -16,9 +16,7 @@ class ExamController extends StudentAdminController {
 		$exam       = $this->model->getExamInfo($type);
 		$registered = $this->model->isRegistered($this->session->get('username'), $type, $exam['nd']);
 
-		if ($registered) {
-			Message::add('danger', '已经报名本次' . $exam['ksmc'] . '考试，不可重复报名');
-		} else {
+		if (!$registered) {
 			if (in_array($exam['kslx'], array(Config::get('exam.type.cet4'), Config::get('exam.type.cjt4'), Config::get('exam.type.cft4'), Config::get('exam.type.crt4'), Config::get('exam.type.cgt4')))) {
 				if (!$this->model->isAllowedFreshRegisterCET4()) {
 					if ($student->isFresh($this->session->get('username')) && !$student->isUndergraduate($this->session->get('username'))) {
@@ -45,10 +43,11 @@ class ExamController extends StudentAdminController {
 
 		if ($uploaded = $student->isUploadedPortrait($this->session->get('id'))) {
 			if (isPost()) {
-				$_POST  = sanitize($_POST);
-				$campus = $_POST['campus'];
+				$type = sanitize($_POST['type']);
 
-				$this->model->register($this->session->get('username'), $type, $campus, $exam['sj'], $exam['nd']);
+				$this->model->register($this->session->get('username'), $type, $this->session->get('campus'), $exam['sj'], $exam['nd']);
+
+				Message::add('success', '考试报名成功');
 
 				return redirect('exam.register', $type);
 			}
@@ -63,7 +62,27 @@ class ExamController extends StudentAdminController {
 		}
 		ksort($campuses);
 
-		return $this->view->display('exam.register', array('exam' => $exam, 'campuses' => $campuses, 'registered' => $registered, 'uploaded' => $uploaded));
+		$confirmed  = is_array($registered) ? $registered['clbz'] : false;
+		$registered = is_array($registered) ? $registered['xq'] : false;
+
+		return $this->view->display('exam.register', array('exam' => $exam, 'campuses' => $campuses, 'registered' => $registered, 'uploaded' => $uploaded, 'confirmed' => $confirmed));
+	}
+
+	/**
+	 * 取消考试报名
+	 * @return void
+	 */
+	protected function cancel() {
+		if (isPost()) {
+			$type = sanitize($_POST['type']);
+			$exam = $this->model->getExamInfo($type);
+
+			$deleted = $this->model->cancel($this->session->get('username'), $type, $exam['sj']);
+
+			Message::add('success', '取消考试报名成功');
+		}
+
+		return redirect('exam.register', $type);
 	}
 
 	/**

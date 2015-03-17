@@ -418,8 +418,12 @@ class CourseModel extends StudentAdminModel {
 			$data['yxq']   = $lterm;
 			$data['ykcxh'] = $lcno;
 		}
+
 		$inserted = $this->db->insertRecord('t_xk_xksq', $data);
-		if (has($inserted)) {
+
+		$sql   = 'SELECT COUNT(*) FROM t_xk_xksq WHERE xh = ? AND nd = ? AND xq = ? AND kcxh = ?';
+		$count = $this->db->getColumn($sql, array($sno, $year, $term, $cno));
+		if (0 < $count) {
 			Logger::write(array('xh' => $sno, 'kcxh' => $cno, 'czlx' => Config::get('log.apply_course')));
 			return true;
 		}

@@ -46,8 +46,8 @@ class TeacherController extends TeacherAdminController {
 				$this->session->put('role', Config::get('user.role.teacher'));
 				$this->session->put('logged', true);
 
-				$this->session->put('scoreCourses', $this->scoreCourses($username));
-				$this->session->put('scoreTerms', $this->scoreTerms($username));
+				$this->session->put('scoreCourses', $this->model->getCourses($this->session->get('year'), $this->session->get('term'), $username));
+				$this->session->put('scoreTerms', $this->model->getTerms($username));
 
 				Message::add('success', '你已经成功登录系统');
 
@@ -106,10 +106,7 @@ class TeacherController extends TeacherAdminController {
 			if (is_string($old) && is_string($new)) {
 
 				if (($new === $confirmed) && ($old !== $new)) {
-					$db = $this->db;
-
-					$data    = $db->searchRecord('t_pk_js', array('jsgh' => $this->session->get('username'), 'mm' => encrypt($old)), array('jsgh'));
-					$success = $this->model->validate($username, $old);
+					$success = $this->model->validate($this->session->get('username'), $old);
 					if ($success) {
 						if ($this->model->changePassword($this->session->get('username'), $new)) {
 							Message::add('success', '修改密码成功');
@@ -132,45 +129,6 @@ class TeacherController extends TeacherAdminController {
 		$profile = $this->model->getProfile($this->session->get('username'));
 
 		return $this->view->display('teacher.profile', array('profile' => $profile));
-	}
-
-	/**
-	 * 根据教师工号列出教师所上课程
-	 *
-	 * @param string  $id 教师工号
-	 * @return array     课程数组
-	 */
-	protected function scoreCourses($id) {
-		$sql  = 'SELECT kcxh FROM v_cj_xscjlr WHERE jsgh = ? AND nd = ? AND xq = ? GROUP BY kcxh ORDER BY kcxh';
-		$data = $this->db->getAll($sql, array($id, $this->session->get('year'), $this->session->get('term')));
-
-		return $data;
-	}
-
-	/**
-	 * 根据教师工号列出教师已录入成绩的学期
-	 *
-	 * @param string  $id 学号
-	 * @return array     学期数据
-	 */
-	protected function scoreTerms($id) {
-		$sql  = 'SELECT nd, xq FROM v_cj_xsgccj WHERE jsgh = ? GROUP BY nd, xq ORDER BY nd DESC, xq DESC';
-		$data = $this->db->getAll($sql, $id);
-
-		return $data;
-	}
-
-	/**
-	 * 根据教师工号列出教师授课的学期
-	 *
-	 * @param string  $id 学号
-	 * @return array     学期数据
-	 */
-	protected function courseTerms($id) {
-		$sql  = 'SELECT nd, xq FROM v_pk_jskcb WHERE jsgh = ? GROUP BY nd, xq ORDER BY nd DESC, xq DESC';
-		$data = $this->db->getAll($sql, $id);
-
-		return $data;
 	}
 
 }

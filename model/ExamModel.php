@@ -25,8 +25,8 @@ class ExamModel extends StudentAdminModel {
 	 * @return boolean       已经报名返回校区号，未报名为FALSE
 	 */
 	public function isRegistered($sno, $type, $year) {
-		$sql  = 'SELECT xq FROM t_ks_qtksbm WHERE nd = ? AND xh = ? AND kslx = ?';
-		$data = $this->db->getColumn($sql, array($year, $sno, $type));
+		$sql  = 'SELECT * FROM t_ks_qtksbm WHERE nd = ? AND xh = ? AND kslx = ?';
+		$data = $this->db->getRow($sql, array($year, $sno, $type));
 
 		return has($data) ? $data : false;
 	}
@@ -38,8 +38,8 @@ class ExamModel extends StudentAdminModel {
 	 * @return boolean       已经报名返回考试名称，未报名则返回FALSE
 	 */
 	public function isRegisteredCET($sno, $year) {
-		$sql  = 'SELECT b.ksmc FROM t_ks_qtksbm a LEFT JOIN t_cj_kslxdm b ON b.kslx = a.kslx WHERE a.nd = ? AND a.xh = ? AND b.ksdl = ?';
-		$data = $this->db->getColumn($sql, array($year, $sno, Config::get('exam.type.cet')));
+		$sql  = 'SELECT b.ksmc FROM t_ks_qtksbm a LEFT JOIN t_cj_kslxdm b ON b.kslx = a.kslx WHERE a.nd = ? AND a.xh = ? AND b.ksdl = ? AND b.zt = ?';
+		$data = $this->db->getColumn($sql, array($year, $sno, Config::get('exam.type.cet'), ENABLE));
 
 		return has($data) ? $data : false;
 	}
@@ -129,8 +129,30 @@ class ExamModel extends StudentAdminModel {
 		$data['nd']   = $year;
 
 		$inserted = $this->db->insertRecord('t_ks_qtksbm', $data);
-		if (has($inserted)) {
+
+		$sql = 'SELECT COUNT(*) FROM t_ks_qtksbm WHERE xh = ? AND kslx = ? AND kssj = ?';
+		$count = $this->db->getColumn($sql, array($sno,$type,$date));
+		if (0 < $count) {
 			Logger::write(array('xh' => $sno, 'czlx' => Config::get('log.register')));
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * 取消考试报名
+	 * @param  string $sno  学号
+	 * @param  string $type 考试类型
+	 * @param  string $date 考试时间
+	 * @return boolean       取消报名成功为TRUE，否则为FALSE
+	 */
+	public function cancel($sno, $type, $date) {
+		$sql     = 'DELETE FROM t_ks_qtksbm WHERE xh = ? AND kslx = ? AND kssj = ? AND clbz = ?';
+		$deleted = $this->db->delete($sql, array($sno, $type, $date, Config::get('exam.status.register')));
+
+		if (has($deleted)) {
+			Logger::write(array('xh' => $sno, 'czlx' => Config::get('log.cancel')));
 			return true;
 		}
 
