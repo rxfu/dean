@@ -11,7 +11,7 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <?php if ($isRegistered): ?>
+                                        <?php if ($registered): ?>
                                             <div class="form-horizontal">
                                                 <div class="form-group">
                                                     <label for="sno" class="col-md-4">学号</label>
@@ -35,7 +35,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="cno" class="col-md-4">所在校区</label>
-                                                    <div class="col-md-8"><?php echo Dictionary::get('xqh', $isRegistered) ?></div>
+                                                    <div class="col-md-8"><?php echo Dictionary::get('xqh', $registered) ?></div>
                                                 </div>
                                             </div>
                                         <?php else: ?>
@@ -87,7 +87,7 @@
                     </div>
                 </section>
 
-                <?php if (!$isRegistered): ?>
+                <?php if (!$registered): ?>
                     <div class="modal fade" id="tipsModal" tabindex="-1" role="dialog" aria-labelledby="#tipsModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -96,7 +96,7 @@
                                 </div>
                             <div class="modal-body">
                                 <p>
-                                    <?php if ($isUploaded): ?>
+                                    <?php if ($uploaded): ?>
                                         请核对考生个人信息无误并<strong>确认</strong>本人照片为符合要求的<strong>蓝底免冠</strong>证件照，方能进行考试报名。若因照片不符合要求而引起的考生无法参加考试等情况，由考生自行负责。
                                     <?php else: ?>
                                         请上传图像要求为高320（像素）*宽240（像素）的<strong>蓝底免冠</strong>证件照，要求jpg格式，方能进行考试报名。若因照片不符合要求而引起的考生无法参加考试等情况，由考生自行负责。
@@ -104,7 +104,7 @@
                                 </p>
                             </div>
                             <div class="modal-footer">
-                                <?php if ($isUploaded): ?>
+                                <?php if ($uploaded): ?>
                                     <button type="button" class="btn btn-primary" data-dismiss="modal" id="cancel">确定</button>
                                 <?php else: ?>
                                     <a href="<?php echo Route::to('student.upload') ?>" role="button" class="btn btn-primary" id="confirm">确定</a>

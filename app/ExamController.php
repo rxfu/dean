@@ -13,33 +13,37 @@ class ExamController extends StudentAdminController {
 	protected function register($type) {
 		$student = new StudentModel();
 
-		$exam         = $this->model->getExamInfo($type);
-		$isRegistered = $this->model->isRegistered($this->session->get('username'), $type, $exam['nd']);
+		$exam       = $this->model->getExamInfo($type);
+		$registered = $this->model->isRegistered($this->session->get('username'), $type, $exam['nd']);
 
-		if (in_array($exam['kslx'], array(Config::get('exam.type.cet4'), Config::get('exam.type.cjt4'), Config::get('exam.type.cft4'), Config::get('exam.type.crt4'), Config::get('exam.type.cgt4')))) {
-			if (!$this->model->isAllowedFreshRegisterCET4()) {
-				if ($student->isFresh($this->session->get('username')) && !$student->isUndergraduate($this->session->get('username'))) {
-					Message::add('danger', '不允许新生报考' . $exam['ksmc'] . '考试');
+		if ($registered) {
+			Message::add('danger', '已经报名本次' . $exam['ksmc'] . '考试，不可重复报名');
+		} else {
+			if (in_array($exam['kslx'], array(Config::get('exam.type.cet4'), Config::get('exam.type.cjt4'), Config::get('exam.type.cft4'), Config::get('exam.type.crt4'), Config::get('exam.type.cgt4')))) {
+				if (!$this->model->isAllowedFreshRegisterCET4()) {
+					if ($student->isFresh($this->session->get('username')) && !$student->isUndergraduate($this->session->get('username'))) {
+						Message::add('danger', '不允许新生报考' . $exam['ksmc'] . '考试');
+						return redirect('exam.listing');
+					}
+				}
+			}
+
+			if (Config::get('exam.type.cet') == $exam['ksdl']) {
+				if ($cet = $this->model->isRegisteredCET($this->session->get('username'), $exam['nd'])) {
+					Message::add('danger', '已经报名本次' . $cet . '考试，' . $cet . '和' . $exam['ksmc'] . '不能同时报名');
+					return redirect('exam.listing');
+				}
+			}
+
+			if (Config::get('exam.type.cet6') == $exam['kslx']) {
+				if (!$this->model->isPassed($this->session->get('username'), Config::get('exam.type.cet4'))) {
+					Message::add('danger', 'CET4成绩不达标，不能参加CET6考试');
 					return redirect('exam.listing');
 				}
 			}
 		}
 
-		if (Config::get('exam.type.cet') == $exam['ksdl']) {
-			if ($registered = $this->model->isRegisteredCET($this->session->get('username'), $exam['nd'])) {
-				Message::add('danger', '已经报名本次' . $registered . '考试，' . $registered . '和' . $exam['ksmc'] . '不能同时报名');
-				return redirect('exam.listing');
-			}
-		}
-
-		if (Config::get('exam.type.cet6') == $exam['kslx']) {
-			if (!$this->model->isPassed($this->session->get('username'), Config::get('exam.type.cet4'))) {
-				Message::add('danger', 'CET4成绩不达标，不能参加CET6考试');
-				return redirect('exam.listing');
-			}
-		}
-
-		if ($isUploaded = $student->isUploadedPortrait($this->session->get('id'))) {
+		if ($uploaded = $student->isUploadedPortrait($this->session->get('id'))) {
 			if (isPost()) {
 				$_POST  = sanitize($_POST);
 				$campus = $_POST['campus'];
@@ -59,7 +63,7 @@ class ExamController extends StudentAdminController {
 		}
 		ksort($campuses);
 
-		return $this->view->display('exam.register', array('exam' => $exam, 'campuses' => $campuses, 'isRegistered' => $isRegistered, 'isUploaded' => $isUploaded));
+		return $this->view->display('exam.register', array('exam' => $exam, 'campuses' => $campuses, 'registered' => $registered, 'uploaded' => $uploaded));
 	}
 
 	/**
