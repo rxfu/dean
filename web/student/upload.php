@@ -17,7 +17,7 @@
                                     </form>
                                 </form>
                                 <p class="help-block">
-                                    <strong>上传说明：</strong>请各位同学上传本人蓝底证件照，高宽比为4:3，大小不得超过2MB。
+                                    <strong>上传说明：</strong>请上传图像要求为高320（像素）*宽240（像素）的蓝底免冠证件照，要求jpg格式，大小不得超过2MB。
                                 </p>
                                 <div>
                                     <img src="<?php echo Route::to('student.portrait') ?>" alt="<?php echo $session['name'] ?>" />
