@@ -22,7 +22,7 @@ class StudentModel extends StudentAdminModel {
 	 * @return boolean 允许上传为TRUE，否则为FALSE
 	 */
 	public function isAllowedUploadPortrait() {
-		return ENABLE == Setting::get('KS_ZPSC') ? true : false;
+		return ENABLE == Setting::get('KS_PHO_UP') ? true : false;
 	}
 
 	/**

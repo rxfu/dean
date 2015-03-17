@@ -7,7 +7,7 @@ return array(
 
 	// 系统参数
 	'setting'    => array(
-		'debug' => true,
+		'debug' => false,
 	),
 
 	// 默认路由
