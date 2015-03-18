@@ -17,18 +17,31 @@ final class Config {
 	 * 配置数据列表
 	 * @var array
 	 */
-	private static $_cache = array();
+	public static $_cache = array();
 
 	/**
-	 * 加载配置文件
-	 * @param  string|array $config 配置文件名称
-	 * @return object         [description]
+	 * 构造函数
+	 * @param  string|array $paths 配置文件路径
+	 * @return void
 	 */
 	public function __construct($paths = null) {
 		if (is_null($paths)) {
 			$paths = glob(CFGROOT . DS . '*.php');
 		}
 
+		$env   = include CFGROOT . DS . 'environment.php';
+		$paths = is_array($paths) ? $paths : array($paths);
+		$paths = array_merge($paths, glob(CFGROOT . DS . $env['env'] . DS . '*.php'));
+
+		self::load($paths);
+	}
+
+	/**
+	 * 加载配置文件
+	 * @param  string|array $paths 配置文件名称
+	 * @return void
+	 */
+	public static function load($paths) {
 		$paths = is_string($paths) ? array($paths) : $paths;
 
 		foreach ($paths as $path) {

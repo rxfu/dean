@@ -9,9 +9,9 @@ class StudentAdminController extends Controller {
 	 * 控制器构造方法
 	 */
 	public function __construct() {
-		$this->before_excepts = array('login', 'auth', 'logout');
-
 		parent::__construct();
+
+		$this->before_excepts = array('login', 'auth', 'logout');
 	}
 
 	/**

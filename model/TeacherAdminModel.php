@@ -6,8 +6,8 @@
 class TeacherAdminModel extends Model {
 
 	public function __construct() {
-		Config::set('db.default', Config::get('db.test.teacher'));
-		$this->db = Database::getInstance();
+		$this->setRole(Config::get('user.role.teacher'));
+		parent::__construct();
 	}
 
 }

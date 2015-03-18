@@ -11,7 +11,7 @@ class App {
 	 * 程序版本号
 	 * @var string
 	 */
-	const VERSION = '2.0.0';
+	const VERSION = '2.1.0';
 
 	/**
 	 * 配置文件对象
@@ -25,7 +25,7 @@ class App {
 	 */
 	public function run() {
 		$this->_config = Config::getInstance();
-		
+
 		$this->setReporting();
 		set_error_handler('error', E_USER_ERROR);
 

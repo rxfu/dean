@@ -5,6 +5,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col-md-4 col-md-offset-2">
                         <div class="panel panel-primary">

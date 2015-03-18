@@ -37,9 +37,7 @@ class Database {
 	 * 数据库构造方法
 	 * @param array $dsn 数据库连接参数
 	 */
-	public function __construct($dsn = null) {
-		$dsn = is_null($dsn) ? Config::get('db.default') : $dsn;
-		
+	public function __construct($dsn) {
 		$this->_dsn = array(
 			'engine'   => $dsn['engine'],
 			'host'     => $dsn['host'],

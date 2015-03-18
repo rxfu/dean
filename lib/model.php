@@ -12,10 +12,26 @@ class Model {
 	protected $db = null;
 
 	/**
+	 * 数据库角色
+	 * @var string
+	 */
+	private $_role = null;
+
+	/**
 	 * 模型类构造方法
 	 */
 	public function __construct() {
-		$this->db = Database::getInstance();
+		$this->_role = is_null($this->_role) ? 'default' : $this->_role;
+		$dsn         = Config::get('db.' . $this->_role);
+		$this->db    = Database::getInstance($dsn);
+	}
+
+	/**
+	 * 设置数据库角色
+	 * @param string $role 数据库角色
+	 */
+	public function setRole($role) {
+		$this->_role = $role;
 	}
 
 }
