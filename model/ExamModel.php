@@ -45,6 +45,19 @@ class ExamModel extends StudentAdminModel {
 	}
 
 	/**
+	 * 检测考试类型是否具有过往成绩
+	 * @param  string  $sno  学号
+	 * @param  string  $type 考试类型
+	 * @return boolean       具有过往成绩返回TRUE，否则返回FALSE
+	 */
+	public function hasGrade($sno, $type) {
+		$sql  = 'SELECT COUNT(*) FROM t_cj_qtkscj WHERE c_xh = ? AND c_kslx = ?';
+		$data = $this->db->getColumn($sql, array($sno, $type));
+
+		return has($data) && 0 < $data;
+	}
+
+	/**
 	 * 检测是否有已经确认的报名信息
 	 * @param  string  $sno 学号
 	 * @return boolean      有则返回TRUE，否则返回FALSE
@@ -130,8 +143,8 @@ class ExamModel extends StudentAdminModel {
 
 		$inserted = $this->db->insertRecord('t_ks_qtksbm', $data);
 
-		$sql = 'SELECT COUNT(*) FROM t_ks_qtksbm WHERE xh = ? AND kslx = ? AND kssj = ?';
-		$count = $this->db->getColumn($sql, array($sno,$type,$date));
+		$sql   = 'SELECT COUNT(*) FROM t_ks_qtksbm WHERE xh = ? AND kslx = ? AND kssj = ?';
+		$count = $this->db->getColumn($sql, array($sno, $type, $date));
 		if (0 < $count) {
 			Logger::write(array('xh' => $sno, 'czlx' => Config::get('log.register')));
 			return true;
@@ -194,7 +207,7 @@ class ExamModel extends StudentAdminModel {
 				}
 
 				if (Config::get('exam.type.cet6') == $type['kslx']) {
-					if (!$this->isPassed($sno, Config::get('exam.type.cet4'))) {
+					if (!$this->isPassed($sno, Config::get('exam.type.cet4')) || !$this->hasGrade($sno, Config::get('exam.type.cet6'))) {
 						continue;
 					}
 				}

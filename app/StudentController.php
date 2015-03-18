@@ -170,8 +170,7 @@ class StudentController extends StudentAdminController {
 	 */
 	protected function upload() {
 		if (!$this->model->isAllowedUploadPortrait()) {
-			Message::add('danger', '现在不允许上传照片');
-			return redirect('error.error');
+			Error::display('现在不允许上传照片');
 		}
 
 		if (isPost()) {

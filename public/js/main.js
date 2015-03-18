@@ -1,11 +1,8 @@
 (function($) {
-	$.fn.getJsUrl = function() {
-		var url = $("script").last().attr("src");
-
-		return url.substring(0, url.lastIndexOf("/") + 1);
-	};
 	$.fn.getBaseUrl = function() {
-		return location.protocol + "//" + location.host + "/dean/";
+		var pathname = $(location).attr('pathname').substring(1);
+		var webroot = '' == pathname ? '' : pathname.substring(0, pathname.indexOf('/'));
+		return $(location).attr('protocol') + '//' + $(location).attr('host') + '/' + webroot + '/';
 	};
 })(jQuery);
 $(document).ready(function() {
@@ -229,7 +226,7 @@ $(document).ready(function() {
 	$('#courseConfirm').on('hidden.bs.modal', function(e) {
 		location.reload();
 	});
-	
+
 	$('#confirmDialog').on('show.bs.modal', function(e) {
 		var button = $(e.relatedTarget);
 		var title = button.data('title');

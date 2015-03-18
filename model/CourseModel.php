@@ -339,8 +339,12 @@ class CourseModel extends StudentAdminModel {
 		$sql   = 'SELECT COUNT(*) FROM t_xk_tj WHERE kcxh = ?';
 		$count = $this->db->getColumn($sql, $cno);
 		if (0 >= $count) {
-			$sql      = 'INSERT INTO t_xk_tj (kxch, rs) SELECT kcxh, COUNT(xh) FROM t_xk_xkxx WHERE nd = ? AND xq = ? AND kcxh = ?';
-			$inserted = $this->db->insert($sql, array($year, $term, $cno));
+			$sql      = 'SELECT kcxh, COUNT(xh) AS rs FROM t_xk_xkxx WHERE nd = ? AND xq = ? AND kcxh = ?';
+			$selcount = $this->db->getRow($sql, array($year, $term, $cno));
+
+			$data['kcxh'] = $cno;
+			$data['rs']   = has($selcount) ? $selcount['rs'] : 0;
+			$inserted     = $this->db->insertRecord('t_xk_tj', $data);
 		}
 
 		$param    = "'" . implode("', '", array($year, $term, $sno, $cno, $name, $grade, $speciality, $season)) . "'";

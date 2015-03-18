@@ -26,20 +26,17 @@ class CourseController extends StudentAdminController {
 	 */
 	private function _check() {
 		if (!$this->model->isOpen()) {
-			$this->session->put('error', '现在未开放选课，不允许选课');
-			return redirect('error.error');
+			Error::display('现在未开放选课，不允许选课');
 		}
 		if ($this->_student->isUnpaid($this->session->get('username'))) {
-			$this->session->put('error', '请交清费用再进行选课');
-			return redirect('error.error');
+			Error::display('请交清费用再进行选课');
 		}
 
 		// 是否限制选课时间
 		$now   = date('Y-m-d H:i:s');
 		$allow = $this->model->isAllowedCourse($now, $this->session->get('grade'), $this->session->get('system'));
 		if (!$allow) {
-			$this->session->put('error', '现在未到选课时间，不允许选课');
-			return redirect('error.error');
+			Error::display('现在未到选课时间，不允许选课');
 		}
 
 		return $allow;
@@ -61,8 +58,7 @@ class CourseController extends StudentAdminController {
 		if ($this->model->isGeneralCourse($code)) {
 			// 是否允许选择通识素质课
 			if (!$this->model->isGeneralOpen()) {
-				$this->session->put('error', '现在未开放通识素质课选课，不允许选课');
-				return redirect('error.error');
+				Error::display('现在未开放通识素质课选课，不允许选课');
 			}
 
 			// 是否限制选择通识素质课
@@ -71,14 +67,13 @@ class CourseController extends StudentAdminController {
 			$generalRatio = Config::get('course.general.unlimited');
 			$allow        = $this->model->isAllowedGeneralCourse($now, $this->session->get('grade'), $this->session->get('system'), $generalCount, $generalRatio);
 			if (!$allow) {
-				$this->session->put('error', '现在未到通识素质课选课时间，不允许选课');
-				return redirect('error.error');
+				Error::display('现在未到通识素质课选课时间，不允许选课');
 			}
 		}
 
 		list($property, $platform) = array_pad(str_split($code), 2, '');
 		if ($this->model->isSpecializedCourse($code)) {
-			if (isEmpty($platform) && 'b' == $property) {
+			if (isEmpty($platform) && 'B' == $property) {
 				$platforms = Dictionary::getAll('pt');
 				$platforms = array_column($platforms, 'dm');
 				$platform  = array_values(array_diff($platforms, array('', 'T')));
@@ -146,8 +141,7 @@ class CourseController extends StudentAdminController {
 		// 是否允许选择其他课程
 		if ($this->model->isOtherCourse($code)) {
 			if (!$this->model->isOthersOpen()) {
-				$this->session->put('error', '现在未到其他课程选课时间，不允许选课');
-				return redirect('error.error');
+				Error::display('现在未到其他课程选课时间，不允许选课');
 			}
 		}
 
@@ -213,8 +207,7 @@ class CourseController extends StudentAdminController {
 			if ($this->model->isGeneralCourse($code)) {
 				// 是否允许选择通识素质课
 				if (!$this->model->isGeneralOpen()) {
-					$this->session->put('error', '现在未开放通识素质课选课，不允许选课');
-					return redirect('error.error');
+					Error::display('现在未开放通识素质课选课，不允许选课');
 				}
 
 				// 是否限制选择通识素质课
@@ -223,8 +216,7 @@ class CourseController extends StudentAdminController {
 				$generalRatio = Config::get('course.general.unlimited');
 				$allow        = $this->model->isAllowedGeneralCourse($now, $this->session->get('grade'), $this->session->get('system'), $generalCount, $generalRatio);
 				if (!$allow) {
-					$this->session->put('error', '现在未到通识素质课选课时间，不允许选课');
-					return redirect('error.error');
+					Error::display('现在未到通识素质课选课时间，不允许选课');
 				}
 			}
 
@@ -235,11 +227,9 @@ class CourseController extends StudentAdminController {
 						$this->session->get('term'),
 						$this->session->get('username'),
 						$generalCount)) {
-						$this->session->put('error', '该门课程选课人数超限，不允许选课');
-						return redirect('error.error');
+						Error::display('该门课程选课人数超限，不允许选课');
 					} elseif (Config::get('course.general.unlimited') < $generalRatio) {
-						$this->session->put('error', '已选通识素质课已达限制门数，不允许选课');
-						return redirect('error.error');
+						Error::display('已选通识素质课已达限制门数，不允许选课');
 					}
 				}
 
@@ -282,8 +272,7 @@ class CourseController extends StudentAdminController {
 			if ($this->model->isOtherCourse($code)) {
 				// 是否允许选择其他课程
 				if (!$this->model->isOthersOpen()) {
-					$this->session->put('error', '现在未到其他课程选课时间，不允许选课');
-					return redirect('error.error');
+					Error::display('现在未到其他课程选课时间，不允许选课');
 				}
 
 				// 申请其他课程

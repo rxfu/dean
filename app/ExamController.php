@@ -34,7 +34,7 @@ class ExamController extends StudentAdminController {
 			}
 
 			if (Config::get('exam.type.cet6') == $exam['kslx']) {
-				if (!$this->model->isPassed($this->session->get('username'), Config::get('exam.type.cet4'))) {
+				if (!$this->model->hasGrade($this->session->get('username'), Config::get('exam.type.cet6')) && !$this->model->isPassed($this->session->get('username'), Config::get('exam.type.cet4'))) {
 					Message::add('danger', 'CET4成绩不达标，不能参加CET6考试');
 					return redirect('exam.listing');
 				}

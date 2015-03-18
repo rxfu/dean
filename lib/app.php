@@ -20,11 +20,18 @@ class App {
 	private $_config = null;
 
 	/**
+	 * 错误处理对象
+	 * @var object
+	 */
+	private $_error = null;
+
+	/**
 	 * 运行网站系统
 	 * @return NULL
 	 */
 	public function run() {
 		$this->_config = Config::getInstance();
+		$this->_error  = Error::getInstance();
 
 		$this->setReporting();
 		set_error_handler('error', E_USER_ERROR);
