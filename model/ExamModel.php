@@ -207,7 +207,7 @@ class ExamModel extends StudentAdminModel {
 				}
 
 				if (Config::get('exam.type.cet6') == $type['kslx']) {
-					if (!$this->isPassed($sno, Config::get('exam.type.cet4')) || !$this->hasGrade($sno, Config::get('exam.type.cet6'))) {
+					if (!$this->hasGrade($sno, Config::get('exam.type.cet6')) && !$this->isPassed($sno, Config::get('exam.type.cet4'))) {
 						continue;
 					}
 				}

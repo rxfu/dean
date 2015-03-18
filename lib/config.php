@@ -29,7 +29,7 @@ final class Config {
 			$paths = glob(CFGROOT . DS . '*.php');
 		}
 
-		$env   = include CFGROOT . DS . 'environment.php';
+		$env   = include ROOT . DS . 'environment.php';
 		$paths = is_array($paths) ? $paths : array($paths);
 		$paths = array_merge($paths, glob(CFGROOT . DS . $env['env'] . DS . '*.php'));
 
