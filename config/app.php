@@ -154,9 +154,9 @@ return array(
 
 		// 考试状态代码
 		'status' => array(
-			'register' => '1',
-			'confirmed'   => '2',
-			'payment'  => '3',
+			'register'  => '1',
+			'confirmed' => '2',
+			'payment'   => '3',
 		),
 	),
 
