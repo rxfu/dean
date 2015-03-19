@@ -339,7 +339,7 @@ class CourseModel extends StudentAdminModel {
 		$sql   = 'SELECT COUNT(*) FROM t_xk_tj WHERE kcxh = ?';
 		$count = $this->db->getColumn($sql, $cno);
 		if (0 >= $count) {
-			$sql      = 'SELECT kcxh, COUNT(xh) AS rs FROM t_xk_xkxx WHERE nd = ? AND xq = ? AND kcxh = ?';
+			$sql      = 'SELECT kcxh, COUNT(xh) AS rs FROM t_xk_xkxx WHERE nd = ? AND xq = ? AND kcxh = ? GROUP BY kcxh';
 			$selcount = $this->db->getRow($sql, array($year, $term, $cno));
 
 			$data['kcxh'] = $cno;
