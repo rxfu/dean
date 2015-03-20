@@ -33,7 +33,7 @@ class PlanController extends StudentAdminController {
 	 * @return array         毕业要求的学分数组
 	 */
 	protected function graduation() {
-		$data = array(
+		$studied = $selected = $require = array(
 			'TB' => 0,
 			'KB' => 0,
 			'JB' => 0,
@@ -45,17 +45,29 @@ class PlanController extends StudentAdminController {
 			'KX' => 0,
 			'JX' => 0,
 		);
-		$requirements = $this->model->getGraduation($this->session->get('grade'), $this->session->get('spno'), $this->session->get('season'), $this->session->get('plan'));
 
-		if (is_array($requirements)) {
+		$requirements = $this->model->getGraduation($this->session->get('grade'), $this->session->get('spno'), $this->session->get('season'), $this->session->get('plan'));
+		if (!empty($requirements)) {
 			foreach ($requirements as $requirement) {
-				$data[$requirement['pt'] . $requirement['xz']] = $requirement['xf'];
+				$require[$requirement['pt'] . $requirement['xz']] = $requirement['xf'];
 			}
-		} else {
-			$data = array();
 		}
 
-		return $this->view->display('plan.graduation', array('require' => $data));
+		$selectedCredits = $this->model->getSelectedCredits($this->session->get('year'), $this->session->get('term'), $this->session->get('username'));
+		if (!empty($selectedCredits)) {
+			foreach ($selectedCredits as $credit) {
+				$selected[$credit['pt'] . $credit['xz']] = $credit['xf'];
+			}
+		}
+
+		$studiedCredits = $this->model->getStudiedCredits($this->session->get('username'));
+		if (!empty($studiedCredits)) {
+			foreach ($studiedCredits as $credit) {
+				$studied[$credit['pt'] . $credit['kcxz']] = $credit['xf'];
+			}
+		}
+
+		return $this->view->display('plan.graduation', array('require' => $require, 'selected' => $selected, 'studied' => $studied));
 	}
 
 }

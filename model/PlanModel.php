@@ -42,7 +42,33 @@ class PlanModel extends StudentAdminModel {
 		$sql  = 'SELECT * FROM t_jx_byyq WHERE nj = ? AND zy = ? AND zsjj = ? AND byfa = ?';
 		$data = $this->db->getAll($sql, array($grade, $speciality, $season, $plan));
 
-		return has($data) ? $data : false;
+		return has($data) ? $data : array();
+	}
+
+	/**
+	 * 获取已选课程学分
+	 * @param  string $year 年度
+	 * @param  string $term 学期
+	 * @param  string $sno  学号
+	 * @return mixed       成功返回已选课程学分，否则返回FALSE
+	 */
+	public function getSelectedCredits($year, $term, $sno) {
+		$sql  = 'SELECT pt, xz, SUM(xf) as xf FROM t_xk_xkxx WHERE nd = ? AND xq = ? AND xh = ? GROUP BY pt, xz';
+		$data = $this->db->getAll($sql, array($year, $term, $sno));
+
+		return has($data) ? $data : array();
+	}
+
+	/**
+	 * 获取已修读学分
+	 * @param  string $sno 学号
+	 * @return mixed      成功返回已修读学分，否则返回FALSE
+	 */
+	public function getStudiedCredits($sno) {
+		$sql  = 'SELECT pt, kcxz, SUM(xf) AS xf FROM t_cj_zxscj WHERE xh = ? GROUP BY pt, kcxz';
+		$data = $this->db->getAll($sql, $sno);
+
+		return has($data) ? $data : array();
 	}
 
 }

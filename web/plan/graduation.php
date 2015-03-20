@@ -14,7 +14,7 @@
                                             <th rowspan="3" class="active text-center">课程平台与性质</th>
                                             <th colspan="4" class="active text-center">必修学分数</th>
                                             <th colspan="6" class="active text-center">选修学分数</th>
-                                            <th rowspan="3" class="active text-center">至少应修读总学分</th>
+                                            <th rowspan="3" class="active text-center">总学分</th>
                                         </tr>
                                         <tr>
                                             <th rowspan="2" class="active text-center">通识素质教育<br>(TB)</th>
@@ -48,6 +48,42 @@
                                         <tr>
                                             <td colspan="4" class="text-center"><?php echo $require['TB'] + $require['KB'] + $require['JB'] + $require['SB'] ?></td>
                                             <td colspan="6" class="text-center"><?php echo $require['TW'] + $require['TI'] + $require['TY'] + $require['TQ'] + $require['KX'] + $require['JX'] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <th rowspan="2" class="active text-center">已修读学分数</th>
+                                            <td class="text-center"><?php echo $studied['TB'] ?></td>
+                                            <td class="text-center"><?php echo $studied['KB'] ?></td>
+                                            <td class="text-center"><?php echo $studied['JB'] ?></td>
+                                            <td class="text-center"><?php echo $studied['SB'] ?></td>
+                                            <td class="text-center"><?php echo $studied['TW'] ?></td>
+                                            <td class="text-center"><?php echo $studied['TI'] ?></td>
+                                            <td class="text-center"><?php echo $studied['TY'] ?></td>
+                                            <td class="text-center"><?php echo $studied['TQ'] ?></td>
+                                            <td class="text-center"><?php echo $studied['KX'] ?></td>
+                                            <td class="text-center"><?php echo $studied['JX'] ?></td>
+                                            <td rowspan="2" class="text-center"><?php echo $studied['TB'] + $studied['KB'] + $studied['JB'] + $studied['SB'] + $studied['TW'] + $studied['TI'] + $studied['TY'] + $studied['TQ'] + $studied['KX'] + $studied['JX'] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4" class="text-center"><?php echo $studied['TB'] + $studied['KB'] + $studied['JB'] + $studied['SB'] ?></td>
+                                            <td colspan="6" class="text-center"><?php echo $studied['TW'] + $studied['TI'] + $studied['TY'] + $studied['TQ'] + $studied['KX'] + $studied['JX'] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <th rowspan="2" class="active text-center">本次选修学分数</th>
+                                            <td class="text-center"><?php echo $selected['TB'] ?></td>
+                                            <td class="text-center"><?php echo $selected['KB'] ?></td>
+                                            <td class="text-center"><?php echo $selected['JB'] ?></td>
+                                            <td class="text-center"><?php echo $selected['SB'] ?></td>
+                                            <td class="text-center"><?php echo $selected['TW'] ?></td>
+                                            <td class="text-center"><?php echo $selected['TI'] ?></td>
+                                            <td class="text-center"><?php echo $selected['TY'] ?></td>
+                                            <td class="text-center"><?php echo $selected['TQ'] ?></td>
+                                            <td class="text-center"><?php echo $selected['KX'] ?></td>
+                                            <td class="text-center"><?php echo $selected['JX'] ?></td>
+                                            <td rowspan="2" class="text-center"><?php echo $selected['TB'] + $selected['KB'] + $selected['JB'] + $selected['SB'] + $selected['TW'] + $selected['TI'] + $selected['TY'] + $selected['TQ'] + $selected['KX'] + $selected['JX'] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4" class="text-center"><?php echo $selected['TB'] + $selected['KB'] + $selected['JB'] + $selected['SB'] ?></td>
+                                            <td colspan="6" class="text-center"><?php echo $selected['TW'] + $selected['TI'] + $selected['TY'] + $selected['TQ'] + $selected['KX'] + $selected['JX'] ?></td>
                                         </tr>
                                     </table>
                                 </div>
