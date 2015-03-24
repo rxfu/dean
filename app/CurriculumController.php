@@ -57,7 +57,7 @@ class CurriculumController extends TeacherAdminController {
 				'jsmc'   => $course['jsmc'],
 			);
 
-			for ($i = $begClass + 1; $i < $endClass - $begClass; ++$i) {
+			for ($i = $begClass + 1; $i <= $endClass; ++$i) {
 				$coursesByClass[$course['nd'] . $course['xq']][$i][$week] = null;
 			}
 		}
