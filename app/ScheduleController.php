@@ -59,7 +59,7 @@ class ScheduleController extends StudentAdminController {
 				'jsxm'   => $course['jsxm'],
 			);
 
-			for ($i = $begClass + 1; $i < $endClass - $begClass; ++$i) {
+			for ($i = $begClass + 1; $i <= $endClass; ++$i) {
 				$coursesByClass[$i][$week] = null;
 			}
 		}

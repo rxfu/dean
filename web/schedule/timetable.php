@@ -38,7 +38,7 @@
                                                         <th class="active">第<?php echo $i ?>节</th>
                                                         <?php for ($j = 1; $j <= 7; ++$j): ?>
                                                             <?php if (is_array($courses[$i][$j])): ?>
-                                                                <td<?php echo 1 < ($courses[$i][$j][0]['jsj'] - $i) ? ' rowspan="' . $courses[$i][$j][0]['jsj'] - $i . '"' : '' ?>>
+                                                                <td<?php echo 1 < ($courses[$i][$j][0]['jsj'] - $i + 1) ? ' rowspan="' . ($courses[$i][$j][0]['jsj'] - $i + 1) . '"' : '' ?>>
                                                                     <?php foreach ($courses[$i][$j] as $course): ?>
                                                                         <?php echo $course['kcmc'] ?><br>
                                                                         <?php echo $course['xqh'] ?>校区<?php echo $course['jsmc'] ?>教室<br>
@@ -63,8 +63,8 @@
                                                         <?php endif; ?>
                                                         <th class="active">第<?php echo $i ?>节</th>
                                                         <?php for ($j = 1; $j <= 7; ++$j): ?>
-                                                            <td>
-                                                                <?php if (is_array($courses[$i][$j])): ?>
+                                                            <?php if (is_array($courses[$i][$j])): ?>
+                                                                <td<?php echo 1 < ($courses[$i][$j][0]['jsj'] - $i + 1) ? ' rowspan="' . ($courses[$i][$j][0]['jsj'] - $i + 1) . '"' : '' ?>>
                                                                     <?php foreach ($courses[$i][$j] as $course): ?>
                                                                         <?php echo $course['kcmc'] ?><br>
                                                                         <?php echo $course['xqh'] ?>校区<?php echo $course['jsmc'] ?>教室<br>
@@ -72,8 +72,10 @@
                                                                         第 <?php echo $course['ksz'] ?>~<?php echo $course['jsz'] ?> 周
                                                                         <hr>
                                                                     <?php endforeach; ?>
-                                                                <?php endif; ?>
-                                                            </td>
+                                                                </td>
+                                                            <?php elseif (!is_null($courses[$i][$j])): ?>
+                                                                <td><?php echo $courses[$i][$j] ?></td>
+                                                            <?php endif; ?>
                                                         <?php endfor; ?>
                                                     </tr>
                                                 <?php endfor; ?>
@@ -87,8 +89,8 @@
                                                         <?php endif; ?>
                                                         <th class="active">第<?php echo $i ?>节</th>
                                                         <?php for ($j = 1; $j <= 7; ++$j): ?>
-                                                            <td>
-                                                                <?php if (is_array($courses[$i][$j])): ?>
+                                                            <?php if (is_array($courses[$i][$j])): ?>
+                                                                <td<?php echo 1 < ($courses[$i][$j][0]['jsj'] - $i + 1) ? ' rowspan="' . ($courses[$i][$j][0]['jsj'] - $i + 1) . '"' : '' ?>>
                                                                     <?php foreach ($courses[$i][$j] as $course): ?>
                                                                         <?php echo $course['kcmc'] ?><br>
                                                                         <?php echo $course['xqh'] ?>校区<?php echo $course['jsmc'] ?>教室<br>
@@ -96,8 +98,10 @@
                                                                         第 <?php echo $course['ksz'] ?>~<?php echo $course['jsz'] ?> 周
                                                                         <hr>
                                                                     <?php endforeach; ?>
-                                                                <?php endif; ?>
-                                                            </td>
+                                                                </td>
+                                                            <?php elseif (!is_null($courses[$i][$j])): ?>
+                                                                <td><?php echo $courses[$i][$j] ?></td>
+                                                            <?php endif; ?>
                                                         <?php endfor; ?>
                                                     </tr>
                                                 <?php endfor; ?>
