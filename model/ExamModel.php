@@ -97,7 +97,7 @@ class ExamModel extends StudentAdminModel {
 
 		$passed = false;
 		foreach ($scores as $score) {
-			if ($score >= $passline) {
+			if ($score['c_cj'] >= $passline) {
 				$passed = true;
 				break;
 			}
