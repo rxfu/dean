@@ -200,7 +200,7 @@ class ExamModel extends StudentAdminModel {
 				if (Config::get('exam.type.cet4') == $type['kslx']) {
 					if (!$this->isAllowedFreshRegisterCET4()) {
 						$student = new StudentModel();
-						if ($student->isFresh($sno && !$student->isUndergraduate($sno))) {
+						if ($student->isFresh($sno) && !$student->isUndergraduate($sno)) {
 							continue;
 						}
 					}
