@@ -1,6 +1,6 @@
                 <section class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header"><?php echo $session['name'] ?>同学<?php echo $session['year'] ?>年度<?php echo Dictionary::get('xq', $session['term']) ?>学期课程表</h1>
+                        <h1 class="page-header"><?Php echo $session['username'] ?><?php echo $session['name'] ?>同学<?php echo $session['year'] ?>年度<?php echo Dictionary::get('xq', $session['term']) ?>学期课程表</h1>
                     </div>
                 </section>
 
@@ -14,6 +14,9 @@
                     <section class="row">
                         <div class="col-lg-12">
                             <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <div class="panel-title">生成时间：<?php echo date('Y-m-d H:i:s') ?></div>
+                                </div>
                                 <div class="panel-body">
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-striped">
@@ -109,6 +112,7 @@
                                         </table>
                                     </div>
                                 </div>
+                                <div class="panel-footer">生成时间：<?php echo date('Y-m-d H:i:s') ?></div>
                             </div>
                         </div>
                     </section>
