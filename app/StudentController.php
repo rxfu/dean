@@ -150,8 +150,8 @@ class StudentController extends StudentAdminController {
 	}
 
 	/**
-	 * 获取当前学生头像
-	 * @return integer       头像文件
+	 * 获取当前学生考试照片
+	 * @return integer       考试照片
 	 */
 	protected function portrait() {
 		$file     = $this->session->get('id');
@@ -159,6 +159,21 @@ class StudentController extends StudentAdminController {
 		$portrait = $path . $file . '.jpg';
 		if (file_exists($portrait)) {
 			return readfile($portrait);
+		} else {
+			return readfile($path . 'untitled.jpg');
+		}
+	}
+
+	/**
+	 * 获取当前学生学历照片
+	 * @return integer       学历照片
+	 */
+	protected function photo() {
+		$file  = $this->session->get('username');
+		$path  = PHOTO . DS;
+		$photo = $path . $file . '.jpg';
+		if (file_exists($photo)) {
+			return readfile($photo);
 		} else {
 			return readfile($path . 'untitled.jpg');
 		}

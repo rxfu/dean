@@ -21,6 +21,7 @@ define('PUBROOT', ROOT . DS . 'public');
 define('LOGROOT', ROOT . DS . 'log');
 define('STORAGE', ROOT . DS . 'storage');
 define('PORTRAIT', STORAGE . DS . 'portraits');
+define('PHOTO', STORAGE . DS . 'photos');
 define('SESSION', STORAGE . DS . 'sessions');
 define('CACHE', STORAGE . DS . 'cache');
 

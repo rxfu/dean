@@ -7,6 +7,31 @@
                 <section class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
+                            <div class="panel-heading">个人照片</div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <th class="active text-center">考试照片</th>
+                                            <th class="active text-center">学历照片</th>
+                                        </tr>
+                                        <tr>
+                                            <td width="240" height="320" class="text-center">
+                                                <img src="<?php echo Route::to('student.portrait') ?>" alt="<?php echo $session['name'] ?>" /><br><br>
+                                                <?php if ($allow): ?>
+                                                    <div class="text-center">
+                                                        <a href="<?php echo Route::to('student.upload') ?>" role="button" class="btn btn-default">上传照片</a>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td width="240" height="320" class="text-center">
+                                                <img src="<?php echo Route::to('student.photo') ?>" alt="<?php echo $session['name'] ?>" /><br><br>
+                                                <p class="text-info">注意：如果该学历照片有问题，请教务处学籍科反馈信息</p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
                             <div class="panel-heading">基本资料</div>
                             <div class="panel-body">
                                 <div class="table-responsive">
@@ -16,16 +41,6 @@
                                             <td><?php echo $profile['xh'] ?></td>
                                             <th class="active">姓名</th>
                                             <td><?php echo $profile['xm'] ?></td>
-                                            <td rowspan="10" width="240" height="320">
-                                                <img src="<?php echo Route::to('student.portrait') ?>" alt="<?php echo $session['name'] ?>" /><br><br>
-                                                <?php if ($allow): ?>
-                                                    <div class="text-center">
-                                                        <a href="<?php echo Route::to('student.upload') ?>" role="button" class="btn btn-default">上传照片</a>
-                                                    </div>
-                                                <?php endif; ?>
-                                            </td>
-                                        </tr>
-                                        <tr>
                                             <th class="active">曾用名</th>
                                             <td><?php echo $profile['cym'] ?></td>
                                             <th class="active">拼音</th>
@@ -36,8 +51,6 @@
                                             <td><?php echo $profile['xb'] ?></td>
                                             <th class="active">出生日期</th>
                                             <td><?php echo $profile['csny'] ?></td>
-                                        </tr>
-                                        <tr>
                                             <th class="active">证件类型</th>
                                             <td><?php echo $profile['zjlx'] ?></td>
                                             <th class="active">证件号码</th>
@@ -48,8 +61,6 @@
                                             <td><?php echo $profile['gj'] ?></td>
                                             <th class="active">民族</th>
                                             <td><?php echo $profile['mz'] ?></td>
-                                        </tr>
-                                        <tr>
                                             <th class="active">籍贯</th>
                                             <td><?php echo $profile['jg'] ?></td>
                                             <th class="active">政治面貌</th>
@@ -60,8 +71,6 @@
                                             <td><?php echo $profile['syd'] ?></td>
                                             <th class="active">出生地</th>
                                             <td><?php echo $profile['csd'] ?></td>
-                                        </tr>
-                                        <tr>
                                             <th class="active">学院</th>
                                             <td><?php echo $profile['xy'] ?></td>
                                             <th class="active">系所</th>
@@ -72,8 +81,6 @@
                                             <td><?php echo $profile['zy'] ?></td>
                                             <th class="active">专业方向</th>
                                             <td><?php echo $profile['zyfs'] ?></td>
-                                        </tr>
-                                        <tr>
                                             <th class="active">第二专业</th>
                                             <td><?php echo $profile['zy2'] ?></td>
                                             <th class="active">辅修专业</th>
