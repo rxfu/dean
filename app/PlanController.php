@@ -38,12 +38,14 @@ class PlanController extends StudentAdminController {
 			'KB' => 0,
 			'JB' => 0,
 			'SB' => 0,
+			'ZB' => 0,
 			'TW' => 0,
 			'TI' => 0,
 			'TY' => 0,
 			'TQ' => 0,
 			'KX' => 0,
 			'JX' => 0,
+			'ZX' => 0,
 		);
 
 		$requirements = $this->model->getGraduation($this->session->get('grade'), $this->session->get('spno'), $this->session->get('season'), $this->session->get('plan'));
