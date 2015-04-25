@@ -2,6 +2,8 @@
 
 /**
  * 单例类
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 trait Singleton {
 

@@ -2,6 +2,8 @@
 
 /**
  * 教学计划类
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class PlanController extends StudentAdminController {
 

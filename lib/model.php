@@ -2,6 +2,8 @@
 
 /**
  * 模型类
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class Model {
 

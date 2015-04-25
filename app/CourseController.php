@@ -2,6 +2,8 @@
 
 /**
  * 课程类
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class CourseController extends StudentAdminController {
 

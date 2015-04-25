@@ -2,6 +2,8 @@
 
 /**
  * 会话控制类
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class Session extends SessionHandler {
 

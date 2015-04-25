@@ -1,7 +1,9 @@
 <?php
 
 /**
- * 用户控制器
+ * 教师控制器
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class TeacherController extends TeacherAdminController {
 

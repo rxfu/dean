@@ -2,6 +2,8 @@
 
 /**
  * 开发环境数据库配置
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 return array(
 

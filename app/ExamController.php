@@ -1,7 +1,9 @@
 <?php
 
 /**
- * 考试控制类
+ * 考试类
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class ExamController extends StudentAdminController {
 

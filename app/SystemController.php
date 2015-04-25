@@ -2,6 +2,8 @@
 
 /**
  * 系统控制器
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class SystemController extends StudentAdminController {
 

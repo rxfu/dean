@@ -2,6 +2,8 @@
 
 /**
  * 课程表类
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class ScheduleController extends StudentAdminController {
 

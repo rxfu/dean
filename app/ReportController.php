@@ -2,6 +2,8 @@
 
 /**
  * 成绩类
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class ReportController extends StudentAdminController {
 

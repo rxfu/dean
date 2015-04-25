@@ -2,6 +2,8 @@
 
 /**
  * 教师课程表类
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class CurriculumController extends TeacherAdminController {
 

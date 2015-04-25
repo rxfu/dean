@@ -1,7 +1,9 @@
 <?php
 
 /**
- *  配置文件
+ * 配置文件
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 
 /**

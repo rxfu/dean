@@ -2,6 +2,8 @@
 
 /**
  * 课程模型类
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class CourseModel extends StudentAdminModel {
 

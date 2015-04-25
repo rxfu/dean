@@ -2,6 +2,8 @@
 
 /**
  * 课程表模型类
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class ScheduleModel extends StudentAdminModel {
 

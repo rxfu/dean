@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * 网站入口类
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
+ */
 class HomeController extends Controller {
 
 	/**
