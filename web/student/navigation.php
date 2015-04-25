@@ -149,7 +149,14 @@
                                 <a href="#"><i class="fa fa-pencil-square-o fa-fw"></i> 教学评价<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="#">教师评价</a>
+                                        <a href="#">未评课程</a>
+                                        <ul class="nav nav-third-level">
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#">已评课程</a>
+                                        <ul class="nav nav-third-level">
+                                        </ul>
                                     </li>
                                 </ul>
                             </li>
