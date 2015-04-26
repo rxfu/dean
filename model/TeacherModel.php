@@ -8,18 +8,6 @@
 class TeacherModel extends TeacherAdminModel {
 
 	/**
-	 * 根据学号获取学生基本信息
-	 * @param  string $tno 学号
-	 * @return array     成功返回学生基本信息，否则返回FALSE
-	 */
-	public function getInfo($tno) {
-		$sql  = 'SELECT * FROM v_pk_jsxx WHERE jsgh = ?';
-		$data = $this->db->getRow($sql, $tno);
-
-		return has($data) ? $data : false;
-	}
-
-	/**
 	 * 获取教师详细信息
 	 * @param  string $tno 教师工号
 	 * @return array 成功返回教师详细信息，否则返回FALSE

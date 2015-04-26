@@ -36,6 +36,7 @@ return array(
 		'role'     => array(
 			'student' => 'student',
 			'teacher' => 'teacher',
+			'manager' => 'manager',
 		),
 
 		// 加密salt
@@ -188,7 +189,11 @@ return array(
 
 	// 教学评估代码
 	'quality'    => array(
-		'assessed'  => '1',
-		'assessing' => '0',
+		'assessed'   => '1',
+		'assessing'  => '0',
+		'admin'      => '0',
+		'manager'    => '1',
+		'power_user' => '2',
+		'user'       => '3',
 	),
 );
