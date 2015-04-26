@@ -178,10 +178,17 @@ return array(
 		'height' => 320,
 	),
 
+	// 单位类型参数
 	'department' => array(
 		'college'      => '1',
 		'manager'      => '2',
 		'organization' => '3',
 		'industry'     => '4',
+	),
+
+	// 教学评估代码
+	'quality'    => array(
+		'assessed'  => '1',
+		'assessing' => '0',
 	),
 );

@@ -149,14 +149,10 @@
                                 <a href="#"><i class="fa fa-pencil-square-o fa-fw"></i> 教学评价<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="#">未评课程</a>
-                                        <ul class="nav nav-third-level">
-                                        </ul>
+                                        <a href="<?php echo Route::to('quality.course', Config::get('quality.assessing')) ?>">未评课程</a>
                                     </li>
                                     <li>
-                                        <a href="#">已评课程</a>
-                                        <ul class="nav nav-third-level">
-                                        </ul>
+                                        <a href="<?php echo Route::to('quality.course', Config::get('quality.assessed')) ?>">已评课程</a>
                                     </li>
                                 </ul>
                             </li>

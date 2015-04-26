@@ -282,7 +282,7 @@ class CourseModel extends StudentAdminModel {
 			}
 			$courses = array_values($courses);
 			}
-			 */
+			*/
 			array_walk($courses, function (&$course) {
 				$course['zt'] = Config::get('course.select.selectable');
 			});
