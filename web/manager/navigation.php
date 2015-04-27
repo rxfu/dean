@@ -37,10 +37,10 @@
                                 <a href="#"><i class="fa fa-tasks fa-fw"></i> 数据维护<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="#">学生评教管理</a>
+                                        <a href="<?php echo Route::('monitor.setting') ?>">评教状态设置</a>
                                     </li>
                                     <li>
-                                        <a href="#">系统初始化表</a>
+                                        <a href="<?php echo Route::('monitor.init') ?>">系统初始化表</a>
                                     </li>
                                     <li>
                                         <a href="#">用户信息管理</a>
