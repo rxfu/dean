@@ -2,6 +2,8 @@
 
 /**
  * 文件上传类
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class Uploader {
 

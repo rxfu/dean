@@ -2,6 +2,8 @@
 
 /**
  * 错误处理类
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class Error {
 

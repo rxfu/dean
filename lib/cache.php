@@ -2,6 +2,8 @@
 
 /**
  * 缓存类
+ * 
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class Cache {
 

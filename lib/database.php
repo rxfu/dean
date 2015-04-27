@@ -2,6 +2,8 @@
 
 /**
  * 数据库访问类，单例模式
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class Database {
 

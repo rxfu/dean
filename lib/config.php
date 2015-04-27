@@ -2,6 +2,8 @@
 
 /**
  * 配置类
+ * 
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 final class Config {
 

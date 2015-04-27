@@ -2,6 +2,8 @@
 
 /**
  * 教学计划模型类
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class PlanModel extends StudentAdminModel {
 

@@ -1,7 +1,9 @@
 <?php
 
 /**
- * 考试控制类
+ * 考试类
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class ExamController extends StudentAdminController {
 
@@ -17,7 +19,7 @@ class ExamController extends StudentAdminController {
 		$registered = $this->model->isRegistered($this->session->get('username'), $type, $exam['nd']);
 
 		if (!$registered) {
-			if (in_array($exam['kslx'], array(Config::get('exam.type.cet4'), Config::get('exam.type.cjt4'), Config::get('exam.type.cft4'), Config::get('exam.type.crt4'), Config::get('exam.type.cgt4')))) {
+			if (in_array($exam['kslx'], array(Config::get('exam.type.cet3'), Config::get('exam.type.cet4'), Config::get('exam.type.cjt4'), Config::get('exam.type.cft4'), Config::get('exam.type.crt4'), Config::get('exam.type.cgt4')))) {
 				if (!$this->model->isAllowedFreshRegisterCET4()) {
 					if ($student->isFresh($this->session->get('username')) && !$student->isUndergraduate($this->session->get('username'))) {
 						Message::add('danger', '不允许新生报考' . $exam['ksmc'] . '考试');

@@ -2,6 +2,8 @@
 
 /**
  * 学生管理控制器
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class StudentAdminController extends Controller {
 

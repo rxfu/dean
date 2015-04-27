@@ -2,6 +2,8 @@
 
 /**
  * 系统设置类
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 final class Setting {
 

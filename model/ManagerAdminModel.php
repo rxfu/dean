@@ -1,14 +1,14 @@
 <?php
 
 /**
- * 学生管理模型类
+ * 评教管理模型类
  *
  * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
-class StudentAdminModel extends Model {
+class ManagerAdminModel extends Model {
 
 	public function __construct() {
-		$this->setRole(Config::get('user.role.student'));
+		$this->setRole(Config::get('user.role.manager'));
 		parent::__construct();
 	}
 

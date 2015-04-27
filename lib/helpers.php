@@ -2,6 +2,8 @@
 
 /**
  * 常用函数
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 
 if (!function_exists('array_column')) {

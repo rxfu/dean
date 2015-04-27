@@ -1,6 +1,12 @@
 <?php
 
 /**
+ * 网站入口
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
+ */
+
+/**
  * 网站根目录
  */
 define('DS', DIRECTORY_SEPARATOR);

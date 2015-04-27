@@ -2,6 +2,8 @@
 
 /**
  * 字典类
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 final class Dictionary {
 

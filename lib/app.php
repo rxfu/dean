@@ -2,6 +2,8 @@
 
 /**
  * 应用程序类，单例模式
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class App {
 

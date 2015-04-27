@@ -2,6 +2,8 @@
 
 /**
  * 教师成绩管理类
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class ScoreController extends TeacherAdminController {
 

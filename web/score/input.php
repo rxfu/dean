@@ -1,3 +1,14 @@
+                <?php if (empty($info)): ?>
+                <section class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="well">专业课程表中无此课程信息，请联系教学秘书！</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <?php else: ?>
                 <section class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
@@ -76,3 +87,4 @@
                 </section>
 
                 <?php include partial('confirm_dialog') ?>
+                <?php endif; ?>

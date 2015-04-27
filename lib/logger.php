@@ -2,6 +2,8 @@
 
 /**
  * 日志类
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class Logger {
 

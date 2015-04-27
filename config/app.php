@@ -2,6 +2,8 @@
 
 /**
  * 应用程序配置
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 return array(
 
@@ -34,6 +36,7 @@ return array(
 		'role'     => array(
 			'student' => 'student',
 			'teacher' => 'teacher',
+			'manager' => 'manager',
 		),
 
 		// 加密salt
@@ -176,10 +179,21 @@ return array(
 		'height' => 320,
 	),
 
+	// 单位类型参数
 	'department' => array(
 		'college'      => '1',
 		'manager'      => '2',
 		'organization' => '3',
 		'industry'     => '4',
+	),
+
+	// 教学评估代码
+	'quality'    => array(
+		'assessed'   => '1',
+		'assessing'  => '0',
+		'admin'      => '0',
+		'manager'    => '1',
+		'power_user' => '2',
+		'user'       => '3',
 	),
 );

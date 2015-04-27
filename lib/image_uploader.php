@@ -2,6 +2,8 @@
 
 /**
  * 图片上传模块
+ *
+ * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class ImageUploader extends Uploader {
 
