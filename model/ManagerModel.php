@@ -5,7 +5,7 @@
  *
  * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
-class ManagerModel extends Model {
+class ManagerModel extends ManagerAdminModel {
 
 	/**
 	 * 获取评教管理员详细信息
