@@ -274,7 +274,15 @@ class MonitorModel extends ManagerAdminModel {
 		return has($updated) ? $updated : false;
 	}
 
-	public function statXscpl($table, $department, $property, $order) {
+	/**
+	 * 获取学生参评率
+	 * @param  string $table      统计表名
+	 * @param  string $department 学院
+	 * @param  string $property   课程性质
+	 * @param  string $order      排序字段
+	 * @return array             参评率列表
+	 */
+	public function getXscpl($table, $department, $property, $order) {
 		if ($department == "") {
 			$sql = "SELECT c_kcbh, c_jsgh, c_jsyx, COUNT(c_kcxh) AS skzys, SUM(s_cprs) AS cprs, SUM(s_sprs) AS sprs FROM $table GROUP BY c_jsgh, c_kcbh ORDER BY '$order'";
 		} else {
@@ -318,6 +326,8 @@ class MonitorModel extends ManagerAdminModel {
 			$result[]['sprs'] = $myrow[5]; //实评人数
 			$result[]['rate'] = $rate; //参评率
 		}
+
+		return $result;
 	}
 
 }

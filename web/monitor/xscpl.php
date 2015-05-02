@@ -7,6 +7,15 @@
                 <section class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
+                            <div class="panel-headig">
+                                <form name="xscplForm" id="xscplForm" action="<?php echo Route::to('monitor.xscpl') ?>" role="form" class="form-inline">
+                                    <select name="department" id="department">
+                                        <?php foreach ($departments as $department): ?>
+                                            <option value="<?php echo $department[1] ?>"><?php echo $department</option>
+                                        <?php endforeach ?>
+                                    </select>
+                                </form>
+                            </div>
                             <div class="panel-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-striped table-hover data-table">

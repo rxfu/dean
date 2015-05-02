@@ -128,4 +128,33 @@ class MonitorController extends ManagerAdminController {
 		return redirect('monitor.user');
 	}
 
+	/**
+	 * 列出学生参评率
+	 * @return void
+	 */
+	protected function xscpl() {
+		if (isPost()) {
+			$_POST      = sanitize($_POST);
+			$department = $_POST['department'];
+			$property   = $_POST['property'];
+			$table      = $this->session->get('year') . $this->session->get('term') . 't';
+			switch ($_POST['order']) {
+				case 'college':
+					$order = 'c_jsyx';
+					break;
+
+				case 'teacher':
+					$order = 'c_jsgh';
+					break;
+
+				default:
+					$order = 'c_kcbh';
+					break;
+			}
+			$data = $this->model->getXscpl($table, $department, $property, $order);
+		}
+
+		return $this->view->display('monitor.xscpl', array('department' => $department, 'property' => $property, 'order' => $order));
+	}
+
 }
