@@ -78,7 +78,7 @@
                                         <a href="<?php echo Route::to('monitor.yxjstj') ?>">评教排名优秀教师得分统计表</a>
                                     </li>
                                     <li>
-                                        <a href="#">“单名教师单门课程”评教得分明细表</a>
+                                        <a href="<?php echo Route::tol('monitor.jspjjg') ?>">“单名教师单门课程”评教得分明细表</a>
                                     </li>
                                 </ul>
                             </li>

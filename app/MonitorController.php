@@ -554,7 +554,7 @@ class MonitorController extends ManagerAdminController {
 			$course = $_POST['course'];
 			$number = $_POST['teacher'];
 			$table  = $this->session->get('year') . $this->session->get('term') . 't';
-			$data   = $this->model->getGggkpjdb($table, $course, $number);
+			$data   = $this->model->getYxjstj($table, $course, $number);
 
 			$PF_SUM = 0;
 			$td     = 0;
@@ -582,9 +582,34 @@ class MonitorController extends ManagerAdminController {
 				$avg['zhpf'] = $PF_SUM / $number;
 			}
 
-			return $this->view->display('monitor.ggkpjdb', array('courses' => $courses, 'course' => $course, 'data' => $data, 'avg' => $avg));
+			return $this->view->display('monitor.yxjstj', array('courses' => $courses, 'course' => $course, 'data' => $data, 'avg' => $avg));
 		}
-		return $this->view->display('monitor.ggkpjdb', array('courses' => $courses));
+		return $this->view->display('monitor.yxjstj', array('courses' => $courses));
+	}
+
+	/**
+	 * 列出单名教师单门课程评教得分明细表
+	 * @return void
+	 */
+	protected function jspjjg() {
+		$departments = $this->model->getDepartments();
+		$teachers = $this->model->getTeachers();
+		$courses = $this->model->getCourses();
+
+		if (isPost()) {
+			$_POST  = sanitize($_POST);
+			$department = $_POST['department'];
+			$course = $_POST['course'];
+			$number = $_POST['teacher'];
+			$table  = $this->session->get('year') . $this->session->get('term') . 't';
+			$data   = $this->model->getJspjjg($table, $course, $number);
+
+			$quality = new QualityModel();
+			$indexes = $quality->getIndexes();
+
+			return $this->view->display('monitor.jspjjg', array('departments'=>$departments,'department'=>$department, 'teachers'=>$teachers,'teacher'=>$teacher, 'courses' => $courses, 'course' => $course, 'data' => $data, '$indexes'=>$indexes));
+		}
+		return $this->view->display('monitor.jspjjg', array('department'=>$departments,'teachers'=>$teachers, 'courses' => $courses));
 	}
 
 }

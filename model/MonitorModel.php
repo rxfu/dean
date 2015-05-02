@@ -644,7 +644,7 @@ class MonitorModel extends ManagerAdminModel {
 		$data   = $this->db->getAll($sql, $course);
 		$result = array();
 		for ($i = 0; $i < $number; ++$i) {
-			$myrow = $data[$i];
+			$myrow            = $data[$i];
 			$sql              = "SELECT c_xm, c_zc FROM t_pk_js1 WHERE c_jsgh = ?"; //查询教师姓名
 			$js_row           = $this->db->getRow($sql, $myrow[0]);
 			$result[]['jsgh'] = $myrow[0];
@@ -678,6 +678,55 @@ class MonitorModel extends ManagerAdminModel {
 					$result[]['kcmc'][$kc_row[0]]['zhpf'] = $myrow[6];
 				}
 			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * 获取单名教师评教结果
+	 * @param  string $table      统计表名
+	 * @param  string $mark 指标表名
+	 * @param  string $deparmtent      部门
+	 * @param  string $teacher      教师工号
+	 * @param  string $course     课程号
+	 * @return array             公共课评教结果
+	 */
+	public function getJspjjg($table, $mark, $department, $teacher, $course) {
+		if ($course != "" and $teacher != "") {
+			$ZH               = 0;
+			$YJ_PF            = array();
+			$EJ_PF            = array();
+			$sql              = "SELECT c_xm, c_zc FROM t_pk_js1 WHERE c_jsgh = ?";
+			$row              = $this->db->getRow($sql, $teacher);
+			$sql              = "SELECT c_skzy FROM $table WHERE c_kcbh = ? and c_jsgh = ?";
+			$row3             = $this->db->getAll($sql, array($course, $teacher));
+			$result[]['skzy'] = implode(' ', getColumn($row3, 'c_skzy'));
+			$sql              = "SELECT AVG(s_jxtd), AVG(s_jxnr), AVG(s_jxff), AVG(s_jxxg), AVG(s_zhpf) FROM $table WHERE c_kcbh = ? AND c_jsgh = ? GROUP BY c_kcbh, c_jsgh";
+			$row4             = $this->db->getRow($sql, array($course, $teacher));
+			$YJ_PF[1]         = $row4[0];
+			$YJ_PF[2]         = $row4[1];
+			$YJ_PF[3]         = $row4[2];
+			$YJ_PF[4]         = $row4[3];
+			$ZH               = $row4[4];
+
+			$i    = 0;
+			$sql  = "SELECT zb_id FROM t_zb_yjzb ORDER BY zb_id";
+			$data = $this->db->getAll($sql);
+			foreach ($data as $row_yjzb) {
+				$i++;
+				$j   = 0;
+				$sql = "SELECT AVG(s_mark) FROM $mark, t_zb_ejzb WHERE c_xm = ejzb_id AND zb_id = '$row_yjzb[0]' AND c_kcbh = '$select_kc' AND c_jsgh = '$select_js' GROUP BY c_kcbh, c_jsgh, c_xm";
+				$row = $this->db->getAll($sql, array($row_yjzb[0], $course, $teacher));
+				foreach ($row as $row5) {
+					$j++;
+					$EJ_PF[$i][$j] = $row5[0];
+				}
+			}
+
+			$result['yjpf'] = $YJ_PF;
+			$result['ejpf'] = $EJ_PF;
+			$result['zh']   = $ZH;
 		}
 
 		return $result;
