@@ -51,10 +51,10 @@
                                 <a href="#"><i class="fa fa-tasks fa-fw"></i> 评教结果统计表<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="#">学生参评率统计表</a>
+                                        <a href="<?php echo Route::to('monitor.xscpl') ?>">学生参评率统计表</a>
                                     </li>
                                     <li>
-                                        <a href="#">教师评教得分排名表</a>
+                                        <a href="<?php echo Route::to('monitor.xyjspm') ?>">教师评教得分排名表</a>
                                     </li>
                                     <li>
                                         <a href="#">教师评教结果明细表</a>

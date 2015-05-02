@@ -299,14 +299,12 @@ class MonitorModel extends ManagerAdminModel {
 			$sql  = 'SELECT c_xm FROM t_pk_js1 WHERE c_jsgh = ?'; //查询教师姓名
 			$row2 = $this->db->getRow($sql, $myrow[1]);
 			$sql  = "SELECT c_kcxh, c_skzy FROM $table WHERE c_kcbh = ? AND c_jsgh = ?";
-			$row3 = $this->db->getRow($sql, array($myrow[0], $myrow[1]));
-			$kcxz = substr($row3[0], 0, 2);
+			$row3 = $this->db->getAll($sql, array($myrow[0], $myrow[1]));
+			$kcxz = substr($row3[0][0], 0, 2);
 			if ($property != "" && substr($row3[0], 0, 2) != $property) {
 				continue;
 			}
 
-			$yprs += $myrow[4];
-			$sprs += $myrow[5];
 			$sql  = 'SELECT c_mc FROM t_xt_kcxz WHERE c_bh = ?';
 			$row4 = $this->db->getRow($sql, $kcxz);
 			if ($myrow[4] != 0) {
@@ -325,6 +323,55 @@ class MonitorModel extends ManagerAdminModel {
 			$result[]['yprs'] = $myrow[4]; //应评人数
 			$result[]['sprs'] = $myrow[5]; //实评人数
 			$result[]['rate'] = $rate; //参评率
+		}
+
+		return $result;
+	}
+
+	/**
+	 * 获取教师评教得分排名
+	 * @param  string $table      统计表名
+	 * @param  string $department 学院
+	 * @param  string $property   课程性质
+	 * @return array             排名列表
+	 */
+	public function getXyjspm($table, $department, $property) {
+		if ($department == "") {
+			$sql = "SELECT c_kcbh, c_jsgh, c_jsyx, COUNT(c_kcxh) AS skzys, SUM(s_sprs) AS sprs, AVG(s_zhpf) AS zhpf FROM $table GROUP BY c_jsgh, c_kcbh ORDER BY zhpf DESC";
+		} else {
+			$sql = "SELECT c_kcbh, c_jsgh, c_jsyx, COUNT(c_kcxh) AS skzys, SUM(s_sprs) AS sprs, AVG(s_zhpf) AS zhpf FROM $table WHERE c_jsyx = '$department' GROUP BY c_jsgh, c_kcbh ORDER BY zhpf DESC";
+		}
+		$zhpf   = 0; //获取第一条记录的综合评分
+		$i      = 0;
+		$result = array();
+		$data   = $this->db->getAll($sql);
+
+		foreach ($data as $myrow) {
+			$sql  = "SELECT c_zwmc FROM t_jx_kc WHERE c_kcbh = ?"; //查询课程名称
+			$row1 = $this->db->getRow($sql, $myrow[0]);
+			$sql  = "SELECT c_xm, c_zc FROM t_pk_js1 WHERE c_jsgh = ?"; //查询教师姓名
+			$row2 = $this->db->getRow($sql, $myrow[1]);
+			$sql  = "SELECT c_kcxh, c_skzy FROM $table WHERE c_kcbh = ? AND c_jsgh = ?";
+			$row3 = $this->db->getAll($sql, array($myrow[0], $myrow[1]));
+			if ($property != "" and substr($row3[0], 0, 2) != $property) {
+				continue;
+			}
+
+			$result[]['jsgh'] = $myrow[1]; //教师工号
+			$result[]['jsxm'] = $row2[0]; //教师姓名
+			$result[]['jszc'] = $row2[1]; //教师职称
+			$result[]['kcmc'] = $row1[0]; //授课名称
+			$result[]['kcxz'] = substr($row3[0][0], 0, 8); //课程性质代码
+			foreach ($row3 as $row) {
+				$result[]['skzy'] = $row3[1]; //授课年级专业
+			}
+			$result[]['sprs'] = $myrow[4]; //实评人数
+			$result[]['pjdf'] = $myrow[5]; //评教得分
+			if ($zhpf != $myrow[5]) {
+				$i++;
+				$zhpf = $myrow[5];
+			}
+			$result[]['pm'] = $i;
 		}
 
 		return $result;

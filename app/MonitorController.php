@@ -152,9 +152,27 @@ class MonitorController extends ManagerAdminController {
 					break;
 			}
 			$data = $this->model->getXscpl($table, $department, $property, $order);
-		}
 
-		return $this->view->display('monitor.xscpl', array('department' => $department, 'property' => $property, 'order' => $order));
+			return $this->view->display('monitor.xscpl', array('department' => $department, 'property' => $property, 'order' => $order, 'data' => $data));
+		}
+		return $this->view->display('monitor.xscpl');
+	}
+
+	/**
+	 * 列出教师评教排名
+	 * @return void
+	 */
+	protected function xyjspm() {
+		if (isPost()) {
+			$_POST      = sanitize($_POST);
+			$department = $_POST['department'];
+			$property   = $_POST['property'];
+			$table      = $this->session->get('year') . $this->session->get('term') . 't';
+			$data       = $this->model->getXyjspm($table, $department, $property);
+
+			return $this->view->display('monitor.xyjspm', array('department' => $department, 'property' => $property, 'data' => $data));
+		}
+		return $this->view->display('monitor.xyjspm');
 	}
 
 }
