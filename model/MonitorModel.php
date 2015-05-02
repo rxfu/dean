@@ -274,4 +274,50 @@ class MonitorModel extends ManagerAdminModel {
 		return has($updated) ? $updated : false;
 	}
 
+	public function statXscpl($table, $department, $property, $order) {
+		if ($department == "") {
+			$sql = "SELECT c_kcbh, c_jsgh, c_jsyx, COUNT(c_kcxh) AS skzys, SUM(s_cprs) AS cprs, SUM(s_sprs) AS sprs FROM $table GROUP BY c_jsgh, c_kcbh ORDER BY '$order'";
+		} else {
+			$sql = "SELECT c_kcbh, c_jsgh, c_jsyx, COUNT(c_kcxh) AS skzys, SUM(s_cprs) AS cprs, SUM(s_sprs) AS sprs FROM $table WHERE c_jsyx = '$department' GROUP BY c_jsgh, c_kcbh ORDER BY '$order'";
+		}
+		$yprs   = 0;
+		$sprs   = 0;
+		$result = array();
+		$data   = $this->db->getAll($sql);
+
+		foreach ($data as $myrow) {
+			$sql  = 'SELECT c_zwmc FROM t_jx_kc WHERE c_kcbh = ?'; //查询课程名称
+			$row1 = $this->db->getRow($sql, $myrow[0]);
+			$sql  = 'SELECT c_xm FROM t_pk_js1 WHERE c_jsgh = ?'; //查询教师姓名
+			$row2 = $this->db->getRow($sql, $myrow[1]);
+			$sql  = "SELECT c_kcxh, c_skzy FROM $table WHERE c_kcbh = ? AND c_jsgh = ?";
+			$row3 = $this->db->getRow($sql, array($myrow[0], $myrow[1]));
+			$kcxz = substr($row3[0], 0, 2);
+			if ($property != "" && substr($row3[0], 0, 2) != $property) {
+				continue;
+			}
+
+			$yprs += $myrow[4];
+			$sprs += $myrow[5];
+			$sql  = 'SELECT c_mc FROM t_xt_kcxz WHERE c_bh = ?';
+			$row4 = $this->db->getRow($sql, $kcxz);
+			if ($myrow[4] != 0) {
+				$rate = ($myrow[5] / $myrow[4]) * 100;
+			} else {
+				$rate = 0;
+			}
+			$result[]['jsxy'] = $myrow[2]; //教师所在学院
+			$result[]['jsgh'] = $myrow[1]; //教师工号
+			$result[]['jsxm'] = $row2[0]; //教师姓名
+			$result[]['kcmc'] = $row1[0]; //授课名称
+			$result[]['kcxz'] = $row4[0]; //课程性质
+			foreach ($row3 as $row) {
+				$result[]['skzy'][] = $row[1]; //授课年级专业
+			}
+			$result[]['yprs'] = $myrow[4]; //应评人数
+			$result[]['sprs'] = $myrow[5]; //实评人数
+			$result[]['rate'] = $rate; //参评率
+		}
+	}
+
 }
