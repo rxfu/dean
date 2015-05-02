@@ -377,4 +377,35 @@ class MonitorModel extends ManagerAdminModel {
 		return $result;
 	}
 
+	/**
+	 * 获取教师评教明细
+	 * @param  string $table      统计表名
+	 * @param  string $department 学院
+	 * @return array             明细表
+	 */
+	public function getJspjmx($table, $department) {
+		if ($department == "") {
+			$sql = "SELECT DISTINCT c_jsgh, AVG(s_jxtd) AS jxtd, AVG(s_jxnr) AS jxnr, AVG(s_jxff) AS jxff, AVG(s_jxxg) AS jxxg, AVG(s_zhpf) AS zhpf FROM $table GROUP BY c_jsgh ORDER BY zhpf DESC";
+		} else {
+			$sql = "SELECT DISTINCT c_jsgh, AVG(s_jxtd) AS jxtd, AVG(s_jxnr) AS jxnr, AVG(s_jxff) AS jxff, AVG(s_jxxg) AS jxxg, AVG(s_zhpf) AS zhpf FROM $table where c_jsyx='$department' GROUP BY c_jsgh ORDER BY zhpf DESC";
+		}
+		$result = array();
+		$data   = $this->db->getAll($sql);
+		foreach ($data as $myrow) {
+			$sql  = "SELECT c_xm, c_zc FROM t_pk_js1 WHERE c_jsgh = '$myrow[0]'"; //查询教师姓名
+			$row1 = $this->db->getRow($sql, $myrow[0]);
+
+			$result[]['jsgh'] = $myrow[0];
+			$result[]['jsxm'] = $row1[0];
+			$result[]['jsgh'] = $row1[1];
+			$result[]['jxtd'] = $myrow[1];
+			$result[]['jxnr'] = $myrow[2];
+			$result[]['jxff'] = $myrow[3];
+			$result[]['jxxg'] = $myrow[4];
+			$result[]['zhpf'] = $myrow[5];
+		}
+
+		return $result;
+	}
+
 }
