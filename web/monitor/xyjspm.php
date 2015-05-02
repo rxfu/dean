@@ -8,7 +8,7 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <form name="xscplForm" id="xscplForm" action="<?php echo Route::to('monitor.xyjspm') ?>" role="form" class="form-inline">
+                                <form name="xyjspmForm" id="xyjspmForm" action="<?php echo Route::to('monitor.xyjspm') ?>" role="form" class="form-inline">
                                     <div class="form-group">
                                         <label for="department">学院</label>
                                         <select name="department" id="department" class="form-control">

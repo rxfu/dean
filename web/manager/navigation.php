@@ -57,10 +57,10 @@
                                         <a href="<?php echo Route::to('monitor.xyjspm') ?>">教师评教得分排名表</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo Route::to('monitor.kcpjdb') ?>">教师评教结果明细表</a>
+                                        <a href="<?php echo Route::to('monitor.jspjmx') ?>">教师评教结果明细表</a>
                                     </li>
                                     <li>
-                                        <a href="#">课程评教结果明细表</a>
+                                        <a href="<?php echo Route::to('monitor.kcpjmx') ?>">课程评教结果明细表</a>
                                     </li>
                                     <li>
                                         <a href="#">各学院评教结果对比表</a>
@@ -69,7 +69,7 @@
                                         <a href="#">“一名教师讲授多门课程”评教结果横向对比表</a>
                                     </li>
                                     <li>
-                                        <a href="#">“一门课程多名教师讲授”评教结果横向对比表</a>
+                                        <a href="<?php echo Route::to('monitor.kcpjdb') ?>">“一门课程多名教师讲授”评教结果横向对比表</a>
                                     </li>
                                     <li>
                                         <a href="#">公共课评教结果对比表</a>

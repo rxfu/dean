@@ -411,12 +411,47 @@ class MonitorModel extends ManagerAdminModel {
 		$result = array();
 		$data   = $this->db->getAll($sql);
 		foreach ($data as $myrow) {
-			$sql  = "SELECT c_xm, c_zc FROM t_pk_js1 WHERE c_jsgh = '$myrow[0]'"; //查询教师姓名
+			$sql  = "SELECT c_xm, c_zc FROM t_pk_js1 WHERE c_jsgh = ?"; //查询教师姓名
 			$row1 = $this->db->getRow($sql, $myrow[0]);
 
 			$result[]['jsgh'] = $myrow[0];
 			$result[]['jsxm'] = $row1[0];
 			$result[]['jsgh'] = $row1[1];
+			$result[]['jxtd'] = $myrow[1];
+			$result[]['jxnr'] = $myrow[2];
+			$result[]['jxff'] = $myrow[3];
+			$result[]['jxxg'] = $myrow[4];
+			$result[]['zhpf'] = $myrow[5];
+		}
+
+		return $result;
+	}
+
+	/**
+	 * 获取课程评教明细
+	 * @param  string $table      统计表名
+	 * @param  string $department 学院
+	 * @param  string $property 课程性质
+	 * @return array             明细表
+	 */
+	public function getKcpjmx($table, $department, $property) {
+		if ($department == "" and $property == "") {
+			$sql = "SELECT DISTINCT c_kcbh, AVG(s_jxtd) AS jxtd, AVG(s_jxnr) AS jxnr, AVG(s_jxff) AS jxff, AVG(s_jxxg) AS jxxg, AVG(s_zhpf) AS zhpf FROM $table GROUP BY c_kcbh ORDER BY zhpf DESC";
+		} else if ($department != "" and $property == "") {
+			$sql = "SELECT DISTINCT c_kcbh, AVG(s_jxtd) AS jxtd, AVG(s_jxnr) AS jxnr, AVG(s_jxff) AS jxff, AVG(s_jxxg) AS jxxg, AVG(s_zhpf) AS zhpf FROM $table WHERE c_kcyx = '$department' GROUP BY c_kcbh ORDER BY zhpf DESC";
+		} else if ($department == "" and $property != "") {
+			$sql = "SELECT DISTINCT c_kcbh, AVG(s_jxtd) AS jxtd, AVG(s_jxnr) AS jxnr, AVG(s_jxff) AS jxff, AVG(s_jxxg) AS jxxg, AVG(s_zhpf) AS zhpf FROM $table WHERE c_kcxz = '$property' GROUP BY c_kcbh,c_kcxz ORDER BY zhpf DESC";
+		} else if ($department != "" and $property != "") {
+			$sql = "SELECT DISTINCT c_kcbh, AVG(s_jxtd) AS jxtd, AVG(s_jxnr) AS jxnr, AVG(s_jxff) AS jxff, AVG(s_jxxg) AS jxxg, AVG(s_zhpf) AS zhpf FROM $table WHERE c_kcyx = '$department' AND c_kcxz = '$property' GROUP BY c_kcbh,c_kcxz ORDER BY zhpf DESC";
+		}
+		$result = array();
+		$data   = $this->db->getAll($sql);
+		foreach ($data as $myrow) {
+			$sql  = "SELECT c_zwmc FROM t_jx_kc where c_kcbh = ?"; //查询课程名称
+			$row1 = $this->db->getRow($sql, $myrow[0]);
+
+			$result[]['kcmc'] = $row1[0];
+			$result[]['kcxz'] = $myrow[0];
 			$result[]['jxtd'] = $myrow[1];
 			$result[]['jxnr'] = $myrow[2];
 			$result[]['jxff'] = $myrow[3];
