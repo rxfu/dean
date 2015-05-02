@@ -78,7 +78,7 @@
                                                 <th class="active">不及格</th>
                                             </tr>
                                             <tr>
-                                                <td>人数</td>
+                                                <th class="active">人数</th>
                                                 <td><?php echo $grade['yxjs'] ?></td>
                                                 <td><?php echo $grade['lhjs'] ?></td>
                                                 <td><?php echo $grade['zdjs'] ?></td>
@@ -86,7 +86,7 @@
                                                 <td><?php echo $grade['bjgjs'] ?></td>
                                             </tr>
                                             <tr>
-                                                <td>百分比</td>
+                                                <th class="active">百分比</th>th
                                                 <td><?php echo $grade['yxjs'] / $total ?></td>
                                                 <td><?php echo $grade['lhjs'] / $total ?></td>
                                                 <td><?php echo $grade['zdjs'] / $total ?></td>

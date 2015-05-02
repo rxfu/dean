@@ -133,6 +133,8 @@ class MonitorController extends ManagerAdminController {
 	 * @return void
 	 */
 	protected function xscpl() {
+		$departments = $this->model->getDepartments();
+
 		if (isPost()) {
 			$_POST      = sanitize($_POST);
 			$department = $_POST['department'];
@@ -153,9 +155,9 @@ class MonitorController extends ManagerAdminController {
 			}
 			$data = $this->model->getXscpl($table, $department, $property, $order);
 
-			return $this->view->display('monitor.xscpl', array('department' => $department, 'property' => $property, 'order' => $order, 'data' => $data));
+			return $this->view->display('monitor.xscpl', array('departments' => $departments, 'department' => $department, 'property' => $property, 'order' => $order, 'data' => $data));
 		}
-		return $this->view->display('monitor.xscpl');
+		return $this->view->display('monitor.xscpl', array('departments' => $departments));
 	}
 
 	/**
@@ -163,6 +165,8 @@ class MonitorController extends ManagerAdminController {
 	 * @return void
 	 */
 	protected function xyjspm() {
+		$departments = $this->model->getDepartments();
+
 		if (isPost()) {
 			$_POST      = sanitize($_POST);
 			$department = $_POST['department'];
@@ -170,9 +174,9 @@ class MonitorController extends ManagerAdminController {
 			$table      = $this->session->get('year') . $this->session->get('term') . 't';
 			$data       = $this->model->getXyjspm($table, $department, $property);
 
-			return $this->view->display('monitor.xyjspm', array('department' => $department, 'property' => $property, 'data' => $data));
+			return $this->view->display('monitor.xyjspm', array('departments' => $departments, 'department' => $department, 'property' => $property, 'data' => $data));
 		}
-		return $this->view->display('monitor.xyjspm');
+		return $this->view->display('monitor.xyjspm', array('departments' => $departments));
 	}
 
 	/**
@@ -180,6 +184,8 @@ class MonitorController extends ManagerAdminController {
 	 * @return void
 	 */
 	protected function jspjmx() {
+		$departments = $this->model->getDepartments();
+
 		if (isPost()) {
 			$_POST      = sanitize($_POST);
 			$department = $_POST['department'];
@@ -284,9 +290,9 @@ class MonitorController extends ManagerAdminController {
 				$zscore['zhpf'] = $zhpf_bzf;
 			}
 
-			return $this->view->display('monitor.jspjmx', array('department' => $department, 'data' => $data, 'avg' => $avg, 'zscore' => $zscore, 'grade' => $grade, 'total' => $js_num));
+			return $this->view->display('monitor.jspjmx', array('departments' => $departments, 'department' => $department, 'data' => $data, 'avg' => $avg, 'zscore' => $zscore, 'grade' => $grade, 'total' => $js_num));
 		}
-		return $this->view->display('monitor.jspjmx');
+		return $this->view->display('monitor.jspjmx', array('departments' => $departments));
 	}
 
 	/**
@@ -294,6 +300,8 @@ class MonitorController extends ManagerAdminController {
 	 * @return void
 	 */
 	protected function kcpjmx() {
+		$departments = $this->model->getDepartments();
+
 		if (isPost()) {
 			$_POST      = sanitize($_POST);
 			$department = $_POST['department'];
@@ -399,9 +407,79 @@ class MonitorController extends ManagerAdminController {
 				$zscore['zhpf'] = $zhpf_bzf;
 			}
 
-			return $this->view->display('monitor.kcpjmx', array('department' => $department, 'property' => $property, 'data' => $data, 'avg' => $avg, 'zscore' => $zscore, 'grade' => $grade, 'total' => $js_num));
+			return $this->view->display('monitor.kcpjmx', array('departments' => $departments, 'department' => $department, 'property' => $property, 'data' => $data, 'avg' => $avg, 'zscore' => $zscore, 'grade' => $grade, 'total' => $js_num));
 		}
-		return $this->view->display('monitor.kcpjmx');
+		return $this->view->display('monitor.kcpjmx', array('departments' => $departments));
+	}
+
+	/**
+	 * 列出学院评教结果对比表
+	 * @return void
+	 */
+	protected function xypbjg() {
+		$table = $this->session->get('year') . $this->session->get('term') . 't';
+		$data  = $this->model->getXypbjg($table);
+
+		$i    = 0;
+		$pjjs = 0;
+		$pjkc = 0;
+		$pjjs = 0;
+		$avge = 0;
+		foreach ($data as $row) {
+			$pjjs += $row[1];
+			$pjkc += $row[2];
+			$pjrs += $row[4];
+			$avge += $row[0];
+			++$i;
+		}
+		$avge /= $i;
+		rsort($data);
+
+		return $this->view->display('monitor.xypbjg', array('data' => $data, 'pjjs' => $pjjs, 'pjkc' => $pjkc, 'pjrs' => $pjrs, 'avge' => $avge));
+	}
+
+	/**
+	 * 列出“一名教师讲授多门课程”评教结果横向对比表
+	 * @return void
+	 */
+	protected function jskcdb() {
+		$departments = $this->model->getDepartments();
+		$teachers    = $this->model->getTeachers();
+
+		if (isPost()) {
+			$_POST      = sanitize($_POST);
+			$department = $_POST['department'];
+			$teacher    = $_POST['teacher'];
+			$table      = $this->session->get('year') . $this->session->get('term') . 't';
+			$data       = $this->model->getJskcdb($table, $department, $teacher);
+
+			$PF_SUM = 0;
+			$td     = 0;
+			$nr     = 0;
+			$ff     = 0;
+			$xg     = 0;
+			$n      = count($data);
+			$avg    = array();
+
+			foreach ($data as $row) {
+				$td += $row['jxtd'];
+				$nr += $row['jxnr'];
+				$ff += $row['jxff'];
+				$xg += $row['jxxg'];
+				$PF_SUM += $row['zhpf'];
+			}
+
+			if (0 < $n) {
+				$avg['jxtd'] = $td / $n;
+				$avg['jxnr'] = $nr / $n;
+				$avg['jxff'] = $ff / $n;
+				$avg['jxxg'] = $xg / $n;
+				$avg['zhpf'] = $PF_SUM / $n;
+			}
+
+			return $this->view->display('monitor.jskcdb', array('departments' => $departments, 'teachers' => $teachers, 'department' => $department, 'teacher' => $teacher, 'data' => $data, 'avg' => $avg));
+		}
+		return $this->view->display('monitor.jskcdb', array('departments' => $departments, 'teachers' => $teachers));
 	}
 
 	/**
@@ -409,6 +487,9 @@ class MonitorController extends ManagerAdminController {
 	 * @return void
 	 */
 	protected function kcpjdb() {
+		$departments = $this->model->getDepartments();
+		$courses     = $this->model->getCourses();
+
 		if (isPost()) {
 			$_POST      = sanitize($_POST);
 			$department = $_POST['department'];
@@ -437,11 +518,73 @@ class MonitorController extends ManagerAdminController {
 				$avg['jxnr'] = $nr / $n;
 				$avg['jxff'] = $ff / $n;
 				$avg['jxxg'] = $xg / $n;
+				$avg['zhpf'] = $PF_SUM / $n;
 			}
 
-			return $this->view->display('monitor.kcpjdb', array('department' => $department, 'course' => $course, 'data' => $data, 'avg' => $avg));
+			return $this->view->display('monitor.kcpjdb', array('departments' => $departments, 'courses' => $courses, 'department' => $department, 'course' => $course, 'data' => $data, 'avg' => $avg));
 		}
-		return $this->view->display('monitor.kcpjdb');
+		return $this->view->display('monitor.kcpjdb', array('departments' => $departments, 'courses' => $courses));
+	}
+
+	/**
+	 * 列出公共课评教结果对比表
+	 * @return void
+	 */
+	protected function ggkpjdb() {
+		$courses = $this->model->getBasicCourses();
+
+		if (isPost()) {
+			$_POST  = sanitize($_POST);
+			$course = $_POST['course'];
+			$table  = $this->session->get('year') . $this->session->get('term') . 't';
+			$data   = $this->model->getGggkpjdb($table, $course);
+
+			return $this->view->display('monitor.ggkpjdb', array('courses' => $courses, 'course' => $course, 'data' => $data));
+		}
+		return $this->view->display('monitor.ggkpjdb', array('courses' => $courses));
+	}
+
+	/**
+	 * 列出评教排名优秀教师得分统计表
+	 * @return void
+	 */
+	protected function yxjstj() {
+		if (isPost()) {
+			$_POST  = sanitize($_POST);
+			$course = $_POST['course'];
+			$number = $_POST['teacher'];
+			$table  = $this->session->get('year') . $this->session->get('term') . 't';
+			$data   = $this->model->getGggkpjdb($table, $course, $number);
+
+			$PF_SUM = 0;
+			$td     = 0;
+			$nr     = 0;
+			$ff     = 0;
+			$xg     = 0;
+			$avg    = array();
+
+			foreach ($data as $row) {
+				foreach ($row['kcmc'] as $value) {
+
+					$td += $value['jxtd'];
+					$nr += $value['jxnr'];
+					$ff += $value['jxff'];
+					$xg += $value['jxxg'];
+					$PF_SUM += $value['zhpf'];
+				}
+			}
+
+			if (0 < $number) {
+				$avg['jxtd'] = $td / $number;
+				$avg['jxnr'] = $nr / $number;
+				$avg['jxff'] = $ff / $number;
+				$avg['jxxg'] = $xg / $number;
+				$avg['zhpf'] = $PF_SUM / $number;
+			}
+
+			return $this->view->display('monitor.ggkpjdb', array('courses' => $courses, 'course' => $course, 'data' => $data, 'avg' => $avg));
+		}
+		return $this->view->display('monitor.ggkpjdb', array('courses' => $courses));
 	}
 
 }

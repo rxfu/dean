@@ -231,6 +231,44 @@ class MonitorModel extends ManagerAdminModel {
 	}
 
 	/**
+	 * 获取教师信息
+	 * @param  string $table 统计表名
+	 * @return array        教师信息列表
+	 */
+	public function getTeachers($table) {
+		$sql    = 'SELECT DISTINCT c_jsgh, c_jsyx FROM ' . $table;
+		$data   = $this->db->getAll($sql);
+		$result = array();
+		foreach ($data as $row) {
+			$sql              = 'SELECT DISTINCT c_xm FROM t_jx_js1 WHERE c_kcbh = ?';
+			$result[]['jsxm'] = $this->db->getColumn($sql, $row['c_jsgh']);
+			$result[]['jsgh'] = $row['c_jsgh'];
+			$result[]['jsyx'] = $row['c_jsyx'];
+		}
+
+		return $result;
+	}
+
+	/**
+	 * 获取课程信息
+	 * @param  string $table 统计表名
+	 * @return array        课程信息列表
+	 */
+	public function getBasicCourses($table) {
+		$sql    = 'SELECT DISTINCT c_kcbh, c_kcyx FROM ' . $table . ' WHERE kcxh LIKE "BG%"';
+		$data   = $this->db->getAll($sql);
+		$result = array();
+		foreach ($data as $row) {
+			$sql              = 'SELECT kcmc FROM t_jx_kc WHERE c_kcbh = ?';
+			$result[]['kcmc'] = $this->db->getColumn($sql, $row['c_kcbh']);
+			$result[]['kch']  = $row['c_kcbh'];
+			$result[]['kkxy'] = $row['c_kcyx'];
+		}
+
+		return $result;
+	}
+
+	/**
 	 * 获取用户列表
 	 * @return mixed 成功返回用户信息，否则返回FALSE
 	 */
@@ -463,14 +501,70 @@ class MonitorModel extends ManagerAdminModel {
 	}
 
 	/**
+	 * 获取学院评教结果
+	 * @param  string $table      统计表名
+	 * @return array             评教结果
+	 */
+	public function getXypbjg($table) {
+		$sql  = "SELECT DISTINCT c_jsyx FROM $table ORDER BY c_jsyx";
+		$data = $this->db->getAll($sql);
+		$i    = 0;
+		foreach ($data as $myrow) {
+			$sql        = "SELECT COUNT(*) FROM (SELECT DISTINCT c_jsgh FROM $table WHERE c_jsyx = ?)";
+			$PJJS_NUM   = $this->db->getColumn($sql, $myrow[0]);
+			$sql        = "SELECT COUNT(*) FROM (SELECT DISTINCT c_kcbh FROM $table WHERE c_jsyx = ?)";
+			$PJKC_NUM   = $this->db->getColumn($sql, $myrow[0]);
+			$sql        = "SELECT SUM(s_sprs) AS s_sprs FROM $table WHERE c_jsyx = ? GROUP BY c_jsyx";
+			$row_kcxh   = $this->db->getRow($sql, $myrow[0]);
+			$sql        = "SELECT AVG(s_zhpf) AS zhpf FROM $table WHERE c_jsyx = ? GROUP BY c_jsyx";
+			$row3       = $this->db->getRow($sql, $myrow[0]);
+			$result[$i] = array("$row3[0]", "$PJJS_NUM", "$PJKC_NUM", "$myrow[0]", "$row_kcxh[0]");
+			++$i;
+		}
+
+		return $result;
+	}
+
+	/**
 	 * 获取教师评教课程得分
+	 * @param  string $table      统计表名
+	 * @param  string $department 学院
+	 * @param  string $teacher    教师工号
+	 * @return array             评教课程得分表
+	 */
+	public function getJskcdb($table, $department, $teacher) {
+		$sql    = "SELECT c_kcbh, AVG(s_jxtd) AS jxtd, AVG(s_jxnr) AS jxnr, AVG(s_jxff) AS jxff, AVG(s_jxxg) AS jxxg, AVG(s_zhpf) AS zhpf FROM $table WHERE c_jsgh = '$teacher' GROUP BY c_jsgh, c_kcbh";
+		$data   = $this->db->getAll($sql, $teacher);
+		$result = array();
+		foreach ($data as $myrow) {
+			$sql              = "SELECT c_zwmc FROM t_jx_kc WHERE c_kcbh = ?"; //查询课程名称
+			$row2             = $this->db->getRow($sql, $myrow[0]);
+			$sql              = "SELECT c_skzy FROM $table WHERE c_jsgh = ? AND c_jsgh = ?"; // 教师授课专业
+			$row3             = $this->db->getAll($sql, array($myrow[0], $teacher));
+			$result[]['jsxm'] = $row2[0]; //教师姓名
+			$result[]['jsyx'] = $myrow[1]; //教师所在学院
+			foreach ($row3 as $row) {
+				$result[]['skzy'] = $row[0]; //授课年级专业
+			}
+			$result[]['jxtd'] = $myrow[3];
+			$result[]['jxnr'] = $myrow[4];
+			$result[]['jxff'] = $myrow[5];
+			$result[]['jxxg'] = $myrow[6];
+			$result[]['zhpf'] = $myrow[7];
+		}
+
+		return $result;
+	}
+
+	/**
+	 * 获取课程评教教师得分
 	 * @param  string $table      统计表名
 	 * @param  string $department 学院
 	 * @param  string $course     课程号
 	 * @return array             评教课程得分表
 	 */
 	public function getKcpjdb($table, $department, $course) {
-		$sql    = "SELECT c_jsgh, c_jsyx, c_kcbh, AVG(s_jxtd) AS jxtd, AVG(s_jxnr) AS jxnr, AVG(s_jxff) AS jxff, AVG(s_jxxg) AS jxxg, AVG(s_zhpf) AS zhpf FROM $table where c_kcbh = ? GROUP BY c_kcbh, c_jsgh ";
+		$sql    = "SELECT c_jsgh, c_jsyx, c_kcbh, AVG(s_jxtd) AS jxtd, AVG(s_jxnr) AS jxnr, AVG(s_jxff) AS jxff, AVG(s_jxxg) AS jxxg, AVG(s_zhpf) AS zhpf FROM $table where c_kcbh = ? GROUP BY c_kcbh, c_jsgh";
 		$data   = $this->db->getAll($sql, $course);
 		$result = array();
 		foreach ($data as $myrow) {
@@ -488,6 +582,102 @@ class MonitorModel extends ManagerAdminModel {
 			$result[]['jxff'] = $myrow[5];
 			$result[]['jxxg'] = $myrow[6];
 			$result[]['zhpf'] = $myrow[7];
+		}
+
+		return $result;
+	}
+
+	/**
+	 * 获取公共课评教结果
+	 * @param  string $table      统计表名
+	 * @param  string $course     课程号
+	 * @return array             公共课评教结果
+	 */
+	public function getGgkpjdb($table, $course) {
+		if ($course != "") {
+			$sql = "SELECT c_jsgh, c_jsyx, AVG(s_jxtd) AS jxtd, AVG(s_jxnr) AS jxnr, AVG(s_jxff) AS jxff, AVG(s_jxxg) AS jxxg, AVG(s_zhpf) AS zhpf FROM $table WHERE c_kcbh = '$course' GROUP BY c_kcbh, c_jsgh ORDER BY zhpf";
+		} else {
+			$sql = "SELECT c_jsgh, c_jsyx, AVG(s_jxtd) AS jxtd, AVG(s_jxnr) AS jxnr, AVG(s_jxff) AS jxff, AVG(s_jxxg) AS jxxg, AVG(s_zhpf) AS zhpf FROM $table WHERE c_kcxh LIKE \"BG%\" GROUP BY c_kcbh, c_jsgh ORDER BY zhpf";
+		}
+		$data   = $this->db->getAll($sql, $course);
+		$result = array();
+		foreach ($data as $myrow) {
+			$sql  = "SELECT c_xm FROM t_pk_js1 WHERE c_jsgh = ?"; //查询教师姓名
+			$row2 = $this->db->getRow($sql, $myrow[0]);
+			if ($select_kc != "") {
+				$sql = "SELECT c_skzy FROM $table WHERE c_jsgh = ? and c_kcbh='$course'"; // 教师授课专业
+			} else {
+				$sql = "SELECT c_skzy FROM $table WHERE c_jsgh = ?"; // 教师授课专业
+			}
+			$row3             = $this->db->getAll($sql, array($myrow[0]));
+			$result[]['jsgh'] = $myrow[0]; //教师工号
+			$result[]['jsxm'] = $row2[0]; //教师姓名
+			$result[]['jsyx'] = $myrow[1]; //教师所在学院
+			foreach ($row3 as $row) {
+				$result[]['skzy'] = $row[0]; //授课年级专业
+			}
+			$result[]['jxtd'] = $myrow[3];
+			$result[]['jxnr'] = $myrow[4];
+			$result[]['jxff'] = $myrow[5];
+			$result[]['jxxg'] = $myrow[6];
+			$result[]['zhpf'] = $myrow[7];
+		}
+
+		return $result;
+	}
+
+	/**
+	 * 评教排名优秀教师得分统计
+	 * @param  string $table      统计表名
+	 * @param  string $course     课程号
+	 * @param  integer $number    优秀教师数
+	 * @return array             评教优秀教师
+	 */
+	public function getYxjstj($table, $course, $number) {
+		$number = empty($number) ? 20 : intval($number);
+
+		if ($course == "") {
+			$sql = "SELECT c_jsgh, c_jsyx, AVG(s_jxtd) AS jxtd, AVG(s_jxnr) AS jxnr, AVG(s_jxff) AS jxff, AVG(s_jxxg) AS jxxg, AVG(s_zhpf) AS zhpf FROM $table GROUP BY c_jsgh ORDER BY zhpf DESC";
+		} else {
+			$sql = "SELECT c_jsgh, c_jsyx, AVG(s_jxtd) AS jxtd, AVG(s_jxnr) AS jxnr, AVG(s_jxff) AS jxff, AVG(s_jxxg) AS jxxg, AVG(s_zhpf) AS zhpf, c_kcxz FROM $table WHERE c_kcxh = '$course' GROUP BY c_jsgh, c_kcxz ORDER BY zhpf DESC";
+		}
+		$data   = $this->db->getAll($sql, $course);
+		$result = array();
+		for ($i = 0; $i < $number; ++$i) {
+			$myrow = $data[$i];
+			$sql              = "SELECT c_xm, c_zc FROM t_pk_js1 WHERE c_jsgh = ?"; //查询教师姓名
+			$js_row           = $this->db->getRow($sql, $myrow[0]);
+			$result[]['jsgh'] = $myrow[0];
+			$result[]['jsxm'] = $js_row[0];
+			$result[]['jszc'] = $js_row[1];
+			$result[]['jsyx'] = $myrow[1];
+
+			if ($course == "") {
+				$sql = "SELECT DISTINCT c_kcbh FROM $table WHERE c_jsgh = ? ORDER BY s_zhpf";
+			} else {
+				$sql = "SELECT DISTINCT c_kcbh FROM $table WHERE c_jsgh = ? AND c_kcxz = '$course' ORDER BY s_zhpf";
+			}
+			$data2 = $this->db->getAll($sql, $myrow[0]);
+			foreach ($data2 as $row2) {
+				$sql                          = "SELECT c_zwmc FROM t_jx_kc WHERE c_kcbh = '$row2[0]'"; //查询课程名称
+				$kc_row                       = $this->db->getRow($sql, $row2[0]);
+				$result[]['kcmc'][$kc_row[0]] = array();
+				if ($select_kcxz == "") {
+					$sql = "SELECT c_kcxh, c_skzy FROM $table WHERE c_kcbh = ? AND c_jsgh = ? ORDER BY s_zhpf";
+				} else {
+					$sql = "SELECT c_kcxh, c_skzy FROM $table WHERE c_kcbh = ? AND c_jsgh = ? AND c_kcxz = '$course' ORDER BY s_zhpf";
+				}
+				$data3 = $this->db->getAll($sql, array($row2[0], $myrow[0]));
+				foreach ($data3 as $row3) {
+					$result[]['kcmc'][$kc_row[0]]['kcxh'] = $row3[0];
+					$result[]['kcmc'][$kc_row[0]]['skzy'] = $row3[1];
+					$result[]['kcmc'][$kc_row[0]]['jstd'] = $myrow[2];
+					$result[]['kcmc'][$kc_row[0]]['jxnr'] = $myrow[3];
+					$result[]['kcmc'][$kc_row[0]]['jxff'] = $myrow[4];
+					$result[]['kcmc'][$kc_row[0]]['jxxg'] = $myrow[5];
+					$result[]['kcmc'][$kc_row[0]]['zhpf'] = $myrow[6];
+				}
+			}
 		}
 
 		return $result;

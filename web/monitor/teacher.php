@@ -1,6 +1,6 @@
                 <section class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header"><?php echo $session['year'] ?>-<?php echo $session['year'] + 1 ?>学年<?php echo Dictionary::get('xq', $session['term']) ?><?php echo '' == $department ? '全校' : $department ?>学生参评率统计表</h1>
+                        <h1 class="page-header"><?php echo $session['year'] ?>-<?php echo $session['year'] + 1 ?>学年<?php echo Dictionary::get('xq', $session['term']) ?><?php echo '' == $department ? '全校' : $department ?>单名教师单门课程评教得分明细表</h1>
                     </div>
                 </section>
 
@@ -19,25 +19,25 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="property">课程</label>
-                                        <select name="property" id="property" class="form-control">
-                                            <option value=''>== 所有课程 ==</option>
-                                            <?php foreach (Dictionary::getAll('xz') as $item): ?>
-                                                <option value="<?php echo $item['mc'] ?>"<?php echo $item['dm'] == $property ? ' selected' : '' ?>><?php echo $item['mc'] ?></option>
+                                        <label for="teacher">教师</label>
+                                        <select name="teacher" id="teacher" class="form-control">
+                                            <option value=''>== 选择教师 ==</option>
+                                            <?php foreach ($teachers as $item): ?>
+                                                <option value="<?php echo $item['jsgh'] ?>" class="<?php echo $item['kkxy'] ?>" <?php echo $item['kch'] == $teacher ? ' selected' : '' ?>><?php echo $item['kcmc'] ?></option>
                                             <?php endforeach ?>
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="order">排序方式</label>
-                                        <select name="order" id="order" class="form-coonrol">
-                                            <option value='college'>学院</option>
-                                            <option value='teacher'>教师</option>
-                                            <option value='course'>课程</option>
+                                        <label for="course">课程</label>
+                                        <select name="course" id="course" class="form-control">
+                                            <option value=''>== 选择课程 ==</option>
+                                            <?php foreach ($courses as $item): ?>
+                                                <option value="<?php echo $item['kch'] ?>" class="<?php echo $item['kkxy'] ?>" <?php echo $item['kch'] == $course ? ' selected' : '' ?>><?php echo $item['kcmc'] ?></option>
+                                            <?php endforeach ?>
                                         </select>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">确定</button>
+                                    <button type="submit" class="btn btn-primary">查询</button>
                                 </form>
-                                <div class="pull-right">导出表格</div>
                             </div>
                             <div class="panel-body">
                                 <div class="table-responsive">
