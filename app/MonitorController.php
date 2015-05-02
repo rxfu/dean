@@ -284,9 +284,49 @@ class MonitorController extends ManagerAdminController {
 				$zscore['zhpf'] = $zhpf_bzf;
 			}
 
-			return $this->view->display('monitor.xyjspm', array('department' => $department, 'property' => $property, 'data' => $data, 'avg' => $avg, 'zscore' => $zscore, 'grade' => $grade, 'total' => $js_num));
+			return $this->view->display('monitor.jspjmx', array('department' => $department, 'data' => $data, 'avg' => $avg, 'zscore' => $zscore, 'grade' => $grade, 'total' => $js_num));
 		}
-		return $this->view->display('monitor.xyjspm');
+		return $this->view->display('monitor.jspjmx');
+	}
+
+	/**
+	 * 列出“一门课程多名教师讲授”评教结果横向对比表
+	 * @return void
+	 */
+	protected function kcpjdb() {
+		if (isPost()) {
+			$_POST      = sanitize($_POST);
+			$department = $_POST['department'];
+			$course     = $_POST['course'];
+			$table      = $this->session->get('year') . $this->session->get('term') . 't';
+			$data       = $this->model->getKcpjdb($table, $department, $course);
+
+			$PF_SUM = 0;
+			$td     = 0;
+			$nr     = 0;
+			$ff     = 0;
+			$xg     = 0;
+			$n      = count($data);
+			$avg    = array();
+
+			foreach ($data as $row) {
+				$td += $row['jxtd'];
+				$nr += $row['jxnr'];
+				$ff += $row['jxff'];
+				$xg += $row['jxxg'];
+				$PF_SUM += $row['zhpf'];
+			}
+
+			if (0 < $n) {
+				$avg['jxtd'] = $td / $n;
+				$avg['jxnr'] = $nr / $n;
+				$avg['jxff'] = $ff / $n;
+				$avg['jxxg'] = $xg / $n;
+			}
+
+			return $this->view->display('monitor.kcpjdb', array('department' => $department, 'course' => $course, 'data' => $data, 'avg' => $avg));
+		}
+		return $this->view->display('monitor.kcpjdb');
 	}
 
 }

@@ -57,7 +57,7 @@
                                         <a href="<?php echo Route::to('monitor.xyjspm') ?>">教师评教得分排名表</a>
                                     </li>
                                     <li>
-                                        <a href="#">教师评教结果明细表</a>
+                                        <a href="<?php echo Route::to('monitor.kcpjdb') ?>">教师评教结果明细表</a>
                                     </li>
                                     <li>
                                         <a href="#">课程评教结果明细表</a>

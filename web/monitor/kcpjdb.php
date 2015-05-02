@@ -18,18 +18,26 @@
                                             <?php endforeach ?>
                                         </select>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">确定</button>
+                                    <div class="form-group">
+                                        <label for="course">课程</label>
+                                        <select name="course" id="course" class="form-control">
+                                            <option value=''>== 选择课程 ==</option>
+                                            <?php foreach ($courses as $item): ?>
+                                                <option value="<?php echo $item['kch'] ?>" class="<?php echo $item['kkxy'] ?>" <?php echo $item['kch'] == $course ? ' selected' : '' ?>><?php echo $item['kcmc'] ?></option>
+                                            <?php endforeach ?>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">查询</button>
                                 </form>
-                                <div class="pull-right">导出表格</div>
                             </div>
                             <div class="panel-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-striped table-hover">
                                         <thead>
                                             <tr>
-                                                <th class="active">教师工号</th>
                                                 <th class="active">教师姓名</th>
-                                                <th class="active">教师职称</th>
+                                                <th class="active">教师所在学院</th>
+                                                <th class="active">主要授课年级、专业</th>
                                                 <th class="active">教学态度得分</th>
                                                 <th class="active">教学内容得分</th>
                                                 <th class="active">教学方法得分</th>
@@ -40,9 +48,11 @@
                                         <tbody>
                                             <?php foreach ($data as $item): ?>
                                             <tr>
-                                                <td><?php echo $item['jsgh'] ?></td>
                                                 <td><?php echo $item['jsxm'] ?></td>
-                                                <td><?php echo $item['jszc'] ?></td>
+                                                <td><?php echo $item['jsyx'] ?></td>
+                                                <?php foreach ($item['skzy'] as $skzy): ?>
+                                                    <td><?php echo $skzy ?></td>
+                                                <?php endforeach; ?>
                                                 <td><?php echo $item['jxtd'] ?></td>
                                                 <td><?php echo $item['jxnr'] ?></td>
                                                 <td><?php echo $item['jxff'] ?></td>
@@ -60,48 +70,15 @@
                                                 <td><?php echo $avg['jxxg'] ?></td>
                                                 <td><?php echo $avg['zhpf'] ?></td>
                                             </tr>
-                                            <tr>
-                                                <th colspan="3" class="active">标准分</th>
-                                                <td><?php echo $zscore['jxtd'] ?></td>
-                                                <td><?php echo $zscore['jxnr'] ?></td>
-                                                <td><?php echo $zscore['jxff'] ?></td>
-                                                <td><?php echo $zscore['jxxg'] ?></td>
-                                                <td><?php echo $zscore['zhpf'] ?></td>
-                                            </tr>
-                                            <tr>
-                                                <th colspan="2" rowspan="3" class="active">综合评分频率分布</th>
-                                                <th class="active">等级</th>
-                                                <th class="active">优秀</th>
-                                                <th class="active">良好</th>
-                                                <th class="active">中等</th>
-                                                <th class="active">及格</th>
-                                                <th class="active">不及格</th>
-                                            </tr>
-                                            <tr>
-                                                <td>人数</td>
-                                                <td><?php echo $grade['yxjs'] ?></td>
-                                                <td><?php echo $grade['lhjs'] ?></td>
-                                                <td><?php echo $grade['zdjs'] ?></td>
-                                                <td><?php echo $grade['jgjs'] ?></td>
-                                                <td><?php echo $grade['bjgjs'] ?></td>
-                                            </tr>
-                                            <tr>
-                                                <td>百分比</td>
-                                                <td><?php echo $grade['yxjs'] / $total ?></td>
-                                                <td><?php echo $grade['lhjs'] / $total ?></td>
-                                                <td><?php echo $grade['zdjs'] / $total ?></td>
-                                                <td><?php echo $grade['jgjs'] / $total ?></td>
-                                                <td><?php echo $grade['bjgjs'] / $total ?></td>
-                                            </tr>
                                         </tfoot>
                                     </table>
                                 </div>
                             </div>
                             <div class="panel-footer">
-                                注：<br>①教师姓名不重复出现，若一名教师同时讲授多门课程，以平均分来统计；<br>
-②各分数段标准：优秀（90～100）；良好（80～89）；中等（70～79）；及格（60～69）；不及格（60分以下）<br>
-③此表拥有排序功能，可实现按照“教师姓名”进行排序。<br>
-④此表可反馈给学校相关负责领导、教务处相关负责领导、各学院主管教学副院长。
+                                注：<br>①此表包含“一门课程一名教师讲授”情况；<br>
+②若出现“教师姓名”、“授课名称”分别相同，而“主要授课年级、专业”不同的情况，属于不同年级或专业合班授课，对于此种情况采取合并处理，“主要授课年级、专业”采取罗列方式呈现；<br>
+③此表设置三级查询：“学院”（一级查询）——“课程名称”（二级查询）。通过二级查询可获取所选学院所选课程类别、性质所选具体课程的相关统计；<br>
+④此表可反馈给学校相关负责领导、教务处相关负责领导、各学院主管教学副院长。也可面向教师个人进行反馈。
                             </div>
                         </div>
                     </div>

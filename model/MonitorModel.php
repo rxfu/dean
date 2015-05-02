@@ -212,6 +212,25 @@ class MonitorModel extends ManagerAdminModel {
 	}
 
 	/**
+	 * 获取课程信息
+	 * @param  string $table 统计表名
+	 * @return array        课程信息列表
+	 */
+	public function getCourses($table) {
+		$sql    = 'SELECT DISTINCT c_kcbh, c_kcyx FROM ' . $table;
+		$data   = $this->db->getAll($sql);
+		$result = array();
+		foreach ($data as $row) {
+			$sql              = 'SELECT kcmc FROM t_jx_kc WHERE c_kcbh = ?';
+			$result[]['kcmc'] = $this->db->getColumn($sql, $row['c_kcbh']);
+			$result[]['kch']  = $row['c_kcbh'];
+			$result[]['kkxy'] = $row['c_kcyx'];
+		}
+
+		return $result;
+	}
+
+	/**
 	 * 获取用户列表
 	 * @return mixed 成功返回用户信息，否则返回FALSE
 	 */
@@ -403,6 +422,37 @@ class MonitorModel extends ManagerAdminModel {
 			$result[]['jxff'] = $myrow[3];
 			$result[]['jxxg'] = $myrow[4];
 			$result[]['zhpf'] = $myrow[5];
+		}
+
+		return $result;
+	}
+
+	/**
+	 * 获取教师评教课程得分
+	 * @param  string $table      统计表名
+	 * @param  string $department 学院
+	 * @param  string $course     课程号
+	 * @return array             评教课程得分表
+	 */
+	public function getKcpjdb($table, $department, $course) {
+		$sql    = "SELECT c_jsgh, c_jsyx, c_kcbh, AVG(s_jxtd) AS jxtd, AVG(s_jxnr) AS jxnr, AVG(s_jxff) AS jxff, AVG(s_jxxg) AS jxxg, AVG(s_zhpf) AS zhpf FROM $table where c_kcbh = ? GROUP BY c_kcbh, c_jsgh ";
+		$data   = $this->db->getAll($sql, $course);
+		$result = array();
+		foreach ($data as $myrow) {
+			$sql              = "SELECT c_xm FROM t_pk_js1 WHERE c_jsgh = ?"; //查询教师姓名
+			$row2             = $this->db->getRow($sql, $myrow[0]);
+			$sql              = "SELECT c_skzy FROM $table WHERE c_jsgh = ? AND c_kcbh = ?"; // 教师授课专业
+			$row3             = $this->db->getAll($sql, array($myrow[0], $course));
+			$result[]['jsxm'] = $row2[0]; //教师姓名
+			$result[]['jsyx'] = $myrow[1]; //教师所在学院
+			foreach ($row3 as $row) {
+				$result[]['skzy'] = $row[0]; //授课年级专业
+			}
+			$result[]['jxtd'] = $myrow[3];
+			$result[]['jxnr'] = $myrow[4];
+			$result[]['jxff'] = $myrow[5];
+			$result[]['jxxg'] = $myrow[6];
+			$result[]['zhpf'] = $myrow[7];
 		}
 
 		return $result;
