@@ -332,6 +332,17 @@ class MonitorModel extends ManagerAdminModel {
 	}
 
 	/**
+	 * 获取评教等级列表
+	 * @return minxed 成功返回评教等级列表，否则返回FALSE
+	 */
+	public function getRanks() {
+		$sql  = 'SELECT * FROM t_zl_rank';
+		$data = $this->db->getAll($sql);
+
+		return has($data) ? $data : false;
+	}
+
+	/**
 	 * 获取学生参评率
 	 * @param  string $table      统计表名
 	 * @param  string $department 学院
@@ -727,6 +738,41 @@ class MonitorModel extends ManagerAdminModel {
 			$result['yjpf'] = $YJ_PF;
 			$result['ejpf'] = $EJ_PF;
 			$result['zh']   = $ZH;
+		}
+
+		return $result;
+	}
+
+	/**
+	 * 获取监控数据
+	 * @return array 监控数据
+	 */
+	public function getMonitor() {
+		$sql    = "SELECT DISTINCT c_xh, c_xm, c_yx, c_zyh FROM t_xs_zxs WHERE C_xjzt = '01' ORDER BY c_yx";
+		$data   = $this->db->getAll($sql);
+		$i      = 0;
+		$result = array();
+		foreach ($data as $row) {
+			$sql  = "SELECT COUNT(*) AS num FROM t_xk_xkxx WHERE c_xh = '$row[0]' AND c_nd = '$nd' AND c_xq = '$xq' AND not(LEFT(t_xk_xkxx.c_kcxh,4) ='BS28' OR LEFT(t_xk_xkxx.c_kcxh,4)= 'BG16' OR LEFT(t_xk_xkxx.c_kcxh,4)= 'BG20' OR LEFT(t_xk_xkxx.c_kcxh,2)='TW' OR LEFT(t_xk_xkxx.c_kcxh,4)='SB28' OR LEFT(t_xk_xkxx.c_kcxh,6)='TB2010' OR LEFT(t_xk_xkxx.c_kcxh,8)='ZB013109' OR LEFT(t_xk_xkxx.c_kcxh,8)='BZ013109' OR LEFT(t_xk_xkxx.c_kcxh,6)='JB2812' OR LEFT(t_xk_xkxx.c_kcxh,2) IN('TI','TQ','TY')) GROUP BY c_xh";
+			$row1 = $this->db->getRow($sql);
+			$res2 = "SELECT COUNT(*) AS num FROM t_zl_xspf WHERE c_xh = '$row[0]' AND c_nd = '$nd' AND c_xq = '$xq' GROUP BY c_xh";
+			$row2 = $this->db->getRow($sql);
+			if ($row1[0] <= ceil($row2[0] / 10)) {
+				continue;
+			} else {
+				$i++;
+				$sql              = "SELECT c_mc FROM t_xt_yxbh WHERE c_xb='$row[2]'";
+				$row_xy           = $this->db->getRow($sql);
+				$sql              = "SELECT c_mc FROM t_xt_zybh WHERE c_zy='$row[3]'";
+				$row_zy           = mysql_fetch_row($sql);
+				$nj               = substr($row[0], 0, 4);
+				$result[]['id']   = $i;
+				$result[]['yxmc'] = $row_xy[0];
+				$result[]['c_xh'] = $row[0];
+				$result[]['c_xm'] = $row[1];
+				$result[]['c_nj'] = $nj;
+				$result[]['c_zy'] = $row_zy[0];
+			}
 		}
 
 		return $result;

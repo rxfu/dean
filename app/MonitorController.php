@@ -119,13 +119,86 @@ class MonitorController extends ManagerAdminController {
 	 * @return void
 	 */
 	protected function deluser($uid) {
-		$deleted = $this->model->delUser($uid);
+		$success = $this->model->delUser($uid);
 		if (!$success) {
 			Message::add('danger', '删除用户失败');
 			return;
 		}
 
 		return redirect('monitor.user');
+	}
+
+	/**
+	 * 新增指标
+	 * @return void
+	 */
+	protected function addindex() {
+		if (isPost()) {
+			$_POST     = sanitize($_POST);
+			$index     = $_POST['index'];
+			$indexname = $_POST['indexname'];
+			$weight    = $_POST['weight'];
+
+			$success = $this->model->addIndex($index, $indexname, $weight);
+			if (!$success) {
+				Message::add('danger', '新增指标失败');
+				return;
+			}
+
+			return redirect('monitor.index');
+		}
+
+		return $this->view->display('monitor.addindex');
+	}
+
+	/**
+	 * 修改指标
+	 * @return void
+	 */
+	protected function modindex($uid) {
+		$index = $this->model->getindex($uid);
+
+		if (isPost()) {
+			$_POST     = sanitize($_POST);
+			$index     = $_POST['index'];
+			$indexname = $_POST['indexname'];
+			$weight    = $_POST['weight'];
+
+			$success = $this->model->modIndex($indexno, $indexname, $weigh);
+			if (!$success) {
+				Message::add('danger', '新增指标失败');
+				return;
+			}
+
+			return redirect('monitor.index');
+		}
+
+		return $this->view->display('monitor.modindex', array('index' => $index));
+	}
+
+	/**
+	 * 删除指标
+	 * @param  string $index 指标ID
+	 * @return void
+	 */
+	protected function delindex($index) {
+		$success = $this->model->delIndex($index);
+		if (!$success) {
+			Message::add('danger', '删除指标失败');
+			return;
+		}
+
+		return redirect('monitor.index');
+	}
+
+	/**
+	 * 列出评教等级
+	 * @return void
+	 */
+	protected function grade() {
+		$ranks = $this->model->getRanks();
+
+		return $this->view->display('monitor.grade', array('ranks' => $ranks));
 	}
 
 	/**
@@ -593,23 +666,34 @@ class MonitorController extends ManagerAdminController {
 	 */
 	protected function jspjjg() {
 		$departments = $this->model->getDepartments();
-		$teachers = $this->model->getTeachers();
-		$courses = $this->model->getCourses();
+		$teachers    = $this->model->getTeachers();
+		$courses     = $this->model->getCourses();
 
 		if (isPost()) {
-			$_POST  = sanitize($_POST);
+			$_POST      = sanitize($_POST);
 			$department = $_POST['department'];
-			$course = $_POST['course'];
-			$number = $_POST['teacher'];
-			$table  = $this->session->get('year') . $this->session->get('term') . 't';
-			$data   = $this->model->getJspjjg($table, $course, $number);
+			$course     = $_POST['course'];
+			$number     = $_POST['teacher'];
+			$table      = $this->session->get('year') . $this->session->get('term') . 't';
+			$data       = $this->model->getJspjjg($table, $course, $number);
 
 			$quality = new QualityModel();
 			$indexes = $quality->getIndexes();
 
-			return $this->view->display('monitor.jspjjg', array('departments'=>$departments,'department'=>$department, 'teachers'=>$teachers,'teacher'=>$teacher, 'courses' => $courses, 'course' => $course, 'data' => $data, '$indexes'=>$indexes));
+			return $this->view->display('monitor.jspjjg', array('departments' => $departments, 'department' => $department, 'teachers' => $teachers, 'teacher' => $teacher, 'courses' => $courses, 'course' => $course, 'data' => $data, '$indexes' => $indexes));
 		}
-		return $this->view->display('monitor.jspjjg', array('department'=>$departments,'teachers'=>$teachers, 'courses' => $courses));
+		
+		return $this->view->display('monitor.jspjjg', array('department' => $departments, 'teachers' => $teachers, 'courses' => $courses));
+	}
+
+	/**
+	 * 监控评教数据
+	 * @return void
+	 */
+	protected function monitor() {
+		$data = $this->model->getMonitor();
+
+		return $this->view->display('monitor.monitor', array('monitors' => $data));
 	}
 
 }

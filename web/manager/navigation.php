@@ -78,7 +78,7 @@
                                         <a href="<?php echo Route::to('monitor.yxjstj') ?>">评教排名优秀教师得分统计表</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo Route::tol('monitor.jspjjg') ?>">“单名教师单门课程”评教得分明细表</a>
+                                        <a href="<?php echo Route::to('monitor.jspjjg') ?>">“单名教师单门课程”评教得分明细表</a>
                                     </li>
                                 </ul>
                             </li>
@@ -86,10 +86,10 @@
                                 <a href="#"><i class="fa fa-tasks fa-fw"></i> 评教系统参数<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="#">系统指标权重设置</a>
+                                        <a href="<?php echo Route::to('monitor.indexes') ?>">系统指标权重设置</a>
                                     </li>
                                     <li>
-                                        <a href="#">评教评分等级设置</a>
+                                        <a href="<?php echo Route::to('monitor.rank') ?>">评教评分等级设置</a>
                                     </li>
                                     <li>
                                         <a href="#">系统指标权重</a>
