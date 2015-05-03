@@ -333,7 +333,7 @@ class Database {
 	 * @return PDOStatement   PDO状态句柄
 	 */
 	public function search($sql, $params = null) {
-		return $this->_execute($sql, $params);
+		return $this->_execute($sql, $params)->fetchAll();
 	}
 
 	/**
@@ -369,7 +369,16 @@ class Database {
 	 * @return PDOStatement      PDO状态句柄
 	 */
 	public function query($sql) {
-		return self::$_dbh->query($sql)->fetchAll();
+		return self::$_dbh->query($sql);
+	}
+
+	/**
+	 * 执行SQL语句
+	 * @param  string $sql SQL语句
+	 * @return int      受影响的行数
+	 */
+	public function exec($sql) {
+		return self::$_dbh->exec($sql);
 	}
 
 	/**

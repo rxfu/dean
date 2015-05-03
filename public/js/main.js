@@ -251,6 +251,7 @@ $(document).ready(function() {
 	}
 
 	$('#speciality').chained('#college');
+	$('#course').chained('#department');
 
 	$('.modal').modal({
 		show: false,

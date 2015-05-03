@@ -37,16 +37,13 @@
                                 <a href="#"><i class="fa fa-tasks fa-fw"></i> 数据维护<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="<?php echo Route::('monitor.setting') ?>">评教状态设置</a>
+                                        <a href="<?php echo Route::to('monitor.setting') ?>">评教状态设置</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo Route::('monitor.init') ?>">系统初始化表</a>
+                                        <a href="<?php echo Route::to('monitor.init') ?>">系统初始化表</a>
                                     </li>
                                     <li>
-                                        <a href="#">用户信息管理</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">登录密码修改</a>
+                                        <a href="<?php echo Route::to('monitor.user') ?>">用户信息管理</a>
                                     </li>
                                 </ul>
                             </li>
@@ -54,34 +51,34 @@
                                 <a href="#"><i class="fa fa-tasks fa-fw"></i> 评教结果统计表<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="#">学生参评率统计表</a>
+                                        <a href="<?php echo Route::to('monitor.xscpl') ?>">学生参评率统计表</a>
                                     </li>
                                     <li>
-                                        <a href="#">教师评教得分排名表</a>
+                                        <a href="<?php echo Route::to('monitor.xyjspm') ?>">教师评教得分排名表</a>
                                     </li>
                                     <li>
-                                        <a href="#">教师评教结果明细表</a>
+                                        <a href="<?php echo Route::to('monitor.jspjmx') ?>">教师评教结果明细表</a>
                                     </li>
                                     <li>
-                                        <a href="#">课程评教结果明细表</a>
+                                        <a href="<?php echo Route::to('monitor.kcpjmx') ?>">课程评教结果明细表</a>
                                     </li>
                                     <li>
-                                        <a href="#">各学院评教结果对比表</a>
+                                        <a href="<?php echo Route::to('monitor.xypbjg') ?>">各学院评教结果对比表</a>
                                     </li>
                                     <li>
-                                        <a href="#">“一名教师讲授多门课程”评教结果横向对比表</a>
+                                        <a href="<?php echo Route::to('monitor.jskcdb') ?>">“一名教师讲授多门课程”评教结果横向对比表</a>
                                     </li>
                                     <li>
-                                        <a href="#">“一门课程多名教师讲授”评教结果横向对比表</a>
+                                        <a href="<?php echo Route::to('monitor.kcpjdb') ?>">“一门课程多名教师讲授”评教结果横向对比表</a>
                                     </li>
                                     <li>
-                                        <a href="#">公共课评教结果对比表</a>
+                                        <a href="<?php echo Route::to('monitor.ggkpjdb') ?>">公共课评教结果对比表</a>
                                     </li>
                                     <li>
-                                        <a href="#">评教排名优秀教师得分统计表</a>
+                                        <a href="<?php echo Route::to('monitor.yxjstj') ?>">评教排名优秀教师得分统计表</a>
                                     </li>
                                     <li>
-                                        <a href="#">“单名教师单门课程”评教得分明细表</a>
+                                        <a href="<?php echo Route::to('monitor.jspjjg') ?>">“单名教师单门课程”评教得分明细表</a>
                                     </li>
                                 </ul>
                             </li>
@@ -89,10 +86,10 @@
                                 <a href="#"><i class="fa fa-tasks fa-fw"></i> 评教系统参数<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="#">系统指标权重设置</a>
+                                        <a href="<?php echo Route::to('monitor.indexes') ?>">系统指标权重设置</a>
                                     </li>
                                     <li>
-                                        <a href="#">评教评分等级设置</a>
+                                        <a href="<?php echo Route::to('monitor.rank') ?>">评教评分等级设置</a>
                                     </li>
                                     <li>
                                         <a href="#">系统指标权重</a>

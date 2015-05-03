@@ -191,9 +191,9 @@ return array(
 	'quality'    => array(
 		'assessed'   => '1',
 		'assessing'  => '0',
-		'admin'      => '0',
-		'manager'    => '1',
-		'power_user' => '2',
-		'user'       => '3',
+		'admin'      => '0',	// 超级管理员
+		'manager'    => '1',	// 普通管理员
+		'power_user' => '2',	// 学院领导
+		'user'       => '3',	// 教学秘书
 	),
 );
