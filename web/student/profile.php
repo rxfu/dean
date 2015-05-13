@@ -17,7 +17,7 @@
                                         </tr>
                                         <tr>
                                             <td width="240" height="320" class="text-center">
-                                                <img src="<?php echo Route::to('student.portrait') ?>" alt="<?php echo $session['name'] ?>" /><br><br>
+                                                <img src="<?php echo Route::to('student.portrait') ?>" alt="无考试照片" /><br><br>
                                                 <?php if ($allow): ?>
                                                     <div class="text-center">
                                                         <a href="<?php echo Route::to('student.upload') ?>" role="button" class="btn btn-default">上传照片</a>
@@ -25,7 +25,7 @@
                                                 <?php endif; ?>
                                             </td>
                                             <td width="240" height="320" class="text-center">
-                                                <img src="<?php echo Route::to('student.photo') ?>" alt="<?php echo $session['name'] ?>" /><br><br>
+                                                <img src="<?php echo Route::to('student.photo') ?>" alt="无学历照片" /><br><br>
                                                 <p class="text-info">注意：如果该学历照片有问题，请教务处学籍科反馈信息</p>
                                             </td>
                                         </tr>

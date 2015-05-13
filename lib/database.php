@@ -360,7 +360,7 @@ class Database {
 		$field = empty($fields) ? '*' : implode(',', $fields);
 		$sql   = 'SELECT ' . $field . ' FROM ' . $table . $condition;
 
-		return $this->search($sql, $params)->fetchAll();
+		return $this->search($sql, $params);
 	}
 
 	/**
@@ -389,7 +389,7 @@ class Database {
 	 * @return array   查询一行结果
 	 */
 	public function getRow($sql, $params = null) {
-		$sth = $this->search($sql, $params);
+		$sth = $this->_execute($sql, $params);
 		return $sth->fetch();
 	}
 
@@ -413,7 +413,7 @@ class Database {
 	 * @return array   查询一列结果
 	 */
 	public function getColumn($sql, $params = null) {
-		$sth = $this->search($sql, $params);
+		$sth = $this->_execute($sql, $params);
 		return $sth->fetchColumn();
 	}
 
@@ -490,7 +490,7 @@ class Database {
 		// 限制查询结果数量
 		$limit = $sql . ' LIMIT ' . $size . ' OFFSET ' . $offset;
 
-		return $this->search($limit, $params)->fetchAll();
+		return $this->search($limit, $params);
 	}
 
 	/**

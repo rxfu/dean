@@ -73,4 +73,29 @@ class PlanModel extends StudentAdminModel {
 		return has($data) ? $data : array();
 	}
 
+	/**
+	 * 获取选修系列
+	 * @return mixed  成功返回选修系列，否则返回空
+	 */
+	public function getElectives() {
+		$sql  = 'SELECT * FROM t_jx_xxxl WHERE zt = ? ORDER BY dm';
+		$data = $this->db->getAll($sql, ENABLE);
+
+		return $data;
+	}
+
+	/**
+	 * 获取当前学生教学计划
+	 * @param  string $spno  专业号
+	 * @param  string $grade 年级
+	 * @param  string $season 招生季节
+	 * @return mixed        教学计划
+	 */
+	public function getCoursesByStudent($spno, $grade, $season) {
+		$sql  = 'SELECT kch, zxf FROM t_jx_jxjh WHERE zy = ? AND nj = ? AND zsjj = ? ORDER BY kch';
+		$data = $this->db->getAll($sql, array($spno, $grade, $season));
+
+		return $data;
+	}
+
 }

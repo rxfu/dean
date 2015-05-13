@@ -67,4 +67,76 @@ class ReportController extends StudentAdminController {
 		return $this->view->display('report.exam', array('scores' => $scoresByType));
 	}
 
+	/**
+	 * 课程转换申请
+	 * @return NULL
+	 */
+	protected function transfer() {
+		$plan      = new PlanModel();
+		$electives = $plan->getElectives();
+		$courses   = $plan->getCoursesByStudent($this->session->get('spno'), $this->session->get('grade'), $this->session->get('season'));
+
+		$report   = new ScoreModel();
+		$statuses = $report->getStatuses();
+
+		if (isPost()) {
+			$_POST = sanitize($_POST);
+
+			$this->model->applyCreditTransfer(
+				$this->session->get('year'),
+				$this->session->get('term'),
+				$this->session->get('username'),
+				$this->session->get('name'),
+				$this->session->get('spno'),
+				$this->session->get('grade'),
+				$this->session->get('season'),
+				$_POST['lcno'],
+				$_POST['lcname'],
+				$_POST['lplatform'],
+				$_POST['lproperty'],
+				isset($_POST['lelective']) ? $_POST['lelective'] : '',
+				$_POST['method'],
+				$_POST['lcredit'],
+				$_POST['lscore'],
+				$_POST['lgpa'],
+				$_POST['status'],
+				$_POST['cno'],
+				$_POST['reason']);
+
+			return redirect('report.process');
+		}
+
+		return $this->view->display('report.transfer', array('electives' => $electives, 'statuses' => $statuses, 'courses' => $courses));
+	}
+
+	/**
+	 * 撤销课程转换申请
+	 * @return void
+	 */
+	protected function revoke() {
+		if (isPost()) {
+			$_POST = sanitize($_POST);
+			$lcno  = $_POST['lcno'];
+			$cno   = $_POST['cno'];
+
+			$this->model->revokeCreditTransfer($this->session->get('year'),
+				$this->session->get('term'),
+				$this->session->get('username'),
+				$lcno,
+				$cno);
+		}
+
+		return redirect('report.process');
+	}
+
+	/**
+	 * 列出当前学生的课程转换申请列表
+	 * @return array 课程转换申请列表
+	 */
+	protected function process() {
+		$courses = $this->model->getApplications($this->session->get('username'));
+
+		return $this->view->display('report.process', array('courses' => $courses));
+	}
+
 }

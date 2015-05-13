@@ -145,7 +145,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li>
+                            <!--li>
                                 <a href="#"><i class="fa fa-pencil-square-o fa-fw"></i> 教学评价<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
@@ -155,14 +155,30 @@
                                         <a href="<?php echo Route::to('quality.course', Config::get('quality.assessed')) ?>">已评课程</a>
                                     </li>
                                 </ul>
-                            </li>
+                            </li-->
                             <li>
-                                <a href="#"><i class="fa fa-university fa-fw"></i> 创新学分申请<span class="fa arrow"></span></a>
+                                <a href="#"><i class="fa fa-apple fa-fw"></i> 学分申请<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="#">学科竞赛获奖</a>
-                                        <a href="#">发表科研论文</a>
-                                        <a href="#">专利授权</a>
+                                        <a href="#">课程转换申请<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li>
+                                                <a href="<?php echo Route::to('report.transfer') ?>">课程转换</a>
+                                            </li>
+                                            <li>
+                                                <a href="<?php echo Route::to('report.process') ?>">申请进度</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#">创新学分申请<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li>
+                                                <a href="#">学科竞赛获奖</a>
+                                                <a href="#">发表科研论文</a>
+                                                <a href="#">专利授权</a>
+                                            </li>
+                                        </ul>
                                     </li>
                                 </ul>
                             </li>
