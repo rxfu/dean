@@ -46,6 +46,9 @@
                                     <li>
                                         <a href="<?php echo Route::to('plan.graduation') ?>">毕业要求</a>
                                     </li>
+                                    <li>
+                                        <a href="<?php echo Route::to('plan.selected') ?>">选课情况表</a>
+                                    </li>
                                 </ul>
                             </li>
                             <li>
@@ -156,7 +159,7 @@
                                     </li>
                                 </ul>
                             </li-->
-                            <li>
+                            <!--li>
                                 <a href="#"><i class="fa fa-apple fa-fw"></i> 学分申请<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
@@ -181,8 +184,8 @@
                                         </ul>
                                     </li>
                                 </ul>
-                            </li>
-                            <li>
+                            </li-->
+                            <!--li>
                                 <a href="#"><i class="fa fa-university fa-fw"></i> 教室管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
@@ -190,7 +193,7 @@
                                         <a href="#">空教室申请</a>
                                     </li>
                                 </ul>
-                            </li>
+                            </li-->
                             <li>
                                 <a href="#"><i class="fa fa-gear fa-fw"></i> 系统管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">

@@ -103,7 +103,9 @@ class Database {
 				if (null !== $params) {
 					if (is_array($params) || is_object($params)) {
 						foreach ($params as $key => $param) {
-							$sth->bindValue($key + 1, $param, $this->type($param));
+							if (!is_null($param)) {
+								$sth->bindValue($key + 1, $param, $this->type($param));
+							}
 						}
 					} else {
 						$sth->bindValue(1, $params, $this->type($params));

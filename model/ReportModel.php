@@ -35,7 +35,7 @@ class ReportModel extends StudentAdminModel {
 	 */
 	public function getReport($sno) {
 		$sql  = 'SELECT * FROM v_cj_xscj WHERE xh = ? ORDER BY nd DESC, xq DESC';
-		$data = $this->db->getAll($sql, $sno);
+		$data = $this->db->getAll($sql, array($sno));
 
 		return has($data) ? $data : false;
 	}
