@@ -24,7 +24,7 @@ class LoggerModel extends Model {
 			$data['czsj'] = date('Y-m-d H:i:s');
 			$expected     = array('xh', 'kcxh', 'kcmc', 'czlx', 'bz');
 			foreach ($expected as $key) {
-				$data[$key] = isset($log[$key]) ? $log[$key] : null;
+				$data[$key] = isset($log[$key]) ? $log[$key] : '';
 			}
 
 			$this->db->insertRecord($this->_table, $data);
