@@ -76,14 +76,16 @@ class TeacherModel extends TeacherAdminModel {
 	 * @return mixed 成功返回评教年度列表，否则返回空数组
 	 */
 	public function getAssessedTerms($tno) {
+		$db = Database::connect(Config::get('db.tassess'));
+
 		$sql    = 'SELECT table_name FROM information_schema.tables WHERE table_schema = ? AND table_name LIKE ? ORDER BY table_name';
-		$tables = $this->db->getAll($sql, array('public', '20%t'));
+		$tables = $db->getAll($sql, array('public', '20%t'));
 		$data   = array();
 
 		foreach ($tables as $table) {
 			$tableName = $table['table_name'];
-			$sql       = 'SELECT COUNT(*) FROM ' . $tableName . ' WHERE c_jsgh = ?';
-			$count     = $this->db->getColumn($sql, $tno);
+			$sql       = 'SELECT COUNT(*) FROM "' . $tableName . '" WHERE c_jsgh = ?';
+			$count     = $db->getColumn($sql, $tno);
 
 			if (0 < $count) {
 				$year   = substr($tableName, 0, 4);

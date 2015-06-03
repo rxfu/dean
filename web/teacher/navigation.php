@@ -76,7 +76,7 @@
                                 <ul class="nav nav-second-level">
                                     <?php foreach($session['assessTerms'] as $item): ?>
                                         <li>
-                                            <a href="<?php echo Route::to('assess.listing', $item['nd'], $item['xq']) ?>">评教结果</a>
+                                            <a href="<?php echo Route::to('assess.listing', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo Dictionary::get('xq', $item['xq']) ?>学期评教结果</a>
                                         </li>
                                     <?php endforeach; ?>
                                 </ul>
