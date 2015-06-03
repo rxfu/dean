@@ -13,6 +13,25 @@ class SettingModel extends Model {
 	 */
 	private $_table = 't_xt';
 
+	public function __construct() {
+		$session = Session::getInstance(Config::get('session.key'));
+		switch ($session->get('role')) {
+			case 'student':
+				$dbcfg = 'student';
+				break;
+
+			case 'teacher':
+				$dbcfg = 'teacher';
+				break;
+
+			default:
+				$dbcfg = 'default';
+				break;
+		}
+
+		parent::__construct($dbcfg);
+	}
+
 	/**
 	 * 获取系统参数
 	 * @param  string $id 系统参数名

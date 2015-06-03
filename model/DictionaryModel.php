@@ -7,33 +7,53 @@
  */
 class DictionaryModel extends Model {
 
-	/**
-	 * 字典表前缀
-	 * @var string
-	 */
-	private $_prefix = 't_zd_';
+	public function __construct() {
+		$session = Session::getInstance(Config::get('session.key'));
+		switch ($session->get('role')) {
+			case 'student':
+				$dbcfg = 'student';
+				break;
+
+			case 'teacher':
+				$dbcfg = 'teacher';
+				break;
+
+			default:
+				$dbcfg = 'default';
+				break;
+		}
+
+		parent::__construct($dbcfg);
+	}
 
 	/**
 	 * 根据字典代码获得对应的中文名称
-	 * @param  string $table 字典名称
+	 * @param  string $name 字典名称
 	 * @param  string $code    字典代码
+	 * @param string $prefix 前缀
+	 * @param string $key 代码字段
+	 * @param string $value 名称字段
 	 * @return string        中文名称
 	 */
-	public function get($table, $code) {
-		$sql  = 'SELECT mc FROM ' . $this->_prefix . $table . ' WHERE dm = ?';
-		$data = $this->db->getRow($sql, $code);
+	public function get($name, $code, $prefix = 'zd', $key = 'dm', $value = 'mc') {
+		$table = 't_' . $prefix . '_' . $name;
+		$sql   = 'SELECT ' . $value . ' FROM ' . $table . ' WHERE ' . $key . ' = ?';
+		$data  = $this->db->getRow($sql, $code);
 
 		return empty($data['mc']) ? '未知' : $data['mc'];
 	}
 
 	/**
 	 * 遍历字典表
-	 * @param  string $table 字典名称
+	 * @param  string $name 字典名称
+	 * @param string $prefix 前缀
 	 * @return array        字典列表
 	 */
-	public function getAll($table) {
-		$data = $this->db->searchRecord($this->_prefix . $table);
+	public function getAll($name, $prefix = 'zd') {
+		$table = 't_' . $prefix . '_' . $name;
+		$data  = $this->db->searchRecord($table);
 
 		return $data;
 	}
+
 }

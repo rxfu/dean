@@ -5,7 +5,7 @@
  *
  * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
-class LoggerModel extends Model {
+class LoggerModel extends StudentAdminModel {
 
 	/**
 	 * 日志表

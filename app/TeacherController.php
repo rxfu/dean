@@ -23,6 +23,7 @@ class TeacherController extends TeacherAdminController {
 		if ($this->session->get('logged')) {
 			$this->session->forget();
 		}
+		$this->session->put('role', Config::get('user.role.teacher'));
 
 		if (isPost()) {
 			$_POST = sanitize($_POST);
@@ -45,7 +46,6 @@ class TeacherController extends TeacherAdminController {
 				$this->session->put('year', Setting::get('CJ_WEB_ND'));
 				$this->session->put('term', Setting::get('CJ_WEB_XQ'));
 
-				$this->session->put('role', Config::get('user.role.teacher'));
 				$this->session->put('logged', true);
 
 				$this->session->put('scoreCourses', $this->model->getCourses($this->session->get('year'), $this->session->get('term'), $username));

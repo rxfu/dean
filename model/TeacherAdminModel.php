@@ -8,8 +8,7 @@
 class TeacherAdminModel extends Model {
 
 	public function __construct() {
-		$this->setRole(Config::get('user.role.teacher'));
-		parent::__construct();
+		parent::__construct('teacher');
 	}
 
 }

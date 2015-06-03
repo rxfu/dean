@@ -7,8 +7,6 @@
  */
 class Database {
 
-	use Singleton;
-
 	/**
 	 * 保存数据库查询语句
 	 *
@@ -21,13 +19,7 @@ class Database {
 	 *
 	 * @var PDO对象
 	 */
-	private static $_dbh = null;
-
-	/**
-	 * 数据库引擎标识
-	 * @var string
-	 */
-	private static $_engine = null;
+	private $_dbh = null;
 
 	/**
 	 * 数据库连接参数
@@ -39,18 +31,8 @@ class Database {
 	 * 数据库构造方法
 	 * @param array $dsn 数据库连接参数
 	 */
-	public function __construct($dsn) {
-		$this->_dsn = array(
-			'engine'   => $dsn['engine'],
-			'host'     => $dsn['host'],
-			'port'     => $dsn['port'],
-			'dbname'   => $dsn['dbname'],
-			'username' => $dsn['username'],
-			'password' => $dsn['password'],
-			'charset'  => $dsn['charset'],
-		);
-
-		$this->_connect();
+	private function __construct($dsn) {
+		$this->_connect($dsn);
 	}
 
 	/**
@@ -61,9 +43,27 @@ class Database {
 	}
 
 	/**
-	 * 连接数据库
+	 * 关闭数据库
 	 */
-	private function _connect() {
+	private function _close() {
+		$this->_dbh = null;
+	}
+
+	/**
+	 * 连接数据库
+	 * @param array $dsn 数据库连接参数
+	 */
+	private function _connect($dsn) {
+		$this->_dsn = array(
+			'engine'   => $dsn['engine'],
+			'host'     => $dsn['host'],
+			'port'     => $dsn['port'],
+			'dbname'   => $dsn['dbname'],
+			'username' => $dsn['username'],
+			'password' => $dsn['password'],
+			'charset'  => $dsn['charset'],
+		);
+
 		try {
 			$dsn     = $this->_dsn['engine'] . ':host=' . $this->_dsn['host'] . ';port=' . $this->_dsn['port'] . ';dbname=' . $this->_dsn['dbname'];
 			$options = array();
@@ -71,22 +71,15 @@ class Database {
 				$options += array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . strtolower($this->_dsn['charset']) . ';');
 			}
 
-			self::$_dbh = new PDO($dsn, $this->_dsn['username'], $this->_dsn['password'], $options);
-			self::$_dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
-			self::$_dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			self::$_dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+			$this->_dbh = new PDO($dsn, $this->_dsn['username'], $this->_dsn['password'], $options);
+			$this->_dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
+			$this->_dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$this->_dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
-			self::$_engine = self::$_dbh->getAttribute(PDO::ATTR_DRIVER_NAME);
+			$this->_engine = $this->_dbh->getAttribute(PDO::ATTR_DRIVER_NAME);
 		} catch (PDOException $e) {
 			trigger_error($e->getMessage(), E_USER_ERROR);
 		}
-	}
-
-	/**
-	 * 关闭数据库
-	 */
-	private function _close() {
-		self::$_dbh = null;
 	}
 
 	/**
@@ -98,7 +91,7 @@ class Database {
 	 */
 	private function _execute($sql, $params) {
 		try {
-			$sth = self::$_dbh->prepare($sql);
+			$sth = $this->_dbh->prepare($sql);
 			if (is_object($sth)) {
 				if (null !== $params) {
 					if (is_array($params) || is_object($params)) {
@@ -125,6 +118,14 @@ class Database {
 		} catch (PDOException $e) {
 			trigger_error($e->getMessage(), E_USER_ERROR);
 		}
+	}
+
+	/**
+	 * 连接数据库
+	 * @param array $dsn 数据库连接参数
+	 */
+	public static function connect($dsn) {
+		return new self($dsn);
 	}
 
 	/**
@@ -171,7 +172,7 @@ class Database {
 	 * @return string       条加引号后数据
 	 */
 	public function quote($val, $type = PDO::PARAM_STR) {
-		return self::$_dbh->quote($val, $type);
+		return $this->_dbh->quote($val, $type);
 	}
 
 	/**
@@ -212,7 +213,7 @@ class Database {
 	 */
 	public function insert($sql, $params = null) {
 		$sth = $this->_execute($sql, $params);
-		return self::$_dbh->lastInsertId();
+		return $this->_dbh->lastInsertId();
 	}
 
 	/**
@@ -371,7 +372,7 @@ class Database {
 	 * @return PDOStatement      PDO状态句柄
 	 */
 	public function query($sql) {
-		return self::$_dbh->query($sql);
+		return $this->_dbh->query($sql);
 	}
 
 	/**
@@ -380,7 +381,7 @@ class Database {
 	 * @return int      受影响的行数
 	 */
 	public function exec($sql) {
-		return self::$_dbh->exec($sql);
+		return $this->_dbh->exec($sql);
 	}
 
 	/**
@@ -425,7 +426,7 @@ class Database {
 	 * @return boolean 成功为TRUE，失败为FALSE
 	 */
 	public function begin() {
-		return self::$_dbh->beginTransaction();
+		return $this->_dbh->beginTransaction();
 	}
 
 	/**
@@ -434,7 +435,7 @@ class Database {
 	 * @return boolean 成功为TRUE，失败为FALSE
 	 */
 	public function commit() {
-		return self::$_dbh->commit();
+		return $this->_dbh->commit();
 	}
 
 	/**
@@ -443,7 +444,7 @@ class Database {
 	 * @return boolean 成功为TRUE，失败为FALSE
 	 */
 	public function rollBack() {
-		return self::$_dbh->rollBack();
+		return $this->_dbh->rollBack();
 	}
 
 	/**
