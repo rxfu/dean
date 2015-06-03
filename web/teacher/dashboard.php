@@ -7,7 +7,7 @@
     <section class="row">
         <div class="col-lg-12">
         	<div class="panel panel-default">
-        		<div class="panel-body">现在开放录入<?php echo $session['year'] ?>年度<?php echo $session['term'] ?>学期成绩</div>
+        		<div class="panel-body">现在开放录入<?php echo $session['year'] ?>年度<?php echo Dictionary::get('xq', $session['term']) ?>学期成绩</div>
         	</div>
         </div>
     </section>

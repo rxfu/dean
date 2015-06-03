@@ -72,6 +72,16 @@
                                 </ul>
                             </li>
                             <li>
+                                <a href="#"><i class="fa fa-anchor fa-fw"></i> 评教管理<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <?php foreach($session['assessTerms'] as $item): ?>
+                                        <li>
+                                            <a href="<?php echo Route::to('assess.listing', $item['nd'], $item['xq']) ?>">评教结果</a>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </li>
+                            <li>
                                 <a href="#"><i class="fa fa-gear fa-fw"></i> 系统管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>

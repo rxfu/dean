@@ -70,4 +70,32 @@ class TeacherModel extends TeacherAdminModel {
 		return has($data) ? $data : array();
 	}
 
+	/**
+	 * 获取评教年度列表
+	 * @param  string $tno 教师工号
+	 * @return mixed 成功返回评教年度列表，否则返回空数组
+	 */
+	public function getAssessedTerms($tno) {
+		$sql    = 'SELECT table_name FROM information_schema.tables WHERE table_schema = ? AND table_name LIKE ? ORDER BY table_name';
+		$tables = $this->db->getAll($sql, array('public', '20%t'));
+		$data   = array();
+
+		foreach ($tables as $table) {
+			$tableName = $table['table_name'];
+			$sql       = 'SELECT COUNT(*) FROM ' . $tableName . ' WHERE c_jsgh = ?';
+			$count     = $this->db->getColumn($sql, $tno);
+
+			if (0 < $count) {
+				$year   = substr($tableName, 0, 4);
+				$term   = substr($tableName, 4, 1);
+				$data[] = array(
+					'nd' => $year,
+					'xq' => $term,
+				);
+			}
+		}
+
+		return has($data) ? $data : array();
+	}
+
 }
