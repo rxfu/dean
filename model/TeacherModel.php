@@ -78,7 +78,7 @@ class TeacherModel extends TeacherAdminModel {
 	public function getAssessedTerms($tno) {
 		$db = Database::connect(Config::get('db.tassess'));
 
-		$sql    = 'SELECT table_name FROM information_schema.tables WHERE table_schema = ? AND table_name LIKE ? ORDER BY table_name';
+		$sql    = 'SELECT table_name FROM information_schema.tables WHERE table_schema = ? AND table_name LIKE ? ORDER BY table_name DESC';
 		$tables = $db->getAll($sql, array('public', '20%t'));
 		$data   = array();
 
