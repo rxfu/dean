@@ -27,5 +27,14 @@ return array(
 			'password' => 't_web.0',
 			'charset'  => 'UTF8',
 		),
+		'tassess' => array(
+			'engine'   => 'pgsql',
+			'host'     => '202.193.171.253',
+			'port'     => '5432',
+			'dbname'   => 'jxpg',
+			'username' => 'jwxt',
+			'password' => 'jwxt..',
+			'charset'  => 'UTF8',
+		),
 	),
 );

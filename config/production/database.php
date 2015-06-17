@@ -27,5 +27,14 @@ return array(
 			'password' => 'TFD58EC',
 			'charset'  => 'UTF8',
 		),
+		'tassess' => array(
+			'engine'   => 'pgsql',
+			'host'     => '202.193.162.26',
+			'port'     => '5432',
+			'dbname'   => 'jxpg',
+			'username' => 'jxpg',
+			'password' => '5823396..',
+			'charset'  => 'UTF8',
+		),
 	),
 );
