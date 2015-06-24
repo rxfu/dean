@@ -58,17 +58,20 @@
                                     <table class="table table-bordered table-striped table-hover">
                                         <thead>
                                             <tr>
+                                                <th class="active"><i>#</i></th>
                                                 <th class="active">优点</th>
                                                 <th class="active">缺点</th>
                                                 <th class="active">在教学方面，您的学生最想对您说的一句话</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <?php $i = 0 ?>
                                             <?php foreach ($comments as $comment): ?>
                                             <tr>
-                                                <td><?php echo $comment['c_yd'] ?></td>
-                                                <td><?php echo $comment['c_qd'] ?></td>
-                                                <td><?php echo $comment['c_one'] ?></td>
+                                                <td><i>#<?php echo ++$i ?></i></td>
+                                                <td class="text-success"><?php echo $comment['c_yd'] ?></td>
+                                                <td class="text-danger"><?php echo $comment['c_qd'] ?></td>
+                                                <td class="text-info"><?php echo $comment['c_one'] ?></td>
                                             </tr>
                                             <?php endforeach; ?>
                                         </tbody>
