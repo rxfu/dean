@@ -26,6 +26,7 @@ class StudentController extends StudentAdminController {
 		if ($this->session->get('logged')) {
 			$this->session->forget();
 		}
+		$this->session->put('role', Config::get('user.role.student'));
 
 		if (isPost()) {
 			$_POST = sanitize($_POST);
