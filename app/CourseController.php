@@ -229,9 +229,11 @@ class CourseController extends StudentAdminController {
 						$this->session->get('term'),
 						$this->session->get('username'),
 						$generalCount)) {
-						Error::display('该门课程选课人数超限，不允许选课');
-					} elseif (Config::get('course.general.unlimited') < $generalRatio) {
 						Error::display('已选通识素质课已达限制门数，不允许选课');
+					} elseif (Config::get('course.general.unlimited') < $generalRatio) {
+						if ($this->model->isFull($this->session->get('year'), $this->session->get('term'), $cno, $generalRatio)) {
+							Error::display('该门课程选课人数超限，不允许选课');
+						}
 					}
 				}
 
@@ -374,12 +376,22 @@ class CourseController extends StudentAdminController {
 	/**
 	 * 判断是否选课人数已满
 	 * @param  string $cno 课程序号
+	 * @param string $type 课程类型
 	 * @return boolean         人数已满为TRUE，未满为FALSE
 	 */
-	protected function full($cno) {
-		$status = $this->model->isFull($this->session->get('year'),
-			$this->session->get('term'),
-			$cno);
+	protected function full($cno, $type) {
+		$code = Config::get('course.type.' . $type . 'code');
+
+		if ($this->model->isGeneralCourse($code)) {
+			$status = $this->model->isFull($this->session->get('year'),
+				$this->session->get('term'),
+				$cno);
+		} else {
+			$status = $this->model->isFull($this->session->get('year'),
+				$this->session->get('term'),
+				$cno,
+				$this->session->get('spno'));
+		}
 
 		echo json_encode(array('status' => $status));
 		return $status;

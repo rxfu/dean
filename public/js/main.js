@@ -174,12 +174,13 @@ $(document).ready(function() {
 
 		if ('true' == checked) {
 			var cno = form.find('input[name="course"]').val();
+			var type = form.find('input[name="type"]').val();
 			var result;
 
 			// 人数是否已满
 			$.ajax({
 				async: false,
-				url: $().getBaseUrl() + 'course/full/' + cno,
+				url: $().getBaseUrl() + 'course/full/' + cno + '/' + type,
 				success: function(data) {
 					result = $.parseJSON(data);
 				}
