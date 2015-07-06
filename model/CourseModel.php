@@ -541,11 +541,11 @@ class CourseModel extends StudentAdminModel {
 	 */
 	public function isFull($year, $term, $cno, $ratio = 1, $speciality = null) {
 		$sql = 'SELECT jhrs, rs FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND kcxh = ?';
-		if (is_null($speciality)) {
+		if (is_null(null)) {
+			$data = $this->db->getRow($sql, array($year, $term, $cno));
+		} else {
 			$sql .= ' AND zy = ?';
 			$data = $this->db->getRow($sql, array($year, $term, $cno, $speciality));
-		} else {
-			$data = $this->db->getRow($sql, array($year, $term, $cno));
 		}
 
 		return has($data) ? (ceil($data['jhrs'] * $ratio) <= $data['rs']) : false;
