@@ -142,7 +142,7 @@ class CourseModel extends StudentAdminModel {
 		$allow = true;
 		if (ENABLE == Setting::get('XK_SJXZ')) {
 			$sql  = 'SELECT kssj, jssj FROM t_xk_sjxz WHERE nj = ? AND xz = ?';
-			$data = $this->db->getRow($sql, array($grade, $system));
+			$data = $this->db->getRow($sql, array($this->session->get('grade'), $this->session->get('system')));
 
 			if (has($data)) {
 				$allow = ($time >= $data['kssj']) && ($time <= $data['jssj']);
@@ -165,7 +165,7 @@ class CourseModel extends StudentAdminModel {
 		$allow = true;
 		if (ENABLE == Setting::get('XK_TSXZ')) {
 			$sql  = 'SELECT * FROM t_xk_tsxz WHERE nj = ? AND xz = ?';
-			$data = $this->db->getRow($sql, array($grade, $system));
+			$data = $this->db->getRow($sql, array($this->session->get('grade'), $this->session->get('system')));
 
 			if (has($data)) {
 				$allow = ($time >= $data['kssj']) && ($time <= $data['jssj']);
@@ -282,7 +282,7 @@ class CourseModel extends StudentAdminModel {
 			}
 			$courses = array_values($courses);
 			}
-			 */
+			*/
 			array_walk($courses, function (&$course) {
 				$course['zt'] = Config::get('course.select.selectable');
 			});
@@ -535,20 +535,13 @@ class CourseModel extends StudentAdminModel {
 	 * @param  string  $year 年度
 	 * @param  string  $term 学期
 	 * @param  string  $cno  课程序号
-	 * @param string $ratio 人数比例
-	 * @param string $speciality 专业号
 	 * @return boolean       人数已满为TRUE，否则为FALSE
 	 */
-	public function isFull($year, $term, $cno, $ratio = 1, $speciality = null) {
-		$sql = 'SELECT jhrs, rs FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND kcxh = ?';
-		if (is_null($speciality)) {
-			$sql .= ' AND zy = ?';
-			$data = $this->db->getRow($sql, array($year, $term, $cno, $speciality));
-		} else {
-			$data = $this->db->getRow($sql, array($year, $term, $cno));
-		}
+	public function isFull($year, $term, $cno) {
+		$sql  = 'SELECT jhrs, rs FROM v_xk_kxkcxx WHERE nd = ? AND xq = ? AND kcxh = ?';
+		$data = $this->db->getRow($sql, array($year, $term, $cno));
 
-		return has($data) ? (ceil($data['jhrs'] * $ratio) <= $data['rs']) : false;
+		return has($data) ? ($data['jhrs'] <= $data['rs']) : false;
 	}
 
 }
