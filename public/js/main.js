@@ -5,6 +5,10 @@
 		return $(location).attr('protocol') + '//' + $(location).attr('host') + '/' + webroot + '/';
 	};
 })(jQuery);
+$('#browserAlert').hide();
+if ($.ua.is360se || $.ua.is360ee) {
+	$('#browserAlert').slideToggle('slow');
+}
 $(document).ready(function() {
 	$('#loading').hide();
 	$('article').show();
@@ -90,6 +94,7 @@ $(document).ready(function() {
 				}
 			}
 		});
+	$('form[name^="scoreForm"]').formValidation();
 	$('.data-table').dataTable({
 		'lengthMenu': [
 			[10, 25, 50, -1],

@@ -25,6 +25,7 @@
         <?php echo js('js/plugins/dataTables/jquery.dataTables.min.js') ?>
         <?php echo js('js/plugins/dataTables/dataTables.bootstrap.js') ?>
         <?php echo js('js/sb-admin-2.js') ?>
+        <?php echo js('js/jquery.ua.js') ?>
         <?php echo js('js/main.js') ?>
     </body>
 </html>

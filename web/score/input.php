@@ -54,8 +54,8 @@
                                                     <?php foreach($ratios['mode'] as $key => $value): ?>
                                                         <td>
                                                             <?php if (Config::get('score.submit.uncommitted') == $student['tjzt']): ?>
-                                                                <form method="post" action="<?php echo Route::to('score.enter', $info['kcxh']) ?>" role="form" onsubmit="return false">
-                                                                    <input type="text" name="score<?php echo $key ?>" value="<?php echo $student['cj' . $key] ?>" size="6" class="form-control">
+                                                                <form method="post" name="scoreForm<?php echo $student['xh'] ?>" action="<?php echo Route::to('score.enter', $info['kcxh']) ?>" role="form" onsubmit="return false">
+                                                                    <input type="text" name="score<?php echo $key ?>" value="<?php echo $student['cj' . $key] ?>" size="6" min="0" max="100" class="form-control">
                                                                 </form>
                                                             <?php else: ?>
                                                                 <p class="form-control-static"><?php echo $student['cj' . $key] ?></p>
