@@ -54,8 +54,10 @@
                                                     <?php foreach($ratios['mode'] as $key => $value): ?>
                                                         <td>
                                                             <?php if (Config::get('score.submit.uncommitted') == $student['tjzt']): ?>
-                                                                <form method="post" name="scoreForm<?php echo $student['xh'] ?>" action="<?php echo Route::to('score.enter', $info['kcxh']) ?>" role="form" onsubmit="return false">
-                                                                    <input type="text" name="score<?php echo $key ?>" value="<?php echo $student['cj' . $key] ?>" size="6" min="0" max="100" class="form-control">
+                                                                <form method="post" name="scoreForm<?php echo $student['xh'] ?>" action="<?php echo Route::to('score.enter', $info['kcxh']) ?>" role="form" data-fv-framework="bootstrap" data-fv-message="无效值" data-fv-feedbackicons-valid="glyphicon glyphicon-ok" data-fv-feedbackicons-invalid="glyphicon glyphicon-remove" data-fv-feedbackicons-validating="glyphicon glyphicon-refresh" onsubmit="return false">
+                                                                    <input type="text" name="score" value="<?php echo $student['cj' . $key] ?>" size="6" data-fv-integer="true" data-fv-integer-message="成绩必须是正整数" min="0" data-fv-greaterthan-inclusive="true" data-fv-greaterthan-message="输入成绩必须大于等于0" max="100" data-fv-lessthan-inclusive="false" data-fv-lessthan-message="输入成绩必须小于等于100" class="form-control">
+                                                                    <input type="hidden" name="sno" value="<?php echo $student['xh'] ?>">
+                                                                    <input type="hidden" name="mode" value="score<?php echo $key ?>">
                                                                 </form>
                                                             <?php else: ?>
                                                                 <p class="form-control-static"><?php echo $student['cj' . $key] ?></p>

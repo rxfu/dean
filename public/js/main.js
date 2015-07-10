@@ -94,7 +94,23 @@ $(document).ready(function() {
 				}
 			}
 		});
-	$('form[name^="scoreForm"]').formValidation();
+	$('form[name^="scoreForm"]').formValidation().on('success.form.fv', function(e) {
+		// Prevent form submission
+		e.preventDefault();
+
+		var form = $(e.target);
+		var fv = form.data('formValidation');
+
+		// Use Ajax to submit form data
+		$.ajax({
+			type: "post",
+			url: form.prop("action"),
+			data: form.serialize()
+		});
+
+		// Then submit the form as usual
+		fv.defaultSubmit();
+	});
 	$('.data-table').dataTable({
 		'lengthMenu': [
 			[10, 25, 50, -1],
@@ -117,6 +133,7 @@ $(document).ready(function() {
 		e.preventDefault();
 		$(this).tab('show');
 	});
+/*
 	$(':input[name^="score"]').change(function() {
 		var input = $(this);
 		var form = $(this).closest('form');
@@ -140,6 +157,7 @@ $(document).ready(function() {
 			}
 		});
 	});
+	*/
 	$('select[name^="status"]').change(function() {
 		var select = $(this);
 		var form = $(this).closest('form');
