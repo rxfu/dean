@@ -94,22 +94,71 @@ $(document).ready(function() {
 				}
 			}
 		});
-	$('form[name^="scoreForm"]').formValidation().on('success.form.fv', function(e) {
-		// Prevent form submission
-		e.preventDefault();
+	$('form[name="scoreForm"]')
+		.formValidation({
+			framework: 'bootstrap',
+			icon: {
+				valid: 'glyphicon glyphicon-ok',
+				invalid: 'glyphicon glyphicon-remove',
+				validating: 'glyphicon glyphicon-refresh'
+			},
+			fields: {
+				score: {
+					validators: {
+						notEmpty: {
+							message: '成绩不能为空'
+						},
+						integer: {
+							message: '成绩必须是正整数'
+						},
+						between: {
+							min: 0,
+							max: 100,
+							message: '成绩必须是0~100间的正整数'
+						}
+					}
+				}
+			}
+		})
+		.on('success.form.fv', function(e) {
+			// Prevent form submission
+			e.preventDefault();
 
-		var form = $(e.target);
-		var fv = form.data('formValidation');
+			var form = $(e.target);
+			var fv = form.data('formValidation');
 
-		// Use Ajax to submit form data
-		$.ajax({
-			type: "post",
-			url: form.prop("action"),
-			data: form.serialize()
+			// Use Ajax to submit form data
+			$.ajax({
+				type: "post",
+				url: form.prop("action"),
+				data: form.serialize(),
+				success: function(response) {
+					form.closest('tr').find('.total').text(response);
+				}
+			});
+
+			// Then submit the form as usual
+			// fv.defaultSubmit();
 		});
+	$(':input[name="score"]').on('keypress', function(e) {
+		// Enter pressed
+		if (e.keyCode == 13) {
+			var inputs = $(this).parents('table').find(':input[name="score"]');
+			var idx = inputs.index(this);
 
-		// Then submit the form as usual
-		fv.defaultSubmit();
+			if (idx == inputs.length - 1) {
+				inputs[0].select();
+			} else {
+				inputs[idx + 1].focus();
+				inputs[idx + 1].select();
+			}
+
+			$(this).closest('form').submit();
+			return false;
+		}
+	}).on('change', function(e) {
+		$(this).closest('form').submit();
+		return false;
 	});
 	$('.data-table').dataTable({
 		'lengthMenu': [
@@ -133,31 +182,6 @@ $(document).ready(function() {
 		e.preventDefault();
 		$(this).tab('show');
 	});
-/*
-	$(':input[name^="score"]').change(function() {
-		var input = $(this);
-		var form = $(this).closest('form');
-		var sno = $(this).closest('tr').attr('data-row');
-		var mode = $(this).attr('name');
-		$.ajax({
-			type: "post",
-			url: form.prop("action"),
-			data: {
-				"sno": sno,
-				"mode": mode,
-				"score": $(this).val()
-			},
-			success: function(response) {
-				input.wrap('<div class="has-success has-feedback"></div>').after('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
-				$('#total' + sno).text(response);
-			},
-			error: function(response) {
-				input.wrap('<div class="has-error has-feedback"></div>').after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
-				$('#total' + sno).text(response);
-			}
-		});
-	});
-	*/
 	$('select[name^="status"]').change(function() {
 		var select = $(this);
 		var form = $(this).closest('form');
