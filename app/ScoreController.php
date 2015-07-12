@@ -75,7 +75,8 @@ class ScoreController extends TeacherAdminController {
 				// 更新WEB成绩表
 				$total = $this->model->enterScore($this->session->get('year'), $this->session->get('term'), $sno, $cno, $mode, $score, $total);
 				if (isAjax()) {
-					echo $total ? $total : 'failed';
+					$response = $total ? array('success' => true, 'data' => $total) : array('success' => false);
+					echo json_encode($response);
 				}
 
 				return $total;

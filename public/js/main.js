@@ -120,6 +120,7 @@ $(document).ready(function() {
 				}
 			}
 		})
+		.off('success.form.fv')
 		.on('success.form.fv', function(e) {
 			// Prevent form submission
 			e.preventDefault();
@@ -130,10 +131,20 @@ $(document).ready(function() {
 			// Use Ajax to submit form data
 			$.ajax({
 				type: "post",
+				dataType: "json",
 				url: form.prop("action"),
 				data: form.serialize(),
 				success: function(response) {
-					form.closest('tr').find('.total').text(response);
+					total = form.closest('tr').find('.total');
+
+					if (true == response.success) {
+						total.addClass('text-success').text(response.data);
+					} else {
+						total.addClass('text-danger').text('保存失败');
+					}
+				},
+				error: function() {
+					form.closest('tr').find('.total').addClass('text-danger').text('提交失败');
 				}
 			});
 
