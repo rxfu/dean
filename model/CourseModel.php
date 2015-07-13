@@ -486,16 +486,18 @@ class CourseModel extends StudentAdminModel {
 	/**
 	 * 获取学生可重修课程列表
 	 * @param  string $sno 学号
+	 * @param string $year 年度
+	 * @param string $term 学期
 	 * @return array      返回可重修课程列表
 	 */
-	public function getRetakableCourse($sno) {
+	public function getRetakableCourse($sno, $year, $term) {
 		$sql             = 'SELECT DISTINCT nd FROM t_xk_xkxx WHERE xh = ?';
 		$course['years'] = $this->db->getAll($sql, array($sno));
 
 		$course['terms'] = Dictionary::getAll('xq');
 
-		$sql            = 'SELECT kcxh, kcmc FROM v_xk_xskcb WHERE xh = ? ORDER BY kcxh';
-		$course['cnos'] = $this->db->getAll($sql, $sno);
+		$sql            = 'SELECT DISTINCT a.nd, a.xq, a.kcxh, b.kcmc FROM t_xk_xkxx a LEFT JOIN t_jx_kc b ON b.kch = a.kch WHERE a.xh = ? AND (a.nd <> ? OR a.xq <> ?) ORDER BY a.nd DESC, a.xq DESC, a.kcxh';
+		$course['cnos'] = $this->db->getAll($sql, array($sno, $year, $term));
 
 		return $course;
 	}

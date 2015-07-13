@@ -41,7 +41,7 @@
                                             <div class="col-md-4">
                                                 <select name="lcno" id="lcno" class="form-control">
                                                     <?php foreach ($lcnos as $lcno): ?>
-                                                        <option value="<?php echo $lcno['kcxh'] ?>"><?php echo $lcno['kcxh'] ?>-<?php echo $lcno['kcmc'] ?></option>
+                                                        <option value="<?php echo $lcno['kcxh'] ?>"><?php echo $lcno['nd'] ?>年度-<?php echo Dictionary::get('xq', $lcno['xq']) ?>学期-<?php echo $lcno['kcxh'] ?>-<?php echo $lcno['kcmc'] ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>

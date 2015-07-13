@@ -305,7 +305,7 @@ class CourseController extends StudentAdminController {
 		}
 
 		if ($this->model->isRetakeCourse($code)) {
-			$course = $this->model->getRetakableCourse($this->session->get('username'));
+			$course = $this->model->getRetakableCourse($this->session->get('username'), $this->session->get('year'), $this->session->get('term'));
 
 			return $this->view->display('course.apply', array('type' => $type, 'cno' => $cno, 'title' => $title, 'lyears' => $course['years'], 'lterms' => $course['terms'], 'lcnos' => $course['cnos']));
 		}
