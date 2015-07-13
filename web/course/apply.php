@@ -19,21 +19,13 @@
                                         <div class="form-group">
                                             <label for="lyear" class="col-md-2">原年度</label>
                                             <div class="col-md-4">
-                                                <select name="lyear" id="lyear" class="form-control">
-                                                    <?php foreach ($lyears as $lyear): ?>
-                                                        <option value="<?php echo $lyear['nd'] ?>"><?php echo $lyear['nd'] ?> 年度</option>
-                                                    <?php endforeach; ?>
-                                                </select>
+                                                <input type="text" name="lyear" id="lyear" class="form-control" value="" disabled>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="lterm" class="col-md-2">原学期</label>
                                             <div class="col-md-4">
-                                                <select name="lterm" id="lterm" class="form-control">
-                                                    <?php foreach ($lterms as $lterm): ?>
-                                                        <option value="<?php echo $lterm['dm'] ?>"><?php echo $lterm['mc'] ?>学期</option>
-                                                    <?php endforeach; ?>
-                                                </select>
+                                                <input type="text" name="lterm" id="lterm" class="form-control" value="" disabled>
                                             </div>
                                         </div>
                                         <div class="form-group">

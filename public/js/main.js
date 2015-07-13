@@ -1,7 +1,7 @@
 (function($) {
 	$.fn.getBaseUrl = function() {
 		var pathname = $(location).attr('pathname').substring(1);
-		var webroot = '' == pathname ? '' : pathname.substring(0, pathname.indexOf('/'));
+		var webroot = '' === pathname ? '' : pathname.substring(0, pathname.indexOf('/'));
 		return $(location).attr('protocol') + '//' + $(location).attr('host') + '/' + webroot + '/';
 	};
 })(jQuery);
@@ -137,7 +137,7 @@ $(document).ready(function() {
 				success: function(response) {
 					total = form.closest('tr').find('.total');
 
-					if (true == response.success) {
+					if (true === response.success) {
 						total.addClass('text-success').text(response.data);
 					} else {
 						total.addClass('text-danger').text('保存失败');
@@ -243,14 +243,14 @@ $(document).ready(function() {
 					result = $.parseJSON(data);
 				}
 			});
-			if (true == result.status) {
+			if (true === result.status) {
 				$('#fullConfirm').on('show.bs.modal', function(e) {
 					$(this).find('.modal-title').text('人数超限');
 					$(this).find('.modal-body p').html('选课人数已达上限！');
 				});
 				$('#fullConfirm').on('hidden.bs.modal', function(e) {
 					$('#courseConfirm').modal('hide');
-				})
+				});
 				$('#fullConfirm').modal('show');
 				return false;
 			}

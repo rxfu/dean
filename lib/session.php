@@ -56,6 +56,7 @@ class Session extends SessionHandler {
 	protected function setup() {
 		ini_set('session.use_cookies', 1);
 		ini_set('session.use_only_cookies', 1);
+		ini_set('session.use_trans_sid', 0);
 
 		session_name($this->name);
 
@@ -68,12 +69,15 @@ class Session extends SessionHandler {
 	 */
 	public function start() {
 		if (!$this->isStarted()) {
+			/*
 			if (session_start()) {
-				return (0 === mt_rand(0, 4)) ? $this->refresh() : true;
+			return (0 === mt_rand(0, 4)) ? $this->refresh() : true;
 			}
+			 */
+			return session_start();
 		}
 
-		return false;
+		return true;
 	}
 
 	/**
@@ -85,11 +89,21 @@ class Session extends SessionHandler {
 			return false;
 		}
 
-		session_unset();
+		// 重置会话中的所有变量
+		$_SESSION = array();
 
-		setcookie($this->name, '', time() - 42000, $this->cookie['path'], $this->cookie['domain'], $this->cookie['secure'], $this->cookie['httponly']);
+		// 如果要清理的更彻底，那么同时删除会话 cookie
+		// 注意：这样不但销毁了会话中的数据，还同时销毁了会话本身
+		if (ini_get("session.use_cookies")) {
+			$params = session_get_cookie_params();
+			setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]
+			);
+		}
 
-		return session_destroy();
+		// 最后，销毁会话
+		session_destroy();
+
+		return true;
 	}
 
 	/**
@@ -189,7 +203,7 @@ class Session extends SessionHandler {
 	 * @param  mixed $value 会话值
 	 */
 	public function put($name, $value = false) {
-		$parsed = explode('.', $name);
+		$parsed  = explode('.', $name);
 		$session = &$_SESSION;
 
 		while (1 < count($parsed)) {
