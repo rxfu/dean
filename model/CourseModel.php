@@ -399,9 +399,10 @@ class CourseModel extends StudentAdminModel {
 	 * @param  string $lyear 原年度
 	 * @param  string $lterm 原学期
 	 * @param  string $lcno  12位原课程序号
+	 * @param  string $lcredit 原学分
 	 * @return boolean        成功返回TRUE，否则返回FALSE
 	 */
-	public function apply($year, $term, $sno, $name, $cno, $type, $lyear = null, $lterm = null, $lcno = null) {
+	public function apply($year, $term, $sno, $name, $cno, $type, $lyear = null, $lterm = null, $lcno = null, $lcredit = null) {
 		$data['nd']   = $year;
 		$data['xq']   = $term;
 		$data['xh']   = $sno;
@@ -410,12 +411,13 @@ class CourseModel extends StudentAdminModel {
 		$data['xksj'] = date('Y-m-d H:i:s');
 		$data['xklx'] = $type;
 
-		$sql    = 'SELECT kch, pt, xz, kkxy FROM v_xk_kxkcxx WHERE kcxh = ? AND nd = ? AND xq = ?';
+		$sql    = 'SELECT kch, pt, xz, xf, kkxy FROM v_xk_kxkcxx WHERE kcxh = ? AND nd = ? AND xq = ?';
 		$course = $this->db->getRow($sql, array($cno, $year, $term));
 		if (has($course)) {
 			$data['kch']  = $course['kch'];
 			$data['pt']   = $course['pt'];
 			$data['xz']   = $course['xz'];
+			$data['xf']   = $course['xf'];
 			$data['kkxy'] = $course['kkxy'];
 		}
 
@@ -423,6 +425,7 @@ class CourseModel extends StudentAdminModel {
 			$data['ynd']   = $lyear;
 			$data['yxq']   = $lterm;
 			$data['ykcxh'] = $lcno;
+			$data['yxf']   = $lcredit;
 		}
 
 		$inserted = $this->db->insertRecord('t_xk_xksq', $data);
@@ -491,13 +494,8 @@ class CourseModel extends StudentAdminModel {
 	 * @return array      返回可重修课程列表
 	 */
 	public function getRetakableCourse($sno, $year, $term) {
-		$sql             = 'SELECT DISTINCT nd FROM t_xk_xkxx WHERE xh = ?';
-		$course['years'] = $this->db->getAll($sql, array($sno));
-
-		$course['terms'] = Dictionary::getAll('xq');
-
-		$sql            = 'SELECT DISTINCT a.nd, a.xq, a.kcxh, b.kcmc FROM t_xk_xkxx a LEFT JOIN t_jx_kc b ON b.kch = a.kch WHERE a.xh = ? AND (a.nd <> ? OR a.xq <> ?) ORDER BY a.nd DESC, a.xq DESC, a.kcxh';
-		$course['cnos'] = $this->db->getAll($sql, array($sno, $year, $term));
+		$sql            = 'SELECT DISTINCT a.nd, a.xq, a.kcxh, b.kcmc, a.xf FROM t_xk_xkxx a LEFT JOIN t_jx_kc b ON b.kch = a.kch WHERE a.xh = ? AND (a.nd <> ? OR a.xq <> ?) AND a.cx = ? ORDER BY a.kcxh';
+		$course['cnos'] = $this->db->getAll($sql, array($sno, $year, $term, DISABLE));
 
 		return $course;
 	}

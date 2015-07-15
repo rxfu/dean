@@ -14,8 +14,8 @@ return array(
 			'host'     => '202.193.171.253',
 			'port'     => '5432',
 			'dbname'   => 'deantest',
-			'username' => 's_web',
-			'password' => 's_web.0',
+			'username' => 'jwxt',
+			'password' => 'jwxt..',
 			'charset'  => 'UTF8',
 		),
 		'teacher' => array(
@@ -23,8 +23,8 @@ return array(
 			'host'     => '202.193.171.253',
 			'port'     => '5432',
 			'dbname'   => 'deantest',
-			'username' => 't_web',
-			'password' => 't_web.0',
+			'username' => 'jwxt',
+			'password' => 'jwxt..',
 			'charset'  => 'UTF8',
 		),
 		'tassess' => array(

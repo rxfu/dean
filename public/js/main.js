@@ -171,6 +171,26 @@ $(document).ready(function() {
 		$(this).closest('form').submit();
 		return false;
 	});
+	$('select[name^="status"]').change(function() {
+		var select = $(this);
+		var form = $(this).closest('form');
+		var sno = $(this).closest('tr').attr('data-row');
+
+		$.ajax({
+			type: "post",
+			url: form.prop("action"),
+			data: {
+				"sno": sno,
+				"status": $(this).val()
+			},
+			success: function(response) {
+				select.wrap('<div class="has-success has-feedback"></div>').after('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
+			},
+			error: function(xhr, status) {
+				select.wrap('<div class="has-error has-feedback"></div>').after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
+			}
+		});
+	});
 	$('.data-table').dataTable({
 		'lengthMenu': [
 			[10, 25, 50, -1],
@@ -192,26 +212,6 @@ $(document).ready(function() {
 	$('#campus-tab a').click(function(e) {
 		e.preventDefault();
 		$(this).tab('show');
-	});
-	$('select[name^="status"]').change(function() {
-		var select = $(this);
-		var form = $(this).closest('form');
-		var sno = $(this).closest('tr').attr('data-row');
-
-		$.ajax({
-			type: "post",
-			url: form.prop("action"),
-			data: {
-				"sno": sno,
-				"status": $(this).val()
-			},
-			success: function(response) {
-				select.wrap('<div class="has-success has-feedback"></div>').after('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
-			},
-			error: function(xhr, status) {
-				select.wrap('<div class="has-error has-feedback"></div>').after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
-			}
-		});
 	});
 	$('#courseConfirm').on('show.bs.modal', function(e) {
 		var form = $(e.relatedTarget).closest('form');
@@ -284,6 +284,13 @@ $(document).ready(function() {
 	});
 	$('#courseConfirm').on('hidden.bs.modal', function(e) {
 		location.reload();
+	});
+	$('#lcno').change(function() {
+		selected = $('#lcno option:selected');
+		$('#lyear').val(selected.attr('data-year'));
+		$('#lyear-name').val(selected.attr('data-year-name'));
+		$('#lterm').val(selected.attr('data-term'));
+		$('#lterm-name').val(selected.attr('data-term-name'));
 	});
 
 	$('#confirmDialog').on('show.bs.modal', function(e) {

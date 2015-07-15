@@ -16,9 +16,11 @@
                                                 <th class="active">年度</th>
                                                 <th class="active">学期</th>
                                                 <th class="active">课程序号</th>
+                                                <th class="active">学分</th>
                                                 <th class="active">原年度</th>
                                                 <th class="active">原学期</th>
                                                 <th class="active">原课程序号</th>
+                                                <th class="active">原学分</th>
                                                 <th class="active">申请类型</th>
                                                 <th class="active">审核意见</th>
                                                 <th class="active">申请状态</th>
@@ -31,9 +33,11 @@
                                                 <td><?php echo $course['nd'] ?></td>
                                                 <td><?php echo Dictionary::get('xq', $course['xq']) ?></td>
                                                 <td><?php echo $course['kcxh'] ?></td>
+                                                <td><?php echo $course['xf'] ?></td>
                                                 <td><?php echo $course['ynd'] ?></td>
                                                 <td><?php echo isEmpty($course['yxq']) ? $course['yxq'] : Dictionary::get('xq', $course['yxq']) ?></td>
                                                 <td><?php echo $course['ykcxh'] ?></td>
+                                                <td><?php echo $course['yxf'] ?></td>
                                                 <td><?php switch ($course['xklx']) {
                                                     case 0:
                                                         echo '其他课程';

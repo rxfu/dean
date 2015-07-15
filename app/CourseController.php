@@ -298,7 +298,8 @@ class CourseController extends StudentAdminController {
 					Config::get('course.apply.retake'),
 					$_POST['lyear'],
 					$_POST['lterm'],
-					$_POST['lcno']);
+					$_POST['lcno'],
+					$_POST['lcredit']);
 			}
 
 			return redirect('course.process');
@@ -307,7 +308,7 @@ class CourseController extends StudentAdminController {
 		if ($this->model->isRetakeCourse($code)) {
 			$course = $this->model->getRetakableCourse($this->session->get('username'), $this->session->get('year'), $this->session->get('term'));
 
-			return $this->view->display('course.apply', array('type' => $type, 'cno' => $cno, 'title' => $title, 'lyears' => $course['years'], 'lterms' => $course['terms'], 'lcnos' => $course['cnos']));
+			return $this->view->display('course.apply', array('type' => $type, 'cno' => $cno, 'title' => $title, 'lcnos' => $course['cnos']));
 		}
 
 		return $this->view->display('course.apply', array('type' => $type, 'cno' => $cno, 'title' => $title));
