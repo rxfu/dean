@@ -2,7 +2,7 @@
 
 /**
  * 教师成绩模型类
- * 
+ *
  * @author Fu Rongxin <rxfu@mailbox.gxnu.edu.cn>
  */
 class ScoreModel extends TeacherAdminModel {
