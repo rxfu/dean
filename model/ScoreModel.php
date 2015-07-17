@@ -69,11 +69,12 @@ class ScoreModel extends TeacherAdminModel {
 	 * @param  string $year 年度
 	 * @param  string $term 学期
 	 * @param  string $cno  12位课程序号
+	 * @param  string $tno 教师工号
 	 * @return mixed       成功返回学生列表，否则返回FALSE
 	 */
-	public function getStudents($year, $term, $cno) {
-		$sql  = 'SELECT * FROM v_cj_xscjlr WHERE nd = ? AND xq = ? AND kcxh = ? ORDER BY xh';
-		$data = $this->db->getAll($sql, array($year, $term, $cno));
+	public function getStudents($year, $term, $cno, $tno) {
+		$sql  = 'SELECT * FROM v_cj_xscjlr WHERE nd = ? AND xq = ? AND kcxh = ? AND jsgh = ? ORDER BY xh';
+		$data = $this->db->getAll($sql, array($year, $term, $cno, $tno));
 
 		return has($data) ? $data : false;
 	}

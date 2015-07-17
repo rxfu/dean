@@ -23,7 +23,7 @@ class ScoreController extends TeacherAdminController {
 	protected function input($cno) {
 		if ($this->model->isOpen()) {
 			$info     = $this->model->getCourse($this->session->get('year'), $this->session->get('term'), $cno);
-			$students = $this->model->getStudents($this->session->get('year'), $this->session->get('term'), $cno);
+			$students = $this->model->getStudents($this->session->get('year'), $this->session->get('term'), $cno, $this->session->get('username'));
 			foreach ($students as &$student) {
 				if (isEmpty($student['tjzt'])) {
 					$student['tjzt'] = Config::get('score.submit.uncommitted');
