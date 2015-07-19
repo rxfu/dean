@@ -486,7 +486,7 @@ if (!function_exists('partial')) {
 
 	/**
 	 * 包含PHP片段
-	 * @param  string $section PHP片段
+	 * @param  string $part PHP片段
 	 * @return string PHP片段路径
 	 */
 	function partial($part) {

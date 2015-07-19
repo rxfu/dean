@@ -78,7 +78,65 @@ class CurriculumController extends TeacherAdminController {
 	protected function student($year, $term, $cno) {
 		$students = $this->model->listStudents($year, $term, $this->session->get('username'), $cno);
 
-		return $this->view->display('curriculum.student', array('students' => $students,'year'=>$year,'term'=>$term));
+		return $this->view->display('curriculum.student', array('students' => $students, 'year' => $year, 'term' => $term));
+	}
+
+	/**
+	 * 下载上课学生名单
+	 * @param  string $year 年度
+	 * @param  string $term 学期
+	 * @param  string $cno  12位课程序号
+	 * @return void
+	 */
+	protected function download($year, $term, $cno) {
+		$students = $this->model->listStudents($year, $term, $this->session->get('username'), $cno);
+
+		/** Include PHPExcel */
+		require_once VENDOR . DS . 'PHPExcel' . DS . 'PHPExcel.php';
+
+		// Create new PHPExcel object
+		$objPHPExcel = new PHPExcel();
+
+		// Set document properties
+		$objPHPExcel->getProperties()->setCreator('Dean')
+		            ->setLastModifiedBy("Dean")
+		            ->setTitle("Student List of Course")
+		            ->setSubject("Guangxi Normal University Student List")
+		            ->setDescription("Student List of Guangxi Normal University Course")
+		            ->setKeywords("student list course")
+		            ->setCategory("student list");
+
+		$objPHPExcel->setActiveSheetIndex(0)
+		            ->setCellValue('A1', '学号')
+		            ->setCellValue('B1', '姓名');
+
+		// Rename worksheet
+		$objPHPExcel->getActiveSheet()->setTitle($students[0]['kcmc']);
+
+		$data = array();
+		foreach ($students as $student) {
+			$data[] = array_slice($student, 0, 2);
+		}
+		$objPHPExcel->getActiveSheet()->fromArray($data, null, 'A2');
+
+		// Set active sheet index to the first sheet, so Excel opens this as the first sheet
+		$objPHPExcel->setActiveSheetIndex(0);
+
+		// Redirect output to a client’s web browser (Excel5)
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="students' . $this->session->get('year') . $this->session->get('term') . $students[0]['kcxh'] . '.xls"');
+		header('Cache-Control: max-age=0');
+		// If you're serving to IE 9, then the following may be needed
+		header('Cache-Control: max-age=1');
+
+		// If you're serving to IE over SSL, then the following may be needed
+		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+		header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+		header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+		header('Pragma: public'); // HTTP/1.0
+
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$objWriter->save('php://output');
 	}
 
 }

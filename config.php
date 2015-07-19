@@ -22,6 +22,7 @@ define('MODROOT', ROOT . DS . 'model');
 define('PUBROOT', ROOT . DS . 'public');
 define('LOGROOT', ROOT . DS . 'log');
 define('STORAGE', ROOT . DS . 'storage');
+define('VENDOR', ROOT . DS . 'vendor');
 define('PORTRAIT', STORAGE . DS . 'portraits');
 define('PHOTO', STORAGE . DS . 'photos');
 define('SESSION', STORAGE . DS . 'sessions');

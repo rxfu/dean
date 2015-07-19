@@ -8,35 +8,69 @@
 class Autoloader {
 
 	/**
-	 * 自动加载类文件
-	 * @param  string $className 类名
-	 * @return NULL
+	 * 自动加载类对象
+	 * @var object
 	 */
-	public static function autoload($className) {
-		$className = ltrim($className, '\\');
+	private static $loader;
 
-		$pos = strrpos($className, 'Controller');
-		if (false !== $pos && 0 != $pos) {
-			$fileName = APPROOT . DS . $className . '.php';
-		} else {
-			$pos = strrpos($className, 'Model');
-			if (false !== $pos && 0 != $pos) {
-				$fileName = MODROOT . DS . $className . '.php';
-			} else {
-				$fileName = LIBROOT . DS . camelToSnake($className) . '.php';
-			}
-		}
-
-		if (file_exists($fileName)) {
-			require $fileName;
-		}
+	/**
+	 * 构造函数
+	 */
+	public function __construct() {
+		spl_autoload_register(array($this, 'controller'));
+		spl_autoload_register(array($this, 'model'));
+		spl_autoload_register(array($this, 'library'));
 	}
 
 	/**
 	 * 注册autoloader
-	 * @return NULL
+	 * @return object
 	 */
 	public static function register() {
-		spl_autoload_register('Autoloader::autoload');
+		if (NULL == self::$loader) {
+			self::$loader = new self();
+		}
+
+		return self::$loader;
 	}
+
+	/**
+	 * 自动加载控制器类
+	 * @param  string $class 类名
+	 * @return void
+	 */
+	public function controller($class) {
+		$class = preg_replace('/Controller$/ui', '', $class);
+
+		set_include_path(get_include_path() . PS . APPROOT);
+		spl_autoload_extensions('.php');
+		spl_autoload($class);
+	}
+
+	/**
+	 * 自动加载模型类
+	 * @param  string $class 类名
+	 * @return void
+	 */
+	public function model($class) {
+		$class = preg_replace('/Model$/ui', '', $class);
+
+		set_include_path(get_include_path() . PS . MODROOT);
+		spl_autoload_extensions('.php');
+		spl_autoload($class);
+	}
+
+	/**
+	 * 自动加载系统库类
+	 * @param  string $class 类名
+	 * @return void
+	 */
+	public function library($class) {
+		$class = camelToSnake($class);
+
+		set_include_path(get_include_path() . PS . LIBROOT);
+		spl_autoload_extensions('.php');
+		spl_autoload($class);
+	}
+
 }

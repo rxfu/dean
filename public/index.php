@@ -10,6 +10,7 @@
  * 网站根目录
  */
 define('DS', DIRECTORY_SEPARATOR);
+define('PS', PATH_SEPARATOR);
 define('ROOT', dirname(__DIR__));
 
 /**

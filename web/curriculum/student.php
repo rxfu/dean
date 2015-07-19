@@ -9,6 +9,13 @@
                 <section class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
+                            <div class="panel-heading clearfix">
+                                <div class="panel-title">
+                                    <div class="pull-right">
+                                        <a type="button" href="<?php echo Route::to('curriculum.download', $year, $term, $students[0]['kcxh']) ?>" class="btn btn-primary" title="下载学生名单">下载名单</a>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="panel-body">
                                 <div class="table-responsive tab-table">
                                     <table class="table table-bordered table-striped table-hover data-table">
