@@ -225,4 +225,22 @@ class StudentController extends StudentAdminController {
 		return $this->view->display('student.unpaid', array('name' => $this->session->get('name')));
 	}
 
+	/**
+	 * 新生信息核对
+	 * @return void
+	 */
+	protected function fresh() {
+		if (isPost()) {
+			$_POST = sanitize($_POST);
+
+			$train   = $_POST['train'];
+			$address = $_POST['address'];
+
+			if (is_string($train) && is_string($address)) {
+				$this->model->updateFresh($this->session->get('username'), $train, $address);
+			}
+		}
+		return $this->view->display('student.fresh');
+	}
+
 }
