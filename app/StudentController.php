@@ -237,9 +237,10 @@ class StudentController extends StudentAdminController {
 			$address = $_POST['address'];
 
 			if (is_string($train) && is_string($address)) {
-				$this->model->updateFresh($this->session->get('username'), $train, $address);
+				$this->model->setTrainAndAddress($this->session->get('username'), $train, $address);
 			}
 		}
+
 		return $this->view->display('student.fresh');
 	}
 

@@ -140,4 +140,17 @@ class StudentModel extends StudentAdminModel {
 		return $updated ? true : false;
 	}
 
+	/**
+	 * 设置学生火车到站和家庭地址
+	 * @param string $sno     学号
+	 * @param string $train   火车到站
+	 * @param string $address 家庭地址
+	 */
+	public function setTrainAndAddress($sno, $train, $address) {
+		$sql     = 'UPDATE t_xs_zxs SET hcdz = ? AND jtdz = ? WHERE xh = ?';
+		$updated = $this->db->update($sql, array($sno, $train, $address));
+
+		return $updated ? true : false;
+	}
+
 }
