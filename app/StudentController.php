@@ -64,6 +64,7 @@ class StudentController extends StudentAdminController {
 				$this->session->put('term', Setting::get('XK_XQ'));
 
 				$this->session->put('role', Config::get('user.role.student'));
+				$this->session->put('fresh', $this->model->isNewStudent($username));
 				$this->session->put('logged', true);
 
 				$exam = new ExamModel();

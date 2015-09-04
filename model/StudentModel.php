@@ -62,6 +62,18 @@ class StudentModel extends StudentAdminModel {
 	}
 
 	/**
+	 * 从新生表中检测是否新生
+	 * @param  string  $sno 新生学号
+	 * @return boolean      是新生为true，否则为false
+	 */
+	public function isNewStudent($sno) {
+		$sql   = 'SELECT EXISTS(SELECT 1 FROM t_xs_xsb WHERE xh = ?)';
+		$newer = $this->db->getColumn($sql, array($sno));
+
+		return $newer ? true : false;
+	}
+
+	/**
 	 * 检测是否专升本学生
 	 * @param  string  $sno 学号
 	 * @return boolean      是专升本学生为TRUE，否则为FALSE
@@ -148,8 +160,11 @@ class StudentModel extends StudentAdminModel {
 	 * @param string $address 家庭地址
 	 */
 	public function setFreshInfo($sno, $hometown, $train, $address) {
-		$sql     = 'UPDATE t_xs_xsb SET jg = ? AND hcdz = ? AND jtdz = ? WHERE xh = ?';
-		$updated = $this->db->update($sql, array($sno, $hometown, $train, $address));
+		$updated = false;
+		if ($this->isNewStudent($sno)) {
+			$sql     = 'UPDATE t_xs_xsb SET jg = ? AND hcdz = ? AND jtdz = ? WHERE xh = ?';
+			$updated = $this->db->update($sql, array($sno, $hometown, $train, $address));
+		}
 
 		return $updated ? true : false;
 	}

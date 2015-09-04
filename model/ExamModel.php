@@ -92,9 +92,8 @@ class ExamModel extends StudentAdminModel {
 	 */
 	public function isPassed($sno, $types) {
 		// SQL：查找是否存在指定考试类型及格的成绩
-		$sql    = 'SELECT EXISTS(SELECT 1 FROM t_cj_qtkscj a WHERE a.c_xh = ? AND a.c_kslx IN(?) AND a.c_cj > (SELECT jgx FROM t_cj_kslxdm b WHERE b.kslx = a.c_kslx)) AS passed';
-		$score  = $this->db->getRow($sql, array($sno, array_to_pg($types)));
-		$passed = $score['passed'] ? TRUE : FALSE;
+		$sql   = 'SELECT EXISTS(SELECT 1 FROM t_cj_qtkscj a WHERE a.c_xh = ? AND a.c_kslx IN(?) AND a.c_cj > (SELECT jgx FROM t_cj_kslxdm b WHERE b.kslx = a.c_kslx))';
+		$score = $this->db->getColumn($sql, array($sno, array_to_pg($types)));
 		/*
 		$sql    = 'SELECT c_cj FROM t_cj_qtkscj WHERE c_xh = ? AND c_kslx = ?';
 		$scores = $this->db->getAll($sql, array($sno, $type));
@@ -111,7 +110,7 @@ class ExamModel extends StudentAdminModel {
 		}
 		}
 		 */
-		return $passed;
+		return $passed ? true : false;
 	}
 
 	/**
