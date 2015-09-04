@@ -36,8 +36,8 @@ class ExamController extends StudentAdminController {
 			}
 
 			if (Config::get('exam.type.cet6') == $exam['kslx']) {
-				if (!$this->model->hasGrade($this->session->get('username'), Config::get('exam.type.cet6')) && !$this->model->isPassed($this->session->get('username'), Config::get('exam.type.cet4'))) {
-					Message::add('danger', 'CET4成绩不达标，不能参加CET6考试');
+				if (!$this->model->hasGrade($this->session->get('username'), Config::get('exam.type.cet6')) && !$this->model->isPassed($this->session->get('username'), array(Config::get('exam.type.cet4'), Config::get('exam.type.cjt4'), Config::get('exam.type.cft4'), Config::get('exam.type.crt4'), Config::get('exam.type.cgt4')))) {
+					Message::add('danger', '四级成绩不达标，不能参加CET6考试');
 					return redirect('exam.listing');
 				}
 			}

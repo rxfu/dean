@@ -87,24 +87,30 @@ class ExamModel extends StudentAdminModel {
 	/**
 	 * 检测学生相应的考试类型是否及格
 	 * @param  string  $sno  学号
-	 * @param  string  $type 考试类型
+	 * @param  string  $types 考试类型
 	 * @return boolean       及格为TRUE，不及格为FALSE
 	 */
-	public function isPassed($sno, $type) {
+	public function isPassed($sno, $types) {
+		// SQL：查找是否存在指定考试类型及格的成绩
+		$sql    = 'SELECT EXISTS(SELECT 1 FROM t_cj_qtkscj a WHERE a.c_xh = ? AND a.c_kslx IN(?) AND a.c_cj > (SELECT jgx FROM t_cj_kslxdm b WHERE b.kslx = a.c_kslx)) AS passed';
+		$score  = $this->db->getRow($sql, array($sno, array_to_pg($types)));
+		$passed = $score['passed'] ? TRUE : FALSE;
+		/*
 		$sql    = 'SELECT c_cj FROM t_cj_qtkscj WHERE c_xh = ? AND c_kslx = ?';
 		$scores = $this->db->getAll($sql, array($sno, $type));
 
 		$sql      = 'SELECT jgx FROM t_cj_kslxdm WHERE kslx = ?';
 		$passline = $this->db->getColumn($sql, array($type));
+		$passline = (FALSE===$passline)?Config::get('score.passline'):$passline;
 
 		$passed = false;
 		foreach ($scores as $score) {
-			if ($score['c_cj'] >= $passline) {
-				$passed = true;
-				break;
-			}
+		if ($score['c_cj'] >= $passline) {
+		$passed = true;
+		break;
 		}
-
+		}
+		 */
 		return $passed;
 	}
 
@@ -113,7 +119,7 @@ class ExamModel extends StudentAdminModel {
 	 * @return boolean 允许同时报名为TRUE，否则为FALSE
 	 */
 	public function isAllowedCET4AndCET6() {
-		return 1 != Setting::get('KS_CET');
+		return ENABLE != Setting::get('KS_CET');
 	}
 
 	/**
@@ -121,7 +127,7 @@ class ExamModel extends StudentAdminModel {
 	 * @return boolean 允许报名为TRUE，否则为FALSE
 	 */
 	public function isAllowedFreshRegisterCET4() {
-		return 1 != Setting::get('KS_CET4_XS');
+		return ENABLE != Setting::get('KS_CET4_XS');
 	}
 
 	/**
@@ -209,7 +215,7 @@ class ExamModel extends StudentAdminModel {
 				}
 
 				if (Config::get('exam.type.cet6') == $type['kslx']) {
-					if (!$this->hasGrade($sno, Config::get('exam.type.cet6')) && !$this->isPassed($sno, Config::get('exam.type.cet4'))) {
+					if (!$this->hasGrade($sno, Config::get('exam.type.cet6')) && !$this->isPassed($sno, array(Config::get('exam.type.cet4'), Config::get('exam.type.cjt4'), Config::get('exam.type.cft4'), Config::get('exam.type.crt4'), Config::get('exam.type.cgt4')))) {
 						continue;
 					}
 				}
