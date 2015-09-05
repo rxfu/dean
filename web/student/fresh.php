@@ -1,6 +1,6 @@
                 <section class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">新生信息核对</h1>
+                        <h1 class="page-header">新生信息填写</h1>
                     </div>
                 </section>
 

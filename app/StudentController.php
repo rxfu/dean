@@ -12,7 +12,7 @@ class StudentController extends StudentAdminController {
 	 * @return void
 	 */
 	protected function dashboard() {
-		$system = new SystemModel();
+		$system  = new SystemModel();
 		$message = $system->getSystemMessage();
 
 		return $this->view->display('student.dashboard', array('message' => $message));
@@ -47,6 +47,9 @@ class StudentController extends StudentAdminController {
 			if ($this->auth($username, $password)) {
 				Logger::write(array('xh' => $this->session->get('username'), 'czlx' => Config::get('log.login')));
 
+				$isFresh = $this->model->isNewStudent($username);
+				$this->session->put('fresh', $isFresh);
+
 				$info = $this->model->getInfo($username);
 
 				$this->session->put('id', $info['sfzh']);
@@ -64,7 +67,6 @@ class StudentController extends StudentAdminController {
 				$this->session->put('term', Setting::get('XK_XQ'));
 
 				$this->session->put('role', Config::get('user.role.student'));
-				$this->session->put('fresh', $this->model->isNewStudent($username));
 				$this->session->put('logged', true);
 
 				$exam = new ExamModel();
@@ -72,7 +74,11 @@ class StudentController extends StudentAdminController {
 
 				Message::add('success', '你已经成功登录系统');
 
-				return redirect('student.dashboard');
+				if ($isFresh) {
+					return redirect('student.fresh');
+				} else {
+					return redirect('student.dashboard');
+				}
 			} else {
 				Message::add('danger', '登录失败，请检查用户名和密码是否正确');
 			}
@@ -121,8 +127,8 @@ class StudentController extends StudentAdminController {
 		if (isPost()) {
 			$_POST = sanitize($_POST);
 
-			$old = $_POST['oldPassword'];
-			$new = $_POST['newPassword'];
+			$old       = $_POST['oldPassword'];
+			$new       = $_POST['newPassword'];
 			$confirmed = $_POST['confirmedPassword'];
 
 			if (is_string($old) && is_string($new)) {
@@ -148,7 +154,7 @@ class StudentController extends StudentAdminController {
 	 */
 	protected function profile() {
 		$profile = $this->model->getProfile($this->session->get('username'));
-		$allow = $this->model->isAllowedUploadPortrait();
+		$allow   = $this->model->isAllowedUploadPortrait();
 
 		return $this->view->display('student.profile', array('profile' => $profile, 'allow' => $allow));
 	}
@@ -158,8 +164,8 @@ class StudentController extends StudentAdminController {
 	 * @return integer       考试照片
 	 */
 	protected function portrait() {
-		$file = $this->session->get('id');
-		$path = PORTRAIT . DS;
+		$file     = $this->session->get('id');
+		$path     = PORTRAIT . DS;
 		$portrait = $path . $file . '.jpg';
 		if (file_exists($portrait)) {
 			return readfile($portrait);
@@ -173,8 +179,8 @@ class StudentController extends StudentAdminController {
 	 * @return integer       学历照片
 	 */
 	protected function photo() {
-		$file = $this->session->get('username');
-		$path = PHOTO . DS;
+		$file  = $this->session->get('username');
+		$path  = PHOTO . DS;
 		$photo = $path . $file . '.jpg';
 		if (file_exists($photo)) {
 			return readfile($photo);
@@ -195,7 +201,7 @@ class StudentController extends StudentAdminController {
 		if (isPost()) {
 			if (!isEmpty($_FILES['portrait'])) {
 				$uploader = new ImageUploader(PORTRAIT);
-				$mimes = array('image/jpg', 'image/jpeg', 'image/pjpeg');
+				$mimes    = array('image/jpg', 'image/jpeg', 'image/pjpeg');
 
 				$uploader->setFile($_FILES['portrait']);
 				$uploader->setAllowedMimeTypes($mimes);
@@ -231,15 +237,20 @@ class StudentController extends StudentAdminController {
 	 * @return void
 	 */
 	protected function fresh() {
+		if (!$this->model->isNewStudent($this->session->get('username')) || (DISABLE == Setting::get('XS_XSXX_KG'))) {
+			Error::display('你不是新生或未到新生信息填写时间！');
+		}
+
 		if (isPost()) {
 			$_POST = sanitize($_POST);
 
 			$hometown = $_POST['hometown'];
-			$train = $_POST['train'];
-			$address = $_POST['address'];
+			$train    = $_POST['train'];
+			$address  = $_POST['address'];
 
-			if (is_string($train) && is_string($address)) {
+			if (is_string($hometown) && is_string($train) && is_string($address)) {
 				$this->model->setFreshInfo($this->session->get('username'), $hometown, $train, $address);
+				Message::add('success', '新生信息填写成功');
 			}
 		}
 

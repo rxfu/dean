@@ -161,9 +161,9 @@ class StudentModel extends StudentAdminModel {
 	 */
 	public function setFreshInfo($sno, $hometown, $train, $address) {
 		$updated = false;
-		if ($this->isNewStudent($sno)) {
-			$sql     = 'UPDATE t_xs_xsb SET jg = ? AND hcdz = ? AND jtdz = ? WHERE xh = ?';
-			$updated = $this->db->update($sql, array($sno, $hometown, $train, $address));
+		if ($this->isNewStudent($sno) && (ENABLE == Setting::get('XS_XSXX_KG'))) {
+			$sql     = 'UPDATE t_xs_xsb SET jg = ?, hcdz = ?, jtdz = ? WHERE xh = ?';
+			$updated = $this->db->update($sql, array($hometown, $train, $address, $sno));
 		}
 
 		return $updated ? true : false;

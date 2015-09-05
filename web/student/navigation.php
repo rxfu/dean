@@ -32,10 +32,10 @@
                     <div class="sidebar-nav navbar-collapse">
                         <ul id="side-menu" class="nav">
                             <li>
-                                <a href="<?php echo Route::to('student.dashboard')?>"><i class="fa fa-dashboard fa-fw"></i> 综合管理系统</a>
                                 <?php if ((TRUE == $session['fresh']) && (ENABLE == Setting::get('XS_XSXX_KG'))): ?>
-                                    <a href="<?php echo Route::to('student.fresh')?>"><i class="fa fa-ticket fa-fw"></i> 新生信息核对</a>
+                                    <a href="<?php echo Route::to('student.fresh')?>"><i class="fa fa-ticket fa-fw"></i> 新生信息填写</a>
                                 <?php endif;?>
+                                <a href="<?php echo Route::to('student.dashboard')?>"><i class="fa fa-dashboard fa-fw"></i> 综合管理系统</a>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> 教学计划<span class="fa arrow"></span></a>
