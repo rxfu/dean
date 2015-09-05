@@ -12,7 +12,7 @@ class StudentController extends StudentAdminController {
 	 * @return void
 	 */
 	protected function dashboard() {
-		$system  = new SystemModel();
+		$system = new SystemModel();
 		$message = $system->getSystemMessage();
 
 		return $this->view->display('student.dashboard', array('message' => $message));
@@ -121,8 +121,8 @@ class StudentController extends StudentAdminController {
 		if (isPost()) {
 			$_POST = sanitize($_POST);
 
-			$old       = $_POST['oldPassword'];
-			$new       = $_POST['newPassword'];
+			$old = $_POST['oldPassword'];
+			$new = $_POST['newPassword'];
 			$confirmed = $_POST['confirmedPassword'];
 
 			if (is_string($old) && is_string($new)) {
@@ -148,7 +148,7 @@ class StudentController extends StudentAdminController {
 	 */
 	protected function profile() {
 		$profile = $this->model->getProfile($this->session->get('username'));
-		$allow   = $this->model->isAllowedUploadPortrait();
+		$allow = $this->model->isAllowedUploadPortrait();
 
 		return $this->view->display('student.profile', array('profile' => $profile, 'allow' => $allow));
 	}
@@ -158,8 +158,8 @@ class StudentController extends StudentAdminController {
 	 * @return integer       考试照片
 	 */
 	protected function portrait() {
-		$file     = $this->session->get('id');
-		$path     = PORTRAIT . DS;
+		$file = $this->session->get('id');
+		$path = PORTRAIT . DS;
 		$portrait = $path . $file . '.jpg';
 		if (file_exists($portrait)) {
 			return readfile($portrait);
@@ -173,8 +173,8 @@ class StudentController extends StudentAdminController {
 	 * @return integer       学历照片
 	 */
 	protected function photo() {
-		$file  = $this->session->get('username');
-		$path  = PHOTO . DS;
+		$file = $this->session->get('username');
+		$path = PHOTO . DS;
 		$photo = $path . $file . '.jpg';
 		if (file_exists($photo)) {
 			return readfile($photo);
@@ -195,7 +195,7 @@ class StudentController extends StudentAdminController {
 		if (isPost()) {
 			if (!isEmpty($_FILES['portrait'])) {
 				$uploader = new ImageUploader(PORTRAIT);
-				$mimes    = array('image/jpg', 'image/jpeg', 'image/pjpeg');
+				$mimes = array('image/jpg', 'image/jpeg', 'image/pjpeg');
 
 				$uploader->setFile($_FILES['portrait']);
 				$uploader->setAllowedMimeTypes($mimes);
@@ -235,8 +235,8 @@ class StudentController extends StudentAdminController {
 			$_POST = sanitize($_POST);
 
 			$hometown = $_POST['hometown'];
-			$train    = $_POST['train'];
-			$address  = $_POST['address'];
+			$train = $_POST['train'];
+			$address = $_POST['address'];
 
 			if (is_string($train) && is_string($address)) {
 				$this->model->setFreshInfo($this->session->get('username'), $hometown, $train, $address);

@@ -5,10 +5,13 @@
                 </section>
 
                 <section class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-8">
                         <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="panel-title">为完善个人学籍信息，尽快办妥学生证，请新生务必完善以下信息：</div>
+                            </div>
                             <div class="panel-body">
-                                <form id="freshForm" name="freshForm" action="<?php echo Route::to('student.fresh') ?>" role="form" method="post" class="form-horizontal">
+                                <form id="freshForm" name="freshForm" action="<?php echo Route::to('student.fresh')?>" role="form" method="post" class="form-horizontal">
                                     <fieldset>
                                         <div class="form-group">
                                             <label for="hometown" class="col-md-3 control-label">籍贯</label>
@@ -25,7 +28,7 @@
                                         <div class="form-group">
                                             <label for="train" class="col-md-3 control-label">火车到站</label>
                                             <div class="col-md-9">
-                                                <input type="text" name="train" id="train" placeholder="火车到站" class="form-control" autofocus required>
+                                                <input type="text" name="train" id="train" placeholder="火车到站" class="form-control" required>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -36,7 +39,7 @@
                                     </fieldset>
                                 </form>
 
-                                <div class="well well-lg">
+                                <div class="well">
                                     填写要求：
                                     <ol>
                                         <li>籍贯：填写所在省市（县），如“河南省洛阳市”写“河南洛阳”即可；</li>
