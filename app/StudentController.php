@@ -241,6 +241,7 @@ class StudentController extends StudentAdminController {
 			Error::display('你不是新生或未到新生信息填写时间！');
 		}
 
+		$info = $this->model->getFreshInfo($this->session->get('username'));
 		if (isPost()) {
 			$_POST = sanitize($_POST);
 
@@ -254,7 +255,7 @@ class StudentController extends StudentAdminController {
 			}
 		}
 
-		return $this->view->display('student.fresh');
+		return $this->view->display('student.fresh', array('info' => $info));
 	}
 
 }

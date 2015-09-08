@@ -16,23 +16,23 @@
                                         <div class="form-group">
                                             <label for="hometown" class="col-md-3 control-label">籍贯</label>
                                             <div class="col-md-9">
-                                                <input type="text" name="hometown" id="hometown" placeholder="籍贯" class="form-control" autofocus required>
+                                                <input type="text" name="hometown" id="hometown" placeholder="籍贯" class="form-control"<?php echo isset($info['jg']) ? ' value="' . $info['jg'] . '"' : ''?> autofocus required>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="address" class="col-md-3 control-label">家庭地址（20字以内）</label>
                                             <div class="col-md-9">
-                                                <input type="text" name="address" id="address" placeholder="家庭地址" class="form-control" required>
+                                                <input type="text" name="address" id="address" placeholder="家庭地址" class="form-control"<?php echo isset($info['jtdz']) ? ' value="' . $info['jtdz'] . '"' : ''?> required>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="train" class="col-md-3 control-label">火车到站</label>
                                             <div class="col-md-9">
-                                                <input type="text" name="train" id="train" placeholder="火车到站" class="form-control" required>
+                                                <input type="text" name="train" id="train" placeholder="火车到站" class="form-control"<?php echo isset($info['hcdz']) ? ' value="' . $info['hcdz'] . '"' : ''?> required>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="col-md-9 col-md-offset-3">
+                                            <div class="col-md-3 col-md-offset-3">
                                                 <button type="submit" class="btn btn-lg btn-success btn-block">提交</button>
                                             </div>
                                         </div>

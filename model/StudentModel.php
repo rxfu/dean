@@ -169,4 +169,16 @@ class StudentModel extends StudentAdminModel {
 		return $updated ? true : false;
 	}
 
+	/**
+	 * 获取新生信息（籍贯、火车到站、家庭地址）
+	 * @param  string $sno 新生学号
+	 * @return mixed      成功返回新生信息，否则返回false
+	 */
+	public function getFreshInfo($sno) {
+		$sql  = 'SELECT jg, hcdz, jtdz FROM t_xs_xsb WHERE xh = ?';
+		$data = $this->db->getRow($sql, array($sno));
+
+		return has($data) ? $data : false;
+	}
+
 }
