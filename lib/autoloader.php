@@ -39,12 +39,10 @@ class Autoloader {
 	 * @param  string $class 类名
 	 * @return void
 	 */
-	public function controller($class) {
-		$class = preg_replace('/Controller$/ui', '', $class);
-
-		set_include_path(get_include_path() . PS . APPROOT);
-		spl_autoload_extensions('.php');
-		spl_autoload($class);
+	private function controller($class) {
+		if (preg_match('/^.+Controller$/ui', $class)) {
+			require APPROOT . DS . $class . '.php';
+		}
 	}
 
 	/**
@@ -52,12 +50,10 @@ class Autoloader {
 	 * @param  string $class 类名
 	 * @return void
 	 */
-	public function model($class) {
-		$class = preg_replace('/Model$/ui', '', $class);
-
-		set_include_path(get_include_path() . PS . MODROOT);
-		spl_autoload_extensions('.php');
-		spl_autoload($class);
+	private function model($class) {
+		if (preg_match('/^.+Model$/ui', $class)) {
+			require MODROOT . DS . $class . '.php';
+		}
 	}
 
 	/**
@@ -65,12 +61,12 @@ class Autoloader {
 	 * @param  string $class 类名
 	 * @return void
 	 */
-	public function library($class) {
+	private function library($class) {
 		$class = camelToSnake($class);
 
-		set_include_path(get_include_path() . PS . LIBROOT);
-		spl_autoload_extensions('.php');
-		spl_autoload($class);
+		if (file_exists(LIBROOT . DS . $class . '.php')) {
+			require LIBROOT . DS . $class . '.php';
+		}
 	}
 
 }
