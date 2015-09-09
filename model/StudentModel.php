@@ -38,15 +38,15 @@ class StudentModel extends StudentAdminModel {
 	}
 
 	/**
-	 * 判断照片是否审核通过
+	 * 获取照片状态
 	 * @param  string  $sno 学号
-	 * @return boolean      通过为TRUE，未通过为FALSE
+	 * @return boolean      照片状态值
 	 */
-	public function isPortraitPassed($sno) {
-		$sql    = 'SELECT EXISTS(SELECT 1 FROM t_xk_xsmm WHERE xh = ? AND zpzt = ?)';
-		$passed = $this->db->getColumn($sql, array($sno, Config::get('exam.photo.passed')));
+	public function getPortraitStatus($sno) {
+		$sql    = 'SELECT zpzt FROM t_xk_xsmm WHERE xh = ?';
+		$status = $this->db->getColumn($sql, array($sno));
 
-		return $passed ? true : false;
+		return $status;
 	}
 
 	/**

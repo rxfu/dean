@@ -144,7 +144,7 @@ return array(
 	'exam'       => array(
 
 		// 考试类型代码
-		'type'     => array(
+		'type'   => array(
 			'cet'  => '1',
 			'cet3' => '03',
 			'cet4' => '04',
@@ -156,18 +156,10 @@ return array(
 		),
 
 		// 考试状态代码
-		'status'   => array(
+		'status' => array(
 			'register'  => '1',
 			'confirmed' => '2',
 			'payment'   => '3',
-		),
-
-		// 照片状态代码
-		'portrait' => array(
-			'none'    => '0',
-			'has'     => '1',
-			'passed'  => '2',
-			'refused' => '3',
 		),
 	),
 

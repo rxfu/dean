@@ -43,15 +43,17 @@ class ExamController extends StudentAdminController {
 			}
 		}
 
-		if (($uploaded = $student->isUploadedPortrait($this->session->get('id'))) && $student->isPortraitPassed($this->session->get('username'))) {
-			if (isPost()) {
-				$type = sanitize($_POST['type']);
+		if ($uploaded = $student->isUploadedPortrait($this->session->get('id'))) {
+			if (($status = $student->getPortraitStatus($this->session->get('username'))) == Config::get('user.portrait.passed')) {
+				if (isPost()) {
+					$type = sanitize($_POST['type']);
 
-				$this->model->register($this->session->get('username'), $type, $this->session->get('campus'), $exam['sj'], $exam['nd']);
+					$this->model->register($this->session->get('username'), $type, $this->session->get('campus'), $exam['sj'], $exam['nd']);
 
-				Message::add('success', '考试报名成功');
+					Message::add('success', '考试报名成功');
 
-				return redirect('exam.register', $type);
+					return redirect('exam.register', $type);
+				}
 			}
 		}
 
@@ -67,7 +69,7 @@ class ExamController extends StudentAdminController {
 		$confirmed  = is_array($registered) ? $registered['clbz'] : false;
 		$registered = is_array($registered) ? $registered['xq'] : false;
 
-		return $this->view->display('exam.register', array('exam' => $exam, 'campuses' => $campuses, 'registered' => $registered, 'uploaded' => $uploaded, 'confirmed' => $confirmed));
+		return $this->view->display('exam.register', array('exam' => $exam, 'campuses' => $campuses, 'registered' => $registered, 'uploaded' => $uploaded, 'confirmed' => $confirmed, 'status' => $status));
 	}
 
 	/**
