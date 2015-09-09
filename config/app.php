@@ -144,7 +144,7 @@ return array(
 	'exam'       => array(
 
 		// 考试类型代码
-		'type'   => array(
+		'type'     => array(
 			'cet'  => '1',
 			'cet3' => '03',
 			'cet4' => '04',
@@ -156,10 +156,18 @@ return array(
 		),
 
 		// 考试状态代码
-		'status' => array(
+		'status'   => array(
 			'register'  => '1',
 			'confirmed' => '2',
 			'payment'   => '3',
+		),
+
+		// 照片状态代码
+		'portrait' => array(
+			'none'    => '0',
+			'has'     => '1',
+			'passed'  => '2',
+			'refused' => '3',
 		),
 	),
 
@@ -191,9 +199,9 @@ return array(
 	'quality'    => array(
 		'assessed'   => '1',
 		'assessing'  => '0',
-		'admin'      => '0',	// 超级管理员
-		'manager'    => '1',	// 普通管理员
-		'power_user' => '2',	// 学院领导
-		'user'       => '3',	// 教学秘书
+		'admin'      => '0', // 超级管理员
+		'manager'    => '1', // 普通管理员
+		'power_user' => '2', // 学院领导
+		'user'       => '3', // 教学秘书
 	),
 );

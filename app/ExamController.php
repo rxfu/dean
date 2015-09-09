@@ -43,7 +43,7 @@ class ExamController extends StudentAdminController {
 			}
 		}
 
-		if ($uploaded = $student->isUploadedPortrait($this->session->get('id'))) {
+		if (($uploaded = $student->isUploadedPortrait($this->session->get('id'))) && $student->isPortraitPassed($this->session->get('username'))) {
 			if (isPost()) {
 				$type = sanitize($_POST['type']);
 
