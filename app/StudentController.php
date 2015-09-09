@@ -233,7 +233,7 @@ class StudentController extends StudentAdminController {
 	}
 
 	/**
-	 * 新生信息核对
+	 * 新生信息填写
 	 * @return void
 	 */
 	protected function fresh() {
@@ -248,9 +248,10 @@ class StudentController extends StudentAdminController {
 			$hometown = $_POST['hometown'];
 			$train    = $_POST['train'];
 			$address  = $_POST['address'];
+			$parent   = $_POST['parent'];
 
-			if (is_string($hometown) && is_string($train) && is_string($address)) {
-				$this->model->setFreshInfo($this->session->get('username'), $hometown, $train, $address);
+			if (is_string($hometown) && is_string($train) && is_string($address) && is_string($parent)) {
+				$this->model->setFreshInfo($this->session->get('username'), $hometown, $train, $address, $parent);
 				Message::add('success', '新生信息填写成功');
 			}
 		}

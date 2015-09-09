@@ -153,29 +153,29 @@ class StudentModel extends StudentAdminModel {
 	}
 
 	/**
-	 * 设置新生信息（籍贯、火车到站、家庭地址）
+	 * 设置新生信息（籍贯、火车到站、家庭地址、家长姓名）
 	 * @param string $sno     学号
 	 * @param string $hometown 籍贯
 	 * @param string $train   火车到站
 	 * @param string $address 家庭地址
 	 */
-	public function setFreshInfo($sno, $hometown, $train, $address) {
+	public function setFreshInfo($sno, $hometown, $train, $address, $parent) {
 		$updated = false;
 		if ($this->isNewStudent($sno) && (ENABLE == Setting::get('XS_XSXX_KG'))) {
-			$sql     = 'UPDATE t_xs_xsb SET jg = ?, hcdz = ?, jtdz = ? WHERE xh = ?';
-			$updated = $this->db->update($sql, array($hometown, $train, $address, $sno));
+			$sql     = 'UPDATE t_xs_xsb SET jg = ?, hcdz = ?, jtdz = ?, jzxm = ? WHERE xh = ?';
+			$updated = $this->db->update($sql, array($hometown, $train, $address, $parent, $sno));
 		}
 
 		return $updated ? true : false;
 	}
 
 	/**
-	 * 获取新生信息（籍贯、火车到站、家庭地址）
+	 * 获取新生信息（籍贯、火车到站、家庭地址、家长姓名）
 	 * @param  string $sno 新生学号
 	 * @return mixed      成功返回新生信息，否则返回false
 	 */
 	public function getFreshInfo($sno) {
-		$sql  = 'SELECT jg, hcdz, jtdz FROM t_xs_xsb WHERE xh = ?';
+		$sql  = 'SELECT jg, hcdz, jtdz, jzxm FROM t_xs_xsb WHERE xh = ?';
 		$data = $this->db->getRow($sql, array($sno));
 
 		return has($data) ? $data : false;

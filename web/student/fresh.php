@@ -20,6 +20,12 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <label for="parent" class="col-md-3 control-label">家长姓名</label>
+                                            <div class="col-md-9">
+                                                <input type="text" name="parent" id="parent" placeholder="家长姓名" class="form-control"<?php echo isset($info['jzxm']) ? ' value="' . $info['jzxm'] . '"' : ''?> required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <label for="address" class="col-md-3 control-label">家庭地址（20字以内）</label>
                                             <div class="col-md-9">
                                                 <input type="text" name="address" id="address" placeholder="家庭地址" class="form-control"<?php echo isset($info['jtdz']) ? ' value="' . $info['jtdz'] . '"' : ''?> required>
