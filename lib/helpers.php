@@ -218,25 +218,25 @@ if (!function_exists('error')) {
 			header('Content-Type:text/html; charset=utf-8');
 		}
 		switch ($code) {
-			case E_USER_ERROR:
-				echo '<b>ERROR</b>: [' . $code . '] ' . $message . '<br />' . PHP_EOL;
-				echo '  Fatal error on line ' . $line . ' in file ' . $file;
-				echo ', PHP ' . PHP_VERSION . ' (' . PHP_OS . ')<br />' . PHP_EOL;
-				echo 'Aborting...<br />' . PHP_EOL;
-				exit(1);
-				break;
+		case E_USER_ERROR:
+			echo '<b>ERROR</b>: [' . $code . '] ' . $message . '<br />' . PHP_EOL;
+			echo '  Fatal error on line ' . $line . ' in file ' . $file;
+			echo ', PHP ' . PHP_VERSION . ' (' . PHP_OS . ')<br />' . PHP_EOL;
+			echo 'Aborting...<br />' . PHP_EOL;
+			exit(1);
+			break;
 
-			case E_USER_WARNING:
-				echo '<b>WARNING</b>: [' . $code . '] ' . $message . '<br />' . PHP_EOL;
-				break;
+		case E_USER_WARNING:
+			echo '<b>WARNING</b>: [' . $code . '] ' . $message . '<br />' . PHP_EOL;
+			break;
 
-			case E_USER_NOTICE:
-				echo '<b>NOTICE</b>: [' . $code . '] ' . $message . '<br />' . PHP_EOL;
-				break;
+		case E_USER_NOTICE:
+			echo '<b>NOTICE</b>: [' . $code . '] ' . $message . '<br />' . PHP_EOL;
+			break;
 
-			default:
-				echo '<b>UNKNOWN</b>: [' . $code . '] ' . $message . '<br />' . PHP_EOL;
-				break;
+		default:
+			echo '<b>UNKNOWN</b>: [' . $code . '] ' . $message . '<br />' . PHP_EOL;
+			break;
 		}
 	}
 }
@@ -458,26 +458,26 @@ if (!function_exists('parseType')) {
 	 */
 	function parseType($type) {
 		switch (trim($type)) {
-			case 'LOGIN':
-				return '登录系统';
-			case 'LOGOUT':
-				return '登出系统';
-			case 'CHGPWD':
-				return '修改密码';
-			case 'INSERT':
-				return '选课';
-			case 'DELETE':
-				return '退课';
-			case 'REGIST':
-				return '考试报名';
-			case 'CANCEL':
-				return '取消报名';
-			case 'APPLY':
-				return '选课申请';
-			case 'REVOKE':
-				return '撤销申请';
-			default:
-				return '未知类型';
+		case 'LOGIN':
+			return '登录系统';
+		case 'LOGOUT':
+			return '登出系统';
+		case 'CHGPWD':
+			return '修改密码';
+		case 'INSERT':
+			return '选课';
+		case 'DELETE':
+			return '退课';
+		case 'REGIST':
+			return '考试报名';
+		case 'CANCEL':
+			return '取消报名';
+		case 'APPLY':
+			return '选课申请';
+		case 'REVOKE':
+			return '撤销申请';
+		default:
+			return '未知类型';
 		}
 	}
 }
@@ -552,20 +552,20 @@ if (!function_exists('weekend')) {
 	 */
 	function weekend($week) {
 		switch ($week) {
-			case 1:
-				return '一';
-			case 2:
-				return '二';
-			case 3:
-				return '三';
-			case 4:
-				return '四';
-			case 5:
-				return '五';
-			case 6:
-				return '六';
-			case 7:
-				return '日';
+		case 1:
+			return '一';
+		case 2:
+			return '二';
+		case 3:
+			return '三';
+		case 4:
+			return '四';
+		case 5:
+			return '五';
+		case 6:
+			return '六';
+		case 7:
+			return '日';
 		}
 	}
 }

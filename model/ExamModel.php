@@ -56,7 +56,7 @@ class ExamModel extends StudentAdminModel {
 		$sql  = 'SELECT COUNT(*) FROM t_cj_qtkscj WHERE c_xh = ? AND c_kslx = ?';
 		$data = $this->db->getColumn($sql, array($sno, $type));
 
-		return has($data) && 0 < $data;
+		return has($data) && (0 < $data);
 	}
 
 	/**
@@ -68,7 +68,7 @@ class ExamModel extends StudentAdminModel {
 		$sql  = 'SELECT COUNT(*) FROM t_ks_qtksbm a INNER JOIN t_cj_kslxdm b ON b.kslx = a.kslx AND b.nd = a.nd WHERE a.xh = ? AND a.clbz = ? AND b.zt = ?';
 		$data = $this->db->getColumn($sql, array($sno, Config::get('exam.passed'), ENABLE));
 
-		return has($data) && 0 < $data;
+		return has($data) && (0 < $data);
 	}
 
 	/**
@@ -92,8 +92,8 @@ class ExamModel extends StudentAdminModel {
 	 */
 	public function isPassed($sno, $types) {
 		// SQL：查找是否存在指定考试类型及格的成绩
-		$sql   = 'SELECT EXISTS(SELECT 1 FROM t_cj_qtkscj a WHERE a.c_xh = ? AND a.c_kslx IN(?) AND a.c_cj > (SELECT jgx FROM t_cj_kslxdm b WHERE b.kslx = a.c_kslx))';
-		$score = $this->db->getColumn($sql, array($sno, array_to_pg($types)));
+		$sql    = 'SELECT EXISTS(SELECT 1 FROM t_cj_qtkscj a WHERE a.c_xh = ? AND a.c_kslx IN(' . "'" . implode("','", $types) . "'" . ') AND a.c_cj > (SELECT jgx FROM t_cj_kslxdm b WHERE b.kslx = a.c_kslx))';
+		$passed = $this->db->getColumn($sql, array($sno));
 		/*
 		$sql    = 'SELECT c_cj FROM t_cj_qtkscj WHERE c_xh = ? AND c_kslx = ?';
 		$scores = $this->db->getAll($sql, array($sno, $type));
@@ -102,15 +102,15 @@ class ExamModel extends StudentAdminModel {
 		$passline = $this->db->getColumn($sql, array($type));
 		$passline = (FALSE===$passline)?Config::get('score.passline'):$passline;
 
-		$passed = false;
+		$count = false;
 		foreach ($scores as $score) {
 		if ($score['c_cj'] >= $passline) {
-		$passed = true;
+		$count = true;
 		break;
 		}
 		}
 		 */
-		return $passed ? true : false;
+		return $passed;
 	}
 
 	/**
