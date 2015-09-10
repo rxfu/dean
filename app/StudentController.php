@@ -252,6 +252,7 @@ class StudentController extends StudentAdminController {
 
 			if (is_string($hometown) && is_string($train) && is_string($address) && is_string($parent)) {
 				$this->model->setFreshInfo($this->session->get('username'), $hometown, $train, $address, $parent);
+				$info = $this->model->getFreshInfo($this->session->get('username'));
 				Message::add('success', '新生信息填写成功');
 			}
 		}
