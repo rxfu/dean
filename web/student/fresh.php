@@ -1,5 +1,9 @@
                 <section class="row">
                     <div class="col-lg-12">
+                        <div id="flash_warning" class="alert alert-dismissable alert-warning">
+                            <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            初次登录请务必修改密码，若密码忘记请联系年级辅导员初始化。
+                        </div>
                         <h1 class="page-header">新生信息填写</h1>
                     </div>
                 </section>
