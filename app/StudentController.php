@@ -154,7 +154,7 @@ class StudentController extends StudentAdminController {
 	 */
 	protected function profile() {
 		$profile = $this->model->getProfile($this->session->get('username'));
-		$allow   = $this->model->isAllowedUploadPortrait();
+		$allow   = $this->model->isAllowedUploadPortrait($this->session->get('username'));
 
 		return $this->view->display('student.profile', array('profile' => $profile, 'allow' => $allow));
 	}
@@ -194,7 +194,7 @@ class StudentController extends StudentAdminController {
 	 * @return void
 	 */
 	protected function upload() {
-		if (!$this->model->isAllowedUploadPortrait()) {
+		if (!$this->model->isAllowedUploadPortrait($this->session->get('username'))) {
 			Error::display('现在不允许上传照片');
 		}
 

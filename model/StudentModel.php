@@ -21,10 +21,11 @@ class StudentModel extends StudentAdminModel {
 
 	/**
 	 * 检测是否允许照片上传
+	 * @param string $sno 学号
 	 * @return boolean 允许上传为TRUE，否则为FALSE
 	 */
-	public function isAllowedUploadPortrait() {
-		return ENABLE == Setting::get('KS_PHOTO_UP') ? true : false;
+	public function isAllowedUploadPortrait($sno) {
+		return (ENABLE == Setting::get('KS_PHOTO_UP')) && (Config::get('user.portrait.passed') !== $this->getPortraitStatus($sno)) ? true : false;
 	}
 
 	/**
