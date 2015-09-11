@@ -92,7 +92,7 @@ class ExamModel extends StudentAdminModel {
 	 */
 	public function isPassed($sno, $types) {
 		// SQL：查找是否存在指定考试类型及格的成绩
-		$sql    = 'SELECT EXISTS(SELECT 1 FROM t_cj_qtkscj a WHERE a.c_xh = ? AND a.c_kslx IN(' . "'" . implode("','", $types) . "'" . ') AND a.c_cj > (SELECT jgx FROM t_cj_kslxdm b WHERE b.kslx = a.c_kslx))';
+		$sql    = 'SELECT EXISTS(SELECT 1 FROM t_cj_qtkscj a WHERE a.c_xh = ? AND a.c_kslx IN(' . "'" . implode("','", $types) . "'" . ') AND a.c_cj >= (SELECT jgx FROM t_cj_kslxdm b WHERE b.kslx = a.c_kslx))';
 		$passed = $this->db->getColumn($sql, array($sno));
 		/*
 		$sql    = 'SELECT c_cj FROM t_cj_qtkscj WHERE c_xh = ? AND c_kslx = ?';
