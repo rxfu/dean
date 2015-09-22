@@ -124,14 +124,33 @@ class StudentModel extends StudentAdminModel {
 
 	/**
 	 * 验证学生密码
+	 * 注：2015年9月22日应学籍科要求修改：添加新生登录判断
 	 * @param  string $sno 学号
 	 * @return mixed      成功返回TRUE，否则返回FALSE
 	 */
 	public function validate($sno, $password) {
-		$sql  = 'SELECT * FROM t_xk_xsmm WHERE xh = ? AND mm = ?';
-		$data = $this->db->getRow($sql, array($sno, encrypt($password)));
+		$sql   = 'SELECT EXISTS(SELECT 1 FROM t_xk_xsmm WHERE xh = ?)';
+		$valid = $this->db->getColumn($sql, $sno);
+		if (!$valid) {
+			$sql     = 'SELECT EXISTS(SELECT 1 FROM t_xs_xsb WHERE xh = ?)';
+			$isFresh = $this->db->getColumn($sql, $sno);
+			if ($isFresh) {
+				// 新生默认密码与学号一致
+				$data['xh']   = $sno;
+				$data['mm']   = $sno;
+				$data['zpzt'] = Config::get('user.portrait.none');
+				$inserted     = $this->db->insertRecord('t_xk_xsmm', $data);
 
-		return has($data) ? true : false;
+				$valid = $inserted ? false : true;
+			}
+		}
+
+		if ($valid) {
+			$sql   = 'SELECT EXISTS(SELECT 1 FROM t_xk_xsmm WHERE xh = ? AND mm = ?)';
+			$valid = $this->db->getColumn($sql, array($sno, $password));
+		}
+
+		return $valid;
 	}
 
 	/**

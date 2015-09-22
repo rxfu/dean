@@ -134,18 +134,20 @@
                             <li>
                                 <a href="#"><i class="fa fa-tablet fa-fw"></i> 考试报名<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
-                                    <?php foreach ($session['examTypes'] as $examTypes): ?>
-                                        <li>
-                                            <a href="#"><?php echo $examTypes[0]['ksdlmc']?><span class="fa arrow"></span></a>
-                                            <ul class="nav nav-third-level">
-                                                <?php foreach ($examTypes as $examType): ?>
-                                                    <li>
-                                                        <a href="<?php echo Route::to('exam.register', $examType['kslx'])?>"><?php echo $examType['ksmc']?></a>
-                                                    </li>
-                                                <?php endforeach;?>
-                                            </ul>
-                                        </li>
-                                    <?php endforeach;?>
+                                    <?php if (DISABLE == Setting::get('KS_JTBM')): ?>
+                                        <?php foreach ($session['examTypes'] as $examTypes): ?>
+                                            <li>
+                                                <a href="#"><?php echo $examTypes[0]['ksdlmc']?><span class="fa arrow"></span></a>
+                                                <ul class="nav nav-third-level">
+                                                    <?php foreach ($examTypes as $examType): ?>
+                                                        <li>
+                                                            <a href="<?php echo Route::to('exam.register', $examType['kslx'])?>"><?php echo $examType['ksmc']?></a>
+                                                        </li>
+                                                    <?php endforeach;?>
+                                                </ul>
+                                            </li>
+                                        <?php endforeach;?>
+                                    <?php endif;?>
                                     <li>
                                         <a href="<?php echo Route::to('exam.listing')?>">历史报名信息</a>
                                     </li>
