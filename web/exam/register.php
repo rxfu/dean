@@ -60,7 +60,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <img src="<?php echo Route::to('student.portrait')?>" alt="<?php echo $session['name']?>">
+                                        <img src="<?php echo Route::to('student.portrait')?>" alt="<?php echo $session['name']?>" width="240">
                                     </div>
                                 </div>
                             </div>
