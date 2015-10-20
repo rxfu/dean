@@ -50,7 +50,7 @@ class ExamController extends StudentAdminController {
 
 					$this->model->register($this->session->get('username'), $type, $this->session->get('campus'), $exam['sj'], $exam['nd']);
 
-					Message::add('success', '考试报名成功');
+					Message::add('success', '考试已报名，待收费！');
 
 					return redirect('exam.register', $type);
 				}
