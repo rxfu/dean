@@ -43,7 +43,7 @@
                                                                 <th class="active">第<?php echo $i?>节</th>
                                                                 <?php for ($j = 1; $j <= 7; ++$j): ?>
                                                                     <?php if (is_array($course[$i][$j])): ?>
-                                                                        <td<?php echo 1 < ($course[$i][$j][0]['jsj'] - $i + 1) ? ' rowspan="' . ($course[$i][$j][0]['jsj'] - $i) . '"' : ''?>>
+                                                                        <td<?php echo 1 < ($course[$i][$j][0]['jsj'] - $i + 1) ? ' rowspan="' . ($course[$i][$j][0]['jsj'] - $i + 1) . '"' : ''?>>
                                                                             <?php foreach ($course[$i][$j] as $item): ?>
                                                                                 <?php echo $item['kcxh']?><br>
                                                                                 <?php echo $item['kcmc']?><br>
@@ -69,7 +69,7 @@
                                                                 <th class="active">第<?php echo $i?>节</th>
                                                                 <?php for ($j = 1; $j <= 7; ++$j): ?>
                                                                     <?php if (is_array($course[$i][$j])): ?>
-                                                                        <td<?php echo 1 < ($course[$i][$j][0]['jsj'] - $i + 1) ? ' rowspan="' . ($course[$i][$j][0]['jsj'] - $i) . '"' : ''?>>
+                                                                        <td<?php echo 1 < ($course[$i][$j][0]['jsj'] - $i + 1) ? ' rowspan="' . ($course[$i][$j][0]['jsj'] - $i + 1) . '"' : ''?>>
                                                                             <?php foreach ($course[$i][$j] as $item): ?>
                                                                                 <?php echo $item['kcxh']?><br>
                                                                                 <?php echo $item['kcmc']?><br>
@@ -95,7 +95,7 @@
                                                                 <th class="active">第<?php echo $i?>节</th>
                                                                 <?php for ($j = 1; $j <= 7; ++$j): ?>
                                                                     <?php if (is_array($course[$i][$j])): ?>
-                                                                        <td<?php echo 1 < ($course[$i][$j][0]['jsj'] - $i + 1) ? ' rowspan="' . ($course[$i][$j][0]['jsj'] - $i) . '"' : ''?>>
+                                                                        <td<?php echo 1 < ($course[$i][$j][0]['jsj'] - $i + 1) ? ' rowspan="' . ($course[$i][$j][0]['jsj'] - $i + 1) . '"' : ''?>>
                                                                             <?php foreach ($course[$i][$j] as $item): ?>
                                                                                 <?php echo $item['kcxh']?><br>
                                                                                 <?php echo $item['kcmc']?><br>
