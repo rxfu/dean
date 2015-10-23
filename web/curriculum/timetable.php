@@ -1,6 +1,6 @@
                 <section class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header"><?php echo $session['name'] ?>老师课程表</h1>
+                        <h1 class="page-header"><?php echo $session['name']?>老师课程表</h1>
                     </div>
                 </section>
 
@@ -11,14 +11,14 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <div class="panel-title">
-                                            <a href="#<?php echo $key ?>" data-toggle="collapse" data-parent="#accordion">
-                                                <?php $courseTime = parseTerm($key) ?>
-                                                <?php echo $courseTime['year'] ?>年度<?php echo Dictionary::get('xq', $courseTime['term']) ?>学期
+                                            <a href="#<?php echo $key?>" data-toggle="collapse" data-parent="#accordion">
+                                                <?php $courseTime = parseTerm($key)?>
+                                                <?php echo $courseTime['year']?>年度<?php echo Dictionary::get('xq', $courseTime['term'])?>学期
                                             </a>
                                         </div>
                                     </div>
 
-                                    <div id="<?php echo $key ?>" class="panel-collapse collapse">
+                                    <div id="<?php echo $key?>" class="panel-collapse collapse">
                                         <div class="panel-body">
                                             <div class="table-responsive">
                                                 <table class="table table-bordered table-striped">
@@ -39,25 +39,25 @@
                                                             <tr>
                                                                 <?php if (1 == $i): ?>
                                                                     <th rowspan="5" class="active text-center" style="vertical-align:middle">上午</th>
-                                                                <?php endif; ?>
-                                                                <th class="active">第<?php echo $i ?>节</th>
+                                                                <?php endif;?>
+                                                                <th class="active">第<?php echo $i?>节</th>
                                                                 <?php for ($j = 1; $j <= 7; ++$j): ?>
                                                                     <?php if (is_array($course[$i][$j])): ?>
-                                                                        <td<?php echo 1 < ($course[$i][$j][0]['jsj'] - $i) ? ' rowspan="' . ($course[$i][$j][0]['jsj'] - $i) . '"' : '' ?>>
+                                                                        <td<?php echo 1 < ($course[$i][$j][0]['jsj'] - $i + 1) ? ' rowspan="' . ($course[$i][$j][0]['jsj'] - $i) . '"' : ''?>>
                                                                             <?php foreach ($course[$i][$j] as $item): ?>
-                                                                                <?php echo $item['kcxh'] ?><br>
-                                                                                <?php echo $item['kcmc'] ?><br>
-                                                                                <?php echo $item['xqh'] ?>校区<?php echo $item['jsmc'] ?>教室<br>
-                                                                                第 <?php echo $item['ksz'] ?>~<?php echo $item['jsz'] ?> 周
+                                                                                <?php echo $item['kcxh']?><br>
+                                                                                <?php echo $item['kcmc']?><br>
+                                                                                <?php echo $item['xqh']?>校区<?php echo $item['jsmc']?>教室<br>
+                                                                                第 <?php echo $item['ksz']?>~<?php echo $item['jsz']?> 周
                                                                                 <hr>
-                                                                            <?php endforeach; ?>
+                                                                            <?php endforeach;?>
                                                                         </td>
                                                                     <?php elseif (!is_null($course[$i][$j])): ?>
-                                                                        <td><?php echo $course[$i][$j] ?></td>
-                                                                    <?php endif; ?>
-                                                                <?php endfor; ?>
+                                                                        <td><?php echo $course[$i][$j]?></td>
+                                                                    <?php endif;?>
+                                                                <?php endfor;?>
                                                             </tr>
-                                                        <?php endfor; ?>
+                                                        <?php endfor;?>
                                                         <tr>
                                                             <td colspan="9" class="text-center">午休</td>
                                                         </tr>
@@ -65,25 +65,25 @@
                                                             <tr>
                                                                 <?php if (6 == $i): ?>
                                                                     <th rowspan="4" class="active text-center" style="vertical-align:middle">下午</th>
-                                                                <?php endif; ?>
-                                                                <th class="active">第<?php echo $i ?>节</th>
+                                                                <?php endif;?>
+                                                                <th class="active">第<?php echo $i?>节</th>
                                                                 <?php for ($j = 1; $j <= 7; ++$j): ?>
                                                                     <?php if (is_array($course[$i][$j])): ?>
-                                                                        <td<?php echo 1 < ($course[$i][$j][0]['jsj'] - $i) ? ' rowspan="' . ($course[$i][$j][0]['jsj'] - $i) . '"' : '' ?>>
+                                                                        <td<?php echo 1 < ($course[$i][$j][0]['jsj'] - $i + 1) ? ' rowspan="' . ($course[$i][$j][0]['jsj'] - $i) . '"' : ''?>>
                                                                             <?php foreach ($course[$i][$j] as $item): ?>
-                                                                                <?php echo $item['kcxh'] ?><br>
-                                                                                <?php echo $item['kcmc'] ?><br>
-                                                                                <?php echo $item['xqh'] ?>校区<?php echo $item['jsmc'] ?>教室<br>
-                                                                                第 <?php echo $item['ksz'] ?>~<?php echo $item['jsz'] ?> 周
+                                                                                <?php echo $item['kcxh']?><br>
+                                                                                <?php echo $item['kcmc']?><br>
+                                                                                <?php echo $item['xqh']?>校区<?php echo $item['jsmc']?>教室<br>
+                                                                                第 <?php echo $item['ksz']?>~<?php echo $item['jsz']?> 周
                                                                                 <hr>
-                                                                            <?php endforeach; ?>
+                                                                            <?php endforeach;?>
                                                                         </td>
                                                                     <?php elseif (!is_null($course[$i][$j])): ?>
-                                                                        <td><?php echo $course[$i][$j] ?></td>
-                                                                    <?php endif; ?>
-                                                                <?php endfor; ?>
+                                                                        <td><?php echo $course[$i][$j]?></td>
+                                                                    <?php endif;?>
+                                                                <?php endfor;?>
                                                             </tr>
-                                                        <?php endfor; ?>
+                                                        <?php endfor;?>
                                                         <tr>
                                                             <td colspan="9" class="text-center">晚饭</td>
                                                         </tr>
@@ -91,32 +91,32 @@
                                                             <tr>
                                                                 <?php if (10 == $i): ?>
                                                                     <th rowspan="3" class="active text-center" style="vertical-align:middle">晚上</th>
-                                                                <?php endif; ?>
-                                                                <th class="active">第<?php echo $i ?>节</th>
+                                                                <?php endif;?>
+                                                                <th class="active">第<?php echo $i?>节</th>
                                                                 <?php for ($j = 1; $j <= 7; ++$j): ?>
                                                                     <?php if (is_array($course[$i][$j])): ?>
-                                                                        <td<?php echo 1 < ($course[$i][$j][0]['jsj'] - $i) ? ' rowspan="' . ($course[$i][$j][0]['jsj'] - $i) . '"' : '' ?>>
+                                                                        <td<?php echo 1 < ($course[$i][$j][0]['jsj'] - $i + 1) ? ' rowspan="' . ($course[$i][$j][0]['jsj'] - $i) . '"' : ''?>>
                                                                             <?php foreach ($course[$i][$j] as $item): ?>
-                                                                                <?php echo $item['kcxh'] ?><br>
-                                                                                <?php echo $item['kcmc'] ?><br>
-                                                                                <?php echo $item['xqh'] ?>校区<?php echo $item['jsmc'] ?>教室<br>
-                                                                                第 <?php echo $item['ksz'] ?>~<?php echo $item['jsz'] ?> 周
+                                                                                <?php echo $item['kcxh']?><br>
+                                                                                <?php echo $item['kcmc']?><br>
+                                                                                <?php echo $item['xqh']?>校区<?php echo $item['jsmc']?>教室<br>
+                                                                                第 <?php echo $item['ksz']?>~<?php echo $item['jsz']?> 周
                                                                                 <hr>
-                                                                            <?php endforeach; ?>
+                                                                            <?php endforeach;?>
                                                                         </td>
                                                                     <?php elseif (!is_null($course[$i][$j])): ?>
-                                                                        <td><?php echo $course[$i][$j] ?></td>
-                                                                    <?php endif; ?>
-                                                                <?php endfor; ?>
+                                                                        <td><?php echo $course[$i][$j]?></td>
+                                                                    <?php endif;?>
+                                                                <?php endfor;?>
                                                             </tr>
-                                                        <?php endfor; ?>
+                                                        <?php endfor;?>
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            <?php endforeach; ?>
+                            <?php endforeach;?>
                         </div>
                     </div>
                 </section>
