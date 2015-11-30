@@ -8,7 +8,7 @@
                       <span class="icon-bar"></span>
                     </button>
                     <a href="<?php echo getBaseUrl() ?>" class="navbar-brand">广西师范大学教务处教师管理系统</a>
-                </div>                    
+                </div>
 
                 <ul class="nav navbar-top-links navbar-right">
                     <li>欢迎<?php echo $session['college'] ?><?php echo $session['name'] ?>老师使用教师管理系统！</li>
@@ -40,22 +40,22 @@
                                         <li>
                                             <a href="#"> 成绩录入<span class="fa arrow"></span></a>
                                             <ul class="nav nav-third-level">
-                                                <?php foreach($session['scoreCourses'] as $item): ?>
+                                                <?php foreach ($session['scoreCourses'] as $item): ?>
                                                     <li>
                                                         <a href="<?php echo Route::to('score.input', $item['kcxh']) ?>"><?php echo $item['kcxh'] ?></a>
                                                     </li>
-                                                <?php endforeach; ?>
+                                                <?php endforeach;?>
                                             </ul>
                                         </li>
-                                    <?php endif; ?>
+                                    <?php endif;?>
                                     <li>
                                         <a href="#"> 成绩查询<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
-                                            <?php foreach($session['scoreTerms'] as $item): ?>
+                                            <?php foreach ($session['scoreTerms'] as $item): ?>
                                                 <li>
                                                     <a href="<?php echo Route::to('score.summary', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo Dictionary::get('xq', $item['xq']) ?>学期成绩单</a>
                                                 </li>
-                                            <?php endforeach; ?>
+                                            <?php endforeach;?>
                                         </ul>
                                     </li>
                                 </ul>
@@ -74,11 +74,26 @@
                             <li>
                                 <a href="#"><i class="fa fa-anchor fa-fw"></i> 评教管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
-                                    <?php foreach($session['assessTerms'] as $item): ?>
+                                    <?php foreach ($session['assessTerms'] as $item): ?>
                                         <li>
                                             <a href="<?php echo Route::to('assess.summary', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>~<?php echo $item['nd'] + 1 ?>学年度<?php echo Dictionary::get('xq', $item['xq']) ?>学期评教结果</a>
                                         </li>
-                                    <?php endforeach; ?>
+                                    <?php endforeach;?>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-comments fa-fw"></i> 评学管理<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#"> 评学录入<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <?php foreach ($session['scoreCourses'] as $item): ?>
+                                                <li>
+                                                    <a href="<?php echo Route::to('tas.input', $item['kcxh']) ?>"><?php echo $item['kcxh'] ?></a>
+                                                </li>
+                                            <?php endforeach;?>
+                                        </ul>
+                                    </li>
                                 </ul>
                             </li>
                             <li>

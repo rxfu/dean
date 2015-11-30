@@ -126,7 +126,7 @@ class CourseController extends StudentAdminController {
 		}
 		krsort($coursesByCampus);
 
-		$this->view->display('course.listing', array('courses' => $coursesByCampus, 'title' => $title, 'type' => $type));
+		return $this->view->display('course.listing', array('courses' => $coursesByCampus, 'title' => $title, 'type' => $type));
 	}
 
 	/**
