@@ -27,7 +27,10 @@
                                                     <td><?php echo $standard['zbmc'] ?></td>
                                                     <td><?php echo $standard['bzmc'] ?></td>
                                                     <td><?php echo $standard['zgfz'] ?></td>
-                                                    <td><input type="text" name="fz" id="fz" placeholder="评分分值"></td>
+                                                    <td>
+                                                        <input type="text" name="scores[<?php echo $standard['pjbz_id'] ?>][fz]" placeholder="评分分值" value="<?php echo $standard['fz'] ?>">
+                                                        <input type="hidden" name="scores[<?php echo $standard['pjzb_id'] ?>][pjzb_id]" value="<?php echo $standard['pjzb_id'] ?>">
+                                                    </td>
                                                 </tr>
                                                 <?php endforeach;?>
                                             </tbody>
