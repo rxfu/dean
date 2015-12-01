@@ -55,6 +55,13 @@ class TasModel extends TeacherAdminModel {
 		return has($data) ? $data : false;
 	}
 
+	/**
+	 * 列出评学课程
+	 * @param  string $year 年度
+	 * @param  string $term 学期
+	 * @param  string $jsgh 教师工号
+	 * @return mixed       成功返回教师评学课程列表，否则返回false
+	 */
 	public function listCourses($year, $term, $jsgh) {
 		$sql  = 'SELECT DISTINCT(a.jsgh), a.kcxh, c.kcmc FROM t_px_pfjg a INNER JOIN t_pk_jxrw b ON b.kcxh = a.kcxh INNER JOIN t_jx_kc c ON c.kch = b.kch WHERE a.nd = ? AND a.xq = ? AND a.jsgh = ?';
 		$data = $this->db->getAll($sql, array($year, $term, $jsgh));
@@ -72,6 +79,18 @@ class TasModel extends TeacherAdminModel {
 	public function getCourseInfo($year, $term, $cno) {
 		$sql  = 'SELECT DISTINCT(b.jsgh), a.nd, a.xq, a.kcxh, c.kcmc, a.nj, a.zy, a.kkxy FROM t_pk_kczy a INNER JOIN t_pk_jxrw b ON b.kcxh = a.kcxh AND b.nd = a.nd AND b.xq = a.xq INNER JOIN t_jx_kc c ON c.kch = b.kch WHERE a.nd = ? AND a.xq = ? AND a.kcxh = ?';
 		$data = $this->db->getRow($sql, array($year, $term, $cno));
+
+		return has($data) ? $data : false;
+	}
+
+	/**
+	 * 获取分数对应等级
+	 * @param  string $score 分数
+	 * @return mixed        成功返回等级，否则返回false
+	 */
+	public function getGrade($score) {
+		$sql  = 'SELECT * FROM t_px_pfdj WHERE ? BETWEEN zdfz AND zgfz';
+		$data = $this->db->getRow($sql, $score);
 
 		return has($data) ? $data : false;
 	}

@@ -21,9 +21,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php $total = 0?>
                                                 <?php foreach ($results as $result): ?>
-                                                    <?php $total += $result['fz']?>
                                                     <tr>
                                                         <td><?php echo $result['xh'] ?></td>
                                                         <td><?php echo $result['zbmc'] ?></td>
@@ -40,7 +38,7 @@
                                                 <tr>
                                                     <th>评价等级与总分</th>
                                                     <th>等级</th>
-                                                    <td></td>
+                                                    <td><?php echo $grade ?></td>
                                                     <th>总分</th>
                                                     <td><?php echo $total ?></td>
                                                 </tr>
