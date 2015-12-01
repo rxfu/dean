@@ -29,6 +29,8 @@ class TasController extends TeacherAdminController {
 			);
 
 			Message::add('success', '评学成功');
+
+			return redirect('tas.input', $cno);
 		}
 
 		$standards = $this->model->listStandards($this->session->get('year'), $this->session->get('term'), $this->session->get('username'), $cno);
