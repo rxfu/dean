@@ -100,4 +100,16 @@ class TeacherModel extends TeacherAdminModel {
 		return has($data) ? $data : array();
 	}
 
+	/**
+	 * 获取具有评学数据的学期
+	 * @param  string $tno 教师工号
+	 * @return mixed      成功返回学期列表，否则返回空数组
+	 */
+	public function getTasTerms($tno) {
+		$sql  = 'SELECT nd, xq FROM t_px_pfjg WHERE jsgh = ? GROUP BY nd, xq ORDER BY nd DESC, xq DESC';
+		$data = $this->db->getAll($sql, $tno);
+
+		return has($data) ? $data : array();
+	}
+
 }

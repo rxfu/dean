@@ -94,6 +94,16 @@
                                             <?php endforeach;?>
                                         </ul>
                                     </li>
+                                    <li>
+                                        <a href="#"> 评学查询<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <?php foreach ($session['tasTerms'] as $item): ?>
+                                                <li>
+                                                    <a href="<?php echo Route::to('tas.summary', $item['nd'], $item['xq']) ?>"><?php echo $item['nd'] ?>年度<?php echo Dictionary::get('xq', $item['xq']) ?>学期评学结果</a>
+                                                </li>
+                                            <?php endforeach;?>
+                                        </ul>
+                                    </li>
                                 </ul>
                             </li>
                             <li>
