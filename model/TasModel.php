@@ -48,14 +48,17 @@ class TasModel extends TeacherAdminModel {
 	 * @param  string $cno  12位课程序号
 	 * @return mixed       成功返回评学数据，否则返回false
 	 */
-	public function listResults($year, $term, $jsgh, $cno = null) {
-		if (is_null($cno)) {
-			$sql  = 'SELECT a.id AS pjbz_id, c.kcxh, a.xh AS xh, a.mc AS bzmc, b.mc AS zbmc, a.fz AS zgfz, c.fz FROM t_px_pjbz a INNER JOIN t_px_pjzb b ON b.id = a.pjzb_id LEFT JOIN t_px_pfjg c ON c.pjbz_id = a.id AND c.nd = ? AND c.xq = ? AND c.jsgh = ? WHERE a.zt = ?';
-			$data = $this->db->getAll($sql, array($year, $term, $jsgh, ENABLE));
-		} else {
-			$sql  = 'SELECT a.id AS pjbz_id, a.xh AS xh, a.mc AS bzmc, b.mc AS zbmc, a.fz AS zgfz, c.fz FROM t_px_pjbz a INNER JOIN t_px_pjzb b ON b.id = a.pjzb_id LEFT JOIN t_px_pfjg c ON c.pjbz_id = a.id AND c.nd = ? AND c.xq = ? AND c.jsgh = ? AND c.kcxh = ? WHERE a.zt = ?';
-			$data = $this->db->getAll($sql, array($year, $term, $jsgh, $cno, ENABLE));
-		}
+	public function listResults($year, $term, $jsgh, $cno) {
+		$sql  = 'SELECT a.id AS pjbz_id, a.xh AS xh, a.mc AS bzmc, b.mc AS zbmc, a.fz AS zgfz, c.fz FROM t_px_pjbz a INNER JOIN t_px_pjzb b ON b.id = a.pjzb_id LEFT JOIN t_px_pfjg c ON c.pjbz_id = a.id AND c.nd = ? AND c.xq = ? AND c.jsgh = ? AND c.kcxh = ? WHERE a.zt = ?';
+		$data = $this->db->getAll($sql, array($year, $term, $jsgh, $cno, ENABLE));
+
+		return has($data) ? $data : false;
+	}
+
+	public function listCourses($year, $term, $jsgh) {
+		$sql  = 'SELECT DISTINCT(a.jsgh), a.kcxh, c.kcmc FROM t_px_pfjg a INNER JOIN t_pk_jxrw b ON b.kcxh = a.kcxh INNER JOIN t_jx_kc c ON c.kch = b.kch WHERE a.nd = ? AND a.xq = ? AND a.jsgh = ?';
+		$data = $this->db->getAll($sql, array($year, $term, $jsgh));
+
 		return has($data) ? $data : false;
 	}
 

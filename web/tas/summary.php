@@ -5,19 +5,19 @@
                 </section>
 
                 <section class="row">
-                    <?php foreach ($results as $result): ?>
+                    <?php foreach ($courses as $course): ?>
                         <div class="col-md-3">
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div><?php echo $result['kcxh'] ?></div>
-                                            <div class="huge"><?php echo $result['kcmc'] ?></div>
+                                            <div><?php echo $course['kcxh'] ?></div>
+                                            <div class="huge"><?php echo $course['kcmc'] ?></div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <a href="<?php echo Route::to('tas.result', $year, $term, $result['kcxh']) ?>">
+                                <a href="<?php echo Route::to('tas.result', $year, $term, $course['kcxh']) ?>">
                                     <div class="panel-footer">
                                         <span class="pull-left">查询评学结果</span>
                                         <span class="pull-right">

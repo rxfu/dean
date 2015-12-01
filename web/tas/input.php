@@ -22,17 +22,17 @@
                                             </thead>
                                             <tbody>
                                                 <?php $total = 0?>
-                                                <?php foreach ($standards as $standard): ?>
-                                                    <?php $total += $standard['fz']?>
+                                                <?php foreach ($results as $result): ?>
+                                                    <?php $total += $result['fz']?>
                                                     <tr>
-                                                        <td><?php echo $standard['xh'] ?></td>
-                                                        <td><?php echo $standard['zbmc'] ?></td>
-                                                        <td><?php echo $standard['bzmc'] ?></td>
-                                                        <td><?php echo $standard['zgfz'] ?></td>
+                                                        <td><?php echo $result['xh'] ?></td>
+                                                        <td><?php echo $result['zbmc'] ?></td>
+                                                        <td><?php echo $result['bzmc'] ?></td>
+                                                        <td><?php echo $result['zgfz'] ?></td>
                                                         <td>
                                                             <div class="form-group">
-                                                                <input type="number" name="scores[<?php echo $standard['pjbz_id'] ?>][fz]" placeholder="评分分值" value="<?php echo $standard['fz'] ?>" data-fv-notempty="true" data-fv-notempty-message="必填项，填写完成才能提交" min="0" max="<?php echo $standard['zgfz'] ?>" required<?php echo isset($standard['fz']) ? ' disabled' : '' ?>>
-                                                                <input type="hidden" name="scores[<?php echo $standard['pjbz_id'] ?>][pjbz]" value="<?php echo $standard['pjbz_id'] ?>">
+                                                                <input type="number" name="scores[<?php echo $result['pjbz_id'] ?>][fz]" placeholder="评分分值" value="<?php echo $result['fz'] ?>" data-fv-notempty="true" data-fv-notempty-message="必填项，填写完成才能提交" min="0" max="<?php echo $result['zgfz'] ?>" required<?php echo isset($result['fz']) ? ' disabled' : '' ?>>
+                                                                <input type="hidden" name="scores[<?php echo $result['pjbz_id'] ?>][pjbz]" value="<?php echo $result['pjbz_id'] ?>">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -52,7 +52,7 @@
                                             </tfoot>
                                         </table>
                                     </div>
-                                    <?php if (!isset($standards[0]['fz'])): ?>
+                                    <?php if (!isset($results[0]['fz'])): ?>
                                     <div class="col-lg-4 col-lg-offset-4">
                                         <button type="submit" name="submit" title="提交评分" class="btn btn-primary btn-block" onclick="document.tasForm.submit.value='评分提交中，请稍候……';document.tasForm.submit.disabled=true">提交评分</button>
                                     </div>

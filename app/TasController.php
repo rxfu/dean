@@ -33,15 +33,15 @@ class TasController extends TeacherAdminController {
 			return redirect('tas.input', $cno);
 		}
 
-		$standards = $this->model->listResults($this->session->get('year'), $this->session->get('term'), $this->session->get('username'), $cno);
+		$results = $this->model->listResults($this->session->get('year'), $this->session->get('term'), $this->session->get('username'), $cno);
 
-		return $this->view->display('tas.input', array('info' => $info, 'standards' => $standards));
+		return $this->view->display('tas.input', array('info' => $info, 'results' => $results));
 	}
 
 	protected function summary($year, $term) {
-		$results = $this->model->listResults($year, $term, $this->session->get('username'));
+		$courses = $this->model->listCourses($year, $term, $this->session->get('username'));
 
-		return $this->view->display('tas.summary', array('year' => $year, 'term' => $term, 'results' => $results));
+		return $this->view->display('tas.summary', array('year' => $year, 'term' => $term, 'courses' => $courses));
 	}
 
 	protected function result($year, $term, $cno) {
