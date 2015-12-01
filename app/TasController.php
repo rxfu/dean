@@ -16,6 +16,19 @@ class TasController extends TeacherAdminController {
 
 		if (isPost()) {
 			$_POST = sanitize($_POST);
+
+			$this->model->save(
+				$this->session->get('year'),
+				$this->session->get('term'),
+				$this->session->get('username'),
+				$info['kcxh'],
+				$info['kkxy'],
+				$info['zy'],
+				$info['nj'],
+				$_POST['scores']
+			);
+
+			Message::add('success', '评学成功');
 		}
 
 		$standards = $this->model->listStandards($this->session->get('year'), $this->session->get('term'), $this->session->get('username'), $cno);

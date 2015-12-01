@@ -8,7 +8,7 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <form action="<<?php echo Route::to('tas.input', $info['kcxh']) ?>" method="post" role="form">
+                                <form action="<?php echo Route::to('tas.input', $info['kcxh']) ?>" method="post" role="form">
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-striped table-hover">
                                             <thead>
@@ -21,18 +21,27 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                <?php $total = 0?>
                                                 <?php foreach ($standards as $standard): ?>
-                                                <tr>
-                                                    <td><?php echo $standard['xh'] ?></td>
-                                                    <td><?php echo $standard['zbmc'] ?></td>
-                                                    <td><?php echo $standard['bzmc'] ?></td>
-                                                    <td><?php echo $standard['zgfz'] ?></td>
-                                                    <td>
-                                                        <input type="text" name="scores[<?php echo $standard['pjbz_id'] ?>][fz]" placeholder="评分分值" value="<?php echo $standard['fz'] ?>">
-                                                        <input type="hidden" name="scores[<?php echo $standard['pjzb_id'] ?>][pjzb_id]" value="<?php echo $standard['pjzb_id'] ?>">
-                                                    </td>
-                                                </tr>
+                                                    <?php $total += $standard['fz']?>
+                                                    <tr>
+                                                        <td><?php echo $standard['xh'] ?></td>
+                                                        <td><?php echo $standard['zbmc'] ?></td>
+                                                        <td><?php echo $standard['bzmc'] ?></td>
+                                                        <td><?php echo $standard['zgfz'] ?></td>
+                                                        <td>
+                                                            <input type="text" name="scores[<?php echo $standard['pjbz_id'] ?>][fz]" placeholder="评分分值" value="<?php echo $standard['fz'] ?>">
+                                                            <input type="hidden" name="scores[<?php echo $standard['pjbz_id'] ?>][pjbz]" value="<?php echo $standard['pjbz_id'] ?>">
+                                                        </td>
+                                                    </tr>
                                                 <?php endforeach;?>
+                                                <tr>
+                                                    <th>评价等级与总分</th>
+                                                    <th>等级</th>
+                                                    <td></td>
+                                                    <th>总分</th>
+                                                    <td><?php echo $total ?></td>
+                                                </tr>
                                             </tbody>
                                             <tfoot>
                                                 <tr>
