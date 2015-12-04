@@ -324,4 +324,30 @@ $(document).ready(function() {
 		backdrop: 'static',
 	});
 	$('#tipsModal').modal('show');
+
+	$('form#tasForm').formValidation({
+		framework: 'bootstrap',
+		icon: {
+			valid: 'glyphicon glyphicon-ok',
+			invalid: 'glyphicon glyphicon-remove',
+			validating: 'glyphicon glyphicon-refresh'
+		},
+		locale: 'zh_CN'
+	}).on('success.form.fv', function(e) {
+		// Prevent form submission
+		e.preventDefault();
+
+		// You can get the form instance
+		var $form = $(e.target);
+
+		// and the FormValidation instance
+		var fv = $form.data('formValidation');
+
+		// Do whatever you want here ...
+		confirm('提交后不可更改，你确定要提交吗？');
+
+		// Use the defaultSubmit() method if you want to submit the form
+		// See http://formvalidation.io/api/#default-submit
+		fv.defaultSubmit();
+	});;
 });

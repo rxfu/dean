@@ -8,7 +8,7 @@
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <form name="tasForm" id="tasForm" action="<?php echo Route::to('tas.input', $info['kcxh']) ?>" method="post" role="form" onsubmit="confirm('提交后不可更改，你确定要提交吗？')" data-fv-framework="bootstrap" data-fv-icon-valid="glyphicon glyphicon-ok" data-fv-icon-invalid="glyphicon glyphicon-remove" data-fv-icon-validating="glyphicon glyphicon-refresh">
+                                <form name="tasForm" id="tasForm" action="<?php echo Route::to('tas.input', $info['kcxh']) ?>" method="post" role="form">
                                     <div class="table-responsive">
                                         <table class="table table-bordered table-striped table-hover">
                                             <thead>
@@ -29,7 +29,7 @@
                                                         <td><?php echo $result['zgfz'] ?></td>
                                                         <td>
                                                             <div class="form-group">
-                                                                <input type="number" name="scores[<?php echo $result['pjbz_id'] ?>][fz]" placeholder="评分分值" value="<?php echo $result['fz'] ?>" data-fv-notempty="true" data-fv-notempty-message="必填项，填写完成才能提交" min="0" max="<?php echo $result['zgfz'] ?>" required<?php echo isset($result['fz']) ? ' disabled' : '' ?>>
+                                                                <input type="text" name="scores[<?php echo $result['pjbz_id'] ?>][fz]" placeholder="评分分值" value="<?php echo $result['fz'] ?>" data-fv-notempty="true" data-fv-integer="true" min="0" max="<?php echo $result['zgfz'] ?>" required<?php echo isset($result['fz']) ? ' disabled' : '' ?>>
                                                                 <input type="hidden" name="scores[<?php echo $result['pjbz_id'] ?>][pjbz]" value="<?php echo $result['pjbz_id'] ?>">
                                                             </div>
                                                         </td>
@@ -52,7 +52,7 @@
                                     </div>
                                     <?php if (!isset($results[0]['fz'])): ?>
                                     <div class="col-lg-4 col-lg-offset-4">
-                                        <button type="submit" name="submit" title="提交评分" class="btn btn-primary btn-block" onclick="document.tasForm.submit.value='评分提交中，请稍候……';document.tasForm.submit.disabled=true">提交评分</button>
+                                        <button type="submit" name="submitScore" title="提交评分" class="btn btn-primary btn-block">提交评分</button>
                                     </div>
                                     <?php endif;?>
                                 </form>
