@@ -84,16 +84,18 @@
                             <li>
                                 <a href="#"><i class="fa fa-comments fa-fw"></i> 评学管理<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
-                                    <li>
-                                        <a href="#"> 评学录入<span class="fa arrow"></span></a>
-                                        <ul class="nav nav-third-level">
-                                            <?php foreach ($session['scoreCourses'] as $item): ?>
-                                                <li>
-                                                    <a href="<?php echo Route::to('tas.input', $item['kcxh']) ?>"><?php echo $item['kcxh'] ?></a>
-                                                </li>
-                                            <?php endforeach;?>
-                                        </ul>
-                                    </li>
+                                    <?php if ($session['tasOpened']): ?>
+                                        <li>
+                                            <a href="#"> 评学录入<span class="fa arrow"></span></a>
+                                            <ul class="nav nav-third-level">
+                                                <?php foreach ($session['scoreCourses'] as $item): ?>
+                                                    <li>
+                                                        <a href="<?php echo Route::to('tas.input', $item['kcxh']) ?>"><?php echo $item['kcxh'] ?></a>
+                                                    </li>
+                                                <?php endforeach;?>
+                                            </ul>
+                                        </li>
+                                    <?php endif;?>
                                     <li>
                                         <a href="#"> 评学查询<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">

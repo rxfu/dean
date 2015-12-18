@@ -52,6 +52,7 @@ class TeacherController extends TeacherAdminController {
 				$this->session->put('scoreTerms', $this->model->getTerms($username));
 				$this->session->put('assessTerms', $this->model->getAssessedTerms($username));
 				$this->session->put('tasTerms', $this->model->getTasTerms($username));
+				$this->session->put('tasOpened', $this->model->isTasOpen());
 
 				Message::add('success', '你已经成功登录系统');
 

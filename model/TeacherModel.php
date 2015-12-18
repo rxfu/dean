@@ -112,4 +112,15 @@ class TeacherModel extends TeacherAdminModel {
 		return has($data) ? $data : array();
 	}
 
+	/**
+	 * 判断评学系统是否开启
+	 * @return boolean 成功返回评学系统状态，否则返回false
+	 */
+	public function isTasOpen() {
+		$sql    = 'SELECT is_open FROM t_px_setting WHERE id = ?';
+		$opened = $this->db->getColumn($sql, '1');
+
+		return has($opened) ? $opened : false;
+	}
+
 }
