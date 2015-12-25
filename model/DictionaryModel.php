@@ -10,17 +10,17 @@ class DictionaryModel extends Model {
 	public function __construct() {
 		$session = Session::getInstance(Config::get('session.key'));
 		switch ($session->get('role')) {
-			case 'student':
-				$dbcfg = 'student';
-				break;
+		case 'student':
+			$dbcfg = 'student';
+			break;
 
-			case 'teacher':
-				$dbcfg = 'teacher';
-				break;
+		case 'teacher':
+			$dbcfg = 'teacher';
+			break;
 
-			default:
-				$dbcfg = 'default';
-				break;
+		default:
+			$dbcfg = 'default';
+			break;
 		}
 
 		parent::__construct($dbcfg);
@@ -35,7 +35,7 @@ class DictionaryModel extends Model {
 	 * @param string $value 名称字段
 	 * @return string        中文名称
 	 */
-	public function get($name, $code, $prefix = 'zd', $key = 'dm', $value = 'mc') {
+	public function get($name, $code, $prefix, $key, $value) {
 		$table = 't_' . $prefix . '_' . $name;
 		$sql   = 'SELECT ' . $value . ' FROM ' . $table . ' WHERE ' . $key . ' = ?';
 		$data  = $this->db->getRow($sql, $code);
@@ -49,7 +49,7 @@ class DictionaryModel extends Model {
 	 * @param string $prefix 前缀
 	 * @return array        字典列表
 	 */
-	public function getAll($name, $prefix = 'zd') {
+	public function getAll($name, $prefix) {
 		$table = 't_' . $prefix . '_' . $name;
 		$data  = $this->db->searchRecord($table);
 

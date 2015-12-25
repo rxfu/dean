@@ -25,7 +25,7 @@
                                         <option value="*">==全部==</option>
                                         <?php foreach ($grades as $grade): ?>
                                             <option value="<?php echo $grade['nj'] ?>"><?php echo $grade['nj'] ?></option>
-                                        <?php endforeach; ?>
+                                        <?php endforeach;?>
                                     </select>
                                 </div>
                                 <div class="col-sm-4">
@@ -34,7 +34,7 @@
                                         <option value="*">==全部==</option>
                                         <?php foreach ($colleges as $college): ?>
                                             <option value="<?php echo $college['dw'] ?>"><?php echo $college['mc'] ?></option>
-                                        <?php endforeach; ?>
+                                        <?php endforeach;?>
                                     </select>
                                 </div>
                                 <div class="col-sm-5">
@@ -43,7 +43,7 @@
                                         <option value="*" class='*'>==全部==</option>
                                         <?php foreach ($specialities as $speciality): ?>
                                             <option value="<?php echo $speciality['zy'] ?>" class="<?php echo $speciality['xy'] ?>"><?php echo $speciality['mc'] ?></option>
-                                        <?php endforeach; ?>
+                                        <?php endforeach;?>
                                     </select>
                                 </div>
                             </div>
@@ -59,9 +59,9 @@
                                     <div role="tabpanel">
                                         <ul id="campus-tab" class="nav nav-tabs" role="tablist">
                                             <?php foreach (array_keys($courses) as $cid): ?>
-                                                <?php $campusId = 'campus-' . $cid ?>
+                                                <?php $campusId = 'campus-' . $cid?>
                                                 <li role="presentation"><a href="#<?php echo $campusId ?>" aria-controls="<?php echo $campusId ?>" role="tab" data-toggle="tab"><?php echo Dictionary::get('xqh', $cid) ?></a></li>
-                                            <?php endforeach ?>
+                                            <?php endforeach?>
                                         </ul>
                                         <div class="tab-content">
                                             <?php foreach (array_keys($courses) as $cid): ?>
@@ -74,12 +74,12 @@
                                                                     <th rowspan="2" class="active">课程序号</th>
                                                                     <th rowspan="2" class="active">课程名称</th>
                                                                     <th rowspan="2" class="active">学分</th>
-                                                                    <th rowspan="2" class="active">考核方式</th>
+                                                                    <th rowspan="2" class="active">开课学院</th>
+                                                                    <th rowspan="2" class="active">专业</th>
+                                                                    <th rowspan="2" class="active">年级</th>
                                                                     <th colspan="3" class="active text-center">上课时间</th>
                                                                     <th rowspan="2" class="active">所在校区</th>
                                                                     <th rowspan="2" class="active">主要任课老师</th>
-                                                                    <th rowspan="2" class="active">上课人数</th>
-                                                                    <th rowspan="2" class="active">已选人数</th>
                                                                 </tr>
                                                                 <tr>
                                                                     <th class="active">起始周次</th>
@@ -90,47 +90,47 @@
                                                             <tbody>
                                                                 <?php foreach ($courses[$cid] as $course): ?>
                                                                     <tr data-row="<?php echo $course[0]['kcxh'] ?>">
-                                                                        <?php $rowspan = count($course) ?>
+                                                                        <?php $rowspan = count($course)?>
                                                                         <td rowspan="<?php echo $rowspan ?>" class="text-center" id="<?php echo $course[0]['kcxh'] ?>">
                                                                             <a class="btn btn-primary" href="<?php echo Route::to('course.apply', $type, $course[0]['kcxh']) ?>" title="申请修读" role="button">申请修读</a>
                                                                         </td>
                                                                         <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kcxh'] ?></td>
                                                                         <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kcmc'] ?></td>
                                                                         <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['xf'] ?></td>
-                                                                        <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['kh'] ?></td>
+                                                                        <td rowspan="<?php echo $rowspan ?>"><?php echo Dictionary::get('department', $course[0]['kkxy'], 'xt', 'dw') ?></td>
+                                                                        <td rowspan="<?php echo $rowspan ?>"><?php echo Dictionary::get('zy', $course[0]['zy'], 'jx', 'zy') ?></td>
+                                                                        <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['nj'] ?></td>
                                                                         <td><?php echo $course[0]['ksz'] ?>~<?php echo $course[0]['jsz'] ?></td>
                                                                         <td><?php echo $course[0]['zc'] ?></td>
                                                                         <td><?php echo $course[0]['ksj'] ?><?php echo $course[0]['jsj'] <= $course[0]['ksj'] ? '' : '~' . $course[0]['jsj'] ?></td>
                                                                         <td><?php echo Dictionary::get('xqh', $course[0]['xqh']) ?></td>
                                                                         <td><?php echo $course[0]['jsxm'] ?></td>
-                                                                        <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['jhrs'] ?></td>
-                                                                        <td rowspan="<?php echo $rowspan ?>"><?php echo $course[0]['rs'] ?></td>
                                                                     </tr>
-                                                                    <?php for($i = 1; $i < $rowspan; ++$i): ?>
+                                                                    <?php for ($i = 1; $i < $rowspan; ++$i): ?>
                                                                         <tr data-name="<?php echo $course[0]['kcxh'] ?>">
-                                                                            <?php for($j = 0; $j < 5; ++$j): ?>
+                                                                            <?php for ($j = 0; $j < 5; ++$j): ?>
                                                                                 <td style="display: none"></td>
-                                                                            <?php endfor; ?>
+                                                                            <?php endfor;?>
                                                                             <td><?php echo $course[$i]['ksz'] ?>~<?php echo $course[$i]['jsz'] ?></td>
                                                                             <td><?php echo $course[$i]['zc'] ?></td>
                                                                             <td><?php echo $course[$i]['ksj'] ?><?php echo $course[$i]['jsj'] <= $course[$i]['ksj'] ? '' : '~' . $course[$i]['jsj'] ?></td>
                                                                             <td><?php echo Dictionary::get('xqh', $course[$i]['xqh']) ?></td>
                                                                             <td><?php echo $course[$i]['jsxm'] ?></td>
-                                                                            <?php for($j = 0; $j < 2; ++$j): ?>
+                                                                            <?php for ($j = 0; $j < 2; ++$j): ?>
                                                                                 <td style="display: none"></td>
-                                                                            <?php endfor; ?>
+                                                                            <?php endfor;?>
                                                                         </tr>
-                                                                    <?php endfor; ?>
-                                                                <?php endforeach; ?>
+                                                                    <?php endfor;?>
+                                                                <?php endforeach;?>
                                                             </tbody>
                                                         </table>
                                                     </div>
                                                 </div>
-                                            <?php endforeach ?>
+                                            <?php endforeach?>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </section>
-                <?php endif; ?>
+                <?php endif;?>
