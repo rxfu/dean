@@ -39,7 +39,7 @@ class TasController extends TeacherAdminController {
 		foreach ($results as $result) {
 			$total += $result['fz'];
 		}
-		$grade = $this->model->getGrade($total);
+		$grade = $this->model->getGrade(floor($total));
 
 		return $this->view->display('tas.input', array('info' => $info, 'total' => $total, 'grade' => $grade['mc'], 'results' => $results));
 	}
