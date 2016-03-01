@@ -21,7 +21,7 @@ class ScoreModel extends TeacherAdminModel {
 	 * @return mixed        获取成功返回成绩方式，否则返回FALSE
 	 */
 	public function getRatio($gid) {
-		$sql   = 'SELECT * FROM t_jx_cjfs WHERE fs = ?';
+		$sql   = 'SELECT * FROM t_jx_cjfs WHERE fs = ? ORDER BY id';
 		$modes = $this->db->getAll($sql, array($gid));
 		if (is_array($modes)) {
 			$ratios = array();
