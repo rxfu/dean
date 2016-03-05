@@ -25,7 +25,12 @@ class StudentModel extends StudentAdminModel {
 	 * @return boolean 允许上传为TRUE，否则为FALSE
 	 */
 	public function isAllowedUploadPortrait($sno) {
-		return (ENABLE == Setting::get('KS_PHOTO_UP')) && (Config::get('user.portrait.passed') !== $this->getPortraitStatus($sno)) ? true : false;
+		// 2016.03.05：应考务科要求修改为每次考试报名均可重新上传照片，且报名后不可上传照片，不再判断学生照片状态是否审核已通过
+		// return (ENABLE == Setting::get('KS_PHOTO_UP')) && (Config::get('user.portrait.passed') !== $this->getPortraitStatus($sno)) ? true : false;
+		$sql  = 'SELECT * FROM t_ks_qtksbm a INNER JOIN t_cj_kslxdm b ON b.kslx = a.kslx and b.nd = a.nd WHERE b.zt = ? AND xh = ?';
+		$data = $this->db->getRow($sql, array(ENABLE, $sno));
+
+		return (ENABLE == Setting::get('KS_PHOTO_UP')) && !has($data);
 	}
 
 	/**
